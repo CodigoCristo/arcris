@@ -32,6 +32,7 @@ else
      dialog --title "|  Conexión a RED  |" --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
    --prgbox "\n\nping -c 5 archlinux.org && echo && echo No hay conexión a Internet" 6 100 
   dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Error de RED |" --msgbox "No hay conexión a Internet" 5 60
+fi
 
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "¿Quieres conectarte a una red wifi?" 5 45 
 case $? in 
@@ -40,6 +41,7 @@ case $? in
 	1) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Ethernet |" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuvamente..." 8 50
    exit;;
 esac
+
 umount -R /mnt
 
 selected=0 
