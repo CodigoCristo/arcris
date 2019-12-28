@@ -18,7 +18,6 @@ do
     echo -n "$v %" $'\r'
     sleep 0.2
 done
-echo
 printf "\n\n Hecho por Codigo Cristo! \n"
 echo ""
 echo -e ' https://github.com/CodigoCristo \033[m'
@@ -28,7 +27,7 @@ cp .dialogrc ~/.dialogrc
 cp Arcris /bin/arcris
 cp arcris-up /bin/arcris-up
 
-cd ..
+cd
 rm -r arcris
 sleep 3
 clear
