@@ -37,7 +37,7 @@ else
 case $? in 
 	0) wifi-menu 
 	wifinet=$(netctl list | awk -F " " '{print $2}');;
-	1) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Ethernet |" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuvamente..." 8 50
+	1) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Ethernet |" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuevamente..." 8 50
    exit;;
 esac
 
@@ -47,8 +47,7 @@ dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --
 case $? in 
 	0) wifi-menu 
 	wifinet=$(netctl list | awk -F " " '{print $2}');;
-	1) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Ethernet |" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuvamente..." 8 50
-   exit;;
+	1) 
 esac
 
 umount -R /mnt
@@ -591,7 +590,7 @@ uefi=$( parted $disk print | grep -ic gpt )
 if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]; then
 dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --title "|  SISTEMA UEFI Y DISCO GPT  |" --infobox "\n           | SU SISTEMA ES UEFI |" 5 50; sleep 5
 dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt pacman -Sy grub efibootmgr os-prober --noconfirm " 22 80
-dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "echo "" && echo '>>> Su disco es GPT | UEFI es el sistema Moderno <<<' && cat /tmp/partitions | grep gpt && echo '' && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --removable" 20 80
+dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "echo "" && echo '>>> Su disco es GPT | UEFI es el sistema Moderno <<<' && cat /tmp/partitions | grep gpt && echo '' && echo 'Instalando >> grubx64.efi' && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch && echo '' && echo 'Instalando >> bootx64.efi' && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --removable" 20 80
   sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
   sed -i '7d' /mnt/etc/default/grub
 dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "echo '' && arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg && echo '' && echo 'ls -l /mnt/boot' && ls -l /mnt/boot && echo '' && echo 'Lea bien que no tenga ningún error marcado' && echo '> Confirme tener las IMG de linux para el arranque' && echo '> Confirme tener la carpeta de GRUB para el arranque' " 25 80
@@ -621,6 +620,6 @@ echo ""
 echo ""
 export $(cat /mnt/etc/locale.conf)
 echo ""
-arch-chroot /mnt /bin/bash -c "pacman -Syu" && arch-chroot /mnt /bin/bash -c "neofetch"; sleep 5
+arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo "" && arch-chroot /mnt /bin/bash -c "neofetch"; sleep 5
 umount -R /mnt
 reboot
