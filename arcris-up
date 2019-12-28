@@ -27,7 +27,7 @@ cp .dialogrc ~/.dialogrc
 cp Arcris /bin/arcris
 cp arcris-up /bin/arcris-up
 
-cd
+cd ..
 rm -r arcris
 sleep 3
 clear
