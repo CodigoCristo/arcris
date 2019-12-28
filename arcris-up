@@ -11,12 +11,17 @@ clear
 echo -e '\033[44;1m'
 echo " CARGANDO... "
 echo ""
-printf "["
-# While process is running...
-while kill -0 $PID 2> /dev/null; do 
-    printf  "▓"
-    sleep 0.1
+for ((k = 0; k <= 10 ; k++))
+do
+    echo -n "[ "
+    for ((i = 0 ; i <= k; i++)); do echo -n "###"; done
+    for ((j = i ; j <= 10 ; j++)); do echo -n "   "; done
+    v=$((k * 10))
+    echo -n " ] "
+    echo -n "$v %" $'\r'
+    sleep 0.05
 done
+echo
 printf "]\n\n Hecho por Codigo Cristo! \n"
 echo ""
 echo -e ' https://github.com/CodigoCristo \033[m'
