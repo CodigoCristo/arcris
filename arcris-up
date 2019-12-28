@@ -15,7 +15,6 @@ chmod +777 arcris
 chmod +777 arcris-up
 
 cp .dialogrc ~/.dialogrc
-cp Arcris /bin/Arcris
 cp Arcris /bin/arcris
 cp arcris-up /bin/arcris-up
 
