@@ -9,7 +9,7 @@ chmod +777 arcris-up
 clear
 for i in $(seq 1 100)
 do
-    sleep 0.05 
+    sleep 0.1 
     echo $i
 done | whiptail --title ' Hecho por Codigo Cristo ' --gauge "\nVisite la comunidad >> t.me/ArchLinuxCristo <<" 7 60 0
 
