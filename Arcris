@@ -11,9 +11,9 @@ clear
 echo es_ES.UTF-8 UTF-8 > /etc/locale.gen
 for i in $(seq 1 100)
 do
-    sleep 0.02
+    sleep 0.04
     echo $i
-done | whiptail --title " Cargando Idioma " --gauge "$(locale-gen)" 7 60 0
+done | dialog --title " Cargando Idioma " --gauge "$(locale-gen)" 7 60 0
 echo LANG=es_ES.UTF-8 > /etc/locale.conf
 export LANG=es_ES.UTF-8
 
@@ -314,7 +314,7 @@ for i in $(seq 1 100)
 do
     sleep 0.07 
     echo $i
-done | whiptail --title ' Actualizando MirrorLists ' --gauge "\nActualizando MirrorList en el LiveCD..." 7 60 0
+done | dialog --title ' Actualizando MirrorLists ' --gauge "\nActualizando MirrorList en el LiveCD..." 7 60 0
 
 cat /etc/pacman.d/mirrorlist | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Mirrors List del LiveCD > Actualizadas..." 25 2000; sleep 3
 
@@ -565,7 +565,7 @@ for i in $(seq 1 100)
 do
     sleep 0.07 
     echo $i
-done | whiptail --title ' Actualizando MirrorLists ' --gauge "\nActualizando MirrorList en el Sistema Base..." 7 60 0
+done | dialog --title ' Actualizando MirrorLists ' --gauge "\nActualizando MirrorList en el Sistema Base..." 7 60 0
 
 cat /mnt/etc/pacman.d/mirrorlist | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Mirrors List del Sistema Base > Actualizadas..." 25 2000; sleep 3
 
