@@ -1,0 +1,15 @@
+#!/bin/bash
+
+
+rm Arcris
+git clone https://github.com/CodigoCristo/arcris
+cd arcris/
+chmod +777 arcris
+
+cp .dialogrc ~/.dialogrc
+cp Arcris /bin/Arcris
+cp Arcris /bin/arcris
+
+cd ..
+rm -r arcris
+arcris
