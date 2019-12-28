@@ -1,15 +1,22 @@
 #!/bin/bash
 
-
-rm Arcris
 git clone https://github.com/CodigoCristo/arcris
 cd arcris/
 chmod +777 arcris
-
+chmod +777 arcris-up
+clear
+printf '\nCargando...\n'
+for x in {1..100} ; do
+    sleep .01   
+    printf .
+done | pv -pt -i0.2 -s100 -w 80 > /dev/null
+printf '\033[41;1m\nArcriS | Bienvenido!!\n\n\033[m'
 cp .dialogrc ~/.dialogrc
 cp Arcris /bin/Arcris
 cp Arcris /bin/arcris
+cp arcris-up /bin/arcris-up
 
 cd ..
 rm -r arcris
+clear
 arcris
