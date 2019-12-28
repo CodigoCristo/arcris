@@ -16,7 +16,7 @@ do
     v=$((k * 10))
     echo -n " ] "
     echo -n "$v %" $'\r'
-    sleep 0.2
+    sleep 0.1
 done
 printf "\n\n Hecho por Codigo Cristo! \n"
 echo ""
