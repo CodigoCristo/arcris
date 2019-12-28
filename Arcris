@@ -13,7 +13,7 @@ for i in $(seq 1 100)
 do
     sleep 0.04
     echo $i
-done | dialog --title " Cargando Idioma " --gauge "$(locale-gen)" 8 60 0
+done | dialog --title "| Cargando Idioma |" --gauge "$(locale-gen)" 8 60 0
 echo LANG=es_ES.UTF-8 > /etc/locale.conf
 export LANG=es_ES.UTF-8
 
@@ -80,7 +80,7 @@ echo "Partition Table: gpt" > uefi3.txt
 
 if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]
 then
-dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "|  UEFI y su disco SI es compatible |"  --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && cat /tmp/partitions | grep gpt && echo "" && cat /tmp/partitions | grep /dev/ )" 12 150
+dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "|  SISTEMA UEFI |"  --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && cat /tmp/partitions | grep gpt && echo "Su disco SI es compatible para continuar" && echo "" && cat /tmp/partitions | grep /dev/ )" 12 150
 
 elif [ $uefi == 0 ] && [ -d /sys/firmware/efi ]
 then
@@ -110,7 +110,7 @@ esac
 
 elif [ $uefi == 0 ]
 then
-dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| BIOS LEGACY y su disco SI es compatible |"  --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && cat /tmp/partitions | grep dos && echo "" && cat /tmp/partitions | grep /dev/ )" 12 150
+dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| SISTEMA BIOS LEGACY |"  --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && cat /tmp/partitions | grep dos && echo "Su disco SI es compatible para continuar" && echo "" && cat /tmp/partitions | grep /dev/ )" 12 150
 
 else  
 
