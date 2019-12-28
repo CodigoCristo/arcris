@@ -17,6 +17,7 @@ done | whiptail --title " Cargando Idioma " --gauge "$(locale-gen)" 7 60 0
 echo LANG=es_ES.UTF-8 > /etc/locale.conf
 export LANG=es_ES.UTF-8
 
+
 #Inicio
 #dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title " Bienvenido " --stdout --ok-label 'Siguiente' --msgbox 'Instalación en Español:' 5 32
 dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Siguiente' --title "| INICIO |" --msgbox "\n| Bienvenido a la instalación de Arch Linux en Español |" 7 60 
@@ -35,7 +36,7 @@ else
   dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "¿Quieres conectarte a una red wifi?" 5 45 
 case $? in 
 	0) wifi-menu 
-		wifinet=$(netctl list | awk -F " " '{print $2}');;
+	wifinet=$(netctl list | awk -F " " '{print $2}');;
 	1) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Ethernet |" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuvamente..." 8 50
    exit;;
 esac
@@ -158,17 +159,23 @@ p=$(echo "$p" | grep -v $part)
 partitioning(){
 	fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}' | grep -v cramfs | grep -v hfsplus | grep -v  bfs | grep -v msdos | grep -v minix)"
 	format=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| FORMATO DE PARTICIÓN |" \
-					--menu "\nElige el tipo de sistema de archivos\n\nEXT4 >> Para Linux\nVFAT >> Para FAT32 UEFI\nNTFS >> Para Windows\n\n<Cancelar> para no formatear" 0 0 0 ${fs} 2>&1 > /dev/tty)
+					--stdout --ok-label 'Seleccionar' --cancel-label 'No formatear' --menu "\nElige el tipo de sistema de archivos\n\nEXT4 >> Para Linux\nFAT >> Para FAT32 UEFI\nNTFS >> Para Windows\n\n" 0 0 0 ${fs} 2>&1 > /dev/tty)
 			
 	case $format in
-		ext4) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en EXT4 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext4 -F $part" 20 80;;
-		reiserfs) mkfs.reiserfs -f -f "$part" | dialog --progressbox "Formateando partición en ReiserFS..." 50 20000; sleep 3;;
-		vfat) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en FAT 32 | Uso General para particiones UEFI... |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.fat -F 32 $part" 7 80;;
-		ntfs) mkfs.ntfs -q "$part" | dialog --progressbox "Formateando partición en NTFS de Windows..." 50 20000; sleep 3;;
-		jfs) mkfs.jfs -q "$part" | dialog --progressbox "Formateando partición en JFS..." 50 20000; sleep 3;;
-		nilfs2) mkfs.nilfs2 -f "$part" | dialog --progressbox "Formateando partición en NILFS2..." 50 20000; sleep 3;;
-		xfs) mkfs.xfs -f "$part" | dialog --progressbox "Formateando partición en XFS..." 50 20000; sleep 3;;
-		btrfs) mkfs.btrfs -f "$part" | dialog --progressbox "Formateando partición en BTRFS..." 50 20000; sleep 3;;
+		ext2) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en EXT2 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext2 -F $part" 20 80;;
+	    ext3) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en EXT3 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext3 -F $part" 20 80;;
+	    ext4) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en EXT4 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext4 -F $part" 20 80;;
+	    reiserfs) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en ReiserFS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.reiserfs -f -f $part" 20 80;;
+	    vfat) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en FAT 32 | Uso General para particiones UEFI... |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.vfat -F 32 $part" 7 80;;
+	    fat) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en FAT 32 | Uso General para particiones UEFI... |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.fat -F 32 $part" 7 80;;
+	    exfat) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en ExFAT |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.exfat $part" 20 80;;
+	    ntfs) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en NTFS - Windows |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ntfs -Q $part" 20 80;;
+	    f2fs) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en F2FS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && modprobe f2fs && mkfs.f2fs $part" 20 80;;
+	    jfs) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en JFS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.jfs -q $part" 20 80;;
+	    xfs) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en XFS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.xfs -f $part" 20 80;;
+	    nilfs2) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en NilFS2 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.nilfs2 -f $part" 20 80;;
+	    udf) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en UDF |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.udf -F $part" 20 80;;
+	    btrfs) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en BTRFS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.btrfs -f $part" 20 80;;
 	esac
 }
 
@@ -383,21 +390,20 @@ esac
   kernel_var=1  
 
   elif [ $kernel_select == linux-zen ]; then
-  pacstrap  /mnt  | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Instalando Kernel Linux ZEN ..." 27 2000; sleep 2;kernel_var=1
- dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux LTS |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware mkinitcpio pulseaudio alsa-plugins alsa-oss dhclient dnsmasq ethtool gpm ndisc6 nfs-utils ntp usb_modeswitch usbutils wvdial nano reflector dhcp dhcpcd dhclient ppp netctl iw iwd net-tools networkmanager ifplugd openssh dialog" 25 80
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux ZEN |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware mkinitcpio pulseaudio alsa-plugins alsa-oss dhclient dnsmasq ethtool gpm ndisc6 nfs-utils ntp usb_modeswitch usbutils wvdial nano reflector dhcp dhcpcd dhclient ppp netctl iw iwd net-tools networkmanager ifplugd openssh dialog" 25 80
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "\n¿Tienes Tarjeta de Wifi?" 7 45 
 case $? in 
-	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux LTS |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt broadcom-wl wireless-regdb wpa_supplicant wireless_tools" 25 80;;
+	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux ZEN |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt broadcom-wl wireless-regdb wpa_supplicant wireless_tools" 25 80;;
 	1) 
 esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --yesno "\n¿Tienes Touchpad?" 7 45 
 case $? in 
-	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux LTS |" --stdout --ok-label "Siguiente" --prgbox "pacstrap  /mnt xf86-input-synaptics xf86-input-libinput xorg-xinput" 25 80;;
+	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux ZEN |" --stdout --ok-label "Siguiente" --prgbox "pacstrap  /mnt xf86-input-synaptics xf86-input-libinput xorg-xinput" 25 80;;
 	1) 
 esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --yesno "\n¿Tienes Bluetooth?" 7 45 
 case $? in 
-	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux LTS |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth blueman" 25 80
+	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux ZEN |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth blueman" 25 80
 	systemctl enable bluetooth.service;;
 	1) 
 esac
@@ -440,7 +446,7 @@ do
 done |  \
  dialog  --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| ZONA HORARIA |" --gauge "Gracias https://ipapi.co/timezone" 6 60
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| ZONA HORARIA |" --yesno "\nTU ZONA HORARIA ES >>> $(cat timezone)\n¿Deseeas modificar tu Zona Horaria?" 8 40 
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| ZONA HORARIA |" --defaultno --yesno "\nTU ZONA HORARIA ES >>> $(cat timezone)\n¿Deseeas modificar tu Zona Horaria?" 8 40 
 
 
 if [ "$?" = "0" ]; then
