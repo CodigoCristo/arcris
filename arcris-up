@@ -1,18 +1,25 @@
 #!/bin/bash
-
 git clone https://github.com/CodigoCristo/arcris
-
-clear
-printf '\nCargando...\n'
-for x in {1..100} ; do
-    sleep .01   
-    printf .
-done | pv -pt -i0.2 -s100 -w 80 > /dev/null
-printf '\033[41;1m\nArcriS | Bienvenido!!\n\n\033[m'
-
 cd arcris/
-chmod +777 arcris
+chmod +777 Arcris
 chmod +777 arcris-up
+
+
+sleep 3 & PID=$! #simulate a long process
+clear
+echo -e '\033[44;1m'
+echo " CARGANDO... "
+echo ""
+printf "["
+# While process is running...
+while kill -0 $PID 2> /dev/null; do 
+    printf  "▓"
+    sleep 0.1
+done
+printf "]\n\n Hecho por Codigo Cristo! \n"
+echo ""
+echo -e ' https://github.com/CodigoCristo \033[m'
+echo ""
 
 cp .dialogrc ~/.dialogrc
 cp Arcris /bin/arcris
@@ -20,5 +27,6 @@ cp arcris-up /bin/arcris-up
 
 cd ..
 rm -r arcris
+sleep 3
 clear
 arcris
