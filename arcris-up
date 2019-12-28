@@ -1,4 +1,5 @@
 #!/bin/bash
+clear
 git clone https://github.com/CodigoCristo/arcris
 cd arcris/
 chmod +777 Arcris
