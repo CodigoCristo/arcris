@@ -43,7 +43,13 @@ esac
 
 fi
 
-
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "¿Quieres conectarte a una red wifi?" 5 45 
+case $? in 
+	0) wifi-menu 
+	wifinet=$(netctl list | awk -F " " '{print $2}');;
+	1) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Ethernet |" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuvamente..." 8 50
+   exit;;
+esac
 
 umount -R /mnt
 
@@ -585,7 +591,7 @@ uefi=$( parted $disk print | grep -ic gpt )
 if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]; then
 dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --title "|  SISTEMA UEFI Y DISCO GPT  |" --infobox "\n           | SU SISTEMA ES UEFI |" 5 50; sleep 5
 dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt pacman -Sy grub efibootmgr os-prober --noconfirm " 22 80
-dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "echo "" && echo '> Su disco es GPT | UEFI es el sistema Moderno ' && cat /tmp/partitions | grep gpt && echo '' && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --removable" 22 80
+dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "echo "" && echo '>>> Su disco es GPT | UEFI es el sistema Moderno <<<' && cat /tmp/partitions | grep gpt && echo '' && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --removable" 20 80
   sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
   sed -i '7d' /mnt/etc/default/grub
 dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "echo '' && arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg && echo '' && echo 'ls -l /mnt/boot' && ls -l /mnt/boot && echo '' && echo 'Lea bien que no tenga ningún error marcado' && echo '> Confirme tener las IMG de linux para el arranque' && echo '> Confirme tener la carpeta de GRUB para el arranque' " 25 80
@@ -594,13 +600,13 @@ dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB -
 else
 dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --title "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --infobox "\n        | SU SISTEMA ES BIOS LEGACY |" 5 50; sleep 5
 dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt pacman -Sy grub os-prober --noconfirm " 22 80
-dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "echo "" && echo '> Su disco es DOS MBR | BIOS Legacy es un sistema antiguo' && cat /tmp/partitions | grep dos && echo '' && arch-chroot /mnt grub-install --target=i386-pc $disk " 20 80
+dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "echo "" && echo '>>> Su disco es DOS MBR | BIOS Legacy es un sistema antiguo <<<' && cat /tmp/partitions | grep dos && echo '' && arch-chroot /mnt grub-install --target=i386-pc $disk " 15 80
   sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
   sed -i '7d' /mnt/etc/default/grub
 dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "echo '' && arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg && echo '' && echo 'ls -l /mnt/boot' && ls -l /mnt/boot && echo '' && echo 'Lea bien que no tenga ningún error marcado' && echo '> Confirme tener las IMG de linux para el arranque' && echo '> Confirme tener la carpeta de GRUB para el arranque' " 25 80
 fi
 
-arch-chroot /mnt /bin/bash -c "pacman -Sy neofetch git wget lsb-release xdg-user-dirs --noconfirm && xdg-user-dirs-update" | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Actualizando Sistema..." 30 2000; sleep 2
+arch-chroot /mnt /bin/bash -c "pacman -Sy neofetch git wget lsb-release xdg-user-dirs --noconfirm && xdg-user-dirs-update" | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Actualizando Sistema..." 20 2000; sleep 2
 dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| La computadora se reiniciara para finalizar la instalación |" 7 66
 clear
 echo ""
@@ -615,6 +621,6 @@ echo ""
 echo ""
 export $(cat /mnt/etc/locale.conf)
 echo ""
-arch-chroot /mnt pacman -Syu && neofetch; sleep 5
+arch-chroot /mnt /bin/bash -c "pacman -Syu" && arch-chroot /mnt /bin/bash -c "neofetch"; sleep 5
 umount -R /mnt
 reboot
