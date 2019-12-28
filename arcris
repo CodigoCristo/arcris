@@ -1733,12 +1733,16 @@ umount -R /mnt
 reboot
 
 
-else  
 
+elif [ -d /sys/firmware/efi ]
+then
 dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO GPT  |" --title "|  SISTEMA BIOS LEGACY TRABAJA CON DISCOS DOS MBR |"   --stdout --ok-label 'Reiniciar' --msgbox "\nUsted inicio la USB en sistema BIOS LEGACY y su disco es GPT \
 \n\nReinicie su sistema e ingrese en modo UEFI \
 \n\nSi convierte su disco a DOS MBR a GPT perderá \nToda su información de Windows Instalado\n\nRecomendación: Reinicie e inicie CD o USB en BIOS LEGACY" 13 65
 reboot
+
+else  
+echo ""
 fi
 
 #MENU FINAL
