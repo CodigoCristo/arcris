@@ -19,6 +19,5 @@ cp arcris-up /bin/arcris-up
 
 cd ..
 rm -r arcris
-sleep 2
 clear
 arcris
