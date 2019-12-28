@@ -2,26 +2,16 @@
 clear
 git clone https://github.com/CodigoCristo/arcris
 cd arcris/
+
 chmod +777 Arcris
 chmod +777 arcris-up
+
 clear
-echo -e '\033[44;1m'
-echo " CARGANDO... "
-echo ""
-for ((k = 0; k <= 10 ; k++))
+for i in $(seq 1 100)
 do
-    echo -n "[ "
-    for ((i = 0 ; i <= k; i++)); do echo -n "###"; done
-    for ((j = i ; j <= 10 ; j++)); do echo -n "   "; done
-    v=$((k * 10))
-    echo -n " ] "
-    echo -n "$v %" $'\r'
-    sleep 0.1
-done
-printf "\n\n Hecho por Codigo Cristo! \n"
-echo ""
-echo -e ' https://github.com/CodigoCristo \033[m'
-echo ""
+    sleep 0.05 
+    echo $i
+done | whiptail --title ' Hecho por Codigo Cristo ' --gauge "\nVisite la comunidad >> t.me/ArchLinuxCristo <<" 7 60 0
 
 cp .dialogrc ~/.dialogrc
 cp Arcris /bin/arcris
