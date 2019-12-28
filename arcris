@@ -795,7 +795,7 @@ part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCri
   --menu "\nElige la partición donde esta el Disco de Datos Windows\nLa ruta donde estara es: /mnt/datos en NTFS\n " 13 67 0 ${p} 2>&1 > /dev/tty)
 datos_osfs=$part
 
-cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --checklist "Selecciona otros puntos de montajes:\n[SPACE] para marcar varias opciones" 20 0 0)
+cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --checklist "Selecciona otros puntos de montajes:\n[SPACE] para marcar varias opciones" 15 0 0)
 options=( 
 	"/home" "Archivos de usuario" off
 	"/tmp" "Archivos temporales" off
