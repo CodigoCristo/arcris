@@ -329,6 +329,7 @@ while [ "$kernel_var" = "0" ] ; do
    
   if [ $kernel_select == linux-stable ]; then
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel linux linux-headers linux-firmware mkinitcpio pulseaudio alsa-plugins alsa-oss dhclient dnsmasq ethtool gpm ndisc6 nfs-utils ntp usb_modeswitch usbutils wvdial nano reflector dhcp dhcpcd dhclient ppp netctl iw iwd net-tools networkmanager ifplugd openssh dialog" 25 80
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt " 25 80
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "\n¿Tienes Tarjeta de Wifi?" 7 45 
 case $? in 
 	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt broadcom-wl wireless-regdb wpa_supplicant wireless_tools" 25 80;;
@@ -341,7 +342,7 @@ case $? in
 esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --yesno "\n¿Tienes Bluetooth?" 7 45 
 case $? in 
-	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth blueman" 25 80
+	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth" 25 80
 	systemctl enable bluetooth.service;;
 	1) 
 esac
@@ -584,7 +585,7 @@ grub_selec=0
 while [ "$grub_selec" = "0" ] ; do
 
   grub_var=`dialog --title "| Selector de Arranque |" --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
-    --stdout --no-cancel --menu "             Instale GRUB en UEFI o BIOS LEGACY\n\nUEFI es el sistema Moderno\nBIOS Legacy es un sistema antiguo\n\n" 13 0 150 BIOS_LEGACY "Instala GRUB en sistemas de BIOS Legacy" UEFI_SYSTEM "Instala GRUB en sistemas de UEFI"`
+    --stdout --no-cancel --menu "             Instale GRUB en: UEFI o BIOS LEGACY\n\n> Discos GPT | UEFI es el sistema Moderno\n> Discos DOS/MBR | BIOS Legacy es un sistema antiguo\n\n$(cat /tmp/partitions | grep dos && cat /tmp/partitions | grep gpt )" 13 0 150 BIOS_LEGACY "Instala GRUB en sistemas de BIOS Legacy" UEFI_SYSTEM "Instala GRUB en sistemas de UEFI"`
   
   if [ $grub_var == BIOS_LEGACY ]; then
 
