@@ -22,11 +22,11 @@ export LANG=es_ES.UTF-8
 #dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title " Bienvenido " --stdout --ok-label 'Siguiente' --msgbox 'Instalación en Español:' 5 32
 dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Siguiente' --title "| INICIO |" --msgbox "\n| Bienvenido a la instalación de Arch Linux en Español |" 7 60 
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  INTERNET |" --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| INTERNET |" --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
 
 if ping -c 2 www.google.com &> /dev/null; then
 	
-   dialog --title "|  Conexión a RED  |" --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
+   dialog --title "|  Conexión  |" --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
    --prgbox "ping -c 5 archlinux.org && echo && echo Si Hay Internet!" 17 100 
 
 else
@@ -159,7 +159,7 @@ p=$(echo "$p" | grep -v $part)
 partitioning(){
 	fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}' | grep -v cramfs | grep -v hfsplus | grep -v  bfs | grep -v msdos | grep -v minix)"
 	format=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| FORMATO DE PARTICIÓN |" \
-					--stdout --ok-label 'Seleccionar' --cancel-label 'No formatear' --menu "\nElige el tipo de sistema de archivos\n\nEXT4 >> Para Linux\nFAT >> Para FAT32 UEFI\nNTFS >> Para Windows\n\n$(cat /tmp/partitions | grep dos) " 0 0 0 ${fs} 2>&1 > /dev/tty)
+					--ok-label 'Seleccionar' --cancel-label 'No formatear' --menu "\nElige el tipo de sistema de archivos\n\nEXT4 >> Para Linux\nFAT >> Para FAT32 para la partición UEFI\nNTFS >> Para Windows\n\n$(cat /tmp/partitions | grep dos && cat /tmp/partitions | grep gpt ) " 0 0 0 ${fs} 2>&1 > /dev/tty)
 			
 	case $format in
 		ext2) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en EXT2 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext2 -F $part" 20 80;;
