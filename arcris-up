@@ -22,7 +22,7 @@ do
     sleep 0.05
 done
 echo
-printf "]\n\n Hecho por Codigo Cristo! \n"
+printf "\n\n Hecho por Codigo Cristo! \n"
 echo ""
 echo -e ' https://github.com/CodigoCristo \033[m'
 echo ""
