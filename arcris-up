@@ -11,7 +11,7 @@ for i in $(seq 1 100)
 do
     sleep 0.1 
     echo $i
-done | dialog --title ' Hecho por Codigo Cristo ' --gauge "\nVisite la comunidad >> t.me/ArchLinuxCristo <<\n " 7 60 0
+done | dialog --title ' Hecho por Codigo Cristo ' --gauge "\nVisite la comunidad >> t.me/ArchLinuxCristo <<\n " 8 60 0
 
 cp .dialogrc ~/.dialogrc
 cp Arcris /bin/arcris
