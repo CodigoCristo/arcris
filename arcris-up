@@ -4,9 +4,6 @@ git clone https://github.com/CodigoCristo/arcris
 cd arcris/
 chmod +777 Arcris
 chmod +777 arcris-up
-
-
-sleep 3 & PID=$! #simulate a long process
 clear
 echo -e '\033[44;1m'
 echo " CARGANDO... "
@@ -19,7 +16,7 @@ do
     v=$((k * 10))
     echo -n " ] "
     echo -n "$v %" $'\r'
-    sleep 0.05
+    sleep 0.2
 done
 echo
 printf "\n\n Hecho por Codigo Cristo! \n"
