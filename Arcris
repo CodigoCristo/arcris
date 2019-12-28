@@ -87,6 +87,10 @@ if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]
 then
 dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "|  SISTEMA UEFI |"  --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && cat /tmp/partitions | grep gpt && echo "Su disco SI es compatible para continuar" && echo "" && cat /tmp/partitions | grep /dev/ )" 12 150
 
+elif [ -d /sys/firmware/efi ]
+then
+dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "|  SISTEMA UEFI |"  --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && cat /tmp/partitions | grep gpt && echo "Su disco SI es compatible para continuar" && echo "" && cat /tmp/partitions | grep /dev/ )" 12 150
+
 elif [ $uefi == 0 ] && [ -d /sys/firmware/efi ]
 then
 dialog --backtitle "| SISTEMA BIOS LEGACY Y DISCO INCOMPATIBLE |" --title "|  BIOS LEGACY y su disco NO es compatible |" \
