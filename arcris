@@ -8,6 +8,8 @@ Licencia Pública General de GNU, ver <http://www.gnu.org/licenses/>'
 
 #Poniendo el sistema en español
 clear
+cp .dialogrc /root
+
 echo es_ES.UTF-8 UTF-8 > /etc/locale.gen
 for i in $(seq 1 100)
 do
@@ -756,7 +758,7 @@ fdisk -l $disk > /tmp/partitions
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
 part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'No tengo' --clear --title "| Partición Boot Windows |" \
-  --menu "\nSelecciona la partición de arranque \n\n$(fdisk -l $disk | grep EFI && fdisk -l $disk | grep 500M)\n " 12 67 0 ${p} 2>&1 > /dev/tty)
+  --menu "\nSelecciona la partición de arranque \n\n$(fdisk -l $disk | grep EFI)\n " 12 67 0 ${p} 2>&1 > /dev/tty)
 boot_osfs=$part
 
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
@@ -1271,7 +1273,7 @@ fdisk -l $disk > /tmp/partitions
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
 part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'No tengo' --clear --title "| Partición Boot Windows |" \
-  --menu "\nSelecciona la partición de arranque \n\n$(fdisk -l $disk | grep EFI && fdisk -l $disk | grep 500M)\n " 12 67 0 ${p} 2>&1 > /dev/tty)
+  --menu "\nSelecciona la partición de arranque \n\n$(fdisk -l $disk | grep 100M && fdisk -l $disk | grep 499M && fdisk -l $disk | grep 500M)\n " 12 67 0 ${p} 2>&1 > /dev/tty)
 boot_osfs=$part
 
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
