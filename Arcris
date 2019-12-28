@@ -585,7 +585,7 @@ grub_selec=0
 while [ "$grub_selec" = "0" ] ; do
 
   grub_var=`dialog --title "| Selector de Arranque |" --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
-    --stdout --no-cancel --menu "             Instale GRUB en: UEFI o BIOS LEGACY\n\n> Discos GPT | UEFI es el sistema Moderno\n> Discos DOS/MBR | BIOS Legacy es un sistema antiguo\n\n$(cat /tmp/partitions | grep dos && cat /tmp/partitions | grep gpt )" 13 0 150 BIOS_LEGACY "Instala GRUB en sistemas de BIOS Legacy" UEFI_SYSTEM "Instala GRUB en sistemas de UEFI"`
+    --stdout --no-cancel --menu "             Instale GRUB en: UEFI o BIOS LEGACY\n\n> Discos GPT | UEFI es el sistema Moderno\n> Discos DOS MBR | BIOS Legacy es un sistema antiguo\n\n$(cat /tmp/partitions | grep dos && cat /tmp/partitions | grep gpt )" 13 0 150 BIOS_LEGACY "Instala GRUB en sistemas de BIOS Legacy" UEFI_SYSTEM "Instala GRUB en sistemas de UEFI"`
   
   if [ $grub_var == BIOS_LEGACY ]; then
 
