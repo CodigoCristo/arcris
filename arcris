@@ -1291,7 +1291,7 @@ part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCri
 datos_osfs=$part
 
 cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --checklist "Selecciona otros puntos de montajes:\n[SPACE] para marcar varias opciones" 8 0 0)
-options=( 
+options=("/boot" "Archivos estáticos del cargador de arranque" off
   "/home" "Archivos de usuario" off
   "/tmp" "Archivos temporales" off
   "/usr" "Datos estáticos" off
@@ -1395,14 +1395,15 @@ done
 
 clear
 mount "$rootfs" /mnt
-mkdir -p /mnt/{"$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
-mkdir -p /mnt/boot
+mkdir -p /mnt/{"$bootdir","$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
+mkdir -p /mnt/mnt/bootwin
 mkdir -p /mnt/mnt/windows
 mkdir -p /mnt/mnt/datos
-mount "$boot_osfs" /mnt/boot
+mount "$boot_osfs" /mnt/mnt/bootwin
 mount "$datosc_osfs" /mnt/mnt/windows
 mount "$datos_osfs" /mnt/mnt/datos
 
+mount "$bootfs" /mnt/boot
 mount "$homefs" /mnt/home
 mount "$tmpfs" /mnt/tmp
 mount "$usrfs" /mnt/usr
