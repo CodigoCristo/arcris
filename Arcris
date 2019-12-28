@@ -329,10 +329,15 @@ while [ "$kernel_var" = "0" ] ; do
    
   if [ $kernel_select == linux-stable ]; then
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel linux linux-headers linux-firmware mkinitcpio pulseaudio alsa-plugins alsa-oss dhclient dnsmasq ethtool gpm ndisc6 nfs-utils ntp usb_modeswitch usbutils wvdial nano reflector dhcp dhcpcd dhclient ppp netctl iw iwd net-tools networkmanager ifplugd openssh dialog" 25 80
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt " 25 80
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt r8168" 25 80
+arch-chroot /mnt /bin/bash -c "rmmod r8169" 
+arch-chroot /mnt /bin/bash -c "modprobe r8168"
+arch-chroot /mnt /bin/bash -c "modprobe r8168"
+arch-chroot /mnt /bin/bash -c "echo blacklist r8169 > /etc/modprobe.d/r8169_blacklist.conf"
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "\n¿Tienes Tarjeta de Wifi?" 7 45 
 case $? in 
-	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt broadcom-wl wireless-regdb wpa_supplicant wireless_tools" 25 80;;
+	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt broadcom-wl wireless-regdb wpa_supplicant wireless_tools" 25 80
+		arch-chroot /mnt /bin/bash -c "modprobe wl";;
 	1) 
 esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --yesno "\n¿Tienes Touchpad?" 7 45 
@@ -343,7 +348,7 @@ esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --yesno "\n¿Tienes Bluetooth?" 7 45 
 case $? in 
 	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth" 25 80
-	systemctl enable bluetooth.service;;
+		arch-chroot /mnt /bin/bash -c "systemctl enable bluetooth.service";;
 	1) 
 esac
   kernel_var=1
@@ -353,7 +358,8 @@ esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Hardened |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel linux-hardened linux-hardened-headers linux-firmware mkinitcpio pulseaudio alsa-plugins alsa-oss dhclient dnsmasq ethtool gpm ndisc6 nfs-utils ntp usb_modeswitch usbutils wvdial nano reflector dhcp dhcpcd dhclient ppp netctl iw iwd net-tools networkmanager ifplugd openssh dialog" 25 80
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "\n¿Tienes Tarjeta de Wifi?" 7 45 
 case $? in 
-	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Hardened |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt broadcom-wl wireless-regdb wpa_supplicant wireless_tools" 25 80;;
+	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Hardened |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt broadcom-wl wireless-regdb wpa_supplicant wireless_tools" 25 80
+		arch-chroot /mnt /bin/bash -c "modprobe wl";;
 	1) 
 esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --yesno "\n¿Tienes Touchpad?" 7 45 
@@ -364,7 +370,7 @@ esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --yesno "\n¿Tienes Bluetooth?" 7 45 
 case $? in 
 	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Hardened |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth blueman" 25 80
-	systemctl enable bluetooth.service;;
+		arch-chroot /mnt /bin/bash -c "systemctl enable bluetooth.service";;
 	1) 
 esac
   kernel_var=1
@@ -374,7 +380,8 @@ esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux LTS |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel linux-lts linux-lts-headers linux-firmware mkinitcpio pulseaudio alsa-plugins alsa-oss dhclient dnsmasq ethtool gpm ndisc6 nfs-utils ntp usb_modeswitch usbutils wvdial nano reflector dhcp dhcpcd dhclient ppp netctl iw iwd net-tools networkmanager ifplugd openssh dialog" 25 80
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "\n¿Tienes Tarjeta de Wifi?" 7 45 
 case $? in 
-	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux LTS |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt broadcom-wl wireless-regdb wpa_supplicant wireless_tools" 25 80;;
+	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux LTS |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt broadcom-wl wireless-regdb wpa_supplicant wireless_tools" 25 80
+		arch-chroot /mnt /bin/bash -c "modprobe wl";;
 	1) 
 esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --yesno "\n¿Tienes Touchpad?" 7 45 
@@ -385,7 +392,7 @@ esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --yesno "\n¿Tienes Bluetooth?" 7 45 
 case $? in 
 	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux LTS |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth blueman" 25 80
-	systemctl enable bluetooth.service;;
+		arch-chroot /mnt /bin/bash -c "systemctl enable bluetooth.service";;
 	1) 
 esac
   kernel_var=1  
@@ -394,7 +401,8 @@ esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux ZEN |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware mkinitcpio pulseaudio alsa-plugins alsa-oss dhclient dnsmasq ethtool gpm ndisc6 nfs-utils ntp usb_modeswitch usbutils wvdial nano reflector dhcp dhcpcd dhclient ppp netctl iw iwd net-tools networkmanager ifplugd openssh dialog" 25 80
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "\n¿Tienes Tarjeta de Wifi?" 7 45 
 case $? in 
-	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux ZEN |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt broadcom-wl wireless-regdb wpa_supplicant wireless_tools" 25 80;;
+	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux ZEN |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt broadcom-wl wireless-regdb wpa_supplicant wireless_tools" 25 80
+		arch-chroot /mnt /bin/bash -c "modprobe wl";;
 	1) 
 esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --yesno "\n¿Tienes Touchpad?" 7 45 
@@ -405,7 +413,7 @@ esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --yesno "\n¿Tienes Bluetooth?" 7 45 
 case $? in 
 	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux ZEN |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth blueman" 25 80
-	systemctl enable bluetooth.service;;
+		arch-chroot /mnt /bin/bash -c "systemctl enable bluetooth.service";;
 	1) 
 esac
   kernel_var=1  
@@ -575,108 +583,22 @@ cat /mnt/etc/pacman.d/mirrorlist | dialog --backtitle "Instalación de ArchLinux
 uefi=$( parted $disk print | grep -ic gpt )
 
 if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]; then
-dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --msgbox "|      SU SISTEMA ES UEFI >> INSTALE GRUB UEFI...    |" 5 50
+dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt pacman -Sy grub efibootmgr os-prober --noconfirm " 22 80
+dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --removable" 22 80
+  sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
+  sed -i '7d' /mnt/etc/default/grub
+dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg && echo "ls -l /mnt/boot" && ls -l /mnt/boot && echo "" && echo "Lea bien que no tenga ningún error marcado" && echo "> Confirme tener las IMG de linux para el arranque" && echo "> Confirme tener la carpeta de GRUB para el arranque" " 25 80
+
 
 else
-dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --msgbox ">>>  SU SISTEMA ES BIOS LEGACY  >> INSTALE GRUB LEGACY...    " 5 60
+dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt /bin/bash -c "pacman -Sy grub os-prober --noconfirm" " 22 80
+dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt grub-install --target=i386-pc $disk " 22 80
+  sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
+  sed -i '7d' /mnt/etc/default/grub
+dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg && echo "ls -l /mnt/boot" && ls -l /mnt/boot && echo "" && echo "Lea bien que no tenga ningún error marcado" && echo "> Confirme tener las IMG de linux para el arranque" && echo "> Confirme tener la carpeta de GRUB para el arranque" " 25 80
 fi
 
-grub_selec=0 
-while [ "$grub_selec" = "0" ] ; do
-
-  grub_var=`dialog --title "| Selector de Arranque |" --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
-    --stdout --no-cancel --menu "             Instale GRUB en: UEFI o BIOS LEGACY\n\n> Discos GPT | UEFI es el sistema Moderno\n> Discos DOS MBR | BIOS Legacy es un sistema antiguo\n\n$(cat /tmp/partitions | grep dos && cat /tmp/partitions | grep gpt )" 13 0 150 BIOS_LEGACY "Instala GRUB en sistemas de BIOS Legacy" UEFI_SYSTEM "Instala GRUB en sistemas de UEFI"`
-  
-  if [ $grub_var == BIOS_LEGACY ]; then
-
-  arch-chroot /mnt /bin/bash -c "pacman -Sy grub os-prober --noconfirm" | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox " GRUB BIOS LEGACY > Actualizando... " 30 2000; sleep 2
-  echo -e '\033[44;1m'
-  clear 
-  echo ""
-  echo "        /////////////////////////////////||"
-  echo "        //                               ||"
-  echo "        //    1 >> Instalando GRUB       ||"
-  echo "        //                               ||"
-  echo "        /////////////////////////////////||"
-  echo ""
-  echo ""
-  arch-chroot /mnt /bin/bash -c "grub-install --target=i386-pc $disk"
-  sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
-  sed -i '7d' /mnt/etc/default/grub
-  echo "        /////////////////////////////////||"
-  echo "        //                               ||"
-  echo "        //     2 >> Generando GRUB       ||"
-  echo "        //                               ||"
-  echo "        /////////////////////////////////||"
-  echo ""
-  arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg" 
-  echo ""
-  echo "ls -l /mnt/boot" && ls -l /mnt/boot
-  echo -e '\033[m'
-  echo -e '\033[41;1m'
-  echo "        /////////////////////////////////////////////////////////////||"
-  echo "        //                                                           ||"
-  echo "        /   Lea bien que no tenga ningún error marcado               ||"
-  echo "        //  > Confirme tener las IMG de linux para el arranque       ||"
-  echo "        //  > Confirme tener la carpeta de GRUB para el arranque     ||"
-  echo "        //                                                           ||"
-  echo "        /////////////////////////////////////////////////////////////||"
-  echo -e '\033[m'
-  echo ""
-  read -p "Presiona ENTER para continuar..."
-  echo ""
-  grub_selec=1
-
-  elif [ $grub_var == UEFI_SYSTEM ]; then
-  arch-chroot /mnt /bin/bash -c "pacman -Sy grub efibootmgr os-prober --noconfirm" | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox " GRUB UEFI > Actualizando... " 30 2000; sleep 2
-  echo -e '\033[44;1m'
-  clear 
-  echo ""
-  echo "        /////////////////////////////////||"
-  echo "        //                               ||"
-  echo "        //    1 >> Instalando GRUB       ||"
-  echo "        //                               ||"
-  echo "        /////////////////////////////////||"
-  echo ""
-  echo ""
-  arch-chroot /mnt /bin/bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch" 
-  echo ""
-  echo ""
-  arch-chroot /mnt /bin/bash -c "grub-install --target=x86_64-efi --efi-directory=/boot --removable"
-  echo ""
-  echo ""
-  sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
-  sed -i '7d' /mnt/etc/default/grub
-  echo ""
-  echo -e '         /////////////////////////////////|| '
-  echo -e '         //                               || '
-  echo -e '         //     2 >> Generando GRUB       || '
-  echo -e '         //                               || '
-  echo -e '         /////////////////////////////////|| '
-  echo ""
-  arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
-
-  echo ""
-  echo "ls -l /mnt/boot" && ls -l /mnt/boot
-  echo -e '\033[m'
-  echo -e '\033[41;1m'
-  echo "        ////////////////////////////////////////////////////////////////||"
-  echo "        //                                                              ||"
-  echo "        /   Lea bien que no tenga ningún error marcado                  ||"
-  echo "        //  > Confirme tener las IMG de linux para el arranque          ||"
-  echo "        //  > Confirme tener la carpeta de GRUB y EFI para el arranque  ||"
-  echo "        //                                                              ||"
-  echo "        ////////////////////////////////////////////////////////////////||"
-  echo -e '\033[m'
-  echo ""
-  read -p "Presiona ENTER para continuar..."
-  echo ""
-  grub_selec=1
-
-  fi
-done
-
-arch-chroot /mnt /bin/bash -c "pacman -Sy neofetch git wget lsb-release xdg-user-dirs --noconfirm && xdg-user-dirs-update"  | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Actualizando Sistema..." 30 2000; sleep 2
+arch-chroot /mnt pacman -Sy neofetch git wget lsb-release xdg-user-dirs --noconfirm && xdg-user-dirs-update | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Actualizando Sistema..." 30 2000; sleep 2
 dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| La computadora se reiniciara para finalizar la instalación |" 7 66
 clear
 echo ""
@@ -691,10 +613,6 @@ echo ""
 echo ""
 export $(cat /mnt/etc/locale.conf)
 echo ""
-arch-chroot /mnt /bin/bash -c "pacman -Syu && neofetch"; sleep 5
+arch-chroot /mnt pacman -Syu && neofetch; sleep 5
 umount -R /mnt
 reboot
-    
-
-
-
