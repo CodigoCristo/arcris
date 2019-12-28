@@ -67,7 +67,7 @@ dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --
 
 
 part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
-disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --menu "Elige el disco para Linux" 0 50 0 ${part} 2>&1 >/dev/tty)
+disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "Elige el disco para Linux" 0 50 0 ${part} 2>&1 >/dev/tty)
 
 fdisk -l $disk > /tmp/partitions
 
