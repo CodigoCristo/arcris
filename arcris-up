@@ -16,7 +16,7 @@ done | whiptail --title ' Hecho por Codigo Cristo ' --gauge "\nVisite la comunid
 cp .dialogrc ~/.dialogrc
 cp Arcris /bin/arcris
 cp arcris-up /bin/arcris-up
-
+sleep 2
 cd ..
 rm -r arcris
 clear
