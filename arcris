@@ -1247,3 +1247,8 @@ arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo "" && arch-chroot
 umount -R /mnt
 reboot
 fi
+ 
+# Cancel 
+else
+        echo "Cancel is pressed"
+fi
