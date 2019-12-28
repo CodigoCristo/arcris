@@ -27,11 +27,11 @@ dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --
 if ping -c 2 www.google.com &> /dev/null; then
 	
    dialog --title "|  Conexión  |" --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
-   --prgbox "ping -c 5 archlinux.org && echo && echo Si Hay Internet!" 17 100 
+   --prgbox "ping -c 3 archlinux.org && echo && echo Si Hay Internet!" 15 100 
 
 else
      dialog --title "|  Conexión a RED  |" --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
-   --prgbox "\n\nping -c 5 archlinux.org && echo && echo No hay conexión a Internet" 6 100 
+   --prgbox "\n\nping -c 3 archlinux.org && echo && echo No hay conexión a Internet" 6 100 
   dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Error de RED |" --msgbox "No hay conexión a Internet" 5 60
   dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "¿Quieres conectarte a una red wifi?" 5 45 
 case $? in 
@@ -140,7 +140,7 @@ esac
 fi
 
 
-partitioner=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| ELIGE UN PROGRAMA PARA CREAR PARTICIONES |" --menu " " 0 0 0\
+partitioner=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| ELIGE UN PROGRAMA |" --ok-label 'Seleccionar' --no-cancel --menu "Crear particiones correctamente" 0 0 0\
 		"cfdisk" "Un particionador casi grafico" \
 		"fdisk" "Un particionador de linea de comandos" \
 		"parted" "Un particionador de linea de comandos" 2>&1 > /dev/tty)
@@ -150,7 +150,7 @@ fdisk -l "$disk" > /tmp/partitions
 
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
-part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --clear --title "| Elige la partición del Administrador |" \
+part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Elige la partición de Administrador |" \
 	--menu "Root: /" 0 0 0 ${p} 2>&1 > /dev/tty)
 rootfs=$part
 p=$(echo "$p" | grep -v $part)
@@ -200,7 +200,7 @@ do
 		"/boot")
 
 #			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
-			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selecciona la partición |" \
+			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: boot |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			bootfs="$part"
 
@@ -211,7 +211,7 @@ do
 		"/home")
 
 #			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
-			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selecciona la partición |" \
+			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: home |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			homefs="$part"
 
@@ -222,7 +222,7 @@ do
 		"/tmp")
 
 #			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
-			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selecciona la partición |" \
+			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: tmp |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			tmpfs="$part"
 
@@ -233,7 +233,7 @@ do
 		"/usr")
 
 #			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
-			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selecciona la partición |" \
+			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: usr |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			usrfs="$part"
 
@@ -244,7 +244,7 @@ do
 		"/var")
 
 #			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
-			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selecciona la partición |" \
+			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: var |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			varfs="$part"
 
@@ -255,7 +255,7 @@ do
 		"/srv")
 
 #			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
-			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selecciona la partición |" \
+			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: srv |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			srvfs="$part"
 
@@ -266,7 +266,7 @@ do
 		"/opt")
 
 #			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
-			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selecciona la partición |" \
+			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: opt |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			optfs="$part"
 
@@ -276,7 +276,7 @@ do
 			;;
 		"swap")
 #			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
-			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selecciona la partición |" \
+			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: swap |" 0 0 0 ${p} 2>&1 > /dev/tty)
 			dialog --title "| Formateando Swap Linux |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkswap $part && swapon $part" 10 100
 
@@ -301,7 +301,7 @@ sed -i "/TotalDonwload/s/^#//g" /etc/pacman.conf
 sed -i "/VerbosePkgLists/s/^#//g" /etc/pacman.conf
 sed -i "39iILoveCandy" /etc/pacman.conf
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Reflector en el LiveCD... |" --stdout --ok-label "Siguiente" --prgbox "pacman -Sy reflector --noconfirm" 25 80
+pacman -Sy reflector --noconfirm | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80; sleep 3
 clear
 echo ""
 pacman-key --populate archlinux 
