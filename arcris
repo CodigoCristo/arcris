@@ -1902,7 +1902,7 @@ fdisk -l "$disk" > /tmp/partitions
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
 part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Elige la partición de Administrador |" \
-  --menu "Selecciona la partición para Root de Arch: /" 0 0 0 ${p} 2>&1 > /dev/tty)
+  --menu "Selecciona la partición para Root: /" 0 0 0 ${p} 2>&1 > /dev/tty)
 rootfs=$part
 p=$(echo "$p" | grep -v $part)
 
@@ -2035,11 +2035,6 @@ do
 	esac
 done
 
-
-#LINUX
-part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
-disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "\nSelecciona el disco donde esta Linux ya esta instalado\n " 10 62 0 ${part} 2>&1 >/dev/tty)
-fdisk -l $disk > /tmp/partitions
 
 clear
 mount "$rootfs" /mnt
@@ -2339,7 +2334,10 @@ cat /mnt/etc/pacman.d/mirrorlist | dialog --backtitle "Instalación de ArchLinux
 
 
 #MONTAR LINUX 2
-
+#LINUX
+part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
+disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "\nSelecciona el disco donde esta Linux ya esta instalado\n " 10 62 0 ${part} 2>&1 >/dev/tty)
+fdisk -l $disk > /tmp/partitions
 
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
