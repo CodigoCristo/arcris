@@ -522,6 +522,10 @@ fi
 #nombre de pc (hostname)
 hostname=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Hostname |" --inputbox "|  Nombre del computador  |" 0 0 2>&1 > /dev/tty)
 echo "$hostname" > /mnt/etc/hostname
+echo "$hostname" > hostname
+echo "127.0.1.1 $(cat timezone).localdomain $(cat timezone)" > /etc/hosts
+rm hostname
+
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| USUARIOS y CONTRASEÑAS |" --msgbox '\n> No se permite iniciar nombre de USUARIO\n> Con números / Caracteres especiales / Mayús\n> Máximo de 8 caracteres\n> En su CLAVE no use la letra “ñ”\n> Ni letras con tilde\n> Por ejemplo: è, ü, etc...\n> Ni otros caracteres especiales\n> ~!@#$%^&*_-+=|\(){}[]:;<;>;,.?/\n\n     >>  Ya que pueden causar errores  <<' 15 50
 #Clave para root
 while [ $rootpasswd != $rootpasswd2 ]
@@ -1101,6 +1105,10 @@ fi
 #nombre de pc (hostname)
 hostname=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Hostname |" --inputbox "|  Nombre del computador  |" 0 0 2>&1 > /dev/tty)
 echo "$hostname" > /mnt/etc/hostname
+echo "$hostname" > hostname
+echo "127.0.1.1 $(cat timezone).localdomain $(cat timezone)" > /etc/hosts
+rm hostname
+
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| USUARIOS y CONTRASEÑAS |" --msgbox '\n> No se permite iniciar nombre de USUARIO\n> Con números / Caracteres especiales / Mayús\n> Máximo de 8 caracteres\n> En su CLAVE no use la letra “ñ”\n> Ni letras con tilde\n> Por ejemplo: è, ü, etc...\n> Ni otros caracteres especiales\n> ~!@#$%^&*_-+=|\(){}[]:;<;>;,.?/\n\n     >>  Ya que pueden causar errores  <<' 15 50
 #Clave para root
 while [ $rootpasswd != $rootpasswd2 ]
@@ -1618,6 +1626,10 @@ fi
 #nombre de pc (hostname)
 hostname=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Hostname |" --inputbox "|  Nombre del computador  |" 0 0 2>&1 > /dev/tty)
 echo "$hostname" > /mnt/etc/hostname
+echo "$hostname" > hostname
+echo "127.0.1.1 $(cat timezone).localdomain $(cat timezone)" > /etc/hosts
+rm hostname
+
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| USUARIOS y CONTRASEÑAS |" --msgbox '\n> No se permite iniciar nombre de USUARIO\n> Con números / Caracteres especiales / Mayús\n> Máximo de 8 caracteres\n> En su CLAVE no use la letra “ñ”\n> Ni letras con tilde\n> Por ejemplo: è, ü, etc...\n> Ni otros caracteres especiales\n> ~!@#$%^&*_-+=|\(){}[]:;<;>;,.?/\n\n     >>  Ya que pueden causar errores  <<' 15 50
 #Clave para root
 while [ $rootpasswd != $rootpasswd2 ]
@@ -1877,6 +1889,7 @@ case $? in
 esac
 fi
 
+umount -R /mnt
 
 partitioner=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| ELIGE UN PROGRAMA |" --ok-label 'Seleccionar' --no-cancel --menu "Crear particiones correctamente" 0 0 0\
 		"cfdisk" "Un particionador casi grafico" \
@@ -1889,7 +1902,7 @@ fdisk -l "$disk" > /tmp/partitions
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
 part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Elige la partición de Administrador |" \
-  --menu "Selecciona la partición para Root: /" 0 0 0 ${p} 2>&1 > /dev/tty)
+  --menu "Selecciona la partición para Root de Arch: /" 0 0 0 ${p} 2>&1 > /dev/tty)
 rootfs=$part
 p=$(echo "$p" | grep -v $part)
 
@@ -2025,15 +2038,8 @@ done
 
 #LINUX
 part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
-disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "\nSelecciona el disco donde esta Linux Instalado\n " 10 62 0 ${part} 2>&1 >/dev/tty)
+disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "\nSelecciona el disco donde esta Linux ya esta instalado\n " 10 62 0 ${part} 2>&1 >/dev/tty)
 fdisk -l $disk > /tmp/partitions
-
-partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-p="$(echo "$partitions")"
-part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'Cancelar' --clear --title "| Partición Boot Linux |" \
-  --menu "\nSelecciona la partición de \nArranque del sistema Linux instalado\nOs-Prober se encargará de agregar a GRUB" 10 50 0 ${p} 2>&1 > /dev/tty)
-boot_linuxfs=$part
-
 
 clear
 mount "$rootfs" /mnt
@@ -2250,6 +2256,10 @@ fi
 #nombre de pc (hostname)
 hostname=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Hostname |" --inputbox "|  Nombre del computador  |" 0 0 2>&1 > /dev/tty)
 echo "$hostname" > /mnt/etc/hostname
+echo "$hostname" > hostname
+echo "127.0.1.1 $(cat timezone).localdomain $(cat timezone)" > /etc/hosts
+rm hostname
+
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| USUARIOS y CONTRASEÑAS |" --msgbox '\n> No se permite iniciar nombre de USUARIO\n> Con números / Caracteres especiales / Mayús\n> Máximo de 8 caracteres\n> En su CLAVE no use la letra “ñ”\n> Ni letras con tilde\n> Por ejemplo: è, ü, etc...\n> Ni otros caracteres especiales\n> ~!@#$%^&*_-+=|\(){}[]:;<;>;,.?/\n\n     >>  Ya que pueden causar errores  <<' 15 50
 #Clave para root
 while [ $rootpasswd != $rootpasswd2 ]
@@ -2329,6 +2339,16 @@ cat /mnt/etc/pacman.d/mirrorlist | dialog --backtitle "Instalación de ArchLinux
 
 
 #MONTAR LINUX 2
+
+
+partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
+p="$(echo "$partitions")"
+part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'Cancelar' --clear --title "| Partición Boot Linux |" \
+  --menu "\nSelecciona la partición \nDel sistema Linux ya instalado\nOs-Prober se encargará de agregarlo a GRUB" 10 50 0 ${p} 2>&1 > /dev/tty)
+boot_linuxfs=$part
+
+dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Verificando cambios en el disco |" --stdout --ok-label "Siguiente" --no-cancel --prgbox "e2fsck -f -b 32768 -y $boot_linuxfs" 22 80
+
 mount "$boot_linuxfs" /mnt/tmp
 
 
