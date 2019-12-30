@@ -583,7 +583,8 @@ part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCri
   --menu "\nSelecciona la partición Linux\nOs-Prober se encargará de agregarlo a GRUB" 8 50 0 ${p} 2>&1 > /dev/tty)
 boot_linuxfs=$part
 
-mount "$boot_linuxfs" /mnt/tmp
+mkdir /mnt/tmp/linux
+mount "$boot_linuxfs" /mnt/tmp/linux
 
 
 #GRUB LINUX
