@@ -126,9 +126,9 @@ partitioner=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchL
     "cfdisk" "Un particionador casi grafico" \
     "fdisk" "Un particionador de linea de comandos" \
     "parted" "Un particionador de linea de comandos" 2>&1 > /dev/tty)
+$partitioner $disk
 
 partprobe
-$partitioner $disk
 
 fdisk -l "$disk" > /tmp/partitions
 
@@ -272,6 +272,7 @@ done
 clear
 mount "$rootfs" /mnt
 mkdir -p /mnt/{"$bootdir","$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
+clear
 mount "$bootfs" /mnt/boot
 mount "$homefs" /mnt/home
 mount "$tmpfs" /mnt/tmp
@@ -279,6 +280,7 @@ mount "$usrfs" /mnt/usr
 mount "$varfs" /mnt/var
 mount "$srvfs" /mnt/srv
 mount "$optfs" /mnt/opt
+clear
 partprobe
 clear
 sed -i "/Color/s/^#//g" /etc/pacman.conf
@@ -313,8 +315,7 @@ while [ "$kernel_var" = "0" ] ; do
     --stdout --no-cancel --menu "Elige que kernel necesitas: \nLinux Stable es la mejor opción para iniciar\nLas otras opciones tienen un estilo diferente para instalar Drivers\nLas otras modificaciones del kernel trabajan con Drivers Libres" 16 0 2000 linux-stable "Kernel en su versión estable y módulos de Vanilla Linux" linux-hardened "Kernel enfocado en Seguridad" linux-lts "Kernel con soporte de larga duración" linux-zen "Kernel del esfuerzo colaborativo de varios hackers"`
    
   if [ $kernel_select == linux-stable ]; then
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel ntfs-3g mtools linux linux-headers linux-firmware mkinitcpio pulseaudio alsa-plugins alsa-oss dhclient dnsmasq ethtool gpm ndisc6 nfs-utils ntp usb_modeswitch usbutils wvdial nano reflector dhcp dhcpcd dhclient ppp netctl iw iwd net-tools networkmanager ifplugd openssh dialog" 25 80
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt r8168" 25 80
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel ntfs-3g mtools linux linux-headers linux-firmware mkinitcpio pulseaudio alsa-plugins alsa-oss dhclient r8168 dnsmasq ethtool gpm ndisc6 nfs-utils ntp usb_modeswitch usbutils wvdial nano reflector dhcp dhcpcd dhclient ppp netctl iw iwd net-tools networkmanager ifplugd openssh dialog" 25 80
 arch-chroot /mnt /bin/bash -c "rmmod r8169" 
 arch-chroot /mnt /bin/bash -c "modprobe r8168"
 arch-chroot /mnt /bin/bash -c "echo blacklist r8169 > /etc/modprobe.d/r8169_blacklist.conf"
@@ -570,21 +571,17 @@ cat /mnt/etc/pacman.d/mirrorlist | dialog --backtitle "Instalación de ArchLinux
 #MONTAR LINUX 2
 #LINUX
 part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
-disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "Elige el disco para Linux Instlado" 0 50 0 ${part} 2>&1 >/dev/tty)
-fdisk -l $disk > /tmp/partitions
-
-part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
-disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Partición |"  --ok-label 'Seleccionar' --no-cancel --menu "\nSelecciona la partición donde esta Linux Instalado\n " 10 62 0 ${part} 2>&1 >/dev/tty)
+disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "Elige el disco para Linux Instalado" 0 50 0 ${part} 2>&1 >/dev/tty)
 fdisk -l $disk > /tmp/partitions
 
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
 part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'Cancelar' --clear --title "| Partición Linux |" \
-  --menu "\nSelecciona la partición Linux\nOs-Prober se encargará de agregarlo a GRUB" 8 50 0 ${p} 2>&1 > /dev/tty)
+  --menu "Selecciona la partición Linux\nOs-Prober se encargará de agregarlo a GRUB" 10 50 0 ${p} 2>&1 > /dev/tty)
 boot_linuxfs=$part
 
-mkdir /mnt/tmp/linux
-mount "$boot_linuxfs" /mnt/tmp/linux
+mkdir /mnt/mnt/linux
+mount "$boot_linuxfs" /mnt/mnt/linux
 
 
 #GRUB LINUX

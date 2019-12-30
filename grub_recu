@@ -1,0 +1,81 @@
+#!/bin/bash
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| INTERNET |" --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
+
+if ping -c 2 www.google.com &> /dev/null;
+then
+  
+   dialog --title "|  Conexión  |" --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
+   --prgbox "ping -c 3 archlinux.org && echo && echo Si Hay Internet!" 15 100 
+
+else
+     dialog --title "|  Conexión a RED  |" --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
+   --prgbox "\n\nping -c 3 archlinux.org && echo && echo No hay conexión a Internet" 6 100 
+  dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Error de RED |" --msgbox "No hay conexión a Internet" 5 60
+  dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "¿Quieres conectarte a una red wifi?" 5 45 
+case $? in 
+  0) wifi-menu 
+  wifinet=$(netctl list | awk -F " " '{print $2}');;
+  1) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Ethernet |" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuevamente..." 8 50
+   exit;;
+esac
+fi
+
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "¿Quieres conectarte a una red wifi?" 5 45 
+case $? in 
+  0) wifi-menu 
+  wifinet=$(netctl list | awk -F " " '{print $2}');;
+  1) 
+esac
+
+
+
+
+#SISTEMA UEFI O BIOS
+uefi=$( parted $disk print | grep -ic gpt )
+
+parted $disk print | grep gpt > uefi2.txt
+echo "Partition Table: gpt" > uefi3.txt
+
+#UEFI
+if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]
+then
+dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --title "|  SISTEMA UEFI Y DISCO GPT  |" --infobox "\n           | SU SISTEMA ES UEFI |" 5 50; sleep 5
+
+
+
+
+#UEFI_ERROR
+elif [ $uefi == 0 ] && [ -d /sys/firmware/efi ]
+then
+dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --title "|  ERROR  |" --infobox "\n    | UEFI: No trabaja con discos DOS MBR |" 5 50; sleep 5
+dialog --backtitle "|  SISTEMA UEFI Y DISCO DOS MBR  |" --title "|  SISTEMA UEFI TRABAJA CON DISCOS GPT |"   --stdout --ok-label 'Reiniciar' --msgbox "\nUsted inicio la USB en sistema UEFI y su disco es DOS MBR \
+\n\nReinicie su sistema e ingrese en modo BIOS LEGACY \
+\n\nSi convierte su disco a GPT a DOS MBR perderá \nToda su información de Windows Instalado\n\nRecomendación: Reinicie e inicie CD o USB en BIOS LEGACY" 13 65
+reboot
+
+
+#BIOS LEGACY
+elif [ $uefi == 0 ]
+then
+dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --title "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --infobox "\n        | SU SISTEMA ES BIOS LEGACY |" 5 50; sleep 5
+
+
+
+
+
+
+
+#BIOS_ERROR
+elif [ -d /sys/firmware/efi ]
+then
+dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --title "|  ERROR  |" --infobox "\n  | BIOS LEGACY: No trabaja con discos GPT |" 5 50; sleep 5
+dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO GPT  |" --title "|  SISTEMA BIOS LEGACY TRABAJA CON DISCOS DOS MBR |"   --stdout --ok-label 'Reiniciar' --msgbox "\nUsted inicio la USB en sistema BIOS LEGACY y su disco es GPT \
+\n\nReinicie su sistema e ingrese en modo UEFI \
+\n\nSi convierte su disco a DOS MBR a GPT perderá \nToda su información de Windows Instalado\n\nRecomendación: Reinicie e inicie CD o USB en BIOS LEGACY" 13 65
+reboot
+
+
+#FINAL
+else  
+echo ""
+fi

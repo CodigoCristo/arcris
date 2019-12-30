@@ -20,7 +20,6 @@ export LANG=es_ES.UTF-8
 #partprobe
 
 #Inicio
-#!/bin/sh
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Código Cristo |" --menu "\nInstalador rápido de Arch Linux " 12 50 20 \
 1 ' > Instalar < ' \
 2 ' > Dual Boot - Windows Instalado < ' \
