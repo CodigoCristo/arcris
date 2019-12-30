@@ -15,6 +15,9 @@ done | dialog --title "| Cargando Idioma |" --gauge "$(locale-gen)" 8 60 0
 echo LANG=es_ES.UTF-8 > /etc/locale.conf
 export LANG=es_ES.UTF-8
 
+#terminus-font
+#FONT=ter-v14b  /etc/vconsole.conf 
+#partprobe
 
 #Inicio
 #!/bin/sh
