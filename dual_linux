@@ -88,12 +88,12 @@ tmp_linuxfs=$part
 
 tam_reducir=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Liberar Espacio  |" \
            --form "\nIngresa el tamaño (GiB) que necesita de espacio libre.\nOs-Prober se encargará de agregarlo a GRUB\n$(fdisk -l /dev/sda | grep Disco)" 12 70 0 \
-           " Espacio Libre de (GiB)" 1 1 "25" 1 25 25 30 2>&1 > /dev/tty)
+           " Espacio Libre de (GiB)" 1 1 "25G" 1 25 25 30 2>&1 > /dev/tty)
 
 
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Comprobando el Sistema de Archivos |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 '$tmp_linuxfs' " 20 80
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Reduciendo Sistema de Archivos |" --stdout --ok-label "Siguiente" --prgbox "resize2fs -p '$disk' $tam_reducir G " 20 80
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Reduciendo Sistema de Archivos |" --stdout --ok-label "Siguiente" --prgbox "resize2fs -p '$disk' $tam_reducir " 20 80
 
 
 
