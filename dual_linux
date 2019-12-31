@@ -83,7 +83,7 @@ dialog --backtitle "ArchLinux" --title "Información del Disco" --textbox /tmp/p
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
 part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'Ya esta particionado' --clear --title "| Partición Linux |" \
-  --menu "\nSelecciona la partición linux instalado" 12 67 0 ${p} 2>&1 > /dev/tty)
+  --menu "\nSelecciona la partición a reducir " 12 67 0 ${p} 2>&1 > /dev/tty)
 tmp_linuxfs=$part
 
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando el Sistema de Archivos |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 '$tmp_linuxfs' " 20 80
@@ -92,7 +92,7 @@ tam_reducir=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchL
            --form "\nIngresa el tamaño (GiB) que necesita de espacio libre.\nOs-Prober se encargará de agregarlo a GRUB\n$(fdisk -l /dev/sda | grep Disco)" 12 70 0 \
            " Espacio Libre de (GiB)" 1 1 "25G" 1 25 25 30 2>&1 > /dev/tty)
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Reduciendo Sistema de Archivos |" --stdout --ok-label "Siguiente" --prgbox "resize2fs -p '$disk' $tam_reducir" 20 80
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Reduciendo Sistema de Archivos |" --stdout --ok-label "Siguiente" --prgbox "resize2fs -p '$tmp_linuxfs' $tam_reducir" 20 80
 
 
 
