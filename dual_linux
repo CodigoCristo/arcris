@@ -93,7 +93,7 @@ tam_reducir=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchL
 
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Comprobando el Sistema de Archivos |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 '$tmp_linuxfs' " 20 80
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Reduciendo Sistema de Archivos |" --stdout --ok-label "Siguiente" --prgbox "resize2fs -p '$disk' $tam_reducirG " 20 80
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Reduciendo Sistema de Archivos |" --stdout --ok-label "Siguiente" --prgbox "resize2fs -p '$disk' $tam_reducir G " 20 80
 
 
 
