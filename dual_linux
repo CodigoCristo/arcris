@@ -48,11 +48,6 @@ dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --
 --msgbox "\n> UEFI trabaja con discos en GPT \n\n> UEFI su partición boot es formateada en FAT32 \n\n> BIOS LEGACY trabaja con discos en DOS/MBR\n\n> BIOS LEGACY su partición boot es formateada en EXT4\n( La partición boot en linux es opcional )" 14 60
 
 
-part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
-disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "Elige el disco para Arch" 0 50 0 ${part} 2>&1 >/dev/tty)
-
-fdisk -l $disk > /tmp/partitions
-
 
 #SISTEMA UEFI O BIOS
 uefi=$( parted $disk print | grep -ic gpt )
@@ -60,67 +55,53 @@ uefi=$( parted $disk print | grep -ic gpt )
 parted $disk print | grep gpt > uefi2.txt
 echo "Partition Table: gpt" > uefi3.txt
 
+#UEFI
 if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]
 then
 dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "|  SISTEMA UEFI |"  --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && cat /tmp/partitions | grep gpt && echo "Su disco SI es compatible para continuar" && echo "" && cat /tmp/partitions | grep /dev/ )" 12 150
 
 
+
+
+#UEFI - DISCO MBR DOS
 elif [ $uefi == 0 ] && [ -d /sys/firmware/efi ]
 then
-dialog --backtitle "| SISTEMA UEFI Y DISCO DOS MBR |" --title "|  UEFI TRABAJA CON GPT |" \
---yesno "\nUsted inicio la USB en sistema UEFI y su disco es DOS MBR\nConvertir su disco DOS/MBR a GPT\n\nAl convertir su disco perderá toda su información \
-\nSi tiene otras particiones en el Disco\nNo realice la conversión \n\n¿Desea convertir su disco DOS/MBR a GPT?" 13 65
-case $? in 
-  0)clear
-  echo ""
-  echo ""
-  echo "        ///////////////////////////////////||"
-  echo "        //                                 ||"
-  echo "        //   Confirme escribiendo          ||"
-  echo "        //                                 ||"
-  echo "        //          >>> Yes   <<<          ||"
-  echo "        //                                 ||"
-  echo "        //      Y presionando ENTER        ||"
-  echo "        //   Para realizar la conversión   ||"
-  echo "        //                                 ||"
-  echo "        ///////////////////////////////////||"
-  echo ""
-  echo ""
-  parted "$disk" mklabel gpt
-  sleep 2;;
-  1)exit
-esac
+dialog --backtitle "|  SISTEMA UEFI Y DISCO DOS MBR  |" --title "|  SISTEMA UEFI TRABAJA CON DISCOS GPT |"   --stdout --ok-label 'Reiniciar' --msgbox "\nUsted inicio la USB en sistema UEFI y su disco es DOS MBR \
+\n\nReinicie su sistema e ingrese en modo BIOS LEGACY \
+\n\nSi convierte su disco a GPT a DOS MBR perderá \nToda su información de Windows Instalado\n\nRecomendación: Reinicie e inicie CD o USB en BIOS LEGACY" 13 65
+reboot
 
+#BIOS
 elif [ $uefi == 0 ]
 then
 dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS MBR  |" --title "| SISTEMA BIOS LEGACY |"  --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && cat /tmp/partitions | grep dos && echo "Su disco SI es compatible para continuar" && echo "" && cat /tmp/partitions | grep /dev/ )" 12 150
 
-else  
-dialog --backtitle "| SISTEMA BIOS LEGACY Y DISCO GPT |" --title "|  BIOS LEGACY TRABAJA CON DOS MBR |" \
---yesno "\nUsted inicio la USB en sistema UEFI y su disco es DOS MBR\nConvertir su disco GPT a DOS/MBR\n\nAl convertir su disco perderá toda su información \
-\nSi tiene otras particiones en el Disco\nNo realice la conversión \n\n¿Desea convertir su disco DOS/MBR a GPT?" 13 65
-case $? in 
-  0)clear
-  echo ""
-  echo ""
-  echo "        ///////////////////////////////////||"
-  echo "        //                                 ||"
-  echo "        //   Confirme escribiendo          ||"
-  echo "        //                                 ||"
-  echo "        //          >>> Yes   <<<          ||"
-  echo "        //                                 ||"
-  echo "        //      Y presionando ENTER        ||"
-  echo "        //   Para realizar la conversión   ||"
-  echo "        //                                 ||"
-  echo "        ///////////////////////////////////||"
-  echo ""
-  echo ""
-  parted "$disk" mklabel msdos
-  sleep 2;;
-  1)exit
-esac
-fi
+fdisk -l "$disk" > /tmp/partitions
+dialog --backtitle "ArchLinux" --title "Información del Disco" --textbox /tmp/partitions 0 0
 
+part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
+disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "\nSelecciona el disco Linux\n " 10 50 0 ${part} 2>&1 >/dev/tty)
+fdisk -l $disk > /tmp/partitions
+
+partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
+p="$(echo "$partitions")"
+part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'Ya esta particionado' --clear --title "| Partición Linux |" \
+  --menu "\nSelecciona la partición linux instalado" 12 67 0 ${p} 2>&1 > /dev/tty)
+tmp_linuxfs=$part
+
+tam_reducir=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Liberar Espacio  |" \
+           --form "\nIngresa el tamaño (GiB) que necesita de espacio libre.\nOs-Prober se encargará de agregarlo a GRUB\n$(fdisk -l /dev/sda | grep Disco)" 12 70 0 \
+           " Espacio Libre de (GiB)" 1 1 "25" 1 25 25 30 2>&1 > /dev/tty)
+
+
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Comprobando el Sistema de Archivos |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 '$disk' " 20 80
+
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Reduciendo Sistema de Archivos |" --stdout --ok-label "Siguiente" --prgbox "resize2fs -p '$disk' $tam_reducir " 20 80
+
+
+
+#'K', 'M', 'G', 'T' or's' 
+#kilobytes, megabytes, gigabytes, terabytes or 512 byte 
 
 partitioner=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| ELIGE UN PROGRAMA |" --ok-label 'Seleccionar' --no-cancel --menu "Crear particiones correctamente" 0 0 0\
     "cfdisk" "Un particionador casi grafico" \
@@ -128,7 +109,8 @@ partitioner=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchL
     "parted" "Un particionador de linea de comandos" 2>&1 > /dev/tty)
 $partitioner $disk
 
-partprobe
+
+part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
 
 fdisk -l "$disk" > /tmp/partitions
 
@@ -273,6 +255,9 @@ clear
 mount "$rootfs" /mnt
 mkdir -p /mnt/{"$bootdir","$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
 clear
+mkdir -p /mnt/tmp/linux
+mount "$tmp_linuxfs" /mnt/tmp/linux
+
 mount "$bootfs" /mnt/boot
 mount "$homefs" /mnt/home
 mount "$tmpfs" /mnt/tmp
@@ -571,17 +556,8 @@ cat /mnt/etc/pacman.d/mirrorlist | dialog --backtitle "Instalación de ArchLinux
 #MONTAR LINUX 2
 #LINUX
 part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
-disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "Elige el disco para Linux Instalado" 0 50 0 ${part} 2>&1 >/dev/tty)
+disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "Elige el disco donde esta Arch Instalado" 0 50 0 ${part} 2>&1 >/dev/tty)
 fdisk -l $disk > /tmp/partitions
-
-partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-p="$(echo "$partitions")"
-part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'Cancelar' --clear --title "| Partición Linux |" \
-  --menu "Selecciona la partición Linux\nOs-Prober se encargará de agregarlo a GRUB" 10 50 0 ${p} 2>&1 > /dev/tty)
-boot_linuxfs=$part
-
-mkdir /mnt/mnt/linux
-mount "$boot_linuxfs" /mnt/mnt/linux
 
 
 #GRUB LINUX
@@ -623,3 +599,23 @@ echo ""
 arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo "" && arch-chroot /mnt /bin/bash -c "neofetch"; sleep 5
 umount -R /mnt
 reboot
+
+
+
+#BIOS - DISCO GPT
+elif [ -d /sys/firmware/efi ]
+then
+dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO GPT  |" --title "|  SISTEMA BIOS LEGACY TRABAJA CON DISCOS DOS MBR |"   --stdout --ok-label 'Reiniciar' --msgbox "\nUsted inicio la USB en sistema BIOS LEGACY y su disco es GPT \
+\n\nReinicie su sistema e ingrese en modo UEFI \
+\n\nSi convierte su disco a DOS MBR a GPT perderá \nToda su información de Windows Instalado\n\nRecomendación: Reinicie e inicie CD o USB en BIOS LEGACY" 13 65
+reboot
+
+
+#FINAL
+else  
+echo ""
+fi
+
+
+
+
