@@ -47,7 +47,9 @@ done
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Importante |" --stdout  --ok-label 'Siguiente'  \
 --msgbox "\n> UEFI trabaja con discos en GPT \n\n> UEFI su partición boot es formateada en FAT32 \n\n> BIOS LEGACY trabaja con discos en DOS/MBR\n\n> BIOS LEGACY su partición boot es formateada en EXT4\n( La partición boot en linux es opcional )" 14 60
 
-
+part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
+disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "\nSelecciona el disco Linux\n " 10 50 0 ${part} 2>&1 >/dev/tty)
+fdisk -l $disk > /tmp/partitions
 
 #SISTEMA UEFI O BIOS
 uefi=$( parted $disk print | grep -ic gpt )
@@ -74,10 +76,6 @@ reboot
 #BIOS
 elif [ $uefi == 0 ]
 then
-part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
-disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "\nSelecciona el disco Linux\n " 10 50 0 ${part} 2>&1 >/dev/tty)
-fdisk -l $disk > /tmp/partitions
-
 dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS MBR  |" --title "| SISTEMA BIOS LEGACY |"  --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && cat /tmp/partitions | grep dos && echo "Su disco SI es compatible para continuar" && echo "" && cat /tmp/partitions | grep /dev/ )" 12 150
 
 dialog --backtitle "ArchLinux" --title "Información del Disco" --textbox /tmp/partitions 0 0
