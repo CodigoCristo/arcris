@@ -283,7 +283,7 @@ sed -i "/TotalDonwload/s/^#//g" /etc/pacman.conf
 sed -i "/VerbosePkgLists/s/^#//g" /etc/pacman.conf
 sed -i "39iILoveCandy" /etc/pacman.conf
 
-pacman -Sy reflector --noconfirm | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80; sleep 3
+pacman -Sy reflector python --noconfirm | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80; sleep 3
 clear
 echo ""
 pacman-key --populate archlinux 
