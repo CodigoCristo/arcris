@@ -1,5 +1,7 @@
 #!/bin/bash
 
+reflector -l 5 --sort rate --save /etc/pacman.d/mirrorlist
+
 pacman -S xorg xorg-apps xorg-xinit xorg-twm xterm xorg-xclock xfce4 xfce4-goodies network-manager-applet lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice pulseaudio pavucontrol intel-ucode --noconfirm
 
 pacman -S xf86-video-intel vulkan-intel mesa lib32-mesa intel-media-driver libva-intel-driver libva-vdpau-driver libvdpau-va-gl libva-utils vdpauinfo intel-compute-runtime beignet clinfo ocl-icd lib32-ocl-icd opencl-headers --noconfirm
