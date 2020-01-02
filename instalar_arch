@@ -29,7 +29,7 @@ esac
 
 umount -R /mnt
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 '$tmp_linuxfs' " 20 80
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 /dev/sda1" 20 80
 
 selected=0 
 while [ $selected == "0" ];do 
