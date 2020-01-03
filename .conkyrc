@@ -1,0 +1,40 @@
+# conky configuration
+#
+# Adapted from conky script found at:
+# http://crunchbanglinux.org/forums/topic/59/my-conky-config/
+
+background yes
+use_xft yes
+xftfont sans:size=72
+xftalpha 1
+update_interval 1.0
+total_run_times 0
+own_window no
+own_window_transparent no
+own_window_colour #282828
+own_window_type override
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+double_buffer yes
+minimum_size 0 0
+maximum_width 900
+draw_shades no
+draw_outline no
+draw_borders no
+draw_graph_borders no
+default_color 1793d1
+default_shade_color 000000
+default_outline_color d9d7d6
+alignment bm
+gap_x 265
+gap_y 700
+no_buffers yes
+uppercase no
+override_utf8_locale no
+##############################################
+#  Output
+##############################################
+TEXT
+${font Sans:style=Bold:size=10}${voffset -60} Kernel: ${kernel} ${font Sans:size=10}| ${font Sans:style=Bold:size=10}RAM: ${mem} / ${memmax} ${font Sans:size=10}| ${font Sans:style=Bold:size=10}[/]: ${fs_used /} / ${fs_size /} ${font Sans:size=10}| ${font Sans:style=Bold:size=10}CPU: ${cpu cpu0}%
+${voffset -25}
+${font Sans:style=Bold:size=10}${voffset -40} Código Cristo || Comunidad: t.me/ArchLinuxCristo
+
