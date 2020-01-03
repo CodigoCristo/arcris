@@ -47,10 +47,13 @@ done
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Importante |" --stdout  --ok-label 'Siguiente'  \
 --msgbox "\n> UEFI trabaja con discos en GPT \n\n> UEFI su partición boot es formateada en FAT32 \n\n> BIOS LEGACY trabaja con discos en DOS/MBR\n\n> BIOS LEGACY su partición boot es formateada en EXT4\n( La partición boot en linux es opcional )" 14 60
 
+
 part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
-disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "\nSelecciona el disco Linux\n " 10 50 0 ${part} 2>&1 >/dev/tty)
+disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "Elige el disco para Linux" 0 50 0 ${part} 2>&1 >/dev/tty)
+
 fdisk -l $disk > /tmp/partitions
 chmod +x /tmp/partitions
+
 #SISTEMA UEFI O BIOS
 uefi=$( parted $disk print | grep -ic gpt )
 
@@ -58,7 +61,7 @@ parted $disk print | grep gpt > uefi2.txt
 echo "Partition Table: gpt" > uefi3.txt
 
 #UEFI
-if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]
+if [ $uefi == 1 ] && [ -d /sys/firmware/efi ];
 then
 dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "|  SISTEMA UEFI |"  --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && cat /tmp/partitions | grep gpt && echo "Su disco SI es compatible para continuar" && echo "" && cat /tmp/partitions | grep /dev/ )" 12 150
 
@@ -91,16 +94,6 @@ then
 dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS MBR  |" --title "| SISTEMA BIOS LEGACY |"  --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && cat /tmp/partitions | grep dos && echo "Su disco SI es compatible para continuar" && echo "" && cat /tmp/partitions | grep /dev/ )" 12 150
 
 dialog --backtitle "ArchLinux" --title "Información del Disco" --textbox /tmp/partitions 0 0
-
-#dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando el Sistema de Archivos |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 '$tmp_linuxfs' " 20 80
-#tam_reducir=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Liberar Espacio  |" \
-#           --form "\nIngresa el tamaño (GiB) que necesita de espacio libre.\nOs-Prober se encargará de agregarlo a GRUB\n$(fdisk -l $disk | grep /dev/)" 15 70 0 \
-#           " Espacio Libre de (GiB)" 1 1 "25G" 1 25 25 30 2>&1 > /dev/tty)
-
-#dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Reduciendo Sistema de Archivos |" --stdout --ok-label "Siguiente" --prgbox "resize2fs -p '$tmp_linuxfs' $tam_reducir" 20 80
-#'K', 'M', 'G', 'T' or's' 
-#kilobytes, megabytes, gigabytes, terabytes or 512 byte 
-#"kB", "MB", "MiB", "GB", "GiB", "TB", "TiB", "%"
 
 partitioner=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| ELIGE UN PROGRAMA |" --ok-label 'Seleccionar' --no-cancel --menu "Crear particiones correctamente" 0 0 0\
     "cfdisk" "Un particionador casi grafico" \
@@ -253,7 +246,6 @@ done
 clear
 mount "$rootfs" /mnt
 mkdir -p /mnt/{"$bootdir","$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
-
 mount "$bootfs" /mnt/boot
 mount "$homefs" /mnt/home
 mount "$tmpfs" /mnt/tmp
