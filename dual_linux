@@ -50,7 +50,7 @@ dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --
 part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
 disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "\nSelecciona el disco Linux\n " 10 50 0 ${part} 2>&1 >/dev/tty)
 fdisk -l $disk > /tmp/partitions
-
+chmod +x /tmp/partitions
 #SISTEMA UEFI O BIOS
 uefi=$( parted $disk print | grep -ic gpt )
 
@@ -102,7 +102,7 @@ $partitioner $disk
 part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
 
 fdisk -l "$disk" > /tmp/partitions
-
+chmod +x /tmp/partitions
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
 part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Elige la partición de Administrador |" \
@@ -544,6 +544,7 @@ cat /mnt/etc/pacman.d/mirrorlist | dialog --backtitle "Instalación de ArchLinux
 part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
 disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "Elige el disco donde esta Arch Instalado" 0 50 0 ${part} 2>&1 >/dev/tty)
 fdisk -l $disk > /tmp/partitions
+chmod +x /tmp/partitions
 
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
