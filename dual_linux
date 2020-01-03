@@ -57,8 +57,6 @@ chmod +x /tmp/partitions
 #SISTEMA UEFI O BIOS
 uefi=$( parted $disk print | grep -ic gpt )
 
-parted $disk print | grep gpt > uefi2.txt
-echo "Partition Table: gpt" > uefi3.txt
 
 #UEFI
 if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]
@@ -249,11 +247,11 @@ sed -i "/Color/s/^#//g" /etc/pacman.conf
 sed -i "/TotalDonwload/s/^#//g" /etc/pacman.conf
 sed -i "/VerbosePkgLists/s/^#//g" /etc/pacman.conf
 sed -i "39iILoveCandy" /etc/pacman.conf
+pacman -Sy reflector --noconfirm | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
 echo ""
 pacman-key --populate archlinux 
 echo ""
 echo "  Claves Actualizadas del LiveCD, Espere..."
-pacman -Sy reflector python --noconfirm | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
 reflector --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
 for i in $(seq 1 100)
 do
