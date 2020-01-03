@@ -599,4 +599,3 @@ reboot
 #FINAL
 else  
 echo ""
-fi
