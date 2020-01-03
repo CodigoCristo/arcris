@@ -61,17 +61,10 @@ parted $disk print | grep gpt > uefi2.txt
 echo "Partition Table: gpt" > uefi3.txt
 
 #UEFI
-if [ $uefi == 1 ] && [ -d /sys/firmware/efi ];
+if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]
 then
-dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "|  SISTEMA UEFI |"  --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && cat /tmp/partitions | grep gpt && echo "Su disco SI es compatible para continuar" && echo "" && cat /tmp/partitions | grep /dev/ )" 12 150
 
-if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]; then
-dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --title "|  SISTEMA UEFI Y DISCO GPT  |" --infobox "\n           | SU SISTEMA ES UEFI |" 5 50; sleep 5
-dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt pacman -Sy grub efibootmgr os-prober --noconfirm " 22 80
-dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "echo "" && echo '>>> Su disco es GPT | UEFI es el sistema Moderno <<<' && cat /tmp/partitions | grep gpt && echo '' && echo 'Instalando >> grubx64.efi' && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch && echo '' && echo 'Instalando >> bootx64.efi' && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --removable" 20 80
-  sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
-  sed -i '7d' /mnt/etc/default/grub
-dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "echo '' && arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg && echo '' && echo 'ls -l /mnt/boot' && ls -l /mnt/boot && echo '' && echo 'Lea bien que no tenga ningún error marcado' && echo '> Confirme tener las IMG de linux para el arranque' && echo '> Confirme tener la carpeta de GRUB para el arranque' " 25 80
+dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "|  SISTEMA UEFI |"  --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && cat /tmp/partitions | grep gpt && echo "Su disco SI es compatible para continuar" && echo "" && cat /tmp/partitions | grep /dev/ )" 12 150
 
 
 
@@ -81,6 +74,7 @@ dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB -
 #UEFI - DISCO MBR DOS
 elif [ $uefi == 0 ] && [ -d /sys/firmware/efi ]
 then
+
 dialog --backtitle "|  SISTEMA UEFI Y DISCO DOS MBR  |" --title "|  SISTEMA UEFI TRABAJA CON DISCOS GPT |"   --stdout --ok-label 'Reiniciar' --msgbox "\nUsted inicio la USB en sistema UEFI y su disco es DOS MBR \
 \n\nReinicie su sistema e ingrese en modo BIOS LEGACY \
 \n\nSi convierte su disco a GPT a DOS MBR perderá \nToda su información de Windows Instalado\n\nRecomendación: Reinicie e inicie CD o USB en BIOS LEGACY" 13 65
@@ -91,6 +85,7 @@ reboot
 #BIOS
 elif [ $uefi == 0 ]
 then
+
 dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS MBR  |" --title "| SISTEMA BIOS LEGACY |"  --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && cat /tmp/partitions | grep dos && echo "Su disco SI es compatible para continuar" && echo "" && cat /tmp/partitions | grep /dev/ )" 12 150
 
 dialog --backtitle "ArchLinux" --title "Información del Disco" --textbox /tmp/partitions 0 0
@@ -101,15 +96,12 @@ partitioner=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchL
     "parted" "Un particionador de linea de comandos" 2>&1 > /dev/tty)
 $partitioner $disk
 
-
-part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
-
 fdisk -l "$disk" > /tmp/partitions
-chmod +x /tmp/partitions
+
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
 part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Elige la partición de Administrador |" \
-  --menu "Selecciona la partición para Root de Arch: /" 0 50 0 ${p} 2>&1 > /dev/tty)
+  --menu "Selecciona la partición para Root: /" 0 0 0 ${p} 2>&1 > /dev/tty)
 rootfs=$part
 p=$(echo "$p" | grep -v $part)
 
