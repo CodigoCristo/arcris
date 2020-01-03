@@ -587,7 +587,7 @@ reboot
 
 
 
-#BIOS - DISCO GPT
+
 elif [ -d /sys/firmware/efi ]
 then
 dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO GPT  |" --title "|  SISTEMA BIOS LEGACY TRABAJA CON DISCOS DOS MBR |"   --stdout --ok-label 'Reiniciar' --msgbox "\nUsted inicio la USB en sistema BIOS LEGACY y su disco es GPT \
@@ -596,6 +596,7 @@ dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO GPT  |" --title "|  SISTEMA B
 reboot
 
 
-#FINAL
+
 else  
 echo ""
+fi
