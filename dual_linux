@@ -130,7 +130,7 @@ partitioning(){
 
 partitioning
 
-cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --checklist "Selecciona otros puntos de montajes:\n[SPACE] para marcar varias opciones" 8 0 0)
+cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --checklist "Selecciona otros puntos de montajes:\n[SPACE] para marcar varias opciones\n| TENGA CUIDADO AL MARCAR |" 8 0 0)
 options=("/boot" "Archivos estáticos del cargador de arranque" off   
   "/home" "Archivos de usuario" off
   "/tmp" "Archivos temporales" off
@@ -556,6 +556,9 @@ dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instal
 arch-chroot /mnt /bin/bash -c "pacman -Sy neofetch git wget lsb-release xdg-user-dirs --noconfirm && xdg-user-dirs-update" | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Instalando programas extras..." 20 2000; sleep 2
 dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| La computadora se reiniciara para finalizar la instalación |" 7 66
 clear
+export $(cat /mnt/etc/locale.conf)
+echo ""
+arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo "" && arch-chroot /mnt /bin/bash -c "neofetch"; sleep 5
 echo ""
 echo ""
 echo ""
@@ -566,9 +569,6 @@ echo "      //                               ||"
 echo "      /////////////////////////////////||"
 echo ""
 echo ""
-export $(cat /mnt/etc/locale.conf)
-echo ""
-arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo "" && arch-chroot /mnt /bin/bash -c "neofetch"; sleep 5
 umount -R /mnt
 reboot
 
