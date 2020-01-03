@@ -246,21 +246,17 @@ mount "$varfs" /mnt/var
 mount "$srvfs" /mnt/srv
 mount "$optfs" /mnt/opt
 clear
-partprobe
-clear
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Actualizando Disco |" --stdout --ok-label "Siguiente" --prgbox "partprobe" 25 80
 sed -i "/Color/s/^#//g" /etc/pacman.conf
 sed -i "/TotalDonwload/s/^#//g" /etc/pacman.conf
 sed -i "/VerbosePkgLists/s/^#//g" /etc/pacman.conf
 sed -i "39iILoveCandy" /etc/pacman.conf
-
-pacman -Sy reflector python --noconfirm | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80; sleep 3
 clear
 echo ""
 pacman-key --populate archlinux 
 echo ""
 echo "  Claves Actualizadas del LiveCD, Espere..."
-echo ""
-echo ""
+pacman -Sy reflector python --noconfirm | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
 reflector -l 5 --sort rate --save /etc/pacman.d/mirrorlist
 for i in $(seq 1 100)
 do
