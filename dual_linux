@@ -50,8 +50,9 @@ dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --
 
 part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
 disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "Elige el disco para Linux" 0 50 0 ${part} 2>&1 >/dev/tty)
-
-echo -e "\033[41m Espere... \033[m"
+clear
+echo ""
+echo -e "\033[41;1m Espere... \033[m"
 fdisk -l $disk > /tmp/partitions
 chmod +x /tmp/partitions
 
@@ -249,6 +250,7 @@ sed -i "/TotalDonwload/s/^#//g" /etc/pacman.conf
 sed -i "/VerbosePkgLists/s/^#//g" /etc/pacman.conf
 sed -i "39iILoveCandy" /etc/pacman.conf
 pacman -Sy reflector --noconfirm | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
+clear
 echo ""
 pacman-key --populate archlinux 
 echo ""
@@ -434,7 +436,8 @@ done
 
 else
 
-ln -sf /usr/share/zoneinfo/$(cat timezone) /mnt/etc/localtime
+zone="$(cat timezone)"
+ln -sf /usr/share/zoneinfo/$zone /mnt/etc/localtime
 
 fi
 
@@ -518,17 +521,17 @@ fi
 arch-chroot /mnt /bin/bash -c "reflector -l 5 --sort rate --save /etc/pacman.d/mirrorlist"
 for i in $(seq 1 100)
 do
-    sleep 0.07 
+    sleep 0.05 
     echo $i
 done | dialog --title '| Actualizando MirrorLists |' --gauge "\nActualizando MirrorList en el Sistema Base..." 7 60 0
 
-cat /mnt/etc/pacman.d/mirrorlist | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Mirrors List del Sistema Base > Actualizadas..." 25 2000; sleep 3
+cat /mnt/etc/pacman.d/mirrorlist | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Mirrors List del Sistema Base > Actualizadas..." 25 2000; sleep 2
 
 
 #MONTAR LINUX 2
 #LINUX
 part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
-disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "Elige el disco donde esta Arch Instalado" 0 50 0 ${part} 2>&1 >/dev/tty)
+disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "Elige el disco donde esta Linux" 0 50 0 ${part} 2>&1 >/dev/tty)
 fdisk -l $disk > /tmp/partitions
 chmod +x /tmp/partitions
 
@@ -541,13 +544,13 @@ mkdir -p /mnt/tmp/linux
 mount "$tmp_linuxfs" /mnt/tmp/linux
 
 #GRUB LINUX
-uefi=$( parted $disk print | grep -ic gpt )
+
 dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --title "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --infobox "\n        | SU SISTEMA ES BIOS LEGACY |" 5 50; sleep 5
 dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt pacman -Sy grub os-prober --noconfirm " 22 80
 dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "echo "" && echo '>>> Su disco es DOS MBR | BIOS Legacy es un sistema antiguo <<<' && cat /tmp/partitions | grep dos && echo '' && arch-chroot /mnt grub-install --target=i386-pc $disk " 15 80
   sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
   sed -i '7d' /mnt/etc/default/grub
-dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "echo '' && arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg && echo '' && echo 'ls -l /mnt/boot' && ls -l /mnt/boot && echo '' && echo 'Lea bien que no tenga ningún error marcado' && echo '> Confirme tener las IMG de linux para el arranque' && echo '> Confirme tener la carpeta de GRUB para el arranque' " 25 80
+dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "echo '' && arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg && echo '' && echo 'ls -l /mnt/boot' && ls -l /mnt/boot && echo '' && echo 'Lea bien que no tenga ningún error marcado' && echo '> Confirme tener las IMG de linux para el arranque' && echo '> Confirme tener la carpeta de GRUB para el arranque' " 25 80
 
 
 arch-chroot /mnt /bin/bash -c "pacman -Sy neofetch git wget lsb-release xdg-user-dirs --noconfirm && xdg-user-dirs-update" | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Instalando programas extras..." 20 2000; sleep 2
