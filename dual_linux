@@ -73,6 +73,8 @@ dialog --backtitle "|  SISTEMA UEFI Y DISCO DOS MBR  |" --title "|  SISTEMA UEFI
 \n\nSi convierte su disco a GPT a DOS MBR perderá \nToda su información de Windows Instalado\n\nRecomendación: Reinicie e inicie CD o USB en BIOS LEGACY" 13 65
 reboot
 
+
+
 #BIOS
 elif [ $uefi == 0 ]
 then
@@ -80,24 +82,15 @@ dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS MBR  |" --title "| SISTEM
 
 dialog --backtitle "ArchLinux" --title "Información del Disco" --textbox /tmp/partitions 0 0
 
-partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-p="$(echo "$partitions")"
-part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'Ya esta particionado' --clear --title "| Partición Linux |" \
-  --menu "\nSelecciona la partición a reducir " 12 67 0 ${p} 2>&1 > /dev/tty)
-tmp_linuxfs=$part
+#dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando el Sistema de Archivos |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 '$tmp_linuxfs' " 20 80
+#tam_reducir=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Liberar Espacio  |" \
+#           --form "\nIngresa el tamaño (GiB) que necesita de espacio libre.\nOs-Prober se encargará de agregarlo a GRUB\n$(fdisk -l $disk | grep /dev/)" 15 70 0 \
+#           " Espacio Libre de (GiB)" 1 1 "25G" 1 25 25 30 2>&1 > /dev/tty)
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando el Sistema de Archivos |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 '$tmp_linuxfs' " 20 80
-
-tam_reducir=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Liberar Espacio  |" \
-           --form "\nIngresa el tamaño (GiB) que necesita de espacio libre.\nOs-Prober se encargará de agregarlo a GRUB\n$(fdisk -l $disk | grep /dev/)" 15 70 0 \
-           " Espacio Libre de (GiB)" 1 1 "25G" 1 25 25 30 2>&1 > /dev/tty)
-
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Reduciendo Sistema de Archivos |" --stdout --ok-label "Siguiente" --prgbox "resize2fs -p '$tmp_linuxfs' $tam_reducir" 20 80
-
-
-
+#dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Reduciendo Sistema de Archivos |" --stdout --ok-label "Siguiente" --prgbox "resize2fs -p '$tmp_linuxfs' $tam_reducir" 20 80
 #'K', 'M', 'G', 'T' or's' 
 #kilobytes, megabytes, gigabytes, terabytes or 512 byte 
+#"kB", "MB", "MiB", "GB", "GiB", "TB", "TiB", "%"
 
 partitioner=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| ELIGE UN PROGRAMA |" --ok-label 'Seleccionar' --no-cancel --menu "Crear particiones correctamente" 0 0 0\
     "cfdisk" "Un particionador casi grafico" \
@@ -250,9 +243,6 @@ done
 clear
 mount "$rootfs" /mnt
 mkdir -p /mnt/{"$bootdir","$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
-clear
-mkdir -p /mnt/tmp/linux
-mount "$tmp_linuxfs" /mnt/tmp/linux
 
 mount "$bootfs" /mnt/boot
 mount "$homefs" /mnt/home
@@ -269,7 +259,7 @@ sed -i "/TotalDonwload/s/^#//g" /etc/pacman.conf
 sed -i "/VerbosePkgLists/s/^#//g" /etc/pacman.conf
 sed -i "39iILoveCandy" /etc/pacman.conf
 
-pacman -Sy reflector --noconfirm | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80; sleep 3
+pacman -Sy reflector python --noconfirm | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80; sleep 3
 clear
 echo ""
 pacman-key --populate archlinux 
@@ -555,27 +545,23 @@ part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')
 disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "Elige el disco donde esta Arch Instalado" 0 50 0 ${part} 2>&1 >/dev/tty)
 fdisk -l $disk > /tmp/partitions
 
+partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
+p="$(echo "$partitions")"
+part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Partición Linux |" \
+  --menu "\nSelecciona la partición linux ya instalado" 12 67 0 ${p} 2>&1 > /dev/tty)
+tmp_linuxfs=$part
+mkdir -p /mnt/tmp/linux
+mount "$tmp_linuxfs" /mnt/tmp/linux
 
 #GRUB LINUX
 uefi=$( parted $disk print | grep -ic gpt )
-
-if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]; then
-dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --title "|  SISTEMA UEFI Y DISCO GPT  |" --infobox "\n           | SU SISTEMA ES UEFI |" 5 50; sleep 5
-dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt pacman -Sy grub efibootmgr os-prober --noconfirm " 22 80
-dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "echo "" && echo '>>> Su disco es GPT | UEFI es el sistema Moderno <<<' && cat /tmp/partitions | grep gpt && echo '' && echo 'Instalando >> grubx64.efi' && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch && echo '' && echo 'Instalando >> bootx64.efi' && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --removable" 20 80
-  sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
-  sed -i '7d' /mnt/etc/default/grub
-dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "echo '' && arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg && echo '' && echo 'ls -l /mnt/boot' && ls -l /mnt/boot && echo '' && echo 'Lea bien que no tenga ningún error marcado' && echo '> Confirme tener las IMG de linux para el arranque' && echo '> Confirme tener la carpeta de GRUB para el arranque' " 25 80
-
-
-else
 dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --title "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --infobox "\n        | SU SISTEMA ES BIOS LEGACY |" 5 50; sleep 5
 dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt pacman -Sy grub os-prober --noconfirm " 22 80
 dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "echo "" && echo '>>> Su disco es DOS MBR | BIOS Legacy es un sistema antiguo <<<' && cat /tmp/partitions | grep dos && echo '' && arch-chroot /mnt grub-install --target=i386-pc $disk " 15 80
   sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
   sed -i '7d' /mnt/etc/default/grub
 dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "echo '' && arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg && echo '' && echo 'ls -l /mnt/boot' && ls -l /mnt/boot && echo '' && echo 'Lea bien que no tenga ningún error marcado' && echo '> Confirme tener las IMG de linux para el arranque' && echo '> Confirme tener la carpeta de GRUB para el arranque' " 25 80
-fi
+
 
 arch-chroot /mnt /bin/bash -c "pacman -Sy neofetch git wget lsb-release xdg-user-dirs --noconfirm && xdg-user-dirs-update" | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Instalando programas extras..." 20 2000; sleep 2
 dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| La computadora se reiniciara para finalizar la instalación |" 7 66
@@ -610,6 +596,19 @@ reboot
 #FINAL
 else  
 echo ""
+
+if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]; then
+dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --title "|  SISTEMA UEFI Y DISCO GPT  |" --infobox "\n           | SU SISTEMA ES UEFI |" 5 50; sleep 5
+dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt pacman -Sy grub efibootmgr os-prober --noconfirm " 22 80
+dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "echo "" && echo '>>> Su disco es GPT | UEFI es el sistema Moderno <<<' && cat /tmp/partitions | grep gpt && echo '' && echo 'Instalando >> grubx64.efi' && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch && echo '' && echo 'Instalando >> bootx64.efi' && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --removable" 20 80
+  sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
+  sed -i '7d' /mnt/etc/default/grub
+dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "echo '' && arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg && echo '' && echo 'ls -l /mnt/boot' && ls -l /mnt/boot && echo '' && echo 'Lea bien que no tenga ningún error marcado' && echo '> Confirme tener las IMG de linux para el arranque' && echo '> Confirme tener la carpeta de GRUB para el arranque' " 25 80
+
+
+else
+
+
 fi
 
 
