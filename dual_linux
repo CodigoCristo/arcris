@@ -130,7 +130,7 @@ partitioning(){
 
 partitioning
 
-cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --checklist "Selecciona otros puntos de montajes:\n[SPACE] para marcar varias opciones\n| TENGA CUIDADO AL MARCAR |" 8 0 0)
+cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --checklist "Selecciona otros puntos de montajes:\n[SPACE] para marcar varias opciones\n| TENGA CUIDADO AL MARCAR |" 12 0 0)
 options=("/boot" "Archivos estáticos del cargador de arranque" off   
   "/home" "Archivos de usuario" off
   "/tmp" "Archivos temporales" off
