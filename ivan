@@ -11,9 +11,9 @@ reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
 
 pacman -S xorg xorg-apps xorg-xinit xorg-twm xterm xorg-xclock xfce4 xfce4-goodies network-manager-applet lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice pulseaudio pavucontrol amd-ucode --noconfirm
 
-pacman -S xf86-video-intel vulkan-intel mesa lib32-mesa intel-media-driver libva-intel-driver libva-vdpau-driver libvdpau-va-gl libva-utils vdpauinfo intel-compute-runtime beignet clinfo ocl-icd lib32-ocl-icd opencl-headers 
+pacman -S xf86-video-ati mesa lib32-mesa mesa-vdpau libva-mesa-driver lib32-mesa-vdpau lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl libva-utils vdpauinfo opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers --noconfirm
 
-pacman -S chromium firefox gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer vlc gufw leafpad --noconfirm
+pacman -S code telegram-desktop chromium firefox gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer vlc gufw leafpad --noconfirm
 
 systemctl enable lightdm
 
@@ -24,4 +24,6 @@ localectl set-x11-keymap latam
 read -p "Presiona ENTER para reiniciar..."
 
 reboot
+
+
 
