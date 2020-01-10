@@ -477,7 +477,8 @@ done
 
 else
 
-ln -sf /usr/share/zoneinfo/$(cat timezone) /mnt/etc/localtime
+zone="$(cat timezone)"
+ln -sf /usr/share/zoneinfo/$zone /mnt/etc/localtime
 
 fi
 
@@ -589,7 +590,7 @@ dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instal
 dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "echo '' && arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg && echo '' && echo 'ls -l /mnt/boot' && ls -l /mnt/boot && echo '' && echo 'Lea bien que no tenga ningún error marcado' && echo '> Confirme tener las IMG de linux para el arranque' && echo '> Confirme tener la carpeta de GRUB para el arranque' " 25 80
 fi
 
-arch-chroot /mnt /bin/bash -c "pacman -Sy neofetch git wget lsb-release xdg-user-dirs --noconfirm && xdg-user-dirs-update" | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Actualizando Sistema..." 20 2000; sleep 2
+arch-chroot /mnt /bin/bash -c "pacman -Sy neofetch git wget lsb-release xdg-user-dirs accountsservice pulseaudio usbutils android-file-transfer android-tools android-udev msmtp libmtp libcddb gvfs gvfs gvfs-afc gvfs-smb gvfs-gphoto2 gvfs-mtp gvfs-goa gvfs-nfs gvfs-google gst-libav geoclue dosfstools mtools jfsutils f2fs-tools btrfs-progs exfat-utils ntfs-3g reiserfsprogs udftools xfsprogs nilfs-utils polkit gpart ark xarchiver unarchiver binutils gzip lha lrzip lzip lz4 p7zip tar xz bzip2 p7zip lbzip2 arj lzop cpio unrar unzip zstd zip lzip unarj zstd pulseaudio pulseaudio-alsa pavucontrol pamixer pulseeffects pulseaudio-equalizer lib32-alsa-plugins lib32-libpulse pulseaudio-equalizer-ladspa libcanberra-pulse libcanberra-gstreamer ffmpeg aom libde265 x265 x264 libmpeg2 xvidcore libtheora libvpx schroedinger sdl gstreamer gst-plugins-bad gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-ugly xine-lib libdvdcss libdvdread dvd+rw-tools lame jasper openjpeg libmng vcdimager --noconfirm && xdg-user-dirs-update" | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Actualizando Sistema..." 20 2000; sleep 2
 dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| La computadora se reiniciara para finalizar la instalación |" 7 66
 clear
 echo ""
