@@ -20,13 +20,6 @@ esac
 
 fi
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "¿Quieres conectarte a una red wifi?" 5 45 
-case $? in 
-	0) wifi-menu 
-	wifinet=$(netctl list | awk -F " " '{print $2}');;
-	1) 
-esac
-
 umount -R /mnt
 
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 /dev/sda1" 20 80
@@ -60,9 +53,6 @@ fdisk -l $disk > /tmp/partitions
 
 #SISTEMA UEFI O BIOS
 uefi=$( parted $disk print | grep -ic gpt )
-
-parted $disk print | grep gpt > uefi2.txt
-echo "Partition Table: gpt" > uefi3.txt
 
 if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]
 then
@@ -168,7 +158,7 @@ partitioning(){
 partitioning
 
 
-cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --checklist "Selecciona otros puntos de montajes:\n[SPACE] para marcar varias opciones" 8 0 0)
+cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --cancel-label 'No tengo más particiones' --checklist "Selecciona otros puntos de montajes:\n[SPACE] para marcar varias opciones" 8 0 0)
 options=("/boot" "Archivos estáticos del cargador de arranque" off   
 	"/home" "Archivos de usuario" off
 	"/tmp" "Archivos temporales" off
@@ -282,20 +272,16 @@ mount "$varfs" /mnt/var
 mount "$srvfs" /mnt/srv
 mount "$optfs" /mnt/opt
 clear
-sed -i "/Color/s/^#//g" /etc/pacman.conf
-sed -i "/TotalDonwload/s/^#//g" /etc/pacman.conf
-sed -i "/VerbosePkgLists/s/^#//g" /etc/pacman.conf
-sed -i "39iILoveCandy" /etc/pacman.conf
+cp pacman.conf /etc/pacman.conf
 
-pacman -Sy reflector python --noconfirm | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80; sleep 3
-clear
 echo ""
 pacman-key --populate archlinux 
 echo ""
 echo "  Claves Actualizadas del LiveCD, Espere..."
 echo ""
 echo ""
-reflector -l 5 --sort rate --save /etc/pacman.d/mirrorlist
+pacman -Sy reflector --noconfirm | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80; sleep 3
+reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 for i in $(seq 1 100)
 do
     sleep 0.07 
@@ -533,19 +519,11 @@ arch-chroot /mnt /bin/bash -c "hwclock -w"
 
 #activando servicios dhcpcd NetworkManager sshd
 #Modificando pacman.conf
-arch-chroot /mnt /bin/bash -c "sed -i "/Color/s/^#//g" /etc/pacman.conf"
-arch-chroot /mnt /bin/bash -c "sed -i "/TotalDonwload/s/^#//g" /etc/pacman.conf"
-arch-chroot /mnt /bin/bash -c "sed -i "/VerbosePkgLists/s/^#//g" /etc/pacman.conf"
-arch-chroot /mnt /bin/bash -c "sed -i "37iILoveCandy" /etc/pacman.conf"
+cp pacman.conf /mnt/etc/pacman.conf
 
 #Actualiza Servicios y Mirrors
 arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd NetworkManager sshd"
 
-sed -i '94d' /mnt/etc/pacman.conf
-sed -i '95d' /mnt/etc/pacman.conf
-sed -i "94i[multilib]" /mnt/etc/pacman.conf
-sed -i "95iInclude = /etc/pacman.d/mirrorlist" /mnt/etc/pacman.conf
-#printf "\n[multilib]\nInclude = /etc/pacman.d/mirrorlist" >>/mnt/etc/pacman.conf
 clear
 echo ""
 arch-chroot /mnt /bin/bash -c "pacman-key --populate archlinux"
@@ -553,11 +531,12 @@ echo ""
 echo "  Claves Actualizadas en el Sistema Base, Espere..."
 echo ""
 echo ""
+
 #Copia Red
-if [[ ! -z $wifinet ]];then
-	cp /etc/netctl/$wifinet /mnt/etc/netctl/$wifinet
-	arch-chroot /mnt /bin/bash -c "netctl enable $wifinet"
-fi
+wifinet=$(netctl list | awk -F " " '{print $2}')
+cp /etc/netctl/$wifinet /mnt/etc/netctl/$wifinet
+arch-chroot /mnt /bin/bash -c "netctl enable $wifinet"
+#Copia Red
 
 arch-chroot /mnt /bin/bash -c "reflector -l 5 --sort rate --save /etc/pacman.d/mirrorlist"
 for i in $(seq 1 100)
@@ -590,7 +569,8 @@ dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instal
 dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "echo '' && arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg && echo '' && echo 'ls -l /mnt/boot' && ls -l /mnt/boot && echo '' && echo 'Lea bien que no tenga ningún error marcado' && echo '> Confirme tener las IMG de linux para el arranque' && echo '> Confirme tener la carpeta de GRUB para el arranque' " 25 80
 fi
 
-arch-chroot /mnt /bin/bash -c "pacman -Sy neofetch git wget lsb-release xdg-user-dirs accountsservice pulseaudio usbutils android-file-transfer android-tools android-udev msmtp libmtp libcddb gvfs gvfs gvfs-afc gvfs-smb gvfs-gphoto2 gvfs-mtp gvfs-goa gvfs-nfs gvfs-google gst-libav geoclue dosfstools mtools jfsutils f2fs-tools btrfs-progs exfat-utils ntfs-3g reiserfsprogs udftools xfsprogs nilfs-utils polkit gpart ark xarchiver unarchiver binutils gzip lha lrzip lzip lz4 p7zip tar xz bzip2 p7zip lbzip2 arj lzop cpio unrar unzip zstd zip lzip unarj zstd pulseaudio pulseaudio-alsa pavucontrol pamixer pulseeffects pulseaudio-equalizer lib32-alsa-plugins lib32-libpulse pulseaudio-equalizer-ladspa libcanberra-pulse libcanberra-gstreamer ffmpeg aom libde265 x265 x264 libmpeg2 xvidcore libtheora libvpx schroedinger sdl gstreamer gst-plugins-bad gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-ugly xine-lib libdvdcss libdvdread dvd+rw-tools lame jasper openjpeg libmng vcdimager --noconfirm && xdg-user-dirs-update" | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Actualizando Sistema..." 20 2000; sleep 2
+
+dialog --backtitle "|  Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --title "| Utilidades del Sistema |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt pacman -Sy neofetch git wget lsb-release xdg-user-dirs accountsservice pulseaudio usbutils android-file-transfer android-tools android-udev msmtp libmtp libcddb gvfs gvfs gvfs-afc gvfs-smb gvfs-gphoto2 gvfs-mtp gvfs-goa gvfs-nfs gvfs-google gst-libav geoclue dosfstools mtools jfsutils f2fs-tools btrfs-progs exfat-utils ntfs-3g reiserfsprogs udftools xfsprogs nilfs-utils polkit gpart ark xarchiver unarchiver binutils gzip lha lrzip lzip lz4 p7zip tar xz bzip2 p7zip lbzip2 arj lzop cpio unrar unzip zstd zip lzip unarj zstd pulseaudio pulseaudio-alsa pavucontrol pamixer pulseeffects pulseaudio-equalizer lib32-alsa-plugins lib32-libpulse pulseaudio-equalizer-ladspa libcanberra-pulse libcanberra-gstreamer ffmpeg aom libde265 x265 x264 libmpeg2 xvidcore libtheora libvpx schroedinger sdl gstreamer gst-plugins-bad gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-ugly xine-lib libdvdcss libdvdread dvd+rw-tools lame jasper openjpeg libmng vcdimager --noconfirm && xdg-user-dirs-update" 22 2000
 dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| La computadora se reiniciara para finalizar la instalación |" 7 66
 clear
 echo ""
