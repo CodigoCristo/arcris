@@ -158,7 +158,8 @@ partitioning
 
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 
-cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --ok-label 'Montar partición' --cancel-label 'No tengo más particiones' --checklist "Selecciona otros puntos de montajes:\n[SPACE] para marcar varias opciones" 8 0 0)
+cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --ok-label 'Montar partición' --cancel-label 'No tengo más particiones' --checklist "Selecciona otros puntos de montajes:\n \
+	[SPACE] para marcar varias opciones luego [ENTER] para continuar." 8 0 0)
 options=("/boot" "Archivos estáticos del cargador de arranque" off   
 	"/home" "Archivos de usuario" off
 	"/tmp" "Archivos temporales" off
