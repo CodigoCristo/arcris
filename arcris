@@ -22,8 +22,9 @@ export LANG=es_ES.UTF-8
 #Inicio
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Código Cristo |" --menu "\nInstalador rápido de Arch Linux " 12 50 20 \
 1 ' > Instalar  - Arch Linux < ' \
-2 ' > Dual Boot - Windows Instalado < ' \
-3 ' > Dual Boot - GNU/Linux Instalado < ' \
+2 ' > Instalar  - Arch con Cifrado < ' \
+3 ' > Dual Boot - Windows Instalado < ' \
+4 ' > Dual Boot - GNU/Linux Instalado < ' \
 GRUB ' > Recuperar el Arranque < ' 2>temp
 
 #Opciones
@@ -51,11 +52,22 @@ fi
         if [ "$menu_inicio_return" = "3" ]
         then
 
+        sh dual_windows
+
+fi 
+
+
+# opción 4 - Dual Boot - LINUX
+        if [ "$menu_inicio_return" = "4" ]
+        then
+
         sh dual_linux
 
 fi 
 
-# opción 3 - Dual Boot - LINUX
+
+
+# opción 5 - Dual Boot - LINUX
         if [ "$menu_inicio_return" = "GRUB" ]
         then
 

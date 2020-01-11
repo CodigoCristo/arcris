@@ -159,7 +159,7 @@ partitioning
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 
 cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --ok-label 'Montar partición' --cancel-label 'No tengo más particiones' --checklist "Selecciona otros puntos de montajes:\n \
-[SPACE] para marcar varias opciones
+[SPACE] para marcar varias opciones \
 [ENTER] para continuar." 10 0 0)
 options=("/boot" "Archivos estáticos del cargador de arranque" off   
 	"/home" "Archivos de usuario" off
@@ -181,7 +181,7 @@ do
 			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: boot |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			bootfs="$part"
-
+			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			bootdir="boot"
 			p=$(echo "$p" | grep -v "$part")
@@ -192,7 +192,7 @@ do
 			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: home |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			homefs="$part"
-
+			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			homedir="home"
 			p=$(echo "$p" | grep -v "$part")
@@ -203,7 +203,7 @@ do
 			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: tmp |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			tmpfs="$part"
-
+			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			tmpdir="tmp"
 			p=$(echo "$p" | grep -v "$part")
@@ -214,7 +214,7 @@ do
 			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: usr |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			usrfs="$part"
-
+			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			usrdir="usr"
 			p=$(echo "$p" | grep -v "$part")
@@ -225,7 +225,7 @@ do
 			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: var |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			varfs="$part"
-
+			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			vardir="var"
 			p=$(echo "$p" | grep -v "$part")
@@ -236,7 +236,7 @@ do
 			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: srv |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			srvfs="$part"
-
+			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			srvdir="srv"
 			p=$(echo "$p" | grep -v "$part")
@@ -247,7 +247,7 @@ do
 			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: opt |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			optfs="$part"
-
+			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			optdir="opt"
 			p=$(echo "$p" | grep -v "$part")
@@ -257,7 +257,7 @@ do
 			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: swap |" 0 0 0 ${p} 2>&1 > /dev/tty)
 			dialog --title "| Formateando Swap Linux |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkswap $part && swapon $part" 10 100
-
+			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			swap="$part"
 			p=$(echo "$p" | grep -v "$part")
 	esac
@@ -302,8 +302,7 @@ while [ "$kernel_var" = "0" ] ; do
     --stdout --no-cancel --menu "Elige que kernel necesitas: \nLinux Stable es la mejor opción para iniciar\nLas otras opciones tienen un estilo diferente para instalar Drivers\nLas otras modificaciones del kernel trabajan con Drivers Libres" 16 0 2000 linux-stable "Kernel en su versión estable y módulos de Vanilla Linux" linux-hardened "Kernel enfocado en Seguridad" linux-lts "Kernel con soporte de larga duración" linux-zen "Kernel del esfuerzo colaborativo de varios hackers"`
    
   if [ $kernel_select == linux-stable ]; then
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel ntfs-3g mtools linux linux-headers linux-firmware mkinitcpio pulseaudio alsa-plugins alsa-oss dhclient dnsmasq ethtool gpm ndisc6 nfs-utils ntp usb_modeswitch usbutils wvdial nano reflector dhcp dhcpcd dhclient ppp netctl iw iwd net-tools networkmanager ifplugd openssh dialog" 25 80
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt r8168" 25 80
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel r8168 ntfs-3g mtools linux linux-headers linux-firmware mkinitcpio pulseaudio alsa-plugins alsa-oss dhclient dnsmasq ethtool gpm ndisc6 nfs-utils ntp usb_modeswitch usbutils wvdial nano reflector dhcp dhcpcd dhclient ppp netctl iw iwd net-tools networkmanager ifplugd openssh dialog" 25 80
 arch-chroot /mnt /bin/bash -c "rmmod r8169" 
 arch-chroot /mnt /bin/bash -c "modprobe r8168"
 arch-chroot /mnt /bin/bash -c "echo blacklist r8169 > /etc/modprobe.d/r8169_blacklist.conf"
@@ -397,7 +396,7 @@ done
 #FSTAB
 rm /mnt/etc/fstab 
 genfstab -U -p /mnt > /mnt/etc/fstab 
-dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| FSTAB >> Confirme que tenga el formato y ruta correcta |"   --stdout --ok-label 'Siguiente' --msgbox "$(cat /mnt/etc/fstab)" 20 1000
+dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Archivo FSTAB |"   --stdout --ok-label 'Siguiente' --msgbox "$(cat /mnt/etc/fstab)" 20 1000
 
 locales="$(cat /mnt/etc/locale.gen | grep .UTF-8 | sed '1,4d' | sed 's/\(.\{1\}\)//')"
 locale=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selecciona tu país |" \
@@ -476,7 +475,7 @@ fi
 hostname=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Hostname |" --inputbox "|  Nombre del computador  |" 0 0 2>&1 > /dev/tty)
 echo "$hostname" > /mnt/etc/hostname
 echo "$hostname" > hostname
-echo "127.0.1.1 $(cat timezone).localdomain $(cat timezone)" > /etc/hosts
+echo "127.0.1.1 $(cat hostname).localdomain $(cat hostname)" > /mnt/etc/hosts
 rm hostname
 
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| USUARIOS y CONTRASEÑAS |" --msgbox '\n> No se permite iniciar nombre de USUARIO\n> Con números / Caracteres especiales / Mayús\n> Máximo de 8 caracteres\n> En su CLAVE no use la letra “ñ”\n> Ni letras con tilde\n> Por ejemplo: è, ü, etc...\n> Ni otros caracteres especiales\n> ~!@#$%^&*_-+=|\(){}[]:;<;>;,.?/\n\n     >>  Ya que pueden causar errores  <<' 15 50
@@ -534,12 +533,6 @@ echo "  Claves Actualizadas en el Sistema Base, Espere..."
 echo ""
 echo ""
 
-#Copia Red
-wifinet=$(netctl list | awk -F " " '{print $2}')
-cp /etc/netctl/$wifinet /mnt/etc/netctl/$wifinet
-arch-chroot /mnt /bin/bash -c "netctl enable $wifinet"
-#Copia Red
-
 arch-chroot /mnt /bin/bash -c "reflector -l 5 --sort rate --save /etc/pacman.d/mirrorlist"
 for i in $(seq 1 100)
 do
@@ -549,6 +542,11 @@ done | dialog --title '| Actualizando MirrorLists |' --gauge "\nActualizando Mir
 
 cat /mnt/etc/pacman.d/mirrorlist | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Mirrors List del Sistema Base > Actualizadas..." 25 2000; sleep 3
 
+#Copia Red
+wifinet=$(netctl list | awk -F " " '{print $2}')
+cp /etc/netctl/$wifinet /mnt/etc/netctl/$wifinet
+arch-chroot /mnt /bin/bash -c "netctl enable $wifinet"
+#Copia Red
 
 
 uefi=$( parted $disk print | grep -ic gpt )
@@ -575,6 +573,10 @@ fi
 dialog --backtitle "|  Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --title "| Utilidades del Sistema |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt pacman -Sy neofetch git wget lsb-release xdg-user-dirs accountsservice pulseaudio usbutils android-file-transfer android-tools android-udev msmtp libmtp libcddb gvfs gvfs gvfs-afc gvfs-smb gvfs-gphoto2 gvfs-mtp gvfs-goa gvfs-nfs gvfs-google gst-libav geoclue dosfstools mtools jfsutils f2fs-tools btrfs-progs exfat-utils ntfs-3g reiserfsprogs udftools xfsprogs nilfs-utils polkit gpart ark xarchiver unarchiver binutils gzip lha lrzip lzip lz4 p7zip tar xz bzip2 p7zip lbzip2 arj lzop cpio unrar unzip zstd zip lzip unarj zstd pulseaudio pulseaudio-alsa pavucontrol pamixer pulseeffects pulseaudio-equalizer lib32-alsa-plugins lib32-libpulse pulseaudio-equalizer-ladspa libcanberra-pulse libcanberra-gstreamer ffmpeg aom libde265 x265 x264 libmpeg2 xvidcore libtheora libvpx schroedinger sdl gstreamer gst-plugins-bad gst-plugins-base gst-plugins-base-libs gst-plugins-good gst-plugins-ugly xine-lib libdvdcss libdvdread dvd+rw-tools lame jasper openjpeg libmng vcdimager --noconfirm && xdg-user-dirs-update" 22 2000
 dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| La computadora se reiniciara para finalizar la instalación |" 7 66
 clear
+
+export $(cat /mnt/etc/locale.conf)
+echo ""
+arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo "" && arch-chroot /mnt /bin/bash -c "neofetch"
 echo ""
 echo ""
 echo ""
@@ -585,8 +587,6 @@ echo "      //                               ||"
 echo "      /////////////////////////////////||"
 echo ""
 echo ""
-export $(cat /mnt/etc/locale.conf)
-echo ""
-arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo "" && arch-chroot /mnt /bin/bash -c "neofetch"; sleep 5
+sleep 5
 umount -R /mnt
 reboot
