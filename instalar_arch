@@ -400,7 +400,7 @@ dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Archivo FSTAB |" 
 
 locales="$(cat /mnt/etc/locale.gen | grep .UTF-8 | sed '1,4d' | sed 's/\(.\{1\}\)//')"
 locale=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selecciona tu país |" \
-	--menu "Elige tu idioma" 0 0 0 ${locales} 2>&1 > /dev/tty)
+	--menu "Elige tu idioma\nEjemplo:\nes_PE = Perú\nes_AR = Argentina\nes_MX = Mexico" 15 0 0 ${locales} 2>&1 > /dev/tty)
 sed -i "/${locale}/ s/# *//" /mnt/etc/locale.gen
 
 
