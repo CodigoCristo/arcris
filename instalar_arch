@@ -286,7 +286,7 @@ pacman -Sy reflector --noconfirm | dialog --backtitle "Instalación de ArchLinux
 reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 for i in $(seq 1 100)
 do
-    sleep 0.07 
+    sleep 0.04 
     echo $i
 done | dialog --title '| Actualizando MirrorLists |' --gauge "\nActualizando MirrorList en el LiveCD..." 7 60 0
 
@@ -536,7 +536,7 @@ echo ""
 arch-chroot /mnt /bin/bash -c "reflector -l 5 --sort rate --save /etc/pacman.d/mirrorlist"
 for i in $(seq 1 100)
 do
-    sleep 0.07 
+    sleep 0.04 
     echo $i
 done | dialog --title '| Actualizando MirrorLists |' --gauge "\nActualizando MirrorList en el Sistema Base..." 7 60 0
 
