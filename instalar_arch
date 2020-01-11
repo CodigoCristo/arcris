@@ -27,7 +27,7 @@ umount -R /mnt
 selected=0 
 while [ $selected == "0" ];do 
 	locales="$(localectl list-keymaps | awk '$locales=$locales" Keyboard"')" && locales=$(echo "$locales") 
-	keyboard=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Define la distribución del teclado: |" --menu " > la-latin1 (LatinoAmerica) \n > es (Español) \n > us (Americano)" 15 15 0 	${locales} 2>&1 > /dev/tty) 
+	keyboard=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Define la distribución del teclado: |" --menu " > la-latin1 (LatinoAmerica) \n > es (Español) \n > us (Americano)" 15 0 20 	${locales} 2>&1 > /dev/tty) 
 	if [ $? == 0 ];then 
 		loadkeys $keyboard 
 		keymap=$keyboard 
