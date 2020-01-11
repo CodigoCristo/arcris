@@ -158,7 +158,7 @@ partitioning(){
 partitioning
 
 
-cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --cancel-label 'No tengo más particiones' --checklist "Selecciona otros puntos de montajes:\n[SPACE] para marcar varias opciones" 8 0 0)
+cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --ok-label 'Montar partición' --cancel-label 'No tengo más particiones' --checklist "Selecciona otros puntos de montajes:\n[SPACE] para marcar varias opciones" 8 0 0)
 options=("/boot" "Archivos estáticos del cargador de arranque" off   
 	"/home" "Archivos de usuario" off
 	"/tmp" "Archivos temporales" off
