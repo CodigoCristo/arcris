@@ -129,7 +129,7 @@ part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCri
 rootfs=$part
 p=$(echo "$p" | grep -v $part)
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+
 
 partitioning(){
 	fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}' | grep -v cramfs | grep -v hfsplus | grep -v  bfs | grep -v msdos | grep -v minix)"
@@ -153,6 +153,8 @@ partitioning(){
 	    btrfs) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en BTRFS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.btrfs -f $part" 20 80;;
 	esac
 }
+
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 
 partitioning
 
