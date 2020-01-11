@@ -27,7 +27,7 @@ umount -R /mnt
 selected=0 
 while [ $selected == "0" ];do 
 	locales="$(localectl list-keymaps | awk '$locales=$locales" Keyboard"')" && locales=$(echo "$locales") 
-	keyboard=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Define la distribución del teclado: |" --menu " > la-latin1 (LatinoAmerica) \n > es (Español) \n > us (Americano)" 30 0 30 	${locales} 2>&1 > /dev/tty) 
+	keyboard=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Define la distribución del teclado: |" --menu "\n> la-latin1 (LatinoAmerica) \n\n > es (Español) \n\n > us (Americano)" 35 0 35 	${locales} 2>&1 > /dev/tty) 
 	if [ $? == 0 ];then 
 		loadkeys $keyboard 
 		keymap=$keyboard 
@@ -400,7 +400,7 @@ dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Archivo FSTAB |" 
 
 locales="$(cat /mnt/etc/locale.gen | grep .UTF-8 | sed '1,4d' | sed 's/\(.\{1\}\)//')"
 locale=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selecciona tu país |" \
-	--menu "Elige tu idioma\nEjemplo:\nes_PE = Perú\nes_AR = Argentina\nes_MX = Mexico" 15 0 0 ${locales} 2>&1 > /dev/tty)
+	--menu "Elige tu idioma\nEjemplo:\nes_PE = Perú\nes_AR = Argentina\nes_MX = Mexico" 35 0 35 ${locales} 2>&1 > /dev/tty)
 sed -i "/${locale}/ s/# *//" /mnt/etc/locale.gen
 
 
