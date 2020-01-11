@@ -27,7 +27,7 @@ umount -R /mnt
 selected=0 
 while [ $selected == "0" ];do 
 	locales="$(localectl list-keymaps | awk '$locales=$locales" Keyboard"')" && locales=$(echo "$locales") 
-	keyboard=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Define la distribución del teclado: |" --menu "\n> la-latin1 (LatinoAmerica) \n\n > es (Español) \n\n > us (Americano)" 35 0 35 	${locales} 2>&1 > /dev/tty) 
+	keyboard=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Define la distribución del teclado: |" --menu "\n > la-latin1 (LatinoAmerica) \n\n > es (Español) \n\n > us (Americano)" 35 0 35 	${locales} 2>&1 > /dev/tty) 
 	if [ $? == 0 ];then 
 		loadkeys $keyboard 
 		keymap=$keyboard 
@@ -400,7 +400,7 @@ dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Archivo FSTAB |" 
 
 locales="$(cat /mnt/etc/locale.gen | grep .UTF-8 | sed '1,4d' | sed 's/\(.\{1\}\)//')"
 locale=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selecciona tu país |" \
-	--menu "Elige tu idioma\nEjemplo:\nes_PE = Perú\nes_AR = Argentina\nes_MX = Mexico" 35 0 35 ${locales} 2>&1 > /dev/tty)
+	--menu "Elige tu idioma\n\nEjemplos:\nes_PE = Perú\nes_AR = Argentina\nes_MX = Mexico" 35 0 35 ${locales} 2>&1 > /dev/tty)
 sed -i "/${locale}/ s/# *//" /mnt/etc/locale.gen
 
 
@@ -470,6 +470,7 @@ ln -sf /usr/share/zoneinfo/$zone /mnt/etc/localtime
 fi
 
 
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| REGLAS EN PERFILES NUEVOS |" --msgbox '\n> No se permite iniciar nombre de USUARIO\n> Con números / Caracteres especiales / Mayús\n> Máximo de 8 caracteres\n> En su CLAVE no use la letra “ñ”\n> Ni letras con tilde\n> Por ejemplo: è, ü, etc...\n> Ni otros caracteres especiales\n> ~!@#$%^&*_-+=|\(){}[]:;<;>;,.?/\n\n     >>  Ya que pueden causar errores  <<' 15 50
 
 #nombre de pc (hostname)
 hostname=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Hostname |" --inputbox "|  Nombre del computador  |" 0 0 2>&1 > /dev/tty)
@@ -478,7 +479,6 @@ echo "$hostname" > hostname
 echo "127.0.1.1 $(cat hostname).localdomain $(cat hostname)" > /mnt/etc/hosts
 rm hostname
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| USUARIOS y CONTRASEÑAS |" --msgbox '\n> No se permite iniciar nombre de USUARIO\n> Con números / Caracteres especiales / Mayús\n> Máximo de 8 caracteres\n> En su CLAVE no use la letra “ñ”\n> Ni letras con tilde\n> Por ejemplo: è, ü, etc...\n> Ni otros caracteres especiales\n> ~!@#$%^&*_-+=|\(){}[]:;<;>;,.?/\n\n     >>  Ya que pueden causar errores  <<' 15 50
 #Clave para root
 while [ $rootpasswd != $rootpasswd2 ]
 do 
