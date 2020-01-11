@@ -299,7 +299,7 @@ kernel_var=0
 while [ "$kernel_var" = "0" ] ; do
 
   kernel_select=`dialog --title "| KERNEL LINUX |" --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
-    --stdout --no-cancel --menu "Elige que kernel necesitas: \nLinux Stable es la mejor opción para iniciar\nLas otras opciones tienen un estilo diferente para instalar Drivers\nLas otras modificaciones del kernel trabajan con Drivers Libres" 16 0 2000 linux-stable "Kernel en su versión estable y módulos de Vanilla Linux" linux-hardened "Kernel enfocado en Seguridad" linux-lts "Kernel con soporte de larga duración" linux-zen "Kernel del esfuerzo colaborativo de varios hackers"`
+    --stdout --ok-label "Seleccionar" --no-cancel --menu "Elige que kernel necesitas: \nLinux Stable es la mejor opción para iniciar\nLas otras opciones tienen un estilo diferente para instalar Drivers\nLas otras modificaciones del kernel trabajan con Drivers Libres" 16 0 2000 linux-stable "Kernel en su versión estable y módulos de Vanilla Linux" linux-hardened "Kernel enfocado en Seguridad" linux-lts "Kernel con soporte de larga duración" linux-zen "Kernel del esfuerzo colaborativo de varios hackers"`
    
   if [ $kernel_select == linux-stable ]; then
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel r8168 ntfs-3g mtools linux linux-headers linux-firmware mkinitcpio pulseaudio alsa-plugins alsa-oss dhclient dnsmasq ethtool gpm ndisc6 nfs-utils ntp usb_modeswitch usbutils wvdial nano reflector dhcp dhcpcd dhclient ppp netctl iw iwd net-tools networkmanager ifplugd openssh dialog" 25 80
