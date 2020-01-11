@@ -20,7 +20,7 @@ export LANG=es_ES.UTF-8
 #partprobe
 
 #Inicio
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Código Cristo |" --menu "\nInstalador rápido de Arch Linux " 13 50 20 \
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Código Cristo |" --ok-label 'Seleccionar' --no-cancel --menu "\nInstalador rápido de Arch Linux " 13 50 20 \
 1 ' > Instalar  - Arch Linux          < ' \
 2 ' > Instalar  - Arch con Cifrado    < ' \
 3 ' > Dual Boot - Windows Instalado   < ' \
