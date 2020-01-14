@@ -304,6 +304,7 @@ while [ "$kernel_var" = "0" ] ; do
   if [ $kernel_select == linux-stable ]; then
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel reflector \
 && arch-chroot /mnt reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist \
+&& cp pacman.conf /mnt/etc/pacman.conf \
 && arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware r8168 ntfs-3g mtools mkinitcpio pulseaudio alsa-plugins alsa-oss dhclient dnsmasq ethtool gpm ndisc6 nfs-utils ntp usb_modeswitch \
 usbutils wvdial nano dhcp dhcpcd dhclient ppp netctl nfs-utils iw iwd net-tools networkmanager ifplugd openssh dialog \
 neofetch git wget lsb-release xdg-user-dirs accountsservice pulseaudio usbutils android-file-transfer android-tools android-udev msmtp libmtp libcddb gvfs \
@@ -537,8 +538,6 @@ sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
 arch-chroot /mnt /bin/bash -c "hwclock -w"
 
 #activando servicios dhcpcd NetworkManager sshd
-#Modificando pacman.conf
-cp pacman.conf /mnt/etc/pacman.conf
 
 #Actualiza Servicios y Mirrors
 arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd NetworkManager sshd"
