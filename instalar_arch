@@ -130,6 +130,7 @@ rootfs=$part
 p=$(echo "$p" | grep -v $part)
 
 
+
 partitioning(){
 	fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}' | grep -v cramfs | grep -v hfsplus | grep -v  bfs | grep -v msdos | grep -v minix)"
   format=$(dialog --backtitle 'Instalación de ArchLinux - https://t.me/ArchLinuxCristo' --clear --title '| FORMATO DE PARTICIÓN |' \
@@ -154,6 +155,8 @@ partitioning(){
 }
 
 partitioning
+
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 
 cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --ok-label 'Montar partición' --cancel-label 'No tengo más particiones' --checklist "Selecciona otros puntos de montajes:\n\
 [SPACE] para marcar varias opciones\n\
