@@ -120,8 +120,6 @@ partitioner=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchL
 		"parted" "Un particionador de linea de comandos" 2>&1 > /dev/tty)
 $partitioner $disk
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "sgdisk --zap-all $disk" 20 80
-
 fdisk -l "$disk" > /tmp/partitions
 
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
