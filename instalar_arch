@@ -1,13 +1,17 @@
 #!/bin/bash
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| INTERNET |" --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
+
+
+titulo="-| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |-"
+
+dialog --backtitle "$titulo" --title "| INTERNET |" --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
 
 if ping -c 2 www.google.com &> /dev/null; then
 	
-   dialog --title "|  Conexión  |" --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
+   dialog --title "|  Conexión  |" --backtitle "$titulo" \
    --prgbox "ping -c 3 archlinux.org && echo && echo Si Hay Internet!" 15 100 
 
 else
-     dialog --title "|  Conexión a RED  |" --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
+     dialog --title "|  Conexión a RED  |" --backtitle "$titulo" \
    --prgbox "\n\nping -c 3 archlinux.org && echo && echo No hay conexión a Internet" 6 100 
   dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Error de RED |" --msgbox "No hay conexión a Internet" 5 60
   dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "¿Quieres conectarte a una red wifi?" 5 45 
@@ -23,19 +27,50 @@ fi
 umount -R /mnt
 
 
+cmd=(dialog --backtitle "$titulo" --title "| Define la distribución del teclado: |" --keep-tite --menu "\n" 10 0 10)
 
-selected=0 
-while [ $selected == "0" ];do 
-	locales="$(localectl list-keymaps | awk '$locales=$locales" Keyboard"')" && locales=$(echo "$locales") 
-	keyboard=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Define la distribución del teclado: |" --menu "\n > la-latin1 (LatinoAmerica) \n\n > es (Español) \n\n > us (Americano)" 35 0 35 	${locales} 2>&1 > /dev/tty) 
-	if [ $? == 0 ];then 
-		loadkeys $keyboard 
-		keymap=$keyboard 
-		selected=1 
-	else 
-		dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| ERROR |" --stdout --ok-label 'Siguiente' --msgbox "Ingrese una distribución del teclado para continuar" 5 55 
-	fi
+options=(es 		"Español"
+         latam 		"Latino"
+         us 		"Ingles"
+         otros 		"keyboard")
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+for choice in $choices
+do
+    case $choice in
+        es)
+            loadkeys es
+			keymap="es" 
+            ;;
+            
+        latam)
+            loadkeys es
+			keymap="la-latin1" 
+            ;;
+            
+        us)
+            loadkeys us
+			keymap="us" 
+            ;;
+            
+        otros)
+            selected=0 
+			while [ $selected == "0" ];do 
+				locales="$(localectl list-keymaps | awk '$locales=$locales" Keyboard"')" && locales=$(echo "$locales") 
+				keyboard=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Define la distribución del teclado: |" --menu "\n" 15 0 15 	${locales} 2>&1 > /dev/tty) 
+				if [ $? == 0 ];then 
+					loadkeys $keyboard 
+					keymap=$keyboard 
+					selected=1 
+				else 
+					dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| ERROR |" --stdout --ok-label 'Siguiente' --msgbox "Ingrese una distribución del teclado para continuar" 5 55 
+				fi
+			done
+            ;;
+    esac
 done
+
 
 
 
@@ -63,23 +98,8 @@ dialog --backtitle "| SISTEMA UEFI Y DISCO DOS MBR |" --title "|  UEFI TRABAJA C
 --yesno "\nUsted inicio la USB en sistema UEFI y su disco es DOS MBR\nConvertir su disco DOS/MBR a GPT\n\nAl convertir su disco perderá toda su información \
 \nSi tiene otras particiones en el Disco\nNo realice la conversión \n\n¿Desea convertir su disco DOS/MBR a GPT?" 13 65
 case $? in 
-	0)clear
-	echo ""
-	echo ""
-	echo "        ///////////////////////////////////||"
-	echo "        //                                 ||"
-	echo "        //   Confirme escribiendo          ||"
-	echo "        //                                 ||"
-	echo "        //          >>> Yes   <<<          ||"
-	echo "        //                                 ||"
-	echo "        //      Y presionando ENTER        ||"
-	echo "        //   Para realizar la conversión   ||"
-	echo "        //                                 ||"
-	echo "        ///////////////////////////////////||"
-	echo ""
-	echo ""
-	parted "$disk" mklabel gpt
-	sleep 2;;
+	0)sgdisk --zap-all $disk && parted "$disk" mklabel gpt | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando xdg-user-dirs... |" 25 80
+	sleep 3;;
 	1)exit
 esac
 
@@ -92,23 +112,8 @@ dialog --backtitle "| SISTEMA BIOS LEGACY Y DISCO GPT |" --title "|  BIOS LEGACY
 --yesno "\nUsted inicio la USB en sistema UEFI y su disco es DOS MBR\nConvertir su disco GPT a DOS/MBR\n\nAl convertir su disco perderá toda su información \
 \nSi tiene otras particiones en el Disco\nNo realice la conversión \n\n¿Desea convertir su disco DOS/MBR a GPT?" 13 65
 case $? in 
-	0)clear
-	echo ""
-	echo ""
-	echo "        ///////////////////////////////////||"
-	echo "        //                                 ||"
-	echo "        //   Confirme escribiendo          ||"
-	echo "        //                                 ||"
-	echo "        //          >>> Yes   <<<          ||"
-	echo "        //                                 ||"
-	echo "        //      Y presionando ENTER        ||"
-	echo "        //   Para realizar la conversión   ||"
-	echo "        //                                 ||"
-	echo "        ///////////////////////////////////||"
-	echo ""
-	echo ""
-	parted "$disk" mklabel msdos
-	sleep 2;;
+	0)sgdisk --zap-all $disk && parted "$disk" mklabel msdos | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando xdg-user-dirs... |" 25 80
+	sleep 3;;
 	1)exit
 esac
 fi
@@ -305,18 +310,17 @@ while [ "$kernel_var" = "0" ] ; do
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel reflector \
 && arch-chroot /mnt reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist \
 && cp pacman.conf /mnt/etc/pacman.conf \
-&& arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware r8168 ntfs-3g mtools mkinitcpio pulseaudio alsa-plugins alsa-oss dhclient dnsmasq ethtool gpm ndisc6 nfs-utils ntp usb_modeswitch \
-usbutils wvdial nano dhcp dhcpcd dhclient ppp netctl nfs-utils iw iwd net-tools networkmanager ifplugd openssh dialog \
-neofetch git wget lsb-release xdg-user-dirs accountsservice pulseaudio usbutils android-file-transfer android-tools android-udev msmtp libmtp libcddb gvfs \
+&& arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio r8168 \
+alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer lib32-alsa-plugins \
+dnsmasq ethtool gpm ndisc6 ntp usb_modeswitch which inetutils usbutils wvdial nano \
+dhcp dhcpcd dhclient ppp netctl nfs-utils iw iwd net-tools networkmanager ifplugd openssh dialog \
+neofetch git wget lsb-release accountsservice usbutils android-file-transfer android-tools android-udev msmtp libmtp libcddb gvfs \
 gvfs gvfs-afc gvfs-smb gvfs-gphoto2 gvfs-mtp gvfs-goa gvfs-nfs gvfs-google gst-libav geoclue dosfstools mtools \
-jfsutils f2fs-tools btrfs-progs exfat-utils ntfs-3g reiserfsprogs udftools xfsprogs nilfs-utils polkit gpart ark xarchiver \
-unarchiver binutils gzip lha lrzip lzip lz4 p7zip tar xz bzip2 p7zip lbzip2 arj lzop cpio unrar unzip zstd zip lzip unarj zstd \
-pulseaudio pulseaudio-alsa pavucontrol pamixer pulseeffects pulseaudio-equalizer lib32-alsa-plugins lib32-libpulse pulseaudio-equalizer-ladspa libcanberra-pulse \
+jfsutils f2fs-tools btrfs-progs exfat-utils ntfs-3g reiserfsprogs udftools xfsprogs nilfs-utils polkit gpart \
+ark xarchiver unarchiver binutils gzip lha lrzip lzip lz4 p7zip tar xz bzip2 p7zip lbzip2 arj lzop cpio unrar unzip zstd zip lzip unarj zstd \
 libcanberra-gstreamer ffmpeg aom libde265 x265 x264 libmpeg2 xvidcore libtheora libvpx schroedinger sdl gstreamer gst-plugins-bad gst-plugins-base gst-plugins-base-libs \
-gst-plugins-good gst-plugins-ugly xine-lib libdvdcss libdvdread dvd+rw-tools lame jasper openjpeg libmng vcdimager --noconfirm \
-&& arch-chroot /mnt xdg-user-dirs-update && ls /mnt/" 25 80
-
-
+gst-plugins-good gst-plugins-ugly xine-lib libdvdcss libdvdread dvd+rw-tools lame jasper openjpeg libmng vcdimager hddtemp \
+alsi inxi yay gotop htop --noconfirm" 25 80
 
 arch-chroot /mnt /bin/bash -c "rmmod r8169" 
 arch-chroot /mnt /bin/bash -c "modprobe r8168"
@@ -324,7 +328,8 @@ arch-chroot /mnt /bin/bash -c "echo blacklist r8169 > /etc/modprobe.d/r8169_blac
 
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "\n¿Tienes Tarjeta de Wifi?" 7 45 
 case $? in 
-	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt broadcom-wl wireless-regdb wpa_supplicant wireless_tools" 25 80
+	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
+		--prgbox "pacstrap /mnt broadcom-wl wireless-regdb wpa_supplicant wireless_tools" 25 80
 		arch-chroot /mnt /bin/bash -c "rmmod b43"
 		arch-chroot /mnt /bin/bash -c "rmmod ssb"
 		arch-chroot /mnt /bin/bash -c "modprobe wl";;
@@ -332,16 +337,17 @@ case $? in
 esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --yesno "\n¿Tienes Touchpad?" 7 45 
 case $? in 
-	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap  /mnt xf86-input-synaptics xf86-input-libinput xorg-xinput" 25 80;;
+	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
+		--prgbox "pacstrap  /mnt xf86-input-synaptics xf86-input-libinput xorg-xinput" 25 80;;
 	1) 
 esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --yesno "\n¿Tienes Bluetooth?" 7 45 
 case $? in 
-	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth" 25 80
+	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
+		--prgbox "pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth blueman" 25 80
 		arch-chroot /mnt /bin/bash -c "systemctl enable bluetooth.service";;
 	1) 
 esac
-
   kernel_var=1
 
 
@@ -419,7 +425,7 @@ dialog --backtitle "-| Instalación de ArchLinux - https://t.me/ArchLinuxCristo 
 
 locales="$(cat /mnt/etc/locale.gen | grep .UTF-8 | sed '1,4d' | sed 's/\(.\{1\}\)//')"
 locale=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selecciona tu país |" \
-	--menu "Elige tu idioma\n\nEjemplos:\nes_PE = Perú\nes_AR = Argentina\nes_MX = Mexico" 35 0 35 ${locales} 2>&1 > /dev/tty)
+	--menu "\nEjemplos:\nes_PE = Perú\nes_AR = Argentina\nes_MX = Mexico" 16 0 16 ${locales} 2>&1 > /dev/tty)
 sed -i "/${locale}/ s/# *//" /mnt/etc/locale.gen
 
 
@@ -468,7 +474,7 @@ do
 	timezones=$(cat timezones) 
 	rm timezones 
 	timezone=$(dialog --backtitle "| Instalación de ArchLinux |" --clear --title "Tu Zona Horaria es $(cat timezone): " \
-			--menu "Ingresa la zona horaria" 0 0 0 ${timezones} 2>&1 >/dev/tty) 
+			--menu "Ingresa la zona horaria" 20 0 20 ${timezones} 2>&1 >/dev/tty) 
 	clear
 	if [ "$?" = "0" ] 
 	then
@@ -541,30 +547,18 @@ arch-chroot /mnt /bin/bash -c "hwclock -w"
 
 #Actualiza Servicios y Mirrors
 arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd NetworkManager sshd"
-
 clear
 echo ""
 arch-chroot /mnt /bin/bash -c "pacman-key --populate archlinux"
 echo ""
 echo "  Claves Actualizadas en el Sistema Base, Espere..."
 echo ""
-echo ""
-
-arch-chroot /mnt /bin/bash -c "reflector -l 5 --sort rate --save /etc/pacman.d/mirrorlist"
-for i in $(seq 1 100)
-do
-    sleep 0.04 
-    echo $i
-done | dialog --title '| Actualizando MirrorLists |' --gauge "\nActualizando MirrorList en el Sistema Base..." 7 60 0
-
-cat /mnt/etc/pacman.d/mirrorlist | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Mirrors List del Sistema Base > Actualizadas..." 25 2000; sleep 3
-
 #Copia Red
 wifinet=$(netctl list | awk -F " " '{print $2}')
 cp /etc/netctl/$wifinet /mnt/etc/netctl/$wifinet
 arch-chroot /mnt /bin/bash -c "netctl enable $wifinet"
 #Copia Red
-
+clear
 
 uefi=$( parted $disk print | grep -ic gpt )
 
@@ -580,16 +574,19 @@ dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB -
 else
 dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --title "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --infobox "\n        | SU SISTEMA ES BIOS LEGACY |" 5 50; sleep 5
 dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt pacman -Sy grub os-prober --noconfirm " 22 80
-dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "echo "" && echo '>>> Su disco es DOS MBR | BIOS Legacy es un sistema antiguo <<<' && cat /tmp/partitions | grep dos && echo '' && arch-chroot /mnt grub-install --target=i386-pc $disk " 15 80
+dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "echo "" && echo '>>> Su disco es DOS MBR | BIOS Legacy es un sistema antiguo <<<' && echo "" && cat /tmp/partitions | grep dos && echo '' && arch-chroot /mnt grub-install --target=i386-pc $disk " 15 80
   sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
   sed -i '7d' /mnt/etc/default/grub
 dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "echo '' && arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg && echo '' && echo 'ls -l /mnt/boot' && ls -l /mnt/boot && echo '' && echo 'Lea bien que no tenga ningún error marcado' && echo '> Confirme tener las IMG de linux para el arranque' && echo '> Confirme tener la carpeta de GRUB para el arranque' " 25 80
 fi
 
-dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| La computadora se reiniciara para finalizar la instalación |" 7 66
-clear
 
+arch-chroot /mnt pacman -Sy xdg-user-dirs --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando xdg-user-dirs... |" 25 80; sleep 3
+dialog --no-collapse --cr-wrap --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| La computadora se reiniciara para finalizar la instalación |" 7 66
+clear
 export $(cat /mnt/etc/locale.conf)
+clear
+arch-chroot /mnt xdg-user-dirs-update && ls /mnt/root
 echo ""
 arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo "" && arch-chroot /mnt /bin/bash -c "neofetch"
 echo ""
@@ -604,4 +601,5 @@ echo ""
 echo ""
 sleep 5
 umount -R /mnt
+swapoff $swap
 reboot
