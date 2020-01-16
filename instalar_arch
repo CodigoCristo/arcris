@@ -119,6 +119,7 @@ case $? in
 esac
 fi
 
+umount -R /mnt
 
 partitioner=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| ELIGE UN PROGRAMA |" --ok-label 'Seleccionar' --no-cancel --menu "Crear particiones correctamente" 0 0 0\
 		"cfdisk" "Un particionador casi grafico" \
@@ -169,7 +170,7 @@ cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCrist
 [SPACE] para marcar varias opciones\n\
 [ENTER] para continuar." 10 0 0)
 options=("/boot" "Archivos estáticos del cargador de arranque" off   
-	"/efi" "Archivos de usuario" off
+	"/efi" "Archivos EFI del cargador de arranque" off
 	"/home" "Archivos de usuario" off
 	"/tmp" "Archivos temporales" off
 	"/usr" "Datos estáticos" off
@@ -279,7 +280,6 @@ do
 #			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
 			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: swap |" 0 0 0 ${p} 2>&1 > /dev/tty)
-			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80	
 			dialog --title "| Formateando Swap Linux |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkswap $part && swapon $part" 10 100
 			swap="$part"
 			p=$(echo "$p" | grep -v "$part")
