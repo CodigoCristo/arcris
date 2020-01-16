@@ -200,6 +200,8 @@ do
 			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			bootdir="boot"
+			mkdir -p /mnt/boot
+			mount "$bootfs" /mnt/boot
 			p=$(echo "$p" | grep -v "$part")
 			;;
 			
@@ -226,6 +228,8 @@ do
 			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			homedir="home"
+			mkdir -p /mnt/home
+			mount "$homefs" /mnt/home
 			p=$(echo "$p" | grep -v "$part")
 			;;
 		"/tmp")
@@ -237,6 +241,8 @@ do
 			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			tmpdir="tmp"
+			mkdir -p /mnt/tmp
+			mount "$tmpfs" /mnt/tmp
 			p=$(echo "$p" | grep -v "$part")
 			;;
 		"/usr")
@@ -248,6 +254,8 @@ do
 			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			usrdir="usr"
+			mkdir -p /mnt/usr
+			mount "$usrfs" /mnt/usr
 			p=$(echo "$p" | grep -v "$part")
 			;;
 		"/var")
@@ -259,6 +267,8 @@ do
 			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			vardir="var"
+			mkdir -p /mnt/var
+			mount "$varfs" /mnt/var
 			p=$(echo "$p" | grep -v "$part")
 			;;
 		"/srv")
@@ -270,6 +280,8 @@ do
 			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			srvdir="srv"
+			mkdir -p /mnt/srv
+			mount "$srvfs" /mnt/srv
 			p=$(echo "$p" | grep -v "$part")
 			;;
 		"/opt")
@@ -281,6 +293,8 @@ do
 			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			optdir="opt"
+			mkdir -p /mnt/opt
+			mount "$optfs" /mnt/opt
 			p=$(echo "$p" | grep -v "$part")
 			;;
 		"swap")
@@ -293,16 +307,8 @@ do
 	esac
 done
 
-clear
+#mkdir -p /mnt/{"$bootdir","$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
 
-mkdir -p /mnt/{"$bootdir","$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
-mount "$bootfs" /mnt/boot
-mount "$homefs" /mnt/home
-mount "$tmpfs" /mnt/tmp
-mount "$usrfs" /mnt/usr
-mount "$varfs" /mnt/var
-mount "$srvfs" /mnt/srv
-mount "$optfs" /mnt/opt
 clear
 cp pacman.conf /etc/pacman.conf
 
