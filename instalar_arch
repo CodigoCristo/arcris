@@ -133,7 +133,7 @@ partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | se
 p="$(echo "$partitions")"
 part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Elige la partición de Administrador |" \
   --menu "Selecciona la partición para Root: /" 0 0 0 ${p} 2>&1 > /dev/tty)
-dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 rootfs=$part
 
 
@@ -313,7 +313,7 @@ do
     echo $i
 done | dialog --title '| Actualizando MirrorLists |' --gauge "\nActualizando MirrorList en el LiveCD..." 7 60 0
 
-cat /etc/pacman.d/mirrorlist | dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Mirrors List del LiveCD > Actualizadas..." 25 2000; sleep 5
+cat /etc/pacman.d/mirrorlist | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Mirrors List del LiveCD > Actualizadas..." 25 2000; sleep 5
 
 
 
@@ -339,11 +339,11 @@ jfsutils f2fs-tools btrfs-progs exfat-utils ntfs-3g reiserfsprogs udftools xfspr
 ark xarchiver unarchiver binutils gzip lha lrzip lzip lz4 p7zip tar xz bzip2 p7zip lbzip2 arj lzop cpio unrar unzip zstd zip lzip unarj zstd \
 libcanberra-gstreamer ffmpeg aom libde265 x265 x264 libmpeg2 xvidcore libtheora libvpx schroedinger sdl gstreamer gst-plugins-bad gst-plugins-base gst-plugins-base-libs \
 gst-plugins-good gst-plugins-ugly xine-lib libdvdcss libdvdread dvd+rw-tools lame jasper openjpeg libmng vcdimager hddtemp \
-alsi inxi yay gotop htop --noconfirm" 25 80
+alsi inxi yay gotop htop --noconfirm \
+&& arch-chroot /mnt /bin/bash -c 'rmmod r8169' \
+&& arch-chroot /mnt /bin/bash -c 'modprobe r8168' \
+&& arch-chroot /mnt /bin/bash -c 'echo blacklist r8169 > /etc/modprobe.d/r8169_blacklist.conf' " 25 80
 
-arch-chroot /mnt /bin/bash -c "rmmod r8169" 
-arch-chroot /mnt /bin/bash -c "modprobe r8168"
-arch-chroot /mnt /bin/bash -c "echo blacklist r8169 > /etc/modprobe.d/r8169_blacklist.conf"
 
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "\n¿Actualizaciones para el microcódigo del procesador?" 7 45 
 case $? in 
