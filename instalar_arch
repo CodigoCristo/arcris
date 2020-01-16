@@ -98,8 +98,9 @@ dialog --backtitle "| SISTEMA UEFI Y DISCO DOS MBR |" --title "|  UEFI TRABAJA C
 --yesno "\nUsted inicio la USB en sistema UEFI y su disco es DOS MBR\nConvertir su disco DOS/MBR a GPT\n\nAl convertir su disco perderá toda su información \
 \nSi tiene otras particiones en el Disco\nNo realice la conversión \n\n¿Desea convertir su disco DOS/MBR a GPT?" 13 65
 case $? in 
-	0)sgdisk --zap-all $disk && parted "$disk" mklabel gpt | dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Convertir Disco |" 25 80
-	sleep 3;;
+	0)dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
+	--prgbox "sgdisk --zap-all $disk && parted $disk mklabel gpt" 25 80;;
+	
 	1)exit
 esac
 
@@ -112,8 +113,8 @@ dialog --backtitle "| SISTEMA BIOS LEGACY Y DISCO GPT |" --title "|  BIOS LEGACY
 --yesno "\nUsted inicio la USB en sistema UEFI y su disco es DOS MBR\nConvertir su disco GPT a DOS/MBR\n\nAl convertir su disco perderá toda su información \
 \nSi tiene otras particiones en el Disco\nNo realice la conversión \n\n¿Desea convertir su disco DOS/MBR a GPT?" 13 65
 case $? in 
-	0)sgdisk --zap-all $disk && parted "$disk" mklabel msdos | dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Convertir Disco |" 25 80
-	sleep 3;;
+	0)dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
+	--prgbox "sgdisk --zap-all $disk && parted $disk mklabel msdos" 25 80;;
 	1)exit
 esac
 fi
