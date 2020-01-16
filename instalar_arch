@@ -165,6 +165,7 @@ partitioning(){
 }
 
 partitioning
+mount "$rootfs" /mnt
 
 cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --ok-label 'Montar partición' --cancel-label 'No tengo más particiones' --checklist "Selecciona otros puntos de montajes:\n\
 [SPACE] para marcar varias opciones\n\
@@ -205,6 +206,8 @@ do
 			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			efidir="efi"
+			mkdir -p /mnt/efi
+			mount "$efifs"  /mnt/efi
 			p=$(echo "$p" | grep -v "$part")
 			;;
 				
@@ -285,10 +288,9 @@ do
 done
 
 clear
-mount "$rootfs" /mnt
-mkdir -p /mnt/{"$bootdir", "$efidir", "$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
+
+mkdir -p /mnt/{"$bootdir","$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
 mount "$bootfs" /mnt/boot
-mount "$efifs"  /mnt/efi
 mount "$homefs" /mnt/home
 mount "$tmpfs" /mnt/tmp
 mount "$usrfs" /mnt/usr
