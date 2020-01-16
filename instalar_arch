@@ -345,18 +345,18 @@ alsi inxi yay gotop htop --noconfirm \
 && arch-chroot /mnt /bin/bash -c 'echo blacklist r8169 > /etc/modprobe.d/r8169_blacklist.conf' " 25 80
 
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Microcode |" --yesno "\n¿Actualizaciones para el microcódigo del procesador?" 7 70 
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Microcode |" --yesno "\n¿Actualizaciones para el microcódigo del procesador?" 7 58 
 case $? in 
 	0) microcode=$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'Host bridge: Intel' ")
 		if [[ $microcode  = *Intel* || $microcode = *intel* || $microcode = *INTEL* ]]
 		then			
 		dialog --backtitle "$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'Host bridge: Intel'")" --title "| Microcode |" --stdout --ok-label "Siguiente" \
-				--prgbox "arch-chroot /mnt pacman -Sy intel-ucode" 25 80
+				--prgbox "arch-chroot /mnt pacman -Sy intel-ucode --noconfirm" 25 80
 
 		else
 			
 		dialog --backtitle "$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'Host bridge:'")" --title "| Microcode |" --stdout --ok-label "Siguiente" \
-				--prgbox "arch-chroot /mnt pacman -Sy amd-ucode" 25 80
+				--prgbox "arch-chroot /mnt pacman -Sy amd-ucode --noconfirm" 25 80
 		fi;;
 	1) 
 esac
