@@ -205,8 +205,8 @@ do
 			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			efidir="efi"
-			mkdir -p /mnt/"$efidir"
-			mount "$efifs" /mnt/efi
+			mkdir -p /mnt/efi
+			mount $efifs /mnt/efi
 			p=$(echo "$p" | grep -v "$part")
 			;;
 				
@@ -327,6 +327,7 @@ while [ "$kernel_var" = "0" ] ; do
   if [ $kernel_select == linux-stable ]; then
 dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel reflector \
 && arch-chroot /mnt reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist \
+&& arch-chroot /mnt cat /etc/pacman.d/mirrorlist \
 && cp pacman.conf /mnt/etc/pacman.conf \
 && arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio r8168 \
 alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer lib32-alsa-plugins \
@@ -346,16 +347,16 @@ arch-chroot /mnt /bin/bash -c "echo blacklist r8169 > /etc/modprobe.d/r8169_blac
 
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "\n¿Actualizaciones para el microcódigo del procesador?" 7 45 
 case $? in 
-	0) microcode=$(inxi | grep CPU | grep Intel)
+	0) microcode=$(arch-chroot /mnt /bin/bash -c "inxi | grep CPU | grep Intel")
 
-		if [[ $microcode  = *Intel* || $microcode = *intel* || $microcode = *INTEL* ]] then
-			
-		dialog --backtitle "$(inxi | grep CPU )" --title "| Microcode |" --stdout --ok-label "Siguiente" \
+		if [[ $microcode  = *Intel* || $microcode = *intel* || $microcode = *INTEL* ]]
+		then			
+		dialog --backtitle "$(arch-chroot /mnt /bin/bash -c "inxi | grep CPU")" --title "| Microcode |" --stdout --ok-label "Siguiente" \
 				--prgbox "arch-chroot /mnt pacman -Sy intel-ucode" 25 80
 
 		else
 			
-		dialog --backtitle "$(inxi | grep CPU )" --title "| Microcode |" --stdout --ok-label "Siguiente" \
+		dialog --backtitle "$(arch-chroot /mnt /bin/bash -c "inxi | grep CPU")" --title "| Microcode |" --stdout --ok-label "Siguiente" \
 				--prgbox "arch-chroot /mnt pacman -Sy amd-ucode" 25 80
 		fi;;
 	1) 
