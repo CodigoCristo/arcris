@@ -41,17 +41,23 @@ do
     case $choice in
         es)
             loadkeys es
-			keymap="es" 
+			keyboard="es"
+			loadkeys=$keyboard 
+			keymap=$keyboard  
             ;;
             
         latam)
-            loadkeys es
-			keymap="la-latin1" 
+            loadkeys la-latin1
+			keyboard="la-latin1"
+			loadkeys=$keyboard 
+			keymap=$keyboard 
             ;;
             
         us)
             loadkeys us
-			keymap="us" 
+			keyboard="us"
+			loadkeys=$keyboard 
+			keymap=$keyboard  
             ;;
             
         otros)
@@ -461,7 +467,7 @@ dialog --backtitle "-| Instalación de ArchLinux - https://t.me/ArchLinuxCristo 
 
 locales="$(cat /mnt/etc/locale.gen | grep .UTF-8 | sed '1,4d' | sed 's/\(.\{1\}\)//')"
 locale=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selecciona tu país |" \
-	--menu "\nEjemplos:\nes_PE = Perú\nes_AR = Argentina\nes_MX = Mexico" 16 0 16 ${locales} 2>&1 > /dev/tty)
+	--menu "\nEjemplos:\nes_PE = Perú\nes_AR = Argentina\nes_MX = Mexico" 18 0 18 ${locales} 2>&1 > /dev/tty)
 sed -i "/${locale}/ s/# *//" /mnt/etc/locale.gen
 
 
