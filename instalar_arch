@@ -205,8 +205,6 @@ do
 			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			efidir="efi"
-			mkdir -p /mnt/efi
-			mount $efifs /mnt/efi
 			p=$(echo "$p" | grep -v "$part")
 			;;
 				
@@ -288,8 +286,9 @@ done
 
 clear
 mount "$rootfs" /mnt
-mkdir -p /mnt/{"$bootdir","$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
+mkdir -p /mnt/{"$bootdir", "$efidir", "$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
 mount "$bootfs" /mnt/boot
+mount "$efifs"  /mnt/efi
 mount "$homefs" /mnt/home
 mount "$tmpfs" /mnt/tmp
 mount "$usrfs" /mnt/usr
@@ -361,15 +360,13 @@ case $? in
 	1) 
 esac
 
-
-
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "\n¿Tienes Tarjeta de Wifi?" 7 45 
 case $? in 
 	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
-		--prgbox "pacstrap /mnt broadcom-wl wireless-regdb wpa_supplicant wireless_tools" 25 80
-		arch-chroot /mnt /bin/bash -c "rmmod b43"
-		arch-chroot /mnt /bin/bash -c "rmmod ssb"
-		arch-chroot /mnt /bin/bash -c "modprobe wl";;
+		--prgbox "arch-chroot /mnt pacman -Sy broadcom-wl wireless-regdb wpa_supplicant wireless_tools --noconfirm \
+		&& arch-chroot /mnt /bin/bash -c 'rmmod b43' \
+		&& arch-chroot /mnt /bin/bash -c 'rmmod ssb' \
+		&& arch-chroot /mnt /bin/bash -c 'modprobe wl' " 25 80;;
 	1) 
 esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --yesno "\n¿Tienes Touchpad?" 7 45 
