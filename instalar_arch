@@ -29,8 +29,8 @@ umount -R /mnt
 
 cmd=(dialog --backtitle "$titulo" --title "| Distribución del teclado: |" --keep-tite --menu "\n" 10 0 10)
 
-options=(es 		"Español"
-         latam 		"Latino"
+options=(la-latin1	"LatinoAmericano"
+         es 		"Español"
          us 		"Ingles"
          otros 		"keyboard")
 
