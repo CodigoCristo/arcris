@@ -140,7 +140,7 @@ p=$(echo "$p" | grep -v $part)
 partitioning(){
 	fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}' | grep -v cramfs | grep -v hfsplus | grep -v  bfs | grep -v msdos | grep -v minix)"
   format=$(dialog --backtitle 'Instalación de ArchLinux - https://t.me/ArchLinuxCristo' --clear --title '| FORMATO DE PARTICIÓN |' \
-          --ok-label 'Seleccionar' --cancel-label 'No formatear' --menu "\nElige el tipo de sistema de archivos\n\nEXT4 >> Para Linux\nFAT >> Para FAT32 para la partición UEFI\nNTFS >> Para Windows\n\n$(fdisk -l /dev/sda | grep dos || fdisk -l /dev/sda | grep gpt)" 20 45 0 ${fs} 2>&1 > /dev/tty)			
+          --ok-label 'Seleccionar' --cancel-label 'No formatear' --menu "\nElige el tipo de sistema de archivos\n\nEXT4 >> Para Linux\nFAT >> Para FAT32 para la partición UEFI\nNTFS >> Para Windows\n\n$(fdisk -l $disk | grep dos || fdisk -l $disk | grep gpt)" 0 0 0 ${fs} 2>&1 > /dev/tty)			
 
 	case $format in
 		ext2) dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en EXT2 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext2 -F $part" 20 80;;
@@ -161,8 +161,6 @@ partitioning(){
 }
 
 partitioning
-
-dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 
 cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --ok-label 'Montar partición' --cancel-label 'No tengo más particiones' --checklist "Selecciona otros puntos de montajes:\n\
 [SPACE] para marcar varias opciones\n\
@@ -190,6 +188,7 @@ do
 			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			bootdir="boot"
+			dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			p=$(echo "$p" | grep -v "$part")
 			;;
 		"/home")
