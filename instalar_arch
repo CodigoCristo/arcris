@@ -46,7 +46,7 @@ do
 			keymap=$keyboard  
             ;;
             
-        latam)
+        la-latin1)
             loadkeys la-latin1
 			keyboard="la-latin1"
 			loadkeys=$keyboard 
