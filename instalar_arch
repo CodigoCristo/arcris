@@ -27,7 +27,7 @@ fi
 umount -R /mnt
 
 
-cmd=(dialog --backtitle "$titulo" --title "| Define la distribución del teclado: |" --keep-tite --menu "\n" 10 0 10)
+cmd=(dialog --backtitle "$titulo" --title "| Distribución del teclado: |" --keep-tite --menu "\n" 10 0 10)
 
 options=(es 		"Español"
          latam 		"Latino"
@@ -58,7 +58,7 @@ do
             selected=0 
 			while [ $selected == "0" ];do 
 				locales="$(localectl list-keymaps | awk '$locales=$locales" Keyboard"')" && locales=$(echo "$locales") 
-				keyboard=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Define la distribución del teclado: |" --menu "\n" 15 0 15 	${locales} 2>&1 > /dev/tty) 
+				keyboard=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Distribución del teclado: |" --menu "\n" 15 0 15 	${locales} 2>&1 > /dev/tty) 
 				if [ $? == 0 ];then 
 					loadkeys $keyboard 
 					keymap=$keyboard 
@@ -98,8 +98,8 @@ dialog --backtitle "| SISTEMA UEFI Y DISCO DOS MBR |" --title "|  UEFI TRABAJA C
 --yesno "\nUsted inicio la USB en sistema UEFI y su disco es DOS MBR\nConvertir su disco DOS/MBR a GPT\n\nAl convertir su disco perderá toda su información \
 \nSi tiene otras particiones en el Disco\nNo realice la conversión \n\n¿Desea convertir su disco DOS/MBR a GPT?" 13 65
 case $? in 
-	0)dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
-	--prgbox "sgdisk --zap-all $disk && parted $disk mklabel gpt" 25 80;;
+	0)dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Convertir Disco |" --stdout --ok-label "Siguiente" \
+	--prgbox "echo "" && sgdisk --zap-all $disk && parted $disk mklabel gpt" 10 80;;
 	
 	1)exit
 esac
@@ -113,8 +113,8 @@ dialog --backtitle "| SISTEMA BIOS LEGACY Y DISCO GPT |" --title "|  BIOS LEGACY
 --yesno "\nUsted inicio la USB en sistema UEFI y su disco es DOS MBR\nConvertir su disco GPT a DOS/MBR\n\nAl convertir su disco perderá toda su información \
 \nSi tiene otras particiones en el Disco\nNo realice la conversión \n\n¿Desea convertir su disco DOS/MBR a GPT?" 13 65
 case $? in 
-	0)dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
-	--prgbox "sgdisk --zap-all $disk && parted $disk mklabel msdos" 25 80;;
+	0)dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Convertir Disco |" --stdout --ok-label "Siguiente" \
+	--prgbox "echo "" && sgdisk --zap-all $disk && parted $disk mklabel msdos" 10 80;;
 	1)exit
 esac
 fi
@@ -143,26 +143,26 @@ partitioning(){
           --ok-label 'Seleccionar' --cancel-label 'No formatear' --menu "\nElige el tipo de sistema de archivos\n\nEXT4 >> Para Linux\nFAT >> Para FAT32 para la partición UEFI\nNTFS >> Para Windows\n\n$(fdisk -l /dev/sda | grep dos || fdisk -l /dev/sda | grep gpt)" 20 45 0 ${fs} 2>&1 > /dev/tty)			
 
 	case $format in
-		ext2) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en EXT2 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext2 -F $part" 20 80;;
-	    ext3) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en EXT3 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext3 -F $part" 20 80;;
-	    ext4) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en EXT4 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext4 -F $part" 20 80;;
-	    reiserfs) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en ReiserFS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.reiserfs -f -f $part" 20 80;;
-	    vfat) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en FAT 32 | Uso General para particiones UEFI... |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.vfat -F 32 $part" 7 80;;
-	    fat) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en FAT 32 | Uso General para particiones UEFI... |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.fat -F 32 $part" 7 80;;
-	    exfat) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en ExFAT |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.exfat $part" 20 80;;
-	    ntfs) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en NTFS - Windows |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ntfs -Q $part" 20 80;;
-	    f2fs) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en F2FS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && modprobe f2fs && mkfs.f2fs $part" 20 80;;
-	    jfs) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en JFS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.jfs -q $part" 20 80;;
-	    xfs) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en XFS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.xfs -f $part" 20 80;;
-	    nilfs2) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en NilFS2 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.nilfs2 -f $part" 20 80;;
-	    udf) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en UDF |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.udf -F $part" 20 80;;
-	    btrfs) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en BTRFS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.btrfs -f $part" 20 80;;
+		ext2) dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en EXT2 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext2 -F $part" 20 80;;
+	    ext3) dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en EXT3 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext3 -F $part" 20 80;;
+	    ext4) dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en EXT4 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext4 -F $part" 20 80;;
+	    reiserfs) dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en ReiserFS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.reiserfs -f -f $part" 20 80;;
+	    vfat) dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en FAT 32 | Uso General para particiones UEFI... |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.vfat -F 32 $part" 7 80;;
+	    fat) dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en FAT 32 | Uso General para particiones UEFI... |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.fat -F 32 $part" 7 80;;
+	    exfat) dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en ExFAT |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.exfat $part" 20 80;;
+	    ntfs) dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en NTFS - Windows |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ntfs -Q $part" 20 80;;
+	    f2fs) dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en F2FS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && modprobe f2fs && mkfs.f2fs $part" 20 80;;
+	    jfs) dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en JFS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.jfs -q $part" 20 80;;
+	    xfs) dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en XFS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.xfs -f $part" 20 80;;
+	    nilfs2) dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en NilFS2 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.nilfs2 -f $part" 20 80;;
+	    udf) dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en UDF |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.udf -F $part" 20 80;;
+	    btrfs) dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en BTRFS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.btrfs -f $part" 20 80;;
 	esac
 }
 
 partitioning
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 
 cmd=(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --separate-output --ok-label 'Montar partición' --cancel-label 'No tengo más particiones' --checklist "Selecciona otros puntos de montajes:\n\
 [SPACE] para marcar varias opciones\n\
@@ -288,7 +288,7 @@ echo ""
 echo "  Claves Actualizadas del LiveCD, Espere..."
 echo ""
 echo ""
-pacman -Sy reflector --noconfirm | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80; sleep 3
+pacman -Sy reflector --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80; sleep 3
 reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 for i in $(seq 1 100)
 do
@@ -296,7 +296,7 @@ do
     echo $i
 done | dialog --title '| Actualizando MirrorLists |' --gauge "\nActualizando MirrorList en el LiveCD..." 7 60 0
 
-cat /etc/pacman.d/mirrorlist | dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Mirrors List del LiveCD > Actualizadas..." 25 2000; sleep 5
+cat /etc/pacman.d/mirrorlist | dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Mirrors List del LiveCD > Actualizadas..." 25 2000; sleep 5
 
 
 
@@ -308,7 +308,7 @@ while [ "$kernel_var" = "0" ] ; do
     --stdout --ok-label "Seleccionar" --no-cancel --menu "Elige que kernel necesitas: \nLinux Stable es la mejor opción para iniciar\nLas otras opciones tienen un estilo diferente para instalar Drivers\nLas otras modificaciones del kernel trabajan con Drivers Libres" 16 0 2000 linux-stable "Kernel en su versión estable y módulos de Vanilla Linux" linux-hardened "Kernel enfocado en Seguridad" linux-lts "Kernel con soporte de larga duración" linux-zen "Kernel del esfuerzo colaborativo de varios hackers"`
    
   if [ $kernel_select == linux-stable ]; then
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel reflector \
+dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel reflector \
 && arch-chroot /mnt reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist \
 && cp pacman.conf /mnt/etc/pacman.conf \
 && arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio r8168 \
