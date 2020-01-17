@@ -25,9 +25,9 @@ do
             sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm
             pacman -U *.pkg.tar.xz --noconfirm
             rm -Rf /home/$nombre_usuario/$programaur
-            cd && yaybin="$(func_yaybin)"
+            cd
             }
-            
+            yaybin="$(func_yaybin)"
             ;;
         2)
             func_spotify() {
@@ -72,9 +72,9 @@ do
             sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm
             pacman -U *.pkg.tar.xz
             rm -Rf /home/$nombre_usuario/$programaur
-            cd && gotop="$(func_gotop)"
+            cd
             }
-
+            gotop="$(func_gotop)"
             ;;
         5)
             func_sublimetextdev() {
@@ -95,7 +95,7 @@ do
     esac
 done
 
-dialog --no-collapse --cr-wrap --prgbox "$gotop; $yaybin" 25 80
+dialog --no-collapse --cr-wrap --prgbox "$gotop $yaybin" 25 80
 
 
 
