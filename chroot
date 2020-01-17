@@ -15,7 +15,7 @@ do
     case $choice in
         1)
             func_yaybin() {
-            
+            dialog --no-collapse --cr-wrap --prgbox " \
             cd /home/$nombre_usuario 
             git clone https://aur.archlinux.org/yay-bin.git 
             chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin 
@@ -24,13 +24,13 @@ do
             sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm 
             pacman -U *.pkg.tar.xz --noconfirm 
             rm -Rf /home/$nombre_usuario/yay-bin  
-            cd
+            cd " 25 80
             }
-            yay=$(func_yaybin)
+            
             ;;
         2)
             func_spotify() {
-    
+            dialog --no-collapse --cr-wrap --prgbox " \
             programaur="spotify"
             cd /home/$nombre_usuario
             git clone https://aur.archlinux.org/$programaur.git
@@ -42,13 +42,13 @@ do
             pacman -U *.pkg.tar.xz --noconfirm
             
             rm -Rf /home/$nombre_usuario/$programaur
-            cd
+            cd " 25 80
             }
             
             ;;
         3)
             func_googlechrome() {
-            
+            dialog --no-collapse --cr-wrap --prgbox " \
             programaur="google-chrome"
             cd /home/$nombre_usuario
             git clone https://aur.archlinux.org/$programaur.git
@@ -60,13 +60,13 @@ do
             pacman -U *.pkg.tar.xz --noconfirm
             
             rm -Rf /home/$nombre_usuario/$programaur
-            cd
+            cd " 25 80
             }
             
             ;;
         4)
             func_gotopgit() {
-    
+            dialog --no-collapse --cr-wrap --prgbox " \
             programaur="gotop-git"
             cd /home/$nombre_usuario
             git clone https://aur.archlinux.org/$programaur.git
@@ -78,14 +78,14 @@ do
             pacman -U *.pkg.tar.xz --noconfirm
             
             rm -Rf /home/$nombre_usuario/$programaur
-            cd
+            cd " 25 80
             }
             
 
             ;;
         5)
             func_sublimetextdev() {
-    
+            dialog --no-collapse --cr-wrap --prgbox " \
             programaur="sublime-text-dev"
             cd /home/$nombre_usuario
             git clone https://aur.archlinux.org/$programaur.git
@@ -97,7 +97,7 @@ do
             pacman -U *.pkg.tar.xz --noconfirm
             
             rm -Rf /home/$nombre_usuario/$programaur
-            cd
+            cd " 25 80
             }
             
 
@@ -105,7 +105,13 @@ do
     esac
 done
 
-yay | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando... |" 25 8000
+func_yaybin
+func_spotify
+func_googlechrome
+func_gotopgit
+func_sublimetextdev
+
+#yay | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando... |" 25 8000
 #func_sublimetextdev | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
 #func_gotopgit | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
 #func_googlechrome | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
