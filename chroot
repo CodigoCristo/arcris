@@ -15,16 +15,17 @@ do
     case $choice in
         1)
             func_yaybin() {
+                
             programaur="yay-bin"
-            dialog --no-collapse --cr-wrap --prgbox "cd /home/$nombre_usuario \
-            && git clone https://aur.archlinux.org/$programaur.git \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur/PKGBUILD \
-            && cd /home/$nombre_usuario/$programaur \
-            && sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm \
-            && pacman -U *.pkg.tar.xz --noconfirm \
-            && rm -Rf /home/$nombre_usuario/$programaur \
-            && cd" 25 80
+            cd /home/$nombre_usuario
+            git clone https://aur.archlinux.org/$programaur.git
+            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur
+            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur/PKGBUILD
+            cd /home/$nombre_usuario/$programaur
+            sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm
+            pacman -U *.pkg.tar.xz --noconfirm
+            rm -Rf /home/$nombre_usuario/$programaur
+            cd && yaybin="$(func_yaybin)"
             }
             
             ;;
@@ -64,14 +65,14 @@ do
             
             programaur="gotop"
             cd /home/$nombre_usuario
-            git clone https://aur.archlinux.org/$programaur.git | dialog --no-collapse --cr-wrap --progressbox "| Instalando ... |" 25 80
+            git clone https://aur.archlinux.org/$programaur.git
             chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur 
             chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur/PKGBUILD 
             cd /home/$nombre_usuario/$programaur 
-            sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm | dialog --no-collapse --cr-wrap --progressbox "| Instalando ... |" 25 80
-            pacman -U *.pkg.tar.xz --noconfirm | dialog --no-collapse --cr-wrap --progressbox "| Instalando ... |" 25 80
+            sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm
+            pacman -U *.pkg.tar.xz
             rm -Rf /home/$nombre_usuario/$programaur
-            cd
+            cd && gotop="$(func_gotop)"
             }
 
             ;;
@@ -94,11 +95,7 @@ do
     esac
 done
 
-func_yaybin
-func_spotify
-func_googlechrome
-func_gotop
-func_sublimetextdev 
+dialog --no-collapse --cr-wrap --prgbox "$gotop; $yaybin" 25 80
 
 
 
