@@ -26,7 +26,7 @@ do
             rm -Rf /home/$nombre_usuario/yay-bin  
             cd
             }
-            
+            yay=$(func_yaybin)
             ;;
         2)
             func_spotify() {
@@ -105,7 +105,7 @@ do
     esac
 done
 
-func_yaybin | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando... |" 25 8000
+yay | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando... |" 25 8000
 #func_sublimetextdev | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
 #func_gotopgit | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
 #func_googlechrome | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
