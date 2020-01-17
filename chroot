@@ -75,7 +75,7 @@ do
             && rm -Rf /home/$nombre_usuario/$programaur \
             && cd" 25 80
             }
-            gotop="$(func_gotop)"
+
             ;;
         5)
             func_sublimetextdev() {
@@ -96,10 +96,7 @@ do
     esac
 done
 
-$gotop 
-$yaybin 
-$sublime 
-$googlechrome
+$(func_gotop)
 
 
 
