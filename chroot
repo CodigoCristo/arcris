@@ -108,8 +108,7 @@ do
 done
 
 
-dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" \
---stdout --ok-label "Siguiente" --prgbox "$sublimetextdev && $gotop && $google_chrome && $spotify && $yay" 25 80
+dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "/bin/bash -c '$sublimetextdev' && /bin/bash -c '$gotop' && /bin/bash -c '$google_chrome' && /bin/bash -c '$spotify' && /bin/bash -c '$yay' " 25 80
 
 
 #func_yaybin | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando... |" 25 80
