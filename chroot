@@ -1,0 +1,107 @@
+#!/bin/bash
+
+nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
+
+cmd=(dialog --no-collapse --cr-wrap --separate-output --checklist "Select options:" 22 76 16)
+options=(1 "yay" off    # any option can be set to default to "on"
+         2 "spotify" off
+         3 "Google" off
+         4 "gotop" off
+         5 "sublime" off)
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            func_yaybin() {
+ 
+            cd /home/$nombre_usuario
+            git clone https://aur.archlinux.org/yay-bin.git
+            chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin
+            chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD
+            cd /home/$nombre_usuario/yay-bin
+            
+            sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm
+            pacman -U *.pkg.tar.xz --noconfirm
+            
+            rm -Rf /home/$nombre_usuario/yay-bin
+            cd
+        }
+            ;;
+        2)
+            func_spotify() {
+    
+            programaur="spotify"
+            cd /home/$nombre_usuario
+            git clone https://aur.archlinux.org/$programaur.git
+            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur
+            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur/PKGBUILD
+            cd /home/$nombre_usuario/$programaur
+            
+            sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm
+            pacman -U *.pkg.tar.xz --noconfirm
+            
+            rm -Rf /home/$nombre_usuario/$programaur
+            cd
+        }
+            ;;
+        3)
+            func_googlechrome() {
+            
+            programaur="google-chrome"
+            cd /home/$nombre_usuario
+            git clone https://aur.archlinux.org/$programaur.git
+            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur
+            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur/PKGBUILD
+            cd /home/$nombre_usuario/$programaur
+            
+            sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm
+            pacman -U *.pkg.tar.xz --noconfirm
+            
+            rm -Rf /home/$nombre_usuario/$programaur
+            cd
+        }
+            ;;
+        4)
+            func_gotopgit() {
+    
+            programaur="gotop-git"
+            cd /home/$nombre_usuario
+            git clone https://aur.archlinux.org/$programaur.git
+            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur
+            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur/PKGBUILD
+            cd /home/$nombre_usuario/$programaur
+            
+            sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm
+            pacman -U *.pkg.tar.xz --noconfirm
+            
+            rm -Rf /home/$nombre_usuario/$programaur
+            cd
+        }
+
+            ;;
+        5)
+            func_sublimetextdev() {
+    
+            programaur="sublime-text-dev"
+            cd /home/$nombre_usuario
+            git clone https://aur.archlinux.org/$programaur.git
+            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur
+            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur/PKGBUILD
+            cd /home/$nombre_usuario/$programaur
+            
+            sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm
+            pacman -U *.pkg.tar.xz --noconfirm
+            
+            rm -Rf /home/$nombre_usuario/$programaur
+            cd
+        }
+
+            ;;
+    esac
+done
+
+
+dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" \
+--stdout --ok-label "Siguiente" --prgbox "func_yaybin;func_sublimetextdev;func_gotopgit;func_googlechrome;func_spotify" 25 80
