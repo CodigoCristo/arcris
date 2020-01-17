@@ -27,7 +27,8 @@ do
             
             rm -Rf /home/$nombre_usuario/yay-bin
             cd
-        }
+            }
+            yay=$(func_yaybin)
             ;;
         2)
             func_spotify() {
@@ -44,7 +45,8 @@ do
             
             rm -Rf /home/$nombre_usuario/$programaur
             cd
-        }
+            }
+            spotify=$(func_spotify)
             ;;
         3)
             func_googlechrome() {
@@ -61,7 +63,8 @@ do
             
             rm -Rf /home/$nombre_usuario/$programaur
             cd
-        }
+            }
+            google_chrome=$(func_googlechrome)
             ;;
         4)
             func_gotopgit() {
@@ -78,7 +81,8 @@ do
             
             rm -Rf /home/$nombre_usuario/$programaur
             cd
-        }
+            }
+            gotop=$(func_gotopgit)
 
             ;;
         5)
@@ -96,7 +100,8 @@ do
             
             rm -Rf /home/$nombre_usuario/$programaur
             cd
-        }
+            }
+            sublimetextdev=$(func_sublimetextdev)
 
             ;;
     esac
@@ -104,7 +109,7 @@ done
 
 
 dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" \
---stdout --ok-label "Siguiente" --prgbox "$func_yaybin;$func_sublimetextdev;$func_gotopgit;$func_googlechrome;$func_spotify" 25 80
+--stdout --ok-label "Siguiente" --prgbox "$sublimetextdev && $gotop && $google_chrome && $spotify && $yay" 25 80
 
 
 #func_yaybin | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando... |" 25 80
