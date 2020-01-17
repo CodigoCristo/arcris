@@ -16,14 +16,17 @@ do
         1)
             func_yaybin() {
             dialog --no-collapse --cr-wrap --prgbox " \
-            cd /home/$nombre_usuario 
-            git clone https://aur.archlinux.org/yay-bin.git 
-            chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin 
-            chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD 
-            cd /home/$nombre_usuario/yay-bin 
-            sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm 
-            pacman -U *.pkg.tar.xz --noconfirm 
-            rm -Rf /home/$nombre_usuario/yay-bin  
+            programaur='yay-bin'
+            cd /home/$nombre_usuario
+            git clone https://aur.archlinux.org/$programaur.git
+            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur
+            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur/PKGBUILD
+            cd /home/$nombre_usuario/$programaur
+            
+            sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm
+            pacman -U *.pkg.tar.xz --noconfirm
+            
+            rm -Rf /home/$nombre_usuario/$programaur
             cd " 25 80
             }
             
@@ -31,7 +34,7 @@ do
         2)
             func_spotify() {
             dialog --no-collapse --cr-wrap --prgbox " \
-            programaur="spotify"
+            programaur='spotify'
             cd /home/$nombre_usuario
             git clone https://aur.archlinux.org/$programaur.git
             chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur
@@ -49,7 +52,7 @@ do
         3)
             func_googlechrome() {
             dialog --no-collapse --cr-wrap --prgbox " \
-            programaur="google-chrome"
+            programaur='google-chrome'
             cd /home/$nombre_usuario
             git clone https://aur.archlinux.org/$programaur.git
             chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur
@@ -67,7 +70,7 @@ do
         4)
             func_gotopgit() {
             dialog --no-collapse --cr-wrap --prgbox " \
-            programaur="gotop-git"
+            programaur='gotop-git'
             cd /home/$nombre_usuario
             git clone https://aur.archlinux.org/$programaur.git
             chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur
@@ -86,7 +89,7 @@ do
         5)
             func_sublimetextdev() {
             dialog --no-collapse --cr-wrap --prgbox " \
-            programaur="sublime-text-dev"
+            programaur='sublime-text-dev'
             cd /home/$nombre_usuario
             git clone https://aur.archlinux.org/$programaur.git
             chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur
