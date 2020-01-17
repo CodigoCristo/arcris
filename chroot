@@ -15,8 +15,8 @@ do
     case $choice in
         1)
             func_yaybin() {
-            dialog --no-collapse --cr-wrap --prgbox " \
-            programaur='yay-bin'
+            dialog --no-collapse --cr-wrap --prgbox ' \
+            programaur="yay-bin"
             cd /home/$nombre_usuario
             git clone https://aur.archlinux.org/$programaur.git
             chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur
@@ -27,14 +27,14 @@ do
             pacman -U *.pkg.tar.xz --noconfirm
             
             rm -Rf /home/$nombre_usuario/$programaur
-            cd " 25 80
+            cd ' 25 80
             }
             
             ;;
         2)
             func_spotify() {
-            dialog --no-collapse --cr-wrap --prgbox " \
-            programaur='spotify'
+            dialog --no-collapse --cr-wrap --prgbox ' \
+            programaur="spotify"
             cd /home/$nombre_usuario
             git clone https://aur.archlinux.org/$programaur.git
             chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur
@@ -45,14 +45,14 @@ do
             pacman -U *.pkg.tar.xz --noconfirm
             
             rm -Rf /home/$nombre_usuario/$programaur
-            cd " 25 80
+            cd ' 25 80
             }
             
             ;;
         3)
             func_googlechrome() {
-            dialog --no-collapse --cr-wrap --prgbox " \
-            programaur='google-chrome'
+            dialog --no-collapse --cr-wrap --prgbox ' \
+            programaur="google-chrome"
             cd /home/$nombre_usuario
             git clone https://aur.archlinux.org/$programaur.git
             chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur
@@ -63,14 +63,14 @@ do
             pacman -U *.pkg.tar.xz --noconfirm
             
             rm -Rf /home/$nombre_usuario/$programaur
-            cd " 25 80
+            cd ' 25 80
             }
             
             ;;
         4)
             func_gotopgit() {
-            dialog --no-collapse --cr-wrap --prgbox " \
-            programaur='gotop-git'
+            dialog --no-collapse --cr-wrap --prgbox ' \
+            programaur="gotop-git"
             cd /home/$nombre_usuario
             git clone https://aur.archlinux.org/$programaur.git
             chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur
@@ -81,15 +81,15 @@ do
             pacman -U *.pkg.tar.xz --noconfirm
             
             rm -Rf /home/$nombre_usuario/$programaur
-            cd " 25 80
+            cd ' 25 80
             }
             
 
             ;;
         5)
             func_sublimetextdev() {
-            dialog --no-collapse --cr-wrap --prgbox " \
-            programaur='sublime-text-dev'
+            dialog --no-collapse --cr-wrap --prgbox ' \
+            programaur="sublime-text-dev"
             cd /home/$nombre_usuario
             git clone https://aur.archlinux.org/$programaur.git
             chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur
@@ -100,7 +100,7 @@ do
             pacman -U *.pkg.tar.xz --noconfirm
             
             rm -Rf /home/$nombre_usuario/$programaur
-            cd " 25 80
+            cd ' 25 80
             }
             
 
