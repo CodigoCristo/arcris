@@ -61,18 +61,19 @@ do
             
             ;;
         4)
-            programaur="gotop-git"
+            
             func_gotop() {
             
-            cd /home/$nombre_usuario
-            git clone https://aur.archlinux.org/$programaur.git
-            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur 
-            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur/PKGBUILD 
-            cd /home/$nombre_usuario/$programaur 
-            sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm
-            pacman -U *.pkg.tar.xz
-            rm -Rf /home/$nombre_usuario/$programaur
-            cd
+            programaur="gotop-git"
+            dialog --no-collapse --cr-wrap --prgbox "cd /home/$nombre_usuario \
+            && git clone https://aur.archlinux.org/$programaur.git \
+            && chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur \
+            && chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur/PKGBUILD \
+            && cd /home/$nombre_usuario/$programaur \
+            && sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm \
+            && pacman -U *.pkg.tar.xz --noconfirm \
+            && rm -Rf /home/$nombre_usuario/$programaur \
+            && cd" 25 80
             }
             gotop="$(func_gotop)"
             ;;
@@ -95,7 +96,10 @@ do
     esac
 done
 
-dialog --no-collapse --cr-wrap --prgbox "/bin/bash -c '$gotop $yaybin $sublime $googlechrome'" 25 80
+$gotop 
+$yaybin 
+$sublime 
+$googlechrome
 
 
 
