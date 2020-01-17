@@ -104,4 +104,12 @@ done
 
 
 dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" \
---stdout --ok-label "Siguiente" --prgbox "func_yaybin;func_sublimetextdev;func_gotopgit;func_googlechrome;func_spotify" 25 80
+--stdout --ok-label "Siguiente" --prgbox "$func_yaybin;$func_sublimetextdev;$func_gotopgit;$func_googlechrome;$func_spotify" 25 80
+
+
+#func_yaybin | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando... |" 25 80
+#func_sublimetextdev | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
+#func_gotopgit | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
+#func_googlechrome | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
+#func_spotify | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
+#sleep 3
