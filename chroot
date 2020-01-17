@@ -15,17 +15,18 @@ do
     case $choice in
         1)
             func_yaybin() {
-            dialog --no-collapse --ok-label "Siguiente" --prgbox "cd /home/$nombre_usuario \
-            && git clone https://aur.archlinux.org/yay-bin.git \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD \
-            && cd /home/$nombre_usuario/yay-bin \
-            && sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm \
-            && pacman -U *.pkg.tar.xz --noconfirm \
-            && rm -Rf /home/$nombre_usuario/yay-bin  \
-            && cd " 25 80
+            
+            cd /home/$nombre_usuario 
+            git clone https://aur.archlinux.org/yay-bin.git 
+            chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin 
+            chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD 
+            cd /home/$nombre_usuario/yay-bin 
+            sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm 
+            pacman -U *.pkg.tar.xz --noconfirm 
+            rm -Rf /home/$nombre_usuario/yay-bin  
+            cd
             }
-            yay=$(func_yaybin)
+            
             ;;
         2)
             func_spotify() {
@@ -43,7 +44,7 @@ do
             rm -Rf /home/$nombre_usuario/$programaur
             cd
             }
-            spotify=$(func_spotify)
+            
             ;;
         3)
             func_googlechrome() {
@@ -61,7 +62,7 @@ do
             rm -Rf /home/$nombre_usuario/$programaur
             cd
             }
-            google_chrome=$(func_googlechrome)
+            
             ;;
         4)
             func_gotopgit() {
@@ -79,7 +80,7 @@ do
             rm -Rf /home/$nombre_usuario/$programaur
             cd
             }
-            gotop=$(func_gotopgit)
+            
 
             ;;
         5)
@@ -98,19 +99,13 @@ do
             rm -Rf /home/$nombre_usuario/$programaur
             cd
             }
-            sublimetextdev=$(func_sublimetextdev)
+            
 
             ;;
     esac
 done
 
-$yay
-func_spotify
-func_googlechrome
-func_gotopgit
-func_sublimetextdev
-
-#func_yaybin | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando... |" 25 80
+func_yaybin | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando... |" 25 8000
 #func_sublimetextdev | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
 #func_gotopgit | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
 #func_googlechrome | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
