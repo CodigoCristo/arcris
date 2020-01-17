@@ -95,7 +95,7 @@ do
     esac
 done
 
-dialog --no-collapse --cr-wrap --prgbox "$gotop $yaybin" 25 80
+dialog --no-collapse --cr-wrap --prgbox "/bin/bash -c '$gotop $yaybin'" 25 80
 
 
 
