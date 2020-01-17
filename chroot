@@ -61,7 +61,7 @@ do
             
             ;;
         4)
-            programaur="gotop"
+            programaur="gotop-git"
             func_gotop() {
             
             cd /home/$nombre_usuario
