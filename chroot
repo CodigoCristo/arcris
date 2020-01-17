@@ -70,18 +70,18 @@ do
         4)
             func_gotopgit() {
             dialog --no-collapse --cr-wrap --prgbox ' \
-            programaur="gotop-git"
-            cd /home/$nombre_usuario
-            git clone https://aur.archlinux.org/$programaur.git
-            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur
-            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur/PKGBUILD
-            cd /home/$nombre_usuario/$programaur
+            programaur="gotop-git" \ 
+            && cd /home/$nombre_usuario \
+            && git clone https://aur.archlinux.org/$programaur.git \
+            && chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur \
+            && chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur/PKGBUILD \
+            && cd /home/$nombre_usuario/$programaur \
             
-            sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm
-            pacman -U *.pkg.tar.xz --noconfirm
+            && sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm \
+            && pacman -U *.pkg.tar.xz --noconfirm \
             
-            rm -Rf /home/$nombre_usuario/$programaur
-            cd ' 25 80
+            && rm -Rf /home/$nombre_usuario/$programaur \
+            && cd ' 25 80
             }
             
 
