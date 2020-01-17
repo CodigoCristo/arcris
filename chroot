@@ -61,9 +61,9 @@ do
             
             ;;
         4)
+            programaur="gotop"
             func_gotop() {
             
-            programaur="gotop"
             cd /home/$nombre_usuario
             git clone https://aur.archlinux.org/$programaur.git
             chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur 
@@ -95,7 +95,7 @@ do
     esac
 done
 
-dialog --no-collapse --cr-wrap --prgbox "/bin/bash -c '$gotop $yaybin'" 25 80
+dialog --no-collapse --cr-wrap --prgbox "/bin/bash -c '$gotop $yaybin $sublime $googlechrome'" 25 80
 
 
 
