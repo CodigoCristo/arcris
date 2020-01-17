@@ -15,18 +15,16 @@ do
     case $choice in
         1)
             func_yaybin() {
- 
-            cd /home/$nombre_usuario
-            git clone https://aur.archlinux.org/yay-bin.git
-            chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin
-            chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD
-            cd /home/$nombre_usuario/yay-bin
-            
-            sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm
-            pacman -U *.pkg.tar.xz --noconfirm
-            
-            rm -Rf /home/$nombre_usuario/yay-bin
-            cd
+            dialog --no-collapse --ok-label "Siguiente" --prgbox ' \
+            cd /home/$nombre_usuario \
+            && git clone https://aur.archlinux.org/yay-bin.git \
+            && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin \
+            && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD \
+            && cd /home/$nombre_usuario/yay-bin \
+            && sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm \
+            && pacman -U *.pkg.tar.xz --noconfirm \
+            && rm -Rf /home/$nombre_usuario/yay-bin  \
+            && cd ' 25 80
             }
             yay=$(func_yaybin)
             ;;
@@ -107,9 +105,11 @@ do
     esac
 done
 
-                
-dialog --no-collapse --ok-label "Siguiente" --prgbox "$func_yaybin" 25 80
-
+func_yaybin
+func_spotify
+func_googlechrome
+func_gotopgit
+func_sublimetextdev
 
 #func_yaybin | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando... |" 25 80
 #func_sublimetextdev | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80
