@@ -7,25 +7,39 @@ clear
 cp .dialogrc /root
 chmod +x *
 echo es_ES.UTF-8 UTF-8 > /etc/locale.gen
+
 for i in $(seq 1 100)
 do
-    sleep 0.04
+    sleep 0.03
     echo $i
 done | dialog --title "| Cargando Idioma |" --gauge "$(locale-gen)" 8 60 0
+#Colores
+red='\e[1;31m'
+echo ""
+echo ""
+echo -e $red "                ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄   ";
+echo -e $red "                █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄ ";
+echo -e $red "                █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄   ";
+echo -e $red "                █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀    ";
+echo -e $red "                   █   █   ▀███▀    █    ▐            ";
+echo -e $red "                  █   ▀            ▀                  ";
+echo -e $red "                 ▀                                    ";
+echo ""
 echo LANG=es_ES.UTF-8 > /etc/locale.conf
 export LANG=es_ES.UTF-8
-
+sleep 3
 #terminus-font
 #FONT=ter-v14b  /etc/vconsole.conf 
 #partprobe
 
 #Inicio
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Código Cristo |" --ok-label 'Seleccionar' --no-cancel --menu "\nInstalador rápido de Arch Linux " 13 50 20 \
-1 ' > Instalar  - Arch Linux          < ' \
-2 ' > Instalar  - Arch con Cifrado    < ' \
-3 ' > Dual Boot - Windows Instalado   < ' \
-4 ' > Dual Boot - GNU/Linux Instalado < ' \
-GRUB ' > Recuperar el Arranque < ' 2>temp
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
+--column-separator "|" --no-tags --title "| Código Cristo |" --ok-label 'Seleccionar' --no-cancel --menu "\nInstalador rápido de Arch Linux\n " 14 55 20 \
+1 ' > | Instalar | Arch Linux| <' \
+2 ' > | Instalar | Arch con Cifrado| <' \
+3 ' > | Dual Boot | Windows Instalado| <' \
+4 ' > | Dual Boot | GNU/Linux Instalado| <' \
+5 ' > | GRUB | Recuperar Arranque de Sistema| <' 2>temp
 
 #Opciones
 if [ "$?" = "0" ]
@@ -68,7 +82,7 @@ fi
 
 
 # opción 5 - Dual Boot - LINUX
-        if [ "$menu_inicio_return" = "GRUB" ]
+        if [ "$menu_inicio_return" = "5" ]
         then
 
         sh grub_recu
