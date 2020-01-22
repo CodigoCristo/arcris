@@ -7,6 +7,14 @@ clear
 red='\033[38;2;255;0;02m'
 echo ""
 echo ""
+echo ""
+echo ""
+echo ""
+echo ""
+echo ""
+echo ""
+echo ""
+echo ""
 echo -e $red ">                      ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                <";
 echo -e $red ">                      █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄              <";
 echo -e $red ">                      █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                <";
@@ -46,7 +54,12 @@ done
 echo -e '\033[m'
 
 #Poniendo el sistema en español
-clear
+echo ""
+echo ""
+echo ""
+echo ""
+echo ""
+echo ""
 cp .dialogrc /root
 chmod +x *
 echo es_ES.UTF-8 UTF-8 > /etc/locale.gen
@@ -54,8 +67,6 @@ locale-gen
 
 echo LANG=es_ES.UTF-8 > /etc/locale.conf
 export LANG=es_ES.UTF-8
-
-
 
 printf '\nTodo listo!\n'
 
