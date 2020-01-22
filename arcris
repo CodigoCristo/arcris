@@ -41,7 +41,7 @@ _end=100
 # Proof of concept
 for number in $(seq ${_start} ${_end})
 do
-    sleep 0.6
+    sleep 0.5
     ProgressBar ${number} ${_end}
 done
 echo -e '\033[m'
