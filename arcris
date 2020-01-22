@@ -8,13 +8,6 @@ red='\033[38;2;255;0;02m'
 echo ""
 echo ""
 echo ""
-echo -e $red ">                      ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                <";
-echo -e $red ">                      █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄              <";
-echo -e $red ">                      █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                <";
-echo -e $red ">                      █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                 <";
-echo -e $red ">                         █   █   ▀███▀    █    ▐                         <";
-echo -e $red ">                        █   ▀            ▀                               <";
-echo -e $red ">                       ▀                                                 <";
 
 function ProgressBar {
 # Process data
@@ -31,6 +24,27 @@ function ProgressBar {
 printf "\rCargando : |${_fill// /▇}${_empty// /-}| ${_progress}%%"
 
 }
+
+# Variables
+_start=1
+
+# This accounts as the "totalState" variable for the ProgressBar function
+_end=100
+
+# Proof of concept
+for number in $(seq ${_start} ${_end})
+do
+    sleep 0.06
+    ProgressBar ${number} ${_end}
+done
+
+echo -e $red ">                      ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                <";
+echo -e $red ">                      █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄              <";
+echo -e $red ">                      █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                <";
+echo -e $red ">                      █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                 <";
+echo -e $red ">                         █   █   ▀███▀    █    ▐                         <";
+echo -e $red ">                        █   ▀            ▀                               <";
+echo -e $red ">                       ▀                                                 <";
 
 # Variables
 _start=1
