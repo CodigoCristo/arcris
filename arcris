@@ -8,13 +8,6 @@ red='\033[38;2;255;0;02m'
 echo ""
 echo ""
 echo ""
-echo ""
-echo ""
-echo ""
-echo ""
-echo ""
-echo ""
-echo ""
 echo -e $red ">                      ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                <";
 echo -e $red ">                      █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄              <";
 echo -e $red ">                      █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                <";
