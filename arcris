@@ -41,7 +41,7 @@ _end=100
 # Proof of concept
 for number in $(seq ${_start} ${_end})
 do
-    sleep 0.05
+    sleep 1
     ProgressBar ${number} ${_end}
 done
 echo -e '\033[m'
@@ -50,9 +50,7 @@ echo -e '\033[m'
 echo ""
 echo ""
 echo ""
-echo ""
-echo ""
-echo ""
+
 cp .dialogrc /root
 chmod +x *
 echo es_ES.UTF-8 UTF-8 > /etc/locale.gen
@@ -60,7 +58,9 @@ locale-gen
 
 echo LANG=es_ES.UTF-8 > /etc/locale.conf
 export LANG=es_ES.UTF-8
-
+echo ""
+echo ""
+echo ""
 printf '\nTodo listo!\n'
 
 sleep 3
