@@ -2,31 +2,63 @@
 : 'Copyright (C) 2019 Código Cristo'
 #!/bin/bash
 
+#Colores
+clear
+red='\033[38;2;255;0;02m'
+echo ""
+echo ""
+echo -e $red ">                      ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                <";
+echo -e $red ">                      █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄              <";
+echo -e $red ">                      █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                <";
+echo -e $red ">                      █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                 <";
+echo -e $red ">                         █   █   ▀███▀    █    ▐                         <";
+echo -e $red ">                        █   ▀            ▀                               <";
+echo -e $red ">                       ▀                                                 <";
+
+function ProgressBar {
+# Process data
+    let _progress=(${1}*100/${2}*100)/100
+    let _done=(${_progress}*6)/10
+    let _left=60-$_done
+# Build progressbar string lengths
+    _fill=$(printf "%${_done}s")
+    _empty=$(printf "%${_left}s")
+
+# 1.2 Build progressbar strings and print the ProgressBar line
+# 1.2.1 Output example:                           
+# 1.2.1.1 Progress : [########################################] 100%
+printf "\rCargando : |${_fill// /▇}${_empty// /-}| ${_progress}%%"
+
+}
+
+# Variables
+_start=1
+
+# This accounts as the "totalState" variable for the ProgressBar function
+_end=100
+
+# Proof of concept
+for number in $(seq ${_start} ${_end})
+do
+    sleep 0.05
+    ProgressBar ${number} ${_end}
+done
+echo -e '\033[m'
+
 #Poniendo el sistema en español
 clear
 cp .dialogrc /root
 chmod +x *
 echo es_ES.UTF-8 UTF-8 > /etc/locale.gen
+locale-gen
 
-for i in $(seq 1 100)
-do
-    sleep 0.03
-    echo $i
-done | dialog --title "| Cargando Idioma |" --gauge "$(locale-gen)" 8 60 0
-#Colores
-red='\e[1;31m'
-echo ""
-echo ""
-echo -e $red "                ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄   ";
-echo -e $red "                █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄ ";
-echo -e $red "                █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄   ";
-echo -e $red "                █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀    ";
-echo -e $red "                   █   █   ▀███▀    █    ▐            ";
-echo -e $red "                  █   ▀            ▀                  ";
-echo -e $red "                 ▀                                    ";
-echo ""
 echo LANG=es_ES.UTF-8 > /etc/locale.conf
 export LANG=es_ES.UTF-8
+
+
+
+printf '\nTodo listo!\n'
+
 sleep 3
 #terminus-font
 #FONT=ter-v14b  /etc/vconsole.conf 
