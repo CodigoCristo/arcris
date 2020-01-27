@@ -657,12 +657,12 @@ dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB -
 fi
 
 clear
-arch-chroot /mnt pacman -Sy xdg-user-dirs --noconfirm && arch-chroot /mnt xdg-user-dirs-update | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando xdg-user-dirs... |" 25 80; sleep 3
+arch-chroot /mnt /bin/bash -c "pacman -Sy xdg-user-dirs --noconfirm && arch-chroot /mnt xdg-user-dirs-update" | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando xdg-user-dirs... |" 25 80; sleep 3
 clear
 export $(cat /mnt/etc/locale.conf)
 echo ""
 echo ""
-arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo "" && arch-chroot /mnt /bin/bash -c "alsi && ls"
+arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo "" && arch-chroot /mnt /bin/bash -c "alsi"
 echo ""
 echo ""
 echo ""
@@ -681,7 +681,7 @@ sed -i "s/selectedkeymap/${keymap}/g" /mnt/root/chroot
 #Prepare el sistema para iniciar directamente en la raíz y ejecute el script posterior a la instalación
 mkdir /mnt/etc/systemd/system/getty@tty1.service.d
 echo -e "[Service]\nExecStart=\nExecStart=-/sbin/agetty --autologin root --noclear %I 38400 linux" > /mnt/etc/systemd/system/getty@tty1.service.d/override.conf
-echo "sh post-install.sh" >> /mnt/root/.bashrc
+echo "sh chroot" >> /mnt/root/.bashrc
 echo -e "if [ -f ~/.bashrc ]; then\n\tsource ~/.bashrc\nfi" >> /mnt/root/.bash_profile
 
 umount -R /mnt
