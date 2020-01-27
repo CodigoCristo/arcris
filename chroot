@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 VM=false
      
     case $(systemd-detect-virt) in
@@ -45,7 +46,8 @@ if "$VM" ; then
 fi
 done
 
-#DIALOG PARA YES Y NO CASOS
+while (VM=none)
+do
 dialog --title "Delete file" --backtitle "Linux Shell Script Tutorial Example" --yesno "Are you sure you want to permanently delete?" 7 60
 
 case $? in
@@ -79,6 +81,7 @@ case $? in
    255) echo "[ESC] key pressed."
 ;;
 esac
+done
 
 
        
