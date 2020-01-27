@@ -45,9 +45,11 @@ if "$VM" ; then
 fi
 done
 
+#DIALOG PARA YES Y NO CASOS
+dialog --title "Delete file" --backtitle "Linux Shell Script Tutorial Example" --yesno "Are you sure you want to permanently delete?" 7 60
 
-
-        if (lspci | grep VGA | grep "NVIDIA" &>/dev/null); then
+case $? in
+   0)  if (lspci | grep VGA | grep "NVIDIA" &>/dev/null); then
             NVIDIA=true default_GPU="xf86-video-nouveau"
             chipset="Nvidia"
             echo "NVIDIA"
@@ -71,3 +73,12 @@ done
             #chipset="Desconocido"
             echo nada
         fi
+;;
+   1) echo "File not deleted."
+;;
+   255) echo "[ESC] key pressed."
+;;
+esac
+
+
+       
