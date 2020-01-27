@@ -128,7 +128,7 @@ fi
 
 umount -R /mnt
 
-partitioner=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "-| ELIGE UN PROGRAMA |-" --ok-label 'Seleccionar' --no-cancel --menu "Crear particiones correctamente" 0 0 0\
+partitioner=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "-| ELIGE UN PROGRAMA |-" --ok-label 'Seleccionar' --no-cancel --menu "Crear particiones correctamente" 10 0 0\
 		"cfdisk" "Un particionador casi grafico" \
 		"fdisk" "Un particionador de linea de comandos" \
 		"parted" "Un particionador de linea de comandos" 2>&1 > /dev/tty)
