@@ -1,6 +1,369 @@
 #!/bin/bash
 
+#Load the X11 keymap
+localectl --no-convert set-x11-keymap selectedkeymap
 
+titulo="| Instalación de ArchLinux - by: ArcriS |"
+
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| INTERNET |" --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
+
+if ping -c 2 www.google.com &> /dev/null; then
+    
+   dialog --title "|  Conexión a RED  |" --backtitle "$titulo" \
+   --prgbox "ping -c 5 archlinux.org && echo && echo Si Hay Internet!" 17 100 
+
+else
+        
+    dialog --backtitle "$titulo" --title "| Error de RED |" --ok-label 'Siguiente' --msgbox "\nNo hay conexión de Internet\n" 7 35
+    wifinet=$(netctl list | awk -F " " '{print $1}')
+    netctl disable $wifinet
+    systemctl disable netctl
+    systemctl enable dhcpcd NetworkManager
+    systemctl start dhcpcd NetworkManager
+    dialog --backtitle "$titulo" --title "| Conexión WiFi |" --yesno "\n¿Tienes Wi-Fi?\n" 7 45 
+
+        
+case $? in 
+0)  wlan=$(echo /proc/net/dev*/w*)
+    lan=${wlan##*/}
+
+            clear
+            red='\033[38;2;255;0;02m'
+            echo ""
+            echo -e $red ">                                      "
+            echo -e $red ">                                      "
+            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
+            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
+            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
+            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
+            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
+            echo -e $red ">                             █   ▀            ▀                                      <";
+            echo -e $red ">                            ▀                                                        <";
+            echo -e " >                                      "
+            sleep 2
+            echo ""
+            wifichroot=$( nmcli dev wifi list | grep 'Infra' | awk -F " " '{print $3}' | tail -c -6 )
+            if [ $wifichroot == 'Infra' ]
+            then
+            nmcli dev wifi list
+            echo ""
+            echo ""
+echo -e '\033[38;2;255;0;02m'
+function ProgressBar {
+# Process data
+    let _progress=(${1}*100/${2}*100)/100
+    let _done=(${_progress}*7)/10
+    let _left=70-$_done
+# Build progressbar string lengths
+    _fill=$(printf "%${_done}s")
+    _empty=$(printf "%${_left}s")
+
+# 1.2 Build progressbar strings and print the ProgressBar line
+# 1.2.1 Output example:                           
+# 1.2.1.1 Progress : [########################################] 100%
+printf "\r > Cargando : |${_fill// /▇}${_empty// /-}| ${_progress}%%"
+
+}
+
+# Variables
+_start=1
+
+# This accounts as the "totalState" variable for the ProgressBar function
+_end=100
+
+# Proof of concept
+for number in $(seq ${_start} ${_end})
+do
+    sleep 0.06
+    ProgressBar ${number} ${_end}
+done
+
+echo -e '\033[m'
+
+
+titulo="| Instalación de ArchLinux - by: ArcriScript |"
+
+cmd=(dialog --no-collapse --cr-wrap --notags --backtitle "$titulo" --keep-tite --menu "Selecciona tu red:" 12 50 16)
+options=(1 "$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -1)"
+         2 "$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -2 | tail -1)"
+         3 "$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -3 | tail -1 | tail -2)"
+         4 "$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -4 | tail -1 | tail -2 | tail -3)"
+         5 "$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -5 | tail -1 | tail -2 | tail -3 | tail -4)")
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+for choice in $choices
+do
+    case $choice in
+        1)  clear
+            red='\033[38;2;255;0;02m'
+            echo ""
+            echo ""
+            echo ""
+            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
+            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
+            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
+            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
+            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
+            echo -e $red ">                             █   ▀            ▀                                      <";
+            echo -e $red ">                            ▀                                                        <";
+            echo -e " >                                      Cargando..."
+            echo -e '\033[m'
+            nombre_red1=$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -1)
+            
+            while [ $clave_red1 != $clave_red1_2 ]
+            do 
+                clave_red1=$(dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "|  Clave de Wifi  |" --insecure --passwordbox "|  Ingrese contraseña |" 8 40 2>&1 > /dev/tty)
+                clave_red1_2=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Clave de wifi |" --insecure --passwordbox "|  Confirme contraseña |" 8 40 2>&1 > /dev/tty)
+                if [ $clave_red1 != $clave_red1_2 ];then 
+                 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Clave incorrecta |" --msgbox 'Las contraseñas no coinciden\n      Intente nuevamente...' 6 50
+              else 
+                clear
+              fi
+            done
+            red='\033[38;2;255;0;02m'
+            echo ""
+            echo ""
+            echo ""
+            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
+            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
+            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
+            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
+            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
+            echo -e $red ">                             █   ▀            ▀                                      <";
+            echo -e $red ">                            ▀                                                        <";
+            echo -e " >                                      Cargando..."
+            echo -e '\033[m'
+            nmcli dev wifi connect $nombre_red1 password $clave_red1
+            systemctl enable dhcpcd NetworkManager
+            systemctl start dhcpcd NetworkManager
+            dialog --backtitle "$titulo" --title "| Estado de Conexión |" \
+            --stdout --ok-label "Siguiente" --prgbox "echo '' && nmcli dev status && echo '' && echo '' && echo 'Nombre de Red: $nombre_red1' && echo 'Clave de Red: no se dice we'" 16 60 
+            ;;
+            
+            
+            
+        2)  
+            clear
+            red='\033[38;2;255;0;02m'
+            echo ""
+            echo ""
+            echo ""
+            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
+            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
+            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
+            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
+            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
+            echo -e $red ">                             █   ▀            ▀                                      <";
+            echo -e $red ">                            ▀                                                        <";
+            echo -e " >                                      Cargando..."
+            echo -e '\033[m'
+            nombre_red2=$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -2 | tail -1)
+            while [ $clave_red2 != $clave_red2_2 ]
+            do 
+                clave_red2=$(dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "|  Clave de Wifi  |" --insecure --passwordbox "|  Ingrese contraseña |" 8 40 2>&1 > /dev/tty)
+                clave_red2_2=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Clave de wifi |" --insecure --passwordbox "|  Confirme contraseña |" 8 40 2>&1 > /dev/tty)
+                if [ $clave_red2 != $clave_red2_2 ];then 
+                 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Clave incorrecta |" --msgbox 'Las contraseñas no coinciden\n      Intente nuevamente...' 6 50
+              else 
+                clear
+              fi
+            done
+            red='\033[38;2;255;0;02m'
+            echo ""
+            echo ""
+            echo ""
+            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
+            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
+            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
+            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
+            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
+            echo -e $red ">                             █   ▀            ▀                                      <";
+            echo -e $red ">                            ▀                                                        <";
+            echo -e " >                                      Cargando..."
+            echo -e '\033[m'
+            nmcli dev wifi connect $nombre_red2 password $clave_red2
+            systemctl enable dhcpcd NetworkManager
+            systemctl start dhcpcd NetworkManager
+            dialog --backtitle "$titulo" --title "| Estado de Conexión |" \
+            --stdout --ok-label "Siguiente" --prgbox "echo '' && nmcli dev status && echo '' && echo '' && echo 'Nombre de Red: $nombre_red2' && echo 'Clave de Red: no se dice we'" 16 60 
+            ;;
+            
+            
+        3)  
+            clear
+            red='\033[38;2;255;0;02m'
+            echo ""
+            echo ""
+            echo ""
+            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
+            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
+            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
+            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
+            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
+            echo -e $red ">                             █   ▀            ▀                                      <";
+            echo -e $red ">                            ▀                                                        <";
+            echo -e " >                                      Cargando..."
+            echo -e '\033[m'
+            nombre_red3=$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -3 | tail -1 | tail -2)
+            while [ $clave_red3 != $clave_red3_2 ]
+            do 
+                clave_red3=$(dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "|  Clave de Wifi  |" --insecure --passwordbox "|  Ingrese contraseña |" 8 40 2>&1 > /dev/tty)
+                clave_red3_2=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Clave de wifi |" --insecure --passwordbox "|  Confirme contraseña |" 8 40 2>&1 > /dev/tty)
+                if [ $clave_red3 != $clave_red3_2 ];then 
+                 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Clave incorrecta |" --msgbox 'Las contraseñas no coinciden\n      Intente nuevamente...' 6 50
+              else 
+                clear
+              fi
+            done
+            red='\033[38;2;255;0;02m'
+            echo ""
+            echo ""
+            echo ""
+            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
+            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
+            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
+            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
+            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
+            echo -e $red ">                             █   ▀            ▀                                      <";
+            echo -e $red ">                            ▀                                                        <";
+            echo -e " >                                      Cargando..."
+            echo -e '\033[m'
+            nmcli dev wifi connect $nombre_red3 password $clave_red3
+            systemctl enable dhcpcd NetworkManager
+            systemctl start dhcpcd NetworkManager
+            dialog --backtitle "$titulo" --title "| Estado de Conexión |" \
+            --stdout --ok-label "Siguiente" --prgbox "echo '' && nmcli dev status && echo '' && echo '' && echo 'Nombre de Red: $nombre_red3' && echo 'Clave de Red: no se dice we' " 16 60 
+            ;;
+            
+            
+        4)  
+            clear
+            red='\033[38;2;255;0;02m'
+            echo ""
+            echo ""
+            echo ""
+            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
+            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
+            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
+            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
+            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
+            echo -e $red ">                             █   ▀            ▀                                      <";
+            echo -e $red ">                            ▀                                                        <";
+            echo -e " >                                      Cargando..."
+            echo -e '\033[m'
+            nombre_red4=$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -4 | tail -1 | tail -2 | tail -3)
+            while [ $clave_red4 != $clave_red4_2 ]
+            do 
+                clave_red4=$(dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "|  Clave de Wifi  |" --insecure --passwordbox "|  Ingrese contraseña |" 8 40 2>&1 > /dev/tty)
+                clave_red4_2=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Clave de wifi |" --insecure --passwordbox "|  Confirme contraseña |" 8 40 2>&1 > /dev/tty)
+                if [ $clave_red4 != $clave_red4_2 ];then 
+                 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Clave incorrecta |" --msgbox 'Las contraseñas no coinciden\n      Intente nuevamente...' 6 50
+              else 
+                clear
+              fi
+            done
+            red='\033[38;2;255;0;02m'
+            echo ""
+            echo ""
+            echo ""
+            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
+            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
+            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
+            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
+            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
+            echo -e $red ">                             █   ▀            ▀                                      <";
+            echo -e $red ">                            ▀                                                        <";
+            echo -e " >                                      Cargando..."
+            echo -e '\033[m'
+            nmcli dev wifi connect $nombre_red4 password $clave_red4
+            systemctl enable dhcpcd NetworkManager
+            systemctl start dhcpcd NetworkManager
+            dialog --backtitle "$titulo" --title "| Estado de Conexión |" \
+            --stdout --ok-label "Siguiente" --prgbox "echo '' && nmcli dev status && echo '' && echo '' && echo 'Nombre de Red: $nombre_red4' && echo 'Clave de Red: no se dice we'" 16 60 
+            ;;
+        5)  
+            clear
+            red='\033[38;2;255;0;02m'
+            echo ""
+            echo ""
+            echo ""
+            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
+            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
+            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
+            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
+            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
+            echo -e $red ">                             █   ▀            ▀                                      <";
+            echo -e $red ">                            ▀                                                        <";
+            echo -e " >                                      Cargando..."
+            echo -e '\033[m'
+            nombre_red5=$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -5 | tail -1 | tail -2 | tail -3 | tail -4)
+            while [ $clave_red5 != $clave_red5_2 ]
+            do 
+                clave_red5=$(dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "|  Clave de Wifi  |" --insecure --passwordbox "|  Ingrese contraseña |" 8 40 2>&1 > /dev/tty)
+                clave_red5_2=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Clave de wifi |" --insecure --passwordbox "|  Confirme contraseña |" 8 40 2>&1 > /dev/tty)
+                if [ $clave_red5 != $clave_red5_2 ];then 
+                 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Clave incorrecta |" --msgbox 'Las contraseñas no coinciden\n      Intente nuevamente...' 6 50
+              else 
+                clear
+              fi
+            done
+            red='\033[38;2;255;0;02m'
+            echo ""
+            echo ""
+            echo ""
+            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
+            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
+            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
+            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
+            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
+            echo -e $red ">                             █   ▀            ▀                                      <";
+            echo -e $red ">                            ▀                                                        <";
+            echo -e " >                                      Cargando..."
+            echo -e '\033[m'
+            nmcli dev wifi connect $nombre_red5 password $clave_red5
+            systemctl enable dhcpcd NetworkManager
+            systemctl start dhcpcd NetworkManager
+            dialog --backtitle "$titulo" --title "| Estado de Conexión |" \
+            --stdout --ok-label "Siguiente" --prgbox "echo '' && nmcli dev status && echo '' && echo '' && echo 'Nombre de Red: $nombre_red5' && echo 'Clave de Red: $clave_red5'" 16 60 
+            ;;
+    esac
+done
+
+else
+    
+    dialog --backtitle "$titulo" --title "| WiFI |" --msgbox "\nNo tiene ninguna interfaz de Wifi detectada..." 7 50
+
+fi;;      
+
+
+1) dialog --backtitle "$titulo" --title "| Ethernet |" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuvamente..." 8 50
+   exit;;
+
+esac
+
+fi
+
+
+nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
+
+instalaryay="yay-bin
+"
+dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando YAY - (AUR helper) |" --stdout --ok-label "Siguiente"\
+--prgbox "cd /home/$nombre_usuario \
+            && git clone https://aur.archlinux.org/$instalaryay.git \
+            && chown -R $nombre_usuario:users /home/$nombre_usuario/$instalaryay \
+            && chown -R $nombre_usuario:users /home/$nombre_usuario/$instalaryay/PKGBUILD \
+            && cd /home/$nombre_usuario/$instalaryay \
+            && sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm \
+            && pacman -U *.pkg.tar.xz --noconfirm \
+            && rm -Rf /home/$nombre_usuario/$instalaryay \
+            && cd" 25 80
+            
+# yay -S gotop-git --noeditmenu --noconfirm --removemake
+
+    ####################################################################
+    
 VM=false
      
     case $(systemd-detect-virt) in
@@ -29,6 +392,9 @@ VM=false
             VM=true
         ;;
     esac
+    
+    ####################################################################
+    
 while (VM=true)
 do
 if "$VM" ; then
@@ -83,6 +449,8 @@ case $? in
 esac
 done
 
+    ####################################################################
+    
 clear
 
 echo FIN

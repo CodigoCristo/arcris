@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-titulo="-| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |-"
+titulo="| Instalación de ArchLinux - by: ArcriS |"
 
 dialog --backtitle "$titulo" --title "| INTERNET |" --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
 
@@ -14,10 +14,10 @@ else
      dialog --title "|  Conexión a RED  |" --backtitle "$titulo" \
    --prgbox "\n\nping -c 3 archlinux.org && echo && echo No hay conexión a Internet" 6 100 
   dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Error de RED |" --msgbox "No hay conexión a Internet" 5 60
-  dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "¿Quieres conectarte a una red wifi?" 5 45 
+  dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "¿Tienes red wifi?" 5 45 
 case $? in 
-	0) wifi-menu 
-	wifinet=$(netctl list | awk -F " " '{print $2}');;
+	0) wifi-menu
+	   wifinet=$(netctl list | awk -F " " '{print $2}');;
 	1) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Ethernet |" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuevamente..." 8 50
    exit;;
 esac
@@ -104,8 +104,8 @@ dialog --backtitle "| SISTEMA UEFI Y DISCO DOS MBR |" --title "|  UEFI TRABAJA C
 --yesno "\nUsted inicio la USB en sistema UEFI y su disco es DOS MBR\nConvertir su disco DOS/MBR a GPT\n\nAl convertir su disco perderá toda su información \
 \nSi tiene otras particiones en el Disco\nNo realice la conversión \n\n¿Desea convertir su disco DOS/MBR a GPT?" 13 65
 case $? in 
-	0)dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Convertir Disco |" --stdout --ok-label "Siguiente" \
-	--prgbox "echo "" && sgdisk --zap-all $disk && parted $disk mklabel gpt" 10 80;;
+	0)dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Convertir Disco |" --stdout --ok-label "Siguiente" \
+	--prgbox "echo '' && echo '' && echo '' && sgdisk --zap-all $disk && parted $disk mklabel gpt" 10 80;;
 	
 	1)exit
 esac
@@ -119,8 +119,8 @@ dialog --backtitle "| SISTEMA BIOS LEGACY Y DISCO GPT |" --title "|  BIOS LEGACY
 --yesno "\nUsted inicio la USB en sistema UEFI y su disco es DOS MBR\nConvertir su disco GPT a DOS/MBR\n\nAl convertir su disco perderá toda su información \
 \nSi tiene otras particiones en el Disco\nNo realice la conversión \n\n¿Desea convertir su disco DOS/MBR a GPT?" 13 65
 case $? in 
-	0)dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Convertir Disco |" --stdout --ok-label "Siguiente" \
-	--prgbox "echo "" && sgdisk --zap-all $disk && parted $disk mklabel msdos" 10 80;;
+	0)dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Convertir Disco |" --stdout --ok-label "Siguiente" \
+	--prgbox "echo '' && echo '' && echo '' && sgdisk --zap-all $disk && parted $disk mklabel msdos" 10 80;;
 	1)exit
 esac
 fi
@@ -311,7 +311,6 @@ done
 
 clear
 cp pacman.conf /etc/pacman.conf
-
 echo ""
 pacman-key --populate archlinux 
 echo ""
@@ -342,7 +341,7 @@ dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://
 && arch-chroot /mnt reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist \
 && arch-chroot /mnt cat /etc/pacman.d/mirrorlist \
 && cp pacman.conf /mnt/etc/pacman.conf \
-&& arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio r8168 \
+&& arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio \
 alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer lib32-alsa-plugins \
 dnsmasq ethtool gpm ndisc6 ntp usb_modeswitch which inetutils usbutils wvdial nano \
 dhcp dhcpcd dhclient ppp netctl nfs-utils iw iwd net-tools networkmanager ifplugd openssh dialog \
@@ -351,12 +350,21 @@ gvfs gvfs-afc gvfs-smb gvfs-gphoto2 gvfs-mtp gvfs-goa gvfs-nfs gvfs-google gst-l
 jfsutils f2fs-tools btrfs-progs exfat-utils ntfs-3g reiserfsprogs udftools xfsprogs nilfs-utils polkit gpart \
 ark xarchiver unarchiver binutils gzip lha lrzip lzip lz4 p7zip tar xz bzip2 p7zip lbzip2 arj lzop cpio unrar unzip zstd zip lzip unarj zstd \
 libcanberra-gstreamer ffmpeg aom libde265 x265 x264 libmpeg2 xvidcore libtheora libvpx schroedinger sdl gstreamer gst-plugins-bad gst-plugins-base gst-plugins-base-libs \
-gst-plugins-good gst-plugins-ugly xine-lib libdvdcss libdvdread dvd+rw-tools lame jasper openjpeg libmng vcdimager hddtemp \
-alsi inxi yay gotop htop --noconfirm \
-&& arch-chroot /mnt /bin/bash -c 'rmmod r8169' \
-&& arch-chroot /mnt /bin/bash -c 'modprobe r8168' \
-&& arch-chroot /mnt /bin/bash -c 'echo blacklist r8169 > /etc/modprobe.d/r8169_blacklist.conf' " 25 80
+gst-plugins-good gst-plugins-ugly xine-lib libdvdcss libdvdread dvd+rw-tools lame jasper openjpeg libmng vcdimager hddtemp alsi inxi-git --noconfirm " 25 80
 
+r8168=$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'RTL8111/8168/8411' ")
+		if [[ $r8168  = *RTL8111/8168/8411* || $r8168 = *Rtl8111/8168/8411* || $r8168 = *rtl8111/8168/8411* ]]
+		then			
+		dialog --backtitle "RTL8111/8168/8411" --title "| Driver Ethernet 8168 |" --stdout --ok-label "Siguiente" \
+				--prgbox "arch-chroot /mnt pacman -Sy r8168 --noconfirm \
+				&& arch-chroot /mnt /bin/bash -c 'modprobe r8168' \
+				&& arch-chroot /mnt /bin/bash -c 'rmmod r8169' \
+				&& arch-chroot /mnt /bin/bash -c 'echo blacklist r8169 > /etc/modprobe.d/r8169_blacklist.conf' " 25 80
+
+		else
+		echo ""
+		fi
+		
 
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Microcode |" --yesno "\n¿Actualizaciones para el microcódigo del procesador?" 7 58 
 case $? in 
@@ -368,28 +376,38 @@ case $? in
 
 		else
 			
-		dialog --backtitle "$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'Host bridge:'")" --title "| Microcode |" --stdout --ok-label "Siguiente" \
+		dialog --backtitle "$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'Host bridge: AMD'")" --title "| Microcode |" --stdout --ok-label "Siguiente" \
 				--prgbox "arch-chroot /mnt pacman -Sy amd-ucode --noconfirm" 25 80
 		fi;;
 	1) 
 esac
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "\n¿Tienes Tarjeta de Wifi?" 7 45 
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --defaultno  --yesno "\n¿Tienes Tarjeta de Wifi?" 7 45 
 case $? in 
-	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
+	0) broadcom=$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'Network controller: Broadcom' ")
+		if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
+		then			
+		dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "arch-chroot /mnt pacman -Sy broadcom-wl wireless-regdb wpa_supplicant wireless_tools --noconfirm \
 		&& arch-chroot /mnt /bin/bash -c 'rmmod b43' \
 		&& arch-chroot /mnt /bin/bash -c 'rmmod ssb' \
-		&& arch-chroot /mnt /bin/bash -c 'modprobe wl' " 25 80;;
+		&& arch-chroot /mnt /bin/bash -c 'modprobe wl' " 25 80
+		else
+			
+		dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
+		--prgbox "arch-chroot /mnt pacman -Sy wireless-regdb wpa_supplicant wireless_tools --noconfirm" 25 80
+				
+		fi;;
 	1) 
 esac
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --yesno "\n¿Tienes Touchpad?" 7 45 
+
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --defaultno --yesno "\n¿Tienes Touchpad?" 7 45 
 case $? in 
 	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "pacstrap  /mnt xf86-input-synaptics xf86-input-libinput xorg-xinput" 25 80;;
 	1) 
 esac
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --yesno "\n¿Tienes Bluetooth?" 7 45 
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --defaultno --yesno "\n¿Tienes Bluetooth?" 7 45 
 case $? in 
 	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth blueman" 25 80
@@ -591,21 +609,29 @@ arch-chroot /mnt /bin/bash -c "echo $user:$userpasswd | chpasswd"
 sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
 arch-chroot /mnt /bin/bash -c "hwclock -w"
 
-#activando servicios dhcpcd NetworkManager sshd
+if [[ ! -z $wifinet ]];then
+	####################################################################
+	#Copia Red
+	wlan=$(echo /proc/net/dev*/w*)
+	lan=${wlan##*/}
+	numeronetctl=$(echo $lan | wc -c)
+	wifinetnuevo=$(netctl list | awk -F " " '{print $2}' | tail -c +${numeronetctl} | tail -c +2)
 
+
+	cp /etc/netctl/$wifinet /mnt/etc/netctl/$wifinetnuevo
+	arch-chroot /mnt /bin/bash -c "netctl enable $wifinetnuevo"
+	####################################################################
+fi
+
+#activando servicios dhcpcd NetworkManager sshd
 #Actualiza Servicios y Mirrors
-arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd NetworkManager sshd"
+arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd sshd"
 clear
 echo ""
 arch-chroot /mnt /bin/bash -c "pacman-key --populate archlinux"
 echo ""
 echo "  Claves Actualizadas en el Sistema Base, Espere..."
 echo ""
-#Copia Red
-wifinet=$(netctl list | awk -F " " '{print $2}')
-cp /etc/netctl/$wifinet /mnt/etc/netctl/$wifinet
-arch-chroot /mnt /bin/bash -c "netctl enable $wifinet"
-#Copia Red
 clear
 
 uefi=$( parted $disk print | grep -ic gpt )
@@ -629,14 +655,12 @@ dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB -
 fi
 
 
-arch-chroot /mnt pacman -Sy xdg-user-dirs --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando xdg-user-dirs... |" 25 80; sleep 3
-dialog --no-collapse --cr-wrap --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| La computadora se reiniciara para finalizar la instalación |" 7 66
+arch-chroot /mnt pacman -Sy xdg-user-dirs --noconfirm && arch-chroot /mnt xdg-user-dirs-update | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando xdg-user-dirs... |" 25 80; sleep 3
 clear
 export $(cat /mnt/etc/locale.conf)
-clear
-arch-chroot /mnt xdg-user-dirs-update && ls /mnt/root
 echo ""
-arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo "" && arch-chroot /mnt /bin/bash -c "neofetch"
+echo ""
+arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo "" && arch-chroot /mnt /bin/bash -c "alsi && ls"
 echo ""
 echo ""
 echo ""
@@ -647,7 +671,24 @@ echo "      //                               ||"
 echo "      /////////////////////////////////||"
 echo ""
 echo ""
+#Copia el script posterior a la instalación en el disco duro
+cp post-install.sh /mnt/root && chmod +x /mnt/root/post-install.sh
+sed -i "s/selectedkeymap/${keymap}/g" /mnt/root/post-install.sh
+
+#Prepare the system to boot directly to root and run the post-insall script
+mkdir /mnt/etc/systemd/system/getty@tty1.service.d
+echo -e "[Service]\nExecStart=\nExecStart=-/sbin/agetty --autologin root --noclear %I 38400 linux" > /mnt/etc/systemd/system/getty@tty1.service.d/override.conf
+echo "sh post-install.sh" >> /mnt/root/.bashrc
+echo -e "if [ -f ~/.bashrc ]; then\n\tsource ~/.bashrc\nfi" >> /mnt/root/.bash_profile
+
+
+
 sleep 5
 umount -R /mnt
 swapoff $swap
+
+dialog --no-collapse --cr-wrap --backtitle "$titulo" \
+--stdout --ok-label 'Reiniciar' --title "--| Finalizar |--" \
+--msgbox "\n| La computadora se reiniciara para finalizar |\n| Cuando este apagada la computadora retire la USB o CD |" 8 66
+
 reboot
