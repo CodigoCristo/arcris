@@ -60,11 +60,8 @@ locale-gen
 echo LANG=es_ES.UTF-8 > /etc/locale.conf
 export LANG=es_ES.UTF-8
 echo ""
-echo ""
-echo ""
-printf '\nTodo listo!\n'
+sleep 2
 
-sleep 3
 #terminus-font
 #FONT=ter-v14b  /etc/vconsole.conf 
 #partprobe
