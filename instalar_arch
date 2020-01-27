@@ -3,22 +3,22 @@
 
 titulo="| Instalación de ArchLinux - by: ArcriS |"
 
-dialog --backtitle "$titulo" --title "| INTERNET |" --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
+dialog --backtitle "$titulo" --title "-| INTERNET |-" --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
 
 if ping -c 2 www.google.com &> /dev/null; then
 	
-   dialog --title "|  Conexión  |" --backtitle "$titulo" \
+   dialog --title "-|  Conexión  |-" --backtitle "$titulo" \
    --prgbox "ping -c 3 archlinux.org && echo && echo Si Hay Internet!" 15 100 
 
 else
-     dialog --title "|  Conexión a RED  |" --backtitle "$titulo" \
+     dialog --title "-|  Conexión a RED  |-" --backtitle "$titulo" \
    --prgbox "\n\nping -c 3 archlinux.org && echo && echo No hay conexión a Internet" 6 100 
-  dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Error de RED |" --msgbox "No hay conexión a Internet" 5 60
-  dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "¿Tienes red wifi?" 5 45 
+  dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Error de RED |-" --msgbox "No hay conexión a Internet" 5 60
+  dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Conexión WiFi |-" --yesno "¿ Tienes red wifi ?" 5 45 
 case $? in 
 	0) wifi-menu
 	   wifinet=$(netctl list | awk -F " " '{print $2}');;
-	1) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Ethernet |" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuevamente..." 8 50
+	1) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Ethernet |-" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuevamente..." 8 50
    exit;;
 esac
 
@@ -27,12 +27,12 @@ fi
 umount -R /mnt
 
 
-cmd=(dialog --backtitle "$titulo" --title "| Distribución del teclado: |" --keep-tite --menu "\n" 10 0 10)
+cmd=(dialog --backtitle "$titulo" --title "-| Distribución del teclado: |-" --keep-tite --menu "\n" 10 0 10)
 
 options=(la-latin1	"LatinoAmericano"
          es 		"Español"
          us 		"Ingles"
-         otros 		"(+) Teclados")
+         otros 		"(+)Teclados")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
