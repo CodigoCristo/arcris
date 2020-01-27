@@ -5,7 +5,7 @@ titulo="| Instalación de ArchLinux - by: ArcriS |"
 
 dialog --backtitle "$titulo" --title "-| INTERNET |-" --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
 
-if ping -c 2 www.google.com &> /dev/null; then
+if ping -c 3 www.google.com &> /dev/null; then
 	
    dialog --title "-|  Conexión  |-" --backtitle "$titulo" \
    --prgbox "ping -c 3 archlinux.org && echo && echo Si Hay Internet!" 15 100 
