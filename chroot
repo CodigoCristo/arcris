@@ -32,13 +32,13 @@ while (VM=true)
 do
 if "$VM" ; then
             case "$virt" in
-                vbox)   echo virtual
+                vbox) dialog --no-collapse --cr-wrap --title "| INTERNET |" --msgbox "\n| virtualbox |" 7 60
                 ;;
-                vmware) echo vmware
+                vmware) dialog --no-collapse --cr-wrap --title "| INTERNET |" --msgbox "\n| virtualbox2 |" 7 60
                 ;;
-                hyper-v) echo hyper
+                hyper-v) dialog --no-collapse --cr-wrap --title "| INTERNET |" --msgbox "\n| virtualbox3 |" 7 60
                 ;;
-                *)      echo otros
+                *) dialog --no-collapse --cr-wrap --title "| INTERNET |" --msgbox "\n| virtualbox4 |" 7 60
                 ;;
             esac
             break
