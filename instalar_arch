@@ -151,7 +151,7 @@ p=$(echo "$p" | grep -v $part)
 
 partitioning(){
 	fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}' | grep -v cramfs | grep -v hfsplus | grep -v  bfs | grep -v msdos | grep -v minix)"
-  format=$(dialog --backtitle '$titulo' --clear --title '-| FORMATO DE PARTICIÓN |-' \
+  format=$(dialog --backtitle "$titulo" --clear --title '-| FORMATO DE PARTICIÓN |-' \
           --ok-label 'Seleccionar' --cancel-label 'No formatear' --menu "\nElige el tipo de sistema de archivos\n\nEXT4 >> Para Linux\nFAT >> Para FAT32 para la partición UEFI\nNTFS >> Para Windows\n\n$(fdisk -l $disk | grep dos || fdisk -l $disk | grep gpt)" 15 45 0 ${fs} 2>&1 > /dev/tty)			
 
 	case $format in
@@ -518,9 +518,9 @@ do
     sleep 0.025 
     echo $i_conta_zona
 done |  \
- dialog  --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| ZONA HORARIA |" --gauge "Gracias https://ipapi.co/timezone" 6 60
+dialog  --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| ZONA HORARIA |" --gauge "Gracias https://ipapi.co/timezone" 6 60
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| ZONA HORARIA |" --defaultno --yesno "\nTU ZONA HORARIA ES >>> $(cat timezone)\n¿Deseeas modificar tu Zona Horaria?" 8 40 
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| ZONA HORARIA |" --defaultno --yesno "\n       >>> $(cat timezone) <<<\n\n       ¿Deseas modificarlo?" 8 40 
 
 
 if [ "$?" = "0" ]; then
