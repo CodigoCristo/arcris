@@ -654,7 +654,7 @@ dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instal
 dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "echo '' && arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg && echo '' && echo 'ls -l /mnt/boot' && ls -l /mnt/boot && echo '' && echo 'Lea bien que no tenga ningún error marcado' && echo '> Confirme tener las IMG de linux para el arranque' && echo '> Confirme tener la carpeta de GRUB para el arranque' " 25 80
 fi
 
-
+clear
 arch-chroot /mnt pacman -Sy xdg-user-dirs --noconfirm && arch-chroot /mnt xdg-user-dirs-update | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando xdg-user-dirs... |" 25 80; sleep 3
 clear
 export $(cat /mnt/etc/locale.conf)
@@ -671,19 +671,17 @@ echo "      //                               ||"
 echo "      /////////////////////////////////||"
 echo ""
 echo ""
+sleep 5
 #Copia el script posterior a la instalación en el disco duro
-cp post-install.sh /mnt/root && chmod +x /mnt/root/post-install.sh
-sed -i "s/selectedkeymap/${keymap}/g" /mnt/root/post-install.sh
+cp chroot /mnt/root && chmod +x /mnt/root/chroot
+sed -i "s/selectedkeymap/${keymap}/g" /mnt/root/chroot
 
-#Prepare the system to boot directly to root and run the post-insall script
+#Prepare el sistema para iniciar directamente en la raíz y ejecute el script posterior a la instalación
 mkdir /mnt/etc/systemd/system/getty@tty1.service.d
 echo -e "[Service]\nExecStart=\nExecStart=-/sbin/agetty --autologin root --noclear %I 38400 linux" > /mnt/etc/systemd/system/getty@tty1.service.d/override.conf
 echo "sh post-install.sh" >> /mnt/root/.bashrc
 echo -e "if [ -f ~/.bashrc ]; then\n\tsource ~/.bashrc\nfi" >> /mnt/root/.bash_profile
 
-
-
-sleep 5
 umount -R /mnt
 swapoff $swap
 
