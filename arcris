@@ -7,7 +7,9 @@ clear
 red='\033[38;2;255;0;02m'
 echo ""
 echo ""
-echo ""
+echo -e $red ">_________________________________________________________________________<";
+echo -e $red ">                                                                         <";
+echo -e $red ">                                                                         <";
 echo -e $red ">                      ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                <";
 echo -e $red ">                      █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄              <";
 echo -e $red ">                      █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                <";
@@ -15,7 +17,7 @@ echo -e $red ">                      █  █ █  █  █▄  ▄▀ █  █ 
 echo -e $red ">                         █   █   ▀███▀    █    ▐                         <";
 echo -e $red ">                        █   ▀            ▀                               <";
 echo -e $red ">                       ▀                                                 <";
-
+echo -e $red ">                                                                         <";
 function ProgressBar {
 # Process data
     let _progress=(${1}*100/${2}*100)/100
