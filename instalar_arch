@@ -27,7 +27,7 @@ fi
 umount -R /mnt
 
 
-cmd=(dialog --backtitle "$titulo" --title "-| Distribución del teclado: |-" --keep-tite --menu "\n" 10 0 10)
+cmd=(dialog --backtitle "$titulo" --title "-| Distribución del teclado |-" --keep-tite --menu "\n" 10 0 10)
 
 options=(la-latin1	"LatinoAmericano"
          es 		"Español"
@@ -140,7 +140,7 @@ partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | se
 p="$(echo "$partitions")"
 #--title "| Elige la partición de Administrador |"
 part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear \
-  --menu "Selecciona la partición para Root: /" 0 0 0 ${p} 2>&1 > /dev/tty)
+  --menu "Selecciona la partición para Root: /" 0 30 0 ${p} 2>&1 > /dev/tty)
 dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Verificando estado de Disco |-" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 rootfs=$part
 
@@ -152,7 +152,7 @@ p=$(echo "$p" | grep -v $part)
 partitioning(){
 	fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}' | grep -v cramfs | grep -v hfsplus | grep -v  bfs | grep -v msdos | grep -v minix)"
   format=$(dialog --backtitle 'Instalación de ArchLinux - https://t.me/ArchLinuxCristo' --clear --title '-| FORMATO DE PARTICIÓN |-' \
-          --ok-label 'Seleccionar' --cancel-label 'No formatear' --menu "\nElige el tipo de sistema de archivos\n\nEXT4 >> Para Linux\nFAT >> Para FAT32 para la partición UEFI\nNTFS >> Para Windows\n\n$(fdisk -l $disk | grep dos || fdisk -l $disk | grep gpt)" 20 40 0 ${fs} 2>&1 > /dev/tty)			
+          --ok-label 'Seleccionar' --cancel-label 'No formatear' --menu "\nElige el tipo de sistema de archivos\n\nEXT4 >> Para Linux\nFAT >> Para FAT32 para la partición UEFI\nNTFS >> Para Windows\n\n$(fdisk -l $disk | grep dos || fdisk -l $disk | grep gpt)" 15 50 0 ${fs} 2>&1 > /dev/tty)			
 
 	case $format in
 		ext2) dialog --clear --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Formateando partición en EXT2 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext2 -F $part" 20 80;;
