@@ -32,22 +32,13 @@ while (VM=true)
 do
 if "$VM" ; then
             case "$virt" in
-                vbox)   dialog --ok-button "$ok" --msgbox "\n$vbox_msg" 10 60
-                        GPU="virtualbox-guest-utils "
-                        if [ "$kernel" == "linux" ]; then
-                            GPU+="virtualbox-guest-modules-arch "
-                        else
-                            GPU+="virtualbox-guest-dkms "
-                        fi
+                vbox)   echo virtual
                 ;;
-                vmware) dialog --ok-button "$ok" --msgbox "\n$vmware_msg" 10 60
-                        GPU="xf86-video-vmware xf86-input-vmmouse open-vm-tools net-tools gtkmm mesa mesa-libgl"
+                vmware) echo vmware
                 ;;
-                hyper-v) dialog --ok-button "$ok" --msgbox "\n$hyperv_msg" 10 60
-                         GPU="xf86-video-fbdev mesa-libgl"
+                hyper-v) echo hyper
                 ;;
-                *)      dialog --ok-button "$ok" --msgbox "\n$vm_msg" 10 60
-                        GPU="xf86-video-fbdev mesa-libgl"
+                *)      echo otros
                 ;;
             esac
             break
