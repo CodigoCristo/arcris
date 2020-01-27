@@ -32,7 +32,7 @@ cmd=(dialog --backtitle "$titulo" --title "| Distribución del teclado: |" --kee
 options=(la-latin1	"LatinoAmericano"
          es 		"Español"
          us 		"Ingles"
-         otros 		"keyboard")
+         otros 		"+ Teclados")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -80,7 +80,7 @@ done
 
 
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Importante |" --stdout  --ok-label 'Siguiente'  \
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Mensaje |" --stdout  --ok-label 'Siguiente'  \
 --msgbox "\n> UEFI trabaja con discos en GPT \n\n> UEFI su partición boot es formateada en FAT32 \n\n> BIOS LEGACY trabaja con discos en DOS/MBR\n\n> BIOS LEGACY su partición boot es formateada en EXT4\n( La partición boot en linux es opcional )" 14 60
 
 

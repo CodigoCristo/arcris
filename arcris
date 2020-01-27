@@ -7,7 +7,7 @@ clear
 red='\033[38;2;255;0;02m'
 echo ""
 echo ""
-echo -e $red ">_________________________________________________________________________<";
+echo -e $red "___________________________________________________________________________";
 echo -e $red ">                                                                         <";
 echo -e $red ">                                                                         <";
 echo -e $red ">                      ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                <";
@@ -47,7 +47,6 @@ do
     ProgressBar ${number} ${_end}
 done
 
-echo -e '\033[m'
 
 #Poniendo el sistema en español
 echo ""
@@ -62,7 +61,8 @@ locale-gen
 echo LANG=es_ES.UTF-8 > /etc/locale.conf
 export LANG=es_ES.UTF-8
 echo ""
-sleep 2
+echo -e '\033[m'
+sleep 3
 
 #terminus-font
 #FONT=ter-v14b  /etc/vconsole.conf 
