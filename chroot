@@ -1,103 +1,84 @@
 #!/bin/bash
 
-nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
-
-cmd=(dialog --no-collapse --cr-wrap --separate-output --checklist "Select options:" 22 76 16)
-options=(1 "yay" off    # any option can be set to default to "on"
-         2 "spotify" off
-         3 "Google" off
-         4 "gotop" off
-         5 "sublime" off)
-choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-clear
-for choice in $choices
+VM=false
+    
+while (true)
 do
-    case $choice in
-        1)
-            func_yaybin() {
-                
-            programaur="yay-bin"
-            cd /home/$nombre_usuario
-            git clone https://aur.archlinux.org/$programaur.git
-            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur
-            chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur/PKGBUILD
-            cd /home/$nombre_usuario/$programaur
-            sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm
-            pacman -U *.pkg.tar.xz --noconfirm
-            rm -Rf /home/$nombre_usuario/$programaur
-            cd
-            }
-            yaybin="$(func_yaybin)"
-            ;;
-        2)
-            func_spotify() {
-            programaur="spotify"
-            dialog --no-collapse --cr-wrap --prgbox "cd /home/$nombre_usuario \
-            && git clone https://aur.archlinux.org/$programaur.git \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur/PKGBUILD \
-            && cd /home/$nombre_usuario/$programaur \
-            && sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm \
-            && pacman -U *.pkg.tar.xz --noconfirm \
-            && rm -Rf /home/$nombre_usuario/$programaur \
-            && cd" 25 80
-            }
-            
-            ;;
-        3)
-            func_googlechrome() {
-            
-            programaur="google-chrome"
-            dialog --no-collapse --cr-wrap --prgbox "cd /home/$nombre_usuario \
-            && git clone https://aur.archlinux.org/$programaur.git \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur/PKGBUILD \
-            && cd /home/$nombre_usuario/$programaur \
-            && sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm \
-            && pacman -U *.pkg.tar.xz --noconfirm \
-            && rm -Rf /home/$nombre_usuario/$programaur \
-            && cd" 25 80
-            }
-            
-            ;;
-        4)
-            
-            func_gotop() {
-            
-            programaur="gotop-git"
-            dialog --no-collapse --cr-wrap --prgbox "cd /home/$nombre_usuario \
-            && git clone https://aur.archlinux.org/$programaur.git \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur/PKGBUILD \
-            && cd /home/$nombre_usuario/$programaur \
-            && sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm \
-            && pacman -U *.pkg.tar.xz --noconfirm \
-            && rm -Rf /home/$nombre_usuario/$programaur \
-            && cd" 25 80
-            }
-
-            ;;
-        5)
-            func_sublimetextdev() {
-            
-            programaur="sublime-text-dev"
-            dialog --no-collapse --cr-wrap --prgbox "cd /home/$nombre_usuario \
-            && git clone https://aur.archlinux.org/$programaur.git \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/$programaur/PKGBUILD \
-            && cd /home/$nombre_usuario/$programaur \
-            && sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm \
-            && pacman -U *.pkg.tar.xz --noconfirm \
-            && rm -Rf /home/$nombre_usuario/$programaur \
-            && cd" 25 80
-            }
-            
-            ;;
+    
+    case $(systemd-detect-virt) in
+        oracle)
+            virt="vbox"
+            VM=true
+        ;;
+        vmware)
+            virt="vmware"
+            VM=true
+        ;;
+        qemu)
+            virt="qemu"
+            VM=true
+        ;;
+        kvm)
+            virt="kvm"
+            VM=true
+        ;;
+        microsoft)
+            virt="hyper-v"
+            VM=true
+        ;;
+        xen)
+            virt="xen"
+            VM=true
+        ;;
     esac
+
+if "$VM" ; then
+            case "$virt" in
+                vbox)   dialog --ok-button "$ok" --msgbox "\n$vbox_msg" 10 60
+                        GPU="virtualbox-guest-utils "
+                        if [ "$kernel" == "linux" ]; then
+                            GPU+="virtualbox-guest-modules-arch "
+                        else
+                            GPU+="virtualbox-guest-dkms "
+                        fi
+                ;;
+                vmware) dialog --ok-button "$ok" --msgbox "\n$vmware_msg" 10 60
+                        GPU="xf86-video-vmware xf86-input-vmmouse open-vm-tools net-tools gtkmm mesa mesa-libgl"
+                ;;
+                hyper-v) dialog --ok-button "$ok" --msgbox "\n$hyperv_msg" 10 60
+                         GPU="xf86-video-fbdev mesa-libgl"
+                ;;
+                *)      dialog --ok-button "$ok" --msgbox "\n$vm_msg" 10 60
+                        GPU="xf86-video-fbdev mesa-libgl"
+                ;;
+            esac
+            break
+fi
 done
 
-$(func_gotop)
 
 
+        if (lspci | grep VGA | grep "NVIDIA" &>/dev/null); then
+            NVIDIA=true default_GPU="xf86-video-nouveau"
+            chipset="Nvidia"
+            echo "NVIDIA"
 
-echo ""
+        elif (lspci | grep VGA | grep "Radeon R" &>/dev/null); then
+            default_GPU="xf86-video-radeon"
+            chipset="AMD RADEON"
+            echo "RADEON"
+
+        elif (lspci | grep VGA | grep "ATI" &>/dev/null); then
+            default_GPU="xf86-video-ati"
+            chipset="AMD/ATI"
+            echo "ATI"
+
+        elif (lspci | grep VGA | grep "Intel" &>/dev/null); then
+            default_GPU="xf86-video-intel"
+            chipset="Intel"
+            echo "Intel"
+        else
+            #default_GPU="xf86-video-vesa"
+            #chipset="Desconocido"
+            echo nada
+        fi
