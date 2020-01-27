@@ -128,7 +128,7 @@ fi
 
 umount -R /mnt
 
-partitioner=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "-| ELIGE UN PROGRAMA |-" --ok-label 'Seleccionar' --no-cancel --menu "Crear particiones correctamente" 10 0 0\
+partitioner=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "-| ELIGE UN PROGRAMA |-" --ok-label 'Seleccionar' --no-cancel --menu "Crear particiones correctamente" 8 0 0\
 		"cfdisk" "Un particionador casi grafico" \
 		"fdisk" "Un particionador de linea de comandos" \
 		"parted" "Un particionador de linea de comandos" 2>&1 > /dev/tty)
@@ -140,7 +140,7 @@ partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | se
 p="$(echo "$partitions")"
 #--title "| Elige la partición de Administrador |"
 part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear \
-  --menu "Selecciona la partición para Root: /" 15 30 0 ${p} 2>&1 > /dev/tty)
+  --menu "Selecciona la partición para Root: /" 15 40 0 ${p} 2>&1 > /dev/tty)
 dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Verificando estado de Disco |-" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 rootfs=$part
 
