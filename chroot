@@ -346,19 +346,20 @@ esac
 fi
 
 
+VM=false
+kernel=$(uname -a | tail -c -6)
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
-instalaryay="yay-bin"
 
 dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando YAY - (AUR helper) |" --stdout --ok-label "Siguiente"\
 --prgbox "cd /home/$nombre_usuario \
-            && git clone https://aur.archlinux.org/$instalaryay.git \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/$instalaryay \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/$instalaryay/PKGBUILD \
-            && cd /home/$nombre_usuario/$instalaryay \
+            && git clone https://aur.archlinux.org/yay-bin.git \
+            && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin \
+            && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD \
+            && cd /home/$nombre_usuario/yay-bin \
             && sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm \
             && pacman -U *.pkg.tar.xz --noconfirm \
-            && rm -Rf /home/$nombre_usuario/$instalaryay \
+            && rm -Rf /home/$nombre_usuario/yay-bin \
             && cd" 25 80
             
 # yay -S gotop-git --noeditmenu --noconfirm --removemake
@@ -366,10 +367,7 @@ dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://
 installxorg=$"xorg xorg-apps xorg-xinit xorg-twm xterm"
 
     ####################################################################
-    
-VM=false
-kernel=$(uname -a | tail -c -6)
-     
+      
     case $(systemd-detect-virt) in
         oracle)
             virt="vbox"
