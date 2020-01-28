@@ -347,14 +347,12 @@ fi
 
 
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
-
+#Para que el sudo no pida clave
 sed -i "80i $nombre_usuario ALL=(ALL) NOPASSWD: ALL" /etc/sudoers
 
 
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Instalando YAY - (AUR helper) |" --stdout --ok-label "Siguiente" --prgbox "cd /home/$nombre_usuario \
             && git clone https://aur.archlinux.org/yay-bin.git \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD \
             && cd /home/$nombre_usuario/yay-bin \
             && sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm \
             && pacman -U *.pkg.tar.xz --noconfirm \
@@ -473,9 +471,7 @@ done
     
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
-chown -hR $nombre_usuario:users /home/$nombre_usuario 
-
-dialog  --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $installxorg --noeditmenu --noconfirm --removemake && sudo -u $nombre_usuario $GPU" 25 100
+dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $installxorg --noeditmenu --noconfirm --removemake && sudo -u $nombre_usuario $GPU" 27 100
 
 
 
@@ -488,7 +484,10 @@ netctl disable $wifinet
 systemctl disable netctl
 systemctl enable dhcpcd NetworkManager
 systemctl start dhcpcd NetworkManager
+
 sed -i '80d' /etc/sudoers
+sed -i "80i $nombre_usuario ALL=(ALL) ALL" /etc/sudoers
+
 clear
 
 
