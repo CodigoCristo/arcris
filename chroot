@@ -353,6 +353,8 @@ sed -i "80i $nombre_usuario ALL=(ALL) NOPASSWD: ALL" /etc/sudoers
 
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Instalando YAY - (AUR helper) |" --stdout --ok-label "Siguiente" --prgbox "cd /home/$nombre_usuario \
             && git clone https://aur.archlinux.org/yay-bin.git \
+            && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin \
+            && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD \
             && cd /home/$nombre_usuario/yay-bin \
             && sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm \
             && pacman -U *.pkg.tar.xz --noconfirm \
