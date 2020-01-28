@@ -470,8 +470,8 @@ done
     
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
-chown -hR root $nombre_usuario:users /home/$nombre_usuario 
-sudo -u $nombre_usuario yay -Sy $installxorg --noeditmenu --noconfirm && sudo -u $nombre_usuario $GPU
+chown -hR $nombre_usuario:users /home/$nombre_usuario 
+sudo -u $nombre_usuario yay -Sy $installxorg --noeditmenu --noconfirm && sudo -u $nombre_usuario $GPU | dialog --programbox 20 100
 
 echo FIN
 
