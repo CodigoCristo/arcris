@@ -346,8 +346,6 @@ esac
 fi
 
 
-VM=false
-kernel=$(uname -a | tail -c -6)
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
 
@@ -364,6 +362,10 @@ dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Instalando YAY -
 # yay -S gotop-git --noeditmenu --noconfirm --removemake
 
 installxorg=$"xorg xorg-apps xorg-xinit xorg-twm xterm"
+
+
+VM=false
+kernel=$(uname -a | tail -c -6)
 
     ####################################################################
       
@@ -466,11 +468,13 @@ done
 
     ####################################################################
     
-clear
+nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
 sudo -u $nombre_usuario $GPU && sudo -u $nombre_usuario yay -Sy $installxorg --noeditmenu --noconfirm --removemake
 
 echo FIN
+
+sleep 10
 
 wifinet=$(netctl list | awk -F " " '{print $1}')
 netctl disable $wifinet
