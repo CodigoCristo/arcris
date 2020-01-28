@@ -1,7 +1,8 @@
 #!/bin/bash
 
 #Load the X11 keymap
-localectl --no-convert set-x11-keymap selectedkeymap
+
+#localectl --no-convert set-x11-keymap selectedkeymap
 
 titulo="| Instalación de ArchLinux - by: ArcriS |"
 
@@ -347,8 +348,8 @@ fi
 
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
-instalaryay="yay-bin
-"
+instalaryay="yay-bin"
+
 dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando YAY - (AUR helper) |" --stdout --ok-label "Siguiente"\
 --prgbox "cd /home/$nombre_usuario \
             && git clone https://aur.archlinux.org/$instalaryay.git \
@@ -454,3 +455,16 @@ done
 clear
 
 echo FIN
+
+
+
+#Deshabilitar el inicio de sesión automático root tn tty1
+
+#rm -R /etc/systemd/system/getty@tty1.service.d
+#sed -i 's/sh chroot//g' /root/.bashrc
+#rm /root/.bash_profile
+
+#Eliminar los scripts y reiniciar
+
+#rm chroot
+#reboot
