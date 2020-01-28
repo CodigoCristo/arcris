@@ -363,9 +363,12 @@ dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://
             
 # yay -S gotop-git --noeditmenu --noconfirm --removemake
 
+installxorg=$"xorg xorg-apps xorg-xinit xorg-twm xterm"
+
     ####################################################################
     
 VM=false
+kernel=$(uname -a | tail -c -6)
      
     case $(systemd-detect-virt) in
         oracle)
@@ -398,16 +401,28 @@ VM=false
     
 while (VM=true)
 do
+
 if "$VM" ; then
             case "$virt" in
-                vbox) dialog --no-collapse --cr-wrap --title "| INTERNET |" --msgbox "\n| virtualbox |" 7 60
+                
+                vbox)   if [ "$kernel" == "Linux" ]; then
+                            GPU="yay -Sy virtualbox-guest-utils virtualbox-guest-modules-arch xf86-video-vmware --noeditmenu --noconfirm --removemake && \
+                            systemctl enable vboxservice.service && \
+                            modprobe -a vboxguest vboxsf vboxvideo"
+                        else
+                            GPU="yay -Sy virtualbox-guest-utils virtualbox-guest-dkms --noeditmenu --noconfirm --removemake && \
+                            systemctl enable systemd-modules-load.service"
+                        fi
                 ;;
-                vmware) dialog --no-collapse --cr-wrap --title "| INTERNET |" --msgbox "\n| virtualbox2 |" 7 60
+                vmware) GPU="yay -Sy xf86-video-vmware xf86-input-vmmouse open-vm-tools net-tools gtkmm mesa mesa-libgl --noeditmenu --noconfirm --removemake"
                 ;;
-                hyper-v) dialog --no-collapse --cr-wrap --title "| INTERNET |" --msgbox "\n| virtualbox3 |" 7 60
+                
+                hyper-v) GPU="yay -Sy xf86-video-fbdev mesa-libgl --noeditmenu --noconfirm --removemake"                         
                 ;;
-                *) dialog --no-collapse --cr-wrap --title "| INTERNET |" --msgbox "\n| virtualbox4 |" 7 60
+                
+                *)      GPU="yay -Sy xf86-video-fbdev mesa-libgl --noeditmenu --noconfirm --removemake"
                 ;;
+                
             esac
             break
 fi
@@ -415,6 +430,7 @@ done
 
 while [ "$VM" != "true" ]
 do
+    
 dialog --title "Delete file" --backtitle "Linux Shell Script Tutorial Example" --yesno "Are you sure you want to permanently delete?" 7 60
 
 case $? in
@@ -443,20 +459,28 @@ case $? in
             echo nada
         fi
 ;;
-   1) echo "File not deleted."
+   1) echo "Proximamente"
 ;;
-   255) echo "[ESC] key pressed."
+   255) echo "Presiono la tecla [ESC]"
 ;;
 esac
+
 done
 
     ####################################################################
     
 clear
 
+$GPU && yay -Sy $installxorg --noeditmenu --noconfirm --removemake
+
 echo FIN
 
-
+wifinet=$(netctl list | awk -F " " '{print $1}')
+netctl disable $wifinet
+systemctl disable netctl
+systemctl enable dhcpcd NetworkManager
+systemctl start dhcpcd NetworkManager
+clear
 
 #Deshabilitar el inicio de sesión automático root tn tty1
 
