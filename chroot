@@ -11,7 +11,7 @@ dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| INTERNET |" --ms
 if ping -c 2 www.google.com &> /dev/null; then
     
    dialog --title "|  Conexión a RED  |" --backtitle "$titulo" \
-   --prgbox "ping -c 5 archlinux.org && echo && echo Si Hay Internet!" 17 100 
+   --prgbox "ping -c 3 archlinux.org && echo && echo Si Hay Internet!" 17 100 
 
 else
         
@@ -351,7 +351,7 @@ nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1)
 sed -i "80i $nombre_usuario ALL=(ALL) NOPASSWD: ALL" /etc/sudoers
 
 
-dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Instalando YAY - (AUR helper) |" --stdout --ok-label "Siguiente" --prgbox "cd /home/$nombre_usuario \
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Instalando AUR helper |" --stdout --ok-label "Siguiente" --prgbox "cd /home/$nombre_usuario \
             && git clone https://aur.archlinux.org/yay-bin.git \
             && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin \
             && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD \
@@ -359,12 +359,13 @@ dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Instalando YAY -
             && sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm \
             && pacman -U *.pkg.tar.xz --noconfirm \
             && rm -Rf /home/$nombre_usuario/yay-bin \
-            && cd" 25 80
+            && cd" 25 100
             
 # yay -S gotop-git --noeditmenu --noconfirm --removemake
 
 installxorg=$"xorg xorg-apps xorg-xinit xorg-twm xterm"
 
+dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Entendido>" --prgbox "echo '' && echo '> Su tarjeta de vídeo es:' && echo '' && inxi -G " 15 80
 
 VM=false
 kernel=$(uname -a | tail -c -6)
@@ -433,32 +434,46 @@ done
 while [ "$VM" != "true" ]
 do
     
-dialog --title "Delete file" --backtitle "Linux Shell Script Tutorial Example" --yesno "Are you sure you want to permanently delete?" 7 60
+dialog --title "Driver de Vídeo" --yesno "¿Auto-Detectar el Hardware de Vídeo?" 7 60
 
 case $? in
    0)  if (lspci | grep VGA | grep "NVIDIA" &>/dev/null); then
-            NVIDIA=true default_GPU="xf86-video-nouveau"
-            chipset="Nvidia"
-            echo "NVIDIA"
+    
+GPU="yay -Sy xf86-video-nouveau mesa lib32-mesa mesa-vdpau libva-mesa-driver \
+lib32-mesa-vdpau lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl \
+libva-utils vdpauinfo libvdpau lib32-libvdpau opencl-mesa clinfo ocl-icd \
+lib32-ocl-icd opencl-headers --noeditmenu --noconfirm --removemake"
+
+dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
+            
 
         elif (lspci | grep VGA | grep "Radeon R" &>/dev/null); then
-            default_GPU="xf86-video-radeon"
-            chipset="AMD RADEON"
-            echo "RADEON"
+            
+GPU="yay -Sy xf86-video-amdgpu mesa lib32-mesa vulkan-radeon \
+lib32-vulkan-radeon mesa-vdpau libva-mesa-driver lib32-mesa-vdpau \
+lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl libva-utils vdpauinfo \
+opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers --noeditmenu --noconfirm --removemake"
+dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
 
         elif (lspci | grep VGA | grep "ATI" &>/dev/null); then
-            default_GPU="xf86-video-ati"
-            chipset="AMD/ATI"
-            echo "ATI"
+                    
+GPU="yay -Sy xf86-video-ati mesa lib32-mesa mesa-vdpau libva-mesa-driver \
+&& lib32-mesa-vdpau lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl \
+&& libva-utils vdpauinfo opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers --noeditmenu --noconfirm --removemake"
+dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
 
         elif (lspci | grep VGA | grep "Intel" &>/dev/null); then
-            default_GPU="xf86-video-intel"
-            chipset="Intel"
-            echo "Intel"
+            
+GPU="yay -Sy xf86-video-intel vulkan-intel mesa lib32-mesa intel-media-driver \
+&& libva-intel-driver libva-vdpau-driver libvdpau-va-gl libva-utils vdpauinfo \
+&& intel-compute-runtime beignet clinfo ocl-icd lib32-ocl-icd opencl-headers --noeditmenu --noconfirm --removemake"
+dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
+                
         else
-            #default_GPU="xf86-video-vesa"
-            #chipset="Desconocido"
-            echo nada
+            
+GPU="yay -Sy xf86-video-vesa mesa lib32-mesa --noeditmenu --noconfirm --removemake"
+dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
+            
         fi
 ;;
    1) echo "Proximamente"
@@ -473,13 +488,18 @@ done
     
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
-dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $installxorg --noeditmenu --noconfirm --removemake && sudo -u $nombre_usuario $GPU" 27 100
+dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $installxorg --noeditmenu --noconfirm --removemake \
+&& sudo -u $nombre_usuario $GPU \
+&& sudo -u $nombre_usuario yay -Sy xfce4 xfce4-goodies network-manager-applet lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice --noeditmenu --noconfirm --removemake \
+&& systemctl enable lightdm \
+&& sudo -u $nombre_usuario yay -Sy pulseaudio pavucontrol chromium gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer vlc gufw leafpad --noeditmenu --noconfirm --removemake" 27 100
 
-
-
+clear
 echo FIN
-
-sleep 10
+echo ''
+echo ''
+alsi
+sleep 5
 
 wifinet=$(netctl list | awk -F " " '{print $1}')
 netctl disable $wifinet
@@ -490,16 +510,13 @@ systemctl start dhcpcd NetworkManager
 sed -i '80d' /etc/sudoers
 sed -i "80i $nombre_usuario ALL=(ALL) ALL" /etc/sudoers
 
-clear
-
-
 #Deshabilitar el inicio de sesión automático root tn tty1
 
-#rm -R /etc/systemd/system/getty@tty1.service.d
-#sed -i 's/sh chroot//g' /root/.bashrc
-#rm /root/.bash_profile
+rm -R /etc/systemd/system/getty@tty1.service.d
+sed -i 's/sh chroot//g' /root/.bashrc
+rm /root/.bash_profile
 
 #Eliminar los scripts y reiniciar
 
-#rm chroot
-#reboot
+rm chroot
+reboot
