@@ -405,7 +405,7 @@ if "$VM" ; then
             case "$virt" in
                 
                 vbox)   if [ "$kernel" == "Linux" ]; then
-                            GPU="yay -Sy virtualbox-guest-utils virtualbox-guest-modules-arch xf86-video-vmware --noeditmenu --noconfirm --removemake && \
+                            GPU="yay -Sy virtualbox-guest-utils virtualbox-guest-modules-arch xf86-video-vmware --noeditmenu --noconfirm && \
                             systemctl enable vboxservice.service && \
                             modprobe -a vboxguest vboxsf vboxvideo"
                         else
@@ -413,13 +413,13 @@ if "$VM" ; then
                             systemctl enable systemd-modules-load.service"
                         fi
                 ;;
-                vmware) GPU="yay -Sy xf86-video-vmware xf86-input-vmmouse open-vm-tools net-tools gtkmm mesa mesa-libgl --noeditmenu --noconfirm --removemake"
+                vmware) GPU="yay -Sy xf86-video-vmware xf86-input-vmmouse open-vm-tools net-tools gtkmm mesa mesa-libgl --noeditmenu --noconfirm "
                 ;;
                 
-                hyper-v) GPU="yay -Sy xf86-video-fbdev mesa-libgl --noeditmenu --noconfirm --removemake"                         
+                hyper-v) GPU="yay -Sy xf86-video-fbdev mesa-libgl --noeditmenu --noconfirm "                         
                 ;;
                 
-                *)      GPU="yay -Sy xf86-video-fbdev mesa-libgl --noeditmenu --noconfirm --removemake"
+                *)      GPU="yay -Sy xf86-video-fbdev mesa-libgl --noeditmenu --noconfirm "
                 ;;
                 
             esac
@@ -470,7 +470,7 @@ done
     
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
-sudo -u $nombre_usuario $GPU && sudo -u $nombre_usuario yay -Sy $installxorg --noeditmenu --noconfirm --removemake
+sudo -u $nombre_usuario yay -Sy $installxorg --noeditmenu --noconfirm && sudo -u $nombre_usuario $GPU
 
 echo FIN
 
