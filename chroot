@@ -470,7 +470,7 @@ done
     
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
-chown -R $nombre_usuario:users /home/$nombre_usuario 
+chown -hR root $nombre_usuario:users /home/$nombre_usuario 
 sudo -u $nombre_usuario yay -Sy $installxorg --noeditmenu --noconfirm && sudo -u $nombre_usuario $GPU
 
 echo FIN
