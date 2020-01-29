@@ -27,8 +27,7 @@ dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --
 case $? in 
 	0)	wifi-menu
 		wifinet=$(netctl list | awk -F " " '{print $2}');;
-	1)	dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Ethernet |-" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuevamente..." 8 50
-   		exit;;
+	1)	;;
 esac
 
 
