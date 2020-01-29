@@ -461,7 +461,8 @@ sed -i '100d' /etc/pacman.conf
 sed -i '99d' /etc/pacman.conf
 sed -i '98d' /etc/pacman.conf
 
-pacman -Syu && alsi
+pacman -Syu
+alsi
 #Deshabilitar el inicio de sesión automático root tn tty1
 
 rm -R /etc/systemd/system/getty@tty1.service.d
@@ -472,5 +473,3 @@ rm /root/.bash_profile
 
 rm chroot
 reboot
-
-
