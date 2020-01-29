@@ -387,7 +387,7 @@ dialog --backtitle "$titulo" \
 1 ' > | lightdm | Para Multiples Escritorios| <' \
 2 ' > | gdm | Para GNOME y derivadas| <' \
 3 ' > | lxdm | Para LXDE| <' \
-4 ' > | sddm | Para KDE y LXQt| <' 2>temp
+4 ' > | sddm | Para KDE y LXQt| <' 2>temp_2
 
 #Opciones
 if [ "$?" = "0" ]
@@ -425,6 +425,14 @@ fi
 
 fi
 #################################################
+
+# Cancelar
+else
+
+    dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| Comunidad para ayudar: t.me/ArchLinuxCristo |" 7 51
+
+fi
+
 #FIN DISPLAY MANAGER
 
 
@@ -434,14 +442,10 @@ dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sud
 && systemctl enable $DM \
 && sudo -u $nombre_usuario yay -Sy pulseaudio pavucontrol google-chrome gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer vlc gufw leafpad --noeditmenu --noconfirm --removemake" 27 100
 
-clear
-echo FIN
-echo ''
-echo ''
-sleep 5
 
 wifinet=$(netctl list | awk -F " " '{print $1}')
 netctl disable $wifinet
+clear
 wifinet=$(netctl list | awk -F " " '{print $2}')
 netctl disable $wifinet
 systemctl disable netctl
