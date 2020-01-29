@@ -280,95 +280,95 @@ do
                         
     esac
 done
-
+fi
 #################################################
 
 #################################################
-        elif [ "$menu_inicio_return" = "2" ]; then
+        if [ "$menu_inicio_return" = "2" ]; then
         clear
         echo "2"
 
-
+fi
 #################################################
 
 #################################################
-        elif [ "$menu_inicio_return" = "3" ]; then
+        if [ "$menu_inicio_return" = "3" ]; then
         clear
         echo "3"
 
-
+fi
 #################################################
 
 #################################################
-        elif [ "$menu_inicio_return" = "4" ]; then
+        if [ "$menu_inicio_return" = "4" ]; then
         clear
         echo "4"
 
-
+fi
 #################################################
 
 #################################################
-        elif [ "$menu_inicio_return" = "5" ]; then
+        if [ "$menu_inicio_return" = "5" ]; then
         clear
         echo "5"
 
-
+fi
 #################################################
 
 #################################################
-        elif [ "$menu_inicio_return" = "6" ]; then
+        if [ "$menu_inicio_return" = "6" ]; then
         clear
         echo "6"
 
-
+fi
 #################################################
 
 #################################################
-        elif [ "$menu_inicio_return" = "7" ]; then
+        if [ "$menu_inicio_return" = "7" ]; then
         clear
         echo "7"
 
-
+fi
 #################################################
 
 #################################################
-        elif [ "$menu_inicio_return" = "8" ]; then
+        if [ "$menu_inicio_return" = "8" ]; then
         clear
         echo "8"
 
-
+fi
 #################################################
 
 #################################################
-        elif [ "$menu_inicio_return" = "9" ]; then
+        if [ "$menu_inicio_return" = "9" ]; then
         clear
         echo "9"
 
-
+fi
 #################################################
 
 #################################################
-        elif [ "$menu_inicio_return" = "10" ]; then
+        if [ "$menu_inicio_return" = "10" ]; then
         clear
         echo "10"
 
-
+fi
 #################################################
 
 #################################################
-        elif [ "$menu_inicio_return" = "11" ]; then
+        if [ "$menu_inicio_return" = "11" ]; then
         clear
         echo "11"
 
-
+fi
 #################################################
 
 #################################################
-        elif [ "$menu_inicio_return" = "12" ]; then
+        if [ "$menu_inicio_return" = "12" ]; then
         clear
         echo "12"
 
-
+fi
 #################################################
 
 # Cancelar
@@ -387,39 +387,39 @@ dialog --backtitle "$titulo" \
 1 ' > | lightdm | Para Multiples Escritorios| <' \
 2 ' > | gdm | Para GNOME y derivadas| <' \
 3 ' > | lxdm | Para LXDE| <' \
-4 ' > | sddm | Para KDE y LXQt| <' 2>temp2
+4 ' > | sddm | Para KDE y LXQt| <' 2>temp
 
 #Opciones
 if [ "$?" = "0" ]
 then
-        menu_inicio_return=$(cat temp2)
+        menu_inicio_return=$(cat temp)
         
 #################################################
         if [ "$menu_inicio_return" = "1" ]; then
             
         DM="lightdm"
 
-
+fi
 #################################################
 
 #################################################
-        elif [ "$menu_inicio_return" = "2" ]; then
+        if [ "$menu_inicio_return" = "2" ]; then
             
         DM="gdm"
 
-
+fi
 #################################################
 
 #################################################
-        elif [ "$menu_inicio_return" = "3" ]; then
+        if [ "$menu_inicio_return" = "3" ]; then
             
         DM="lxdm"
 
-
+fi
 #################################################
 
 #################################################
-        elif [ "$menu_inicio_return" = "4" ]; then
+        if [ "$menu_inicio_return" = "4" ]; then
             
         DM="sddm"
 
@@ -440,11 +440,11 @@ echo ''
 echo ''
 sleep 5
 
-#wifinet=$(netctl list | awk -F " " '{print $1}')
-#netctl disable $wifinet
-#wifinet=$(netctl list | awk -F " " '{print $2}')
-#netctl disable $wifinet
-#systemctl disable netctl
+wifinet=$(netctl list | awk -F " " '{print $1}')
+netctl disable $wifinet
+wifinet=$(netctl list | awk -F " " '{print $2}')
+netctl disable $wifinet
+systemctl disable netctl
 clear
 systemctl enable dhcpcd NetworkManager
 systemctl start dhcpcd NetworkManager
@@ -453,6 +453,11 @@ clear
 sed -i '80d' /etc/sudoers
 sed -i "80i $nombre_usuario ALL=(ALL) ALL" /etc/sudoers
 
+sed -i '100d' /etc/pacman.conf
+sed -i '99d' /etc/pacman.conf
+sed -i '98d' /etc/pacman.conf
+
+pacman -Syu
 alsi
 #Deshabilitar el inicio de sesión automático root tn tty1
 
@@ -461,4 +466,4 @@ sed -i 's/sh chroot//g' /root/.bashrc
 rm /root/.bash_profile
 rm chroot
 reboot
-#Eliminar los scripts y reiniciar
+#Eliminar los scripts y reinic
