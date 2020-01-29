@@ -21,8 +21,16 @@ case $? in
 	1)	dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Ethernet |-" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuevamente..." 8 50
    		exit;;
 esac
-
 fi
+
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Conexión WiFi |-" --yesno "¿ Tienes red wifi ?" 5 45 
+case $? in 
+	0)	wifi-menu
+		wifinet=$(netctl list | awk -F " " '{print $2}');;
+	1)	dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Ethernet |-" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuevamente..." 8 50
+   		exit;;
+esac
+
 
 umount -R /mnt
 
@@ -319,7 +327,7 @@ echo ""
 echo "  Claves Actualizadas del LiveCD, Espere..."
 echo ""
 echo ""
-pacman -Sy reflector --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80; sleep 3
+pacman -Sy reflector --noconfirm && echo "" && echo "Espere..." | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD... |" 25 80; sleep 3
 reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 for i in $(seq 1 100)
 do
@@ -327,7 +335,7 @@ do
     echo $i
 done | dialog --title '| Actualizando MirrorLists |' --gauge "\nActualizando MirrorList en el LiveCD..." 7 60 0
 
-cat /etc/pacman.d/mirrorlist | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Mirrors List del LiveCD > Actualizadas..." 25 2000; sleep 5
+cat /etc/pacman.d/mirrorlist | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Mirrors List del LiveCD > Actualizadas, espere..." 25 2000; sleep 5
 
 
 
@@ -616,7 +624,7 @@ if [[ ! -z $wifinet ]];then
 	#Copia Red
 	wlan=$(echo /proc/net/dev*/w*)
 	lan=${wlan##*/}
-	wifinet=$(netctl list | awk -F " " '{print $2}');;
+	wifinet=$(netctl list | awk -F " " '{print $2}')
 	numeronetctl=$(echo $lan | wc -c)
 	wifinetnuevo=$(netctl list | awk -F " " '{print $2}' | tail -c +${numeronetctl} | tail -c +2)
 
