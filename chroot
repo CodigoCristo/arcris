@@ -427,8 +427,6 @@ fi
 #################################################
 #FIN DISPLAY MANAGER
 
-    
-nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
 dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG --noeditmenu --noconfirm --removemake \
 && sudo -u $nombre_usuario $GPUvirt \
@@ -466,8 +464,6 @@ alsi
 rm -R /etc/systemd/system/getty@tty1.service.d
 sed -i 's/sh chroot//g' /root/.bashrc
 rm /root/.bash_profile
-
-#Eliminar los scripts y reiniciar
-
 rm chroot
 reboot
+#Eliminar los scripts y reiniciar
