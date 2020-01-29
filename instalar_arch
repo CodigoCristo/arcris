@@ -686,6 +686,8 @@ sleep 6
 cp pacman-chroot.conf /mnt/etc/pacman.conf
 
 cp chroot /mnt/root && chmod +x /mnt/root/chroot
+cp .dialogrc /mnt/root && chmod +x /mnt/root/.dialogrc
+
 sed -i "s/selectedkeymap/${keymap}/g" /mnt/root/chroot
 
 #Prepare el sistema para iniciar directamente en la raíz y ejecute el script posterior a la instalación
