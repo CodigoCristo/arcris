@@ -157,7 +157,7 @@ if [ "$VM" == "true" ]; then
                 ;;
                 
             esac
-            break
+
             
 elif [ "$VM" == "none" ]; then
 
@@ -220,7 +220,7 @@ fi
 titulo="| Instalación de ArchLinux - by: ArcriS |"
 
 dialog --backtitle "$titulo" \
---column-separator "|" --no-tags --ok-label '< Seleccionar >' --menu "Seleeciona tu escritorio a instalar - (DE)" 19 60 19 \
+--column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Seleeciona tu escritorio a instalar - (DE)" 19 60 19 \
 1 ' > | xfce4 | Xfce desktop| <' \
 2 ' > | plasma | KDE Plasma desktop| <' \
 3 ' > | deepin | Deepin desktop| <' \
@@ -381,8 +381,6 @@ fi
 #FIN ESCRITORIO
 
 #INICIO DISPLAY MANAGER
-
-titulo="| Instalación de ArchLinux - by: ArcriS |"
 
 dialog --backtitle "$titulo" \
 --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu Display Manager a instalar - (DM)\nPor defecto es Lightdm" 13 60 19 \
