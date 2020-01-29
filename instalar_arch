@@ -683,6 +683,8 @@ echo ""
 echo ""
 sleep 6
 #Copia el script posterior a la instalación en el disco duro
+cp pacman-chroot.conf /mnt/etc/pacman.conf
+
 cp chroot /mnt/root && chmod +x /mnt/root/chroot
 sed -i "s/selectedkeymap/${keymap}/g" /mnt/root/chroot
 

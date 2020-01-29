@@ -372,11 +372,11 @@ fi
 #################################################
 
 # Cancelar
-else
+#else
 
-    dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| Comunidad para ayudar: t.me/ArchLinuxCristo |" 7 51
+#    dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| Comunidad para ayudar: t.me/ArchLinuxCristo |" 7 51
 
-fi
+#fi
 
 #FIN ESCRITORIO
 
@@ -392,7 +392,7 @@ dialog --backtitle "$titulo" \
 #Opciones
 if [ "$?" = "0" ]
 then
-        menu_inicio_return=$(cat temp)
+        menu_inicio_return=$(cat temp_2)
         
 #################################################
         if [ "$menu_inicio_return" = "1" ]; then
@@ -426,13 +426,6 @@ fi
 fi
 #################################################
 
-# Cancelar
-else
-
-    dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| Comunidad para ayudar: t.me/ArchLinuxCristo |" 7 51
-
-fi
-
 #FIN DISPLAY MANAGER
 
 
@@ -456,10 +449,6 @@ clear
 
 sed -i '80d' /etc/sudoers
 sed -i "80i $nombre_usuario ALL=(ALL) ALL" /etc/sudoers
-
-sed -i '100d' /etc/pacman.conf
-sed -i '99d' /etc/pacman.conf
-sed -i '98d' /etc/pacman.conf
 
 pacman -Syu
 alsi
