@@ -346,7 +346,7 @@ dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://
 && arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio \
 alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer lib32-alsa-plugins \
 dnsmasq ethtool gpm ndisc6 ntp usb_modeswitch which inetutils usbutils wvdial nano \
-dhcp dhcpcd dhclient ppp netctl nfs-utils iw iwd net-tools networkmanager ifplugd openssh dialog \
+lshw dhcp dhcpcd dhclient ppp netctl nfs-utils iw iwd net-tools networkmanager ifplugd openssh dialog \
 neofetch git wget lsb-release accountsservice usbutils android-file-transfer android-tools android-udev msmtp libmtp libcddb gvfs \
 gvfs gvfs-afc gvfs-smb gvfs-gphoto2 gvfs-mtp gvfs-goa gvfs-nfs gvfs-google gst-libav geoclue dosfstools mtools \
 jfsutils f2fs-tools btrfs-progs exfat-utils ntfs-3g reiserfsprogs udftools xfsprogs nilfs-utils polkit gpart \
@@ -616,6 +616,7 @@ if [[ ! -z $wifinet ]];then
 	#Copia Red
 	wlan=$(echo /proc/net/dev*/w*)
 	lan=${wlan##*/}
+	wifinet=$(netctl list | awk -F " " '{print $2}');;
 	numeronetctl=$(echo $lan | wc -c)
 	wifinetnuevo=$(netctl list | awk -F " " '{print $2}' | tail -c +${numeronetctl} | tail -c +2)
 

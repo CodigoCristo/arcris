@@ -2,7 +2,7 @@
 
 #Load the X11 keymap
 
-#localectl --no-convert set-x11-keymap selectedkeymap
+localectl --no-convert set-x11-keymap selectedkeymap
 
 titulo="| Instalación de ArchLinux - by: ArcriS |"
 
@@ -18,331 +18,60 @@ else
     dialog --backtitle "$titulo" --title "| Error de RED |" --ok-label 'Siguiente' --msgbox "\nNo hay conexión de Internet\n" 7 35
     wifinet=$(netctl list | awk -F " " '{print $1}')
     netctl disable $wifinet
+    wifinet=$(netctl list | awk -F " " '{print $2}')
+    netctl disable $wifinet
+    clear
     systemctl disable netctl
     systemctl enable dhcpcd NetworkManager
     systemctl start dhcpcd NetworkManager
-    dialog --backtitle "$titulo" --title "| Conexión WiFi |" --yesno "\n¿Tienes Wi-Fi?\n" 7 45 
-
-        
-case $? in 
-0)  wlan=$(echo /proc/net/dev*/w*)
-    lan=${wlan##*/}
-
-            clear
-            red='\033[38;2;255;0;02m'
-            echo ""
-            echo -e $red ">                                      "
-            echo -e $red ">                                      "
-            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
-            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
-            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
-            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
-            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
-            echo -e $red ">                             █   ▀            ▀                                      <";
-            echo -e $red ">                            ▀                                                        <";
-            echo -e " >                                      "
-            sleep 2
-            echo ""
-            wifichroot=$( nmcli dev wifi list | grep 'Infra' | awk -F " " '{print $3}' | tail -c -6 )
-            if [ $wifichroot == 'Infra' ]
-            then
-            nmcli dev wifi list
-            echo ""
-            echo ""
-echo -e '\033[38;2;255;0;02m'
-function ProgressBar {
-# Process data
-    let _progress=(${1}*100/${2}*100)/100
-    let _done=(${_progress}*7)/10
-    let _left=70-$_done
-# Build progressbar string lengths
-    _fill=$(printf "%${_done}s")
-    _empty=$(printf "%${_left}s")
-
-# 1.2 Build progressbar strings and print the ProgressBar line
-# 1.2.1 Output example:                           
-# 1.2.1.1 Progress : [########################################] 100%
-printf "\r > Cargando : |${_fill// /▇}${_empty// /-}| ${_progress}%%"
-
-}
-
-# Variables
-_start=1
-
-# This accounts as the "totalState" variable for the ProgressBar function
-_end=100
-
-# Proof of concept
-for number in $(seq ${_start} ${_end})
-do
-    sleep 0.06
-    ProgressBar ${number} ${_end}
-done
-
-echo -e '\033[m'
-
-
-titulo="| Instalación de ArchLinux - by: ArcriScript |"
-
-cmd=(dialog --no-collapse --cr-wrap --notags --backtitle "$titulo" --keep-tite --menu "Selecciona tu red:" 12 50 16)
-options=(1 "$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -1)"
-         2 "$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -2 | tail -1)"
-         3 "$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -3 | tail -1 | tail -2)"
-         4 "$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -4 | tail -1 | tail -2 | tail -3)"
-         5 "$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -5 | tail -1 | tail -2 | tail -3 | tail -4)")
-
-choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-
-for choice in $choices
-do
-    case $choice in
-        1)  clear
-            red='\033[38;2;255;0;02m'
-            echo ""
-            echo ""
-            echo ""
-            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
-            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
-            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
-            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
-            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
-            echo -e $red ">                             █   ▀            ▀                                      <";
-            echo -e $red ">                            ▀                                                        <";
-            echo -e " >                                      Cargando..."
-            echo -e '\033[m'
-            nombre_red1=$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -1)
-            
-            while [ $clave_red1 != $clave_red1_2 ]
-            do 
-                clave_red1=$(dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "|  Clave de Wifi  |" --insecure --passwordbox "|  Ingrese contraseña |" 8 40 2>&1 > /dev/tty)
-                clave_red1_2=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Clave de wifi |" --insecure --passwordbox "|  Confirme contraseña |" 8 40 2>&1 > /dev/tty)
-                if [ $clave_red1 != $clave_red1_2 ];then 
-                 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Clave incorrecta |" --msgbox 'Las contraseñas no coinciden\n      Intente nuevamente...' 6 50
-              else 
-                clear
-              fi
-            done
-            red='\033[38;2;255;0;02m'
-            echo ""
-            echo ""
-            echo ""
-            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
-            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
-            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
-            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
-            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
-            echo -e $red ">                             █   ▀            ▀                                      <";
-            echo -e $red ">                            ▀                                                        <";
-            echo -e " >                                      Cargando..."
-            echo -e '\033[m'
-            nmcli dev wifi connect $nombre_red1 password $clave_red1
-            systemctl enable dhcpcd NetworkManager
-            systemctl start dhcpcd NetworkManager
-            dialog --backtitle "$titulo" --title "| Estado de Conexión |" \
-            --stdout --ok-label "Siguiente" --prgbox "echo '' && nmcli dev status && echo '' && echo '' && echo 'Nombre de Red: $nombre_red1' && echo 'Clave de Red: no se dice we'" 16 60 
-            ;;
-            
-            
-            
-        2)  
-            clear
-            red='\033[38;2;255;0;02m'
-            echo ""
-            echo ""
-            echo ""
-            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
-            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
-            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
-            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
-            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
-            echo -e $red ">                             █   ▀            ▀                                      <";
-            echo -e $red ">                            ▀                                                        <";
-            echo -e " >                                      Cargando..."
-            echo -e '\033[m'
-            nombre_red2=$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -2 | tail -1)
-            while [ $clave_red2 != $clave_red2_2 ]
-            do 
-                clave_red2=$(dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "|  Clave de Wifi  |" --insecure --passwordbox "|  Ingrese contraseña |" 8 40 2>&1 > /dev/tty)
-                clave_red2_2=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Clave de wifi |" --insecure --passwordbox "|  Confirme contraseña |" 8 40 2>&1 > /dev/tty)
-                if [ $clave_red2 != $clave_red2_2 ];then 
-                 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Clave incorrecta |" --msgbox 'Las contraseñas no coinciden\n      Intente nuevamente...' 6 50
-              else 
-                clear
-              fi
-            done
-            red='\033[38;2;255;0;02m'
-            echo ""
-            echo ""
-            echo ""
-            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
-            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
-            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
-            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
-            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
-            echo -e $red ">                             █   ▀            ▀                                      <";
-            echo -e $red ">                            ▀                                                        <";
-            echo -e " >                                      Cargando..."
-            echo -e '\033[m'
-            nmcli dev wifi connect $nombre_red2 password $clave_red2
-            systemctl enable dhcpcd NetworkManager
-            systemctl start dhcpcd NetworkManager
-            dialog --backtitle "$titulo" --title "| Estado de Conexión |" \
-            --stdout --ok-label "Siguiente" --prgbox "echo '' && nmcli dev status && echo '' && echo '' && echo 'Nombre de Red: $nombre_red2' && echo 'Clave de Red: no se dice we'" 16 60 
-            ;;
-            
-            
-        3)  
-            clear
-            red='\033[38;2;255;0;02m'
-            echo ""
-            echo ""
-            echo ""
-            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
-            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
-            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
-            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
-            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
-            echo -e $red ">                             █   ▀            ▀                                      <";
-            echo -e $red ">                            ▀                                                        <";
-            echo -e " >                                      Cargando..."
-            echo -e '\033[m'
-            nombre_red3=$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -3 | tail -1 | tail -2)
-            while [ $clave_red3 != $clave_red3_2 ]
-            do 
-                clave_red3=$(dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "|  Clave de Wifi  |" --insecure --passwordbox "|  Ingrese contraseña |" 8 40 2>&1 > /dev/tty)
-                clave_red3_2=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Clave de wifi |" --insecure --passwordbox "|  Confirme contraseña |" 8 40 2>&1 > /dev/tty)
-                if [ $clave_red3 != $clave_red3_2 ];then 
-                 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Clave incorrecta |" --msgbox 'Las contraseñas no coinciden\n      Intente nuevamente...' 6 50
-              else 
-                clear
-              fi
-            done
-            red='\033[38;2;255;0;02m'
-            echo ""
-            echo ""
-            echo ""
-            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
-            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
-            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
-            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
-            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
-            echo -e $red ">                             █   ▀            ▀                                      <";
-            echo -e $red ">                            ▀                                                        <";
-            echo -e " >                                      Cargando..."
-            echo -e '\033[m'
-            nmcli dev wifi connect $nombre_red3 password $clave_red3
-            systemctl enable dhcpcd NetworkManager
-            systemctl start dhcpcd NetworkManager
-            dialog --backtitle "$titulo" --title "| Estado de Conexión |" \
-            --stdout --ok-label "Siguiente" --prgbox "echo '' && nmcli dev status && echo '' && echo '' && echo 'Nombre de Red: $nombre_red3' && echo 'Clave de Red: no se dice we' " 16 60 
-            ;;
-            
-            
-        4)  
-            clear
-            red='\033[38;2;255;0;02m'
-            echo ""
-            echo ""
-            echo ""
-            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
-            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
-            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
-            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
-            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
-            echo -e $red ">                             █   ▀            ▀                                      <";
-            echo -e $red ">                            ▀                                                        <";
-            echo -e " >                                      Cargando..."
-            echo -e '\033[m'
-            nombre_red4=$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -4 | tail -1 | tail -2 | tail -3)
-            while [ $clave_red4 != $clave_red4_2 ]
-            do 
-                clave_red4=$(dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "|  Clave de Wifi  |" --insecure --passwordbox "|  Ingrese contraseña |" 8 40 2>&1 > /dev/tty)
-                clave_red4_2=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Clave de wifi |" --insecure --passwordbox "|  Confirme contraseña |" 8 40 2>&1 > /dev/tty)
-                if [ $clave_red4 != $clave_red4_2 ];then 
-                 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Clave incorrecta |" --msgbox 'Las contraseñas no coinciden\n      Intente nuevamente...' 6 50
-              else 
-                clear
-              fi
-            done
-            red='\033[38;2;255;0;02m'
-            echo ""
-            echo ""
-            echo ""
-            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
-            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
-            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
-            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
-            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
-            echo -e $red ">                             █   ▀            ▀                                      <";
-            echo -e $red ">                            ▀                                                        <";
-            echo -e " >                                      Cargando..."
-            echo -e '\033[m'
-            nmcli dev wifi connect $nombre_red4 password $clave_red4
-            systemctl enable dhcpcd NetworkManager
-            systemctl start dhcpcd NetworkManager
-            dialog --backtitle "$titulo" --title "| Estado de Conexión |" \
-            --stdout --ok-label "Siguiente" --prgbox "echo '' && nmcli dev status && echo '' && echo '' && echo 'Nombre de Red: $nombre_red4' && echo 'Clave de Red: no se dice we'" 16 60 
-            ;;
-        5)  
-            clear
-            red='\033[38;2;255;0;02m'
-            echo ""
-            echo ""
-            echo ""
-            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
-            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
-            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
-            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
-            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
-            echo -e $red ">                             █   ▀            ▀                                      <";
-            echo -e $red ">                            ▀                                                        <";
-            echo -e " >                                      Cargando..."
-            echo -e '\033[m'
-            nombre_red5=$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -5 | tail -1 | tail -2 | tail -3 | tail -4)
-            while [ $clave_red5 != $clave_red5_2 ]
-            do 
-                clave_red5=$(dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "|  Clave de Wifi  |" --insecure --passwordbox "|  Ingrese contraseña |" 8 40 2>&1 > /dev/tty)
-                clave_red5_2=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Clave de wifi |" --insecure --passwordbox "|  Confirme contraseña |" 8 40 2>&1 > /dev/tty)
-                if [ $clave_red5 != $clave_red5_2 ];then 
-                 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Clave incorrecta |" --msgbox 'Las contraseñas no coinciden\n      Intente nuevamente...' 6 50
-              else 
-                clear
-              fi
-            done
-            red='\033[38;2;255;0;02m'
-            echo ""
-            echo ""
-            echo ""
-            echo -e $red ">                           ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                       <";
-            echo -e $red ">                           █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄                     <";
-            echo -e $red ">                           █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                       <";
-            echo -e $red ">                           █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                        <";
-            echo -e $red ">                              █   █   ▀███▀    █    ▐                                <";
-            echo -e $red ">                             █   ▀            ▀                                      <";
-            echo -e $red ">                            ▀                                                        <";
-            echo -e " >                                      Cargando..."
-            echo -e '\033[m'
-            nmcli dev wifi connect $nombre_red5 password $clave_red5
-            systemctl enable dhcpcd NetworkManager
-            systemctl start dhcpcd NetworkManager
-            dialog --backtitle "$titulo" --title "| Estado de Conexión |" \
-            --stdout --ok-label "Siguiente" --prgbox "echo '' && nmcli dev status && echo '' && echo '' && echo 'Nombre de Red: $nombre_red5' && echo 'Clave de Red: $clave_red5'" 16 60 
-            ;;
-    esac
-done
-
-else
     
-    dialog --backtitle "$titulo" --title "| WiFI |" --msgbox "\nNo tiene ninguna interfaz de Wifi detectada..." 7 50
+    #--title "| Conexión WiFi |"
+    dialog --backtitle "$titulo"  --yesno "\n¿Tienes Wi-Fi?\n" 7 20
 
-fi;;      
+case $? in
+   0)       wifi_var=0 
+            wlan=$(echo /proc/net/dev*/w*)
+            lan=${wlan##*/}
+            
+            nombre_red="$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -1)"
+            clave_red=" Clave"
+            dialog --title "| LISTA DE REDES WIFI SSID: |" --backtitle "$titulo" --ok-label "Conectar" --no-cancel \
+              --stdout --form "$(iw dev $lan scan | grep SSID:)" 15 50 0 \
+              "Nombre de Red :  " 0 0 "$nombre_red" 1 20 20 0 \
+              "Contraseña    :  " 2 1 "$clave_red" 2 20 20 0 > output.txt
+            nombre_red=$(cat output.txt | head -1)
+            clave_red=$(cat output.txt | head -2 | tail -1)
+            
+            
+            DIALOG=${DIALOG=dialog}
+            
+            COUNT=10
+            (
+            while test $COUNT != 110
+            do
+            echo $COUNT
+            nmcli dev wifi connect $(cat output.txt | head -1) password $(cat output.txt | head -2 | tail -1)
+            systemctl enable dhcpcd NetworkManager
+            systemctl start dhcpcd NetworkManager
+            COUNT=`expr $COUNT + 50`
+            sleep 1
+            done
+            ) |
+            $DIALOG --title "| Conectando a Red Wifi |" --gauge "\n\nConectándose, espere..." 10 50 0
+            
 
+            dialog --backtitle "$titulo" --title "| Estado de Conexión |" \
+            --stdout --ok-label "Siguiente" --prgbox "echo '' && nmcli dev status && echo '' && echo '' && echo 'Nombre de Red: $nombre_red' && echo 'Clave de Red: $clave_red'" 18 68 ; wifi_var=1
+            
+            rm output.txt ;;   
 
-1) dialog --backtitle "$titulo" --title "| Ethernet |" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuvamente..." 8 50
-   exit;;
-
+   1)   dialog --backtitle "$titulo" --title "| Ethernet |" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuvamente..." 8 50
+        exit;;
+        
+   255) dialog --backtitle "$titulo" --title "| Ethernet |" --msgbox "\nPresiono [ESC] - Salir del Script" 7 40
+        exit;;
+        
 esac
-
 fi
 
 
@@ -363,13 +92,10 @@ dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Instalando AUR h
             
 # yay -S gotop-git --noeditmenu --noconfirm --removemake
 
-installxorg=$"xorg xorg-apps xorg-xinit xorg-twm xterm"
+XORG=$"xorg xorg-apps xorg-xinit xorg-twm xterm"
 
-dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Entendido>" --prgbox "echo '' && echo '> Su tarjeta de vídeo es:' && echo '' && inxi -G " 15 80
-
+#Inicio de Video
 VM=false
-kernel=$(uname -a | tail -c -6)
-
     ####################################################################
       
     case $(systemd-detect-virt) in
@@ -400,78 +126,79 @@ kernel=$(uname -a | tail -c -6)
     esac
     
     ####################################################################
-    
-while (VM=true)
-do
+kernel=$(uname -a | tail -c -6)
+videotext=$(sudo lshw -class display | grep "product:\|vendor:")
 
-if "$VM" ; then
+if [ "$VM" == "true" ]; then
+    
+            dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Entendido>" --msgbox "$videotext" 10 100
             case "$virt" in
                 
                 vbox)   if [ "$kernel" == "Linux" ]; then
-                            GPU="yay -Sy virtualbox-guest-utils virtualbox-guest-modules-arch xf86-video-vmware --noeditmenu --noconfirm --removemake && \
+                            GPUvirt="yay -Sy virtualbox-guest-utils virtualbox-guest-modules-arch xf86-video-vmware --noeditmenu --noconfirm --removemake && \
                             systemctl enable vboxservice.service && \
                             modprobe -a vboxguest vboxsf vboxvideo && \
                             systemctl start vboxservice.service"
+                            dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VirtualBox\nInstalar: VirtualBox Guest" 7 80
                         else
-                            GPU="yay -Sy virtualbox-guest-utils virtualbox-guest-dkms --noeditmenu --noconfirm --removemake && \
+                            GPUvirt="yay -Sy virtualbox-guest-utils virtualbox-guest-dkms --noeditmenu --noconfirm --removemake && \
                             systemctl enable systemd-modules-load.service"
+                            dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VirtualBox\nInstalar: VirtualBox Guest-dkms" 7 80
                         fi
                 ;;
-                vmware) GPU="yay -Sy xf86-video-vmware xf86-input-vmmouse open-vm-tools net-tools gtkmm mesa mesa-libgl --noeditmenu --removemake --noconfirm "
+                vmware) GPUvirt="yay -Sy xf86-video-vmware xf86-input-vmmouse open-vm-tools net-tools gtkmm mesa mesa-libgl --noeditmenu --removemake --noconfirm "
+                        dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VMware\nInstalar: xf86-video-vmware" 7 80
                 ;;
                 
-                hyper-v) GPU="yay -Sy xf86-video-fbdev mesa-libgl --noeditmenu --noconfirm --removemake"                         
+                hyper-v) GPUvirt="yay -Sy xf86-video-fbdev mesa-libgl --noeditmenu --noconfirm --removemake"                         
                 ;;
                 
-                *)      GPU="yay -Sy xf86-video-fbdev mesa-libgl --noeditmenu --noconfirm --removemake"
+                *)      GPUvirt="yay -Sy xf86-video-fbdev mesa-libgl --noeditmenu --noconfirm --removemake"
                 ;;
                 
             esac
             break
-fi
-done
+            
+elif [ "$VM" == "none" ]; then
 
-while [ "$VM" != "true" ]
-do
-    
 dialog --title "Driver de Vídeo" --yesno "¿Auto-Detectar el Hardware de Vídeo?" 7 60
 
 case $? in
-   0)  if (lspci | grep VGA | grep "NVIDIA" &>/dev/null); then
+   0)  if (lspci | grep VGA | grep "NVIDIA\|nVidia" &>/dev/null); then
     
-GPU="yay -Sy xf86-video-nouveau mesa lib32-mesa mesa-vdpau libva-mesa-driver \
+GPU="xf86-video-nouveau mesa lib32-mesa mesa-vdpau libva-mesa-driver \
 lib32-mesa-vdpau lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl \
 libva-utils vdpauinfo libvdpau lib32-libvdpau opencl-mesa clinfo ocl-icd \
-lib32-ocl-icd opencl-headers --noeditmenu --noconfirm --removemake"
+lib32-ocl-icd opencl-headers"
 
 dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
             
 
-        elif (lspci | grep VGA | grep "Radeon R" &>/dev/null); then
+        elif (lspci | grep VGA | grep "Radeon R\|R2/R3/R4/R5" &>/dev/null); then
             
-GPU="yay -Sy xf86-video-amdgpu mesa lib32-mesa vulkan-radeon \
+GPU="xf86-video-amdgpu mesa lib32-mesa vulkan-radeon \
 lib32-vulkan-radeon mesa-vdpau libva-mesa-driver lib32-mesa-vdpau \
 lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl libva-utils vdpauinfo \
-opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers --noeditmenu --noconfirm --removemake"
+opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers"
 dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
 
-        elif (lspci | grep VGA | grep "ATI" &>/dev/null); then
+        elif (lspci | grep VGA | grep "ATI\|AMD" &>/dev/null); then
                     
-GPU="yay -Sy xf86-video-ati mesa lib32-mesa mesa-vdpau libva-mesa-driver \
-&& lib32-mesa-vdpau lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl \
-&& libva-utils vdpauinfo opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers --noeditmenu --noconfirm --removemake"
+GPU="xf86-video-ati mesa lib32-mesa mesa-vdpau libva-mesa-driver \
+lib32-mesa-vdpau lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl \
+libva-utils vdpauinfo opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers"
 dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
 
         elif (lspci | grep VGA | grep "Intel" &>/dev/null); then
             
-GPU="yay -Sy xf86-video-intel vulkan-intel mesa lib32-mesa intel-media-driver \
-&& libva-intel-driver libva-vdpau-driver libvdpau-va-gl libva-utils vdpauinfo \
-&& intel-compute-runtime beignet clinfo ocl-icd lib32-ocl-icd opencl-headers --noeditmenu --noconfirm --removemake"
+GPU="xf86-video-intel vulkan-intel mesa lib32-mesa intel-media-driver \
+libva-intel-driver libva-vdpau-driver libvdpau-va-gl libva-utils vdpauinfo \
+intel-compute-runtime beignet clinfo ocl-icd lib32-ocl-icd opencl-headers"
 dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
                 
         else
             
-GPU="yay -Sy xf86-video-vesa mesa lib32-mesa --noeditmenu --noconfirm --removemake"
+GPU="xf86-video-vesa mesa lib32-mesa"
 dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
             
         fi
@@ -482,34 +209,259 @@ dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msg
 ;;
 esac
 
-done
+else            
+GPU="xf86-video-vesa mesa lib32-mesa"
+dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
+#Final de VIDEO      
+fi
 
     ####################################################################
     
+titulo="| Instalación de ArchLinux - by: ArcriS |"
+
+dialog --backtitle "$titulo" \
+--column-separator "|" --no-tags --ok-label '< Seleccionar >' --menu "Seleeciona tu escritorio a instalar - (DE)" 19 60 19 \
+1 ' > | xfce4 | Xfce desktop| <' \
+2 ' > | plasma | KDE Plasma desktop| <' \
+3 ' > | deepin | Deepin desktop| <' \
+4 ' > | gnome | GNOME Classic desktop| <' \
+5 ' > | gnome-flashback | GNOME 2 desktop| <' \
+6 ' > | cinnamon | Cinnamon desktop| <' \
+7 ' > | budgie-desktop | Budgie desktop| <' \
+8 ' > | enlightenment | Enlightenment desktop| <' \
+9 ' > | lxde-gtk3| The Lightweight X11 desktop| <' \
+10 ' > | lxde | The Lightweight X11 GTK2| <' \
+11 ' > | lxqt | LXDE-Qt y Razor-qt projects| <' \
+12 ' > | mate | Mate GTK3 desktop| <' 2>temp
+
+#Opciones
+if [ "$?" = "0" ]
+then
+        menu_inicio_return=$(cat temp)
+#################################################
+        if [ "$menu_inicio_return" = "1" ]; then
+        cmd=(dialog --keep-tite --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Decide en instalar o personalizar las opciones\n\n \
+xfce4 xfce4-goodies network-manager-applet alacarte \n\nSelecciona una opción para XFCE4 \n" 14 60 19)
+
+options=(1 "Predeterminado || Una mejor experiencia "
+         2 "Personalizar || Especificar Paquetes básicos")
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+for choice in $choices
+do
+    case $choice in
+        1)  DE="xfce4 xfce4-goodies network-manager-applet alacarte"
+            ;;
+        
+        2) cmd=(dialog --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes extras del escritorio XFCE4\n[ ESPACIO ] - Para Seleccionar" 12 70 19)
+            options=(1 "xfce4-goodies || Programas extras de xfce4" off    # any option can be set to default to "on"
+                     2 "network-manager-applet || Gestionar conexiones de red" off
+                     3 "alacarte || Editar entradas" off)
+            choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+            clear
+            for choice in $choices
+            do
+                case $choice in
+                    1)
+                        xfce4_2="xfce4-goodies"
+                        ;;
+                    2)
+                        xfce4_3="network-manager-applet"
+                        ;;
+                    3)
+                        xfce4_4="alacarte"
+                        ;;
+                esac
+            done
+            xfce4="xfce4"
+            DE="$xfce4 $xfce4_2 $xfce4_3 $xfce4_4"
+            ;;
+                        
+    esac
+done
+fi
+#################################################
+
+#################################################
+        if [ "$menu_inicio_return" = "2" ]; then
+        clear
+        echo "2"
+
+fi
+#################################################
+
+#################################################
+        if [ "$menu_inicio_return" = "3" ]; then
+        clear
+        echo "3"
+
+fi
+#################################################
+
+#################################################
+        if [ "$menu_inicio_return" = "4" ]; then
+        clear
+        echo "4"
+
+fi
+#################################################
+
+#################################################
+        if [ "$menu_inicio_return" = "5" ]; then
+        clear
+        echo "5"
+
+fi
+#################################################
+
+#################################################
+        if [ "$menu_inicio_return" = "6" ]; then
+        clear
+        echo "6"
+
+fi
+#################################################
+
+#################################################
+        if [ "$menu_inicio_return" = "7" ]; then
+        clear
+        echo "7"
+
+fi
+#################################################
+
+#################################################
+        if [ "$menu_inicio_return" = "8" ]; then
+        clear
+        echo "8"
+
+fi
+#################################################
+
+#################################################
+        if [ "$menu_inicio_return" = "9" ]; then
+        clear
+        echo "9"
+
+fi
+#################################################
+
+#################################################
+        if [ "$menu_inicio_return" = "10" ]; then
+        clear
+        echo "10"
+
+fi
+#################################################
+
+#################################################
+        if [ "$menu_inicio_return" = "11" ]; then
+        clear
+        echo "11"
+
+fi
+#################################################
+
+#################################################
+        if [ "$menu_inicio_return" = "12" ]; then
+        clear
+        echo "12"
+
+fi
+#################################################
+
+# Cancelar
+else
+
+    dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| Comunidad para ayudar: t.me/ArchLinuxCristo |" 7 51
+
+fi
+
+#FIN ESCRITORIO
+
+#INICIO DISPLAY MANAGER
+
+titulo="| Instalación de ArchLinux - by: ArcriS |"
+
+dialog --backtitle "$titulo" \
+--column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu Display Manager a instalar - (DM)\nPor defecto es Lightdm" 13 60 19 \
+1 ' > | lightdm | Para Multiples Escritorios| <' \
+2 ' > | gdm | Para GNOME y derivadas| <' \
+3 ' > | lxdm | Para LXDE| <' \
+4 ' > | sddm | Para KDE y LXQt| <' 2>temp2
+
+#Opciones
+if [ "$?" = "0" ]
+then
+        menu_inicio_return=$(cat temp2)
+        
+#################################################
+        if [ "$menu_inicio_return" = "1" ]; then
+            
+        DM="lightdm"
+
+fi
+#################################################
+
+#################################################
+        if [ "$menu_inicio_return" = "2" ]; then
+            
+        DM="gdm"
+
+fi
+#################################################
+
+#################################################
+        if [ "$menu_inicio_return" = "3" ]; then
+            
+        DM="lxdm"
+
+fi
+#################################################
+
+#################################################
+        if [ "$menu_inicio_return" = "4" ]; then
+            
+        DM="sddm"
+
+fi
+#################################################
+#FIN DISPLAY MANAGER
+
+    
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
-dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $installxorg --noeditmenu --noconfirm --removemake \
-&& sudo -u $nombre_usuario $GPU \
-&& sudo -u $nombre_usuario yay -Sy xfce4 xfce4-goodies network-manager-applet lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice --noeditmenu --noconfirm --removemake \
-&& systemctl enable lightdm \
-&& sudo -u $nombre_usuario yay -Sy pulseaudio pavucontrol chromium gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer vlc gufw leafpad --noeditmenu --noconfirm --removemake" 27 100
+dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG --noeditmenu --noconfirm --removemake \
+&& sudo -u $nombre_usuario $GPUvirt \
+&& sudo -u $nombre_usuario yay -Sy $GPU $DE $DM --noeditmenu --noconfirm --removemake \
+&& systemctl enable $DM \
+&& sudo -u $nombre_usuario yay -Sy pulseaudio pavucontrol google-chrome gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer vlc gufw leafpad --noeditmenu --noconfirm --removemake" 27 100
 
 clear
 echo FIN
 echo ''
 echo ''
-alsi
 sleep 5
 
 wifinet=$(netctl list | awk -F " " '{print $1}')
 netctl disable $wifinet
+wifinet=$(netctl list | awk -F " " '{print $2}')
+netctl disable $wifinet
 systemctl disable netctl
+clear
 systemctl enable dhcpcd NetworkManager
 systemctl start dhcpcd NetworkManager
+clear
 
 sed -i '80d' /etc/sudoers
 sed -i "80i $nombre_usuario ALL=(ALL) ALL" /etc/sudoers
 
+sed -i '100d' /etc/pacman.conf
+sed -i '99d' /etc/pacman.conf
+sed -i '98d' /etc/pacman.conf
+
+pacman -Syu && alsi
 #Deshabilitar el inicio de sesión automático root tn tty1
 
 rm -R /etc/systemd/system/getty@tty1.service.d
@@ -520,3 +472,5 @@ rm /root/.bash_profile
 
 rm chroot
 reboot
+
+
