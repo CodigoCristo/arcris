@@ -269,28 +269,32 @@ fi
     
 titulo="| Instalación de ArchLinux - by: ArcriS |"
 
-dialog --backtitle "$titulo" \
---column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Seleeciona tu escritorio a instalar - (DE)" 19 60 19 \
-1 ' > | xfce4 | Xfce desktop| <' \
-2 ' > | plasma | KDE Plasma desktop| <' \
-3 ' > | deepin | Deepin desktop| <' \
-4 ' > | gnome | GNOME Classic desktop| <' \
-5 ' > | gnome-flashback | GNOME 2 desktop| <' \
-6 ' > | cinnamon | Cinnamon desktop| <' \
-7 ' > | budgie-desktop | Budgie desktop| <' \
-8 ' > | enlightenment | Enlightenment desktop| <' \
-9 ' > | lxde-gtk3| The Lightweight X11 desktop| <' \
-10 ' > | lxde | The Lightweight X11 GTK2| <' \
-11 ' > | lxqt | LXDE-Qt y Razor-qt projects| <' \
-12 ' > | mate | Mate GTK3 desktop| <' 2>temp
+#INICIO ESCRITORIO
 
-#Opciones
-if [ "$?" = "0" ]
-then
-        menu_inicio_return=$(cat temp)
-#################################################
-        if [ "$menu_inicio_return" = "1" ]; then
-        cmd=(dialog --keep-tite --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Decide en instalar o personalizar las opciones\n\n \
+cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "$titulo" --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu escritorio a instalar - (DE)" 19 60 19)
+
+options=(1 " > | xfce4 | Xfce desktop| <"
+         2 " > | plasma | KDE Plasma desktop| <'"
+         3 " > | deepin | Deepin desktop| <"
+         4 " > | gnome | GNOME Classic desktop| <"
+         5 " > | gnome-flashback | GNOME 2 desktop| <"
+         6 " > | cinnamon | Cinnamon desktop| <"
+         7 " > | budgie-desktop | Budgie desktop| <"
+         8 " > | enlightenment | Enlightenment desktop| <"
+         9 " > | lxde-gtk3| The Lightweight X11 desktop| <"
+         10 " > | lxde | The Lightweight X11 GTK2| <"
+         11 " > | lxqt | LXDE-Qt y Razor-qt projects| <"
+         12 " > | mate | Mate GTK3 desktop| <")
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+for choice in $choices
+do
+    case $choice in
+        
+        1)
+cmd=(dialog --keep-tite --backtitle "$titulo" \
+--no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Decide en instalar o personalizar las opciones\n\n \
 xfce4 xfce4-goodies network-manager-applet alacarte \n\nSelecciona una opción para XFCE4 \n" 14 60 19)
 
 options=(1 "Predeterminado || Una mejor experiencia "
@@ -301,10 +305,10 @@ choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 for choice in $choices
 do
     case $choice in
-        1)  DE="xfce4 xfce4-goodies network-manager-applet alacarte"
+        1)  DE="xfce4 xfce4-goodies network-manager-applet alacarte papirus-icon-theme deepin-icon-theme sierra-gtk-theme-git"
             ;;
         
-        2) cmd=(dialog --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes extras del escritorio XFCE4\n[ ESPACIO ] - Para Seleccionar" 12 70 19)
+        2) cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes extras del escritorio XFCE4\n[ ESPACIO ] - Para Seleccionar" 12 70 19)
             options=(1 "xfce4-goodies || Programas extras de xfce4" off    # any option can be set to default to "on"
                      2 "network-manager-applet || Gestionar conexiones de red" off
                      3 "alacarte || Editar entradas" off)
@@ -330,150 +334,53 @@ do
                         
     esac
 done
-fi
-#################################################
+            ;;
+            
+        2)
+            echo "Second Option"
+            ;;
+        3)
+            echo "Third Option"
+            ;;
+        4)
+            echo "Fourth Option"
+            ;;
+    esac
+done
 
-#################################################
-        if [ "$menu_inicio_return" = "2" ]; then
-        clear
-        echo "2"
-
-fi
-#################################################
-
-#################################################
-        if [ "$menu_inicio_return" = "3" ]; then
-        clear
-        echo "3"
-
-fi
-#################################################
-
-#################################################
-        if [ "$menu_inicio_return" = "4" ]; then
-        clear
-        echo "4"
-
-fi
-#################################################
-
-#################################################
-        if [ "$menu_inicio_return" = "5" ]; then
-        clear
-        echo "5"
-
-fi
-#################################################
-
-#################################################
-        if [ "$menu_inicio_return" = "6" ]; then
-        clear
-        echo "6"
-
-fi
-#################################################
-
-#################################################
-        if [ "$menu_inicio_return" = "7" ]; then
-        clear
-        echo "7"
-
-fi
-#################################################
-
-#################################################
-        if [ "$menu_inicio_return" = "8" ]; then
-        clear
-        echo "8"
-
-fi
-#################################################
-
-#################################################
-        if [ "$menu_inicio_return" = "9" ]; then
-        clear
-        echo "9"
-
-fi
-#################################################
-
-#################################################
-        if [ "$menu_inicio_return" = "10" ]; then
-        clear
-        echo "10"
-
-fi
-#################################################
-
-#################################################
-        if [ "$menu_inicio_return" = "11" ]; then
-        clear
-        echo "11"
-
-fi
-#################################################
-
-#################################################
-        if [ "$menu_inicio_return" = "12" ]; then
-        clear
-        echo "12"
-
-fi
-#################################################
-
-# Cancelar
-#else
-
-#    dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| Comunidad para ayudar: t.me/ArchLinuxCristo |" 7 51
-
-#fi
 
 #FIN ESCRITORIO
 
 #INICIO DISPLAY MANAGER
 
-dialog --backtitle "$titulo" \
---column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu Display Manager a instalar - (DM)\nPor defecto es Lightdm" 13 60 19 \
-1 ' > | lightdm | Para Multiples Escritorios| <' \
-2 ' > | gdm | Para GNOME y derivadas| <' \
-3 ' > | lxdm | Para LXDE| <' \
-4 ' > | sddm | Para KDE y LXQt| <' 2>temp_2
+cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "$titulo" --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel \
+    --menu "Selecciona tu Display Manager a instalar - (DM)\n\nPor defecto es Lightdm" 13 55 19)
 
-#Opciones
-if [ "$?" = "0" ]
-then
-        menu_inicio_return=$(cat temp_2)
-        
-#################################################
-        if [ "$menu_inicio_return" = "1" ]; then
-            
-        DM="lightdm"
+options=(1 " > | lightdm || Para Multiples Escritorios| <"
+         2 " > | gdm || Para GNOME y derivadas| <"
+         3 " > | lxdm || Para LXDE| <"
+         4 " > | sddm || Para KDE y LXQt| <")
 
-fi
-#################################################
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
-#################################################
-        if [ "$menu_inicio_return" = "2" ]; then
-            
-        DM="gdm"
+for choice in $choices
+do
+    case $choice in
+        1)
+            DM="lightdm"
+            ;;
+        2)
+            DM="gdm"
+            ;;
+        3)
+            DM="lxdm"
+            ;;
+        4)
+            DM="sddm"
+            ;;
+    esac
+done
 
-fi
-#################################################
-
-#################################################
-        if [ "$menu_inicio_return" = "3" ]; then
-            
-        DM="lxdm"
-
-fi
-#################################################
-
-#################################################
-        if [ "$menu_inicio_return" = "4" ]; then
-            
-        DM="sddm"
-
-fi
 #################################################
 
 #FIN DISPLAY MANAGER
