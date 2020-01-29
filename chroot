@@ -440,11 +440,11 @@ echo ''
 echo ''
 sleep 5
 
-wifinet=$(netctl list | awk -F " " '{print $1}')
-netctl disable $wifinet
-wifinet=$(netctl list | awk -F " " '{print $2}')
-netctl disable $wifinet
-systemctl disable netctl
+#wifinet=$(netctl list | awk -F " " '{print $1}')
+#netctl disable $wifinet
+#wifinet=$(netctl list | awk -F " " '{print $2}')
+#netctl disable $wifinet
+#systemctl disable netctl
 clear
 systemctl enable dhcpcd NetworkManager
 systemctl start dhcpcd NetworkManager
@@ -453,11 +453,6 @@ clear
 sed -i '80d' /etc/sudoers
 sed -i "80i $nombre_usuario ALL=(ALL) ALL" /etc/sudoers
 
-sed -i '100d' /etc/pacman.conf
-sed -i '99d' /etc/pacman.conf
-sed -i '98d' /etc/pacman.conf
-
-pacman -Syu
 alsi
 #Deshabilitar el inicio de sesión automático root tn tty1
 
