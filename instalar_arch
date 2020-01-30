@@ -668,6 +668,8 @@ clear
 arch-chroot /mnt /bin/bash -c "pacman -Sy xdg-user-dirs --noconfirm && xdg-user-dirs-update" | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando xdg-user-dirs... |" 25 80; sleep 3
 clear
 export $(cat /mnt/etc/locale.conf)
+
+cp pacman-chroot.conf /mnt/etc/pacman.conf
 echo ""
 echo ""
 arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo "" && arch-chroot /mnt /bin/bash -c "alsi"
@@ -682,9 +684,8 @@ echo "      /////////////////////////////////||"
 echo ""
 echo ""
 sleep 6
-#Copia el script posterior a la instalación en el disco duro
-cp pacman-chroot.conf /mnt/etc/pacman.conf
 
+#Copia el script posterior a la instalación en el disco duro
 cp chroot /mnt/root && chmod +x /mnt/root/chroot
 cp .dialogrc /mnt/root && chmod +x /mnt/root/.dialogrc
 
