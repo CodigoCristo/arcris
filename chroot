@@ -303,6 +303,7 @@ do
 dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "git clone https://github.com/CodigoCristo/config.git" 27 100
 unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
 cp -rf xfce4/.config/* /root/.config
+sudo -u $nombre_usuario cp -rf xfce4/.config/* /home/$nombre_usuario/.config/
 
             ;;
         
