@@ -185,25 +185,26 @@ if [ "$VM" == "true" ]; then
             case "$virt" in
                 
                 vbox)   if [ "$kernel" == "Linux" ]; then
-                            GPUvirt="yay -Sy virtualbox-guest-utils virtualbox-guest-modules-arch xf86-video-vmware --noeditmenu --noconfirm --removemake && \
-                            systemctl enable vboxservice.service && \
-                            modprobe -a vboxguest vboxsf vboxvideo && \
-                            systemctl start vboxservice.service"
+                            GPU="virtualbox-guest-utils virtualbox-guest-modules-arch xf86-video-vmware"
+                            GPUvirt="vboxservice"
+                            echo $GPUvirt | awk -F " " '{print $1}' > GPUvirt
+                            
                             dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VirtualBox\nInstalar: VirtualBox Guest" 7 80
                         else
-                            GPUvirt="yay -Sy virtualbox-guest-utils virtualbox-guest-dkms --noeditmenu --noconfirm --removemake && \
-                            systemctl enable systemd-modules-load.service"
+                            GPU="virtualbox-guest-utils virtualbox-guest-dkms"
+                            GPUvirt="systemd-modules-load"
+                            echo $GPUvirt | awk -F " " '{print $1}' > GPUvirt
                             dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VirtualBox\nInstalar: VirtualBox Guest-dkms" 7 80
                         fi
                 ;;
-                vmware) GPUvirt="yay -Sy xf86-video-vmware xf86-input-vmmouse open-vm-tools net-tools gtkmm mesa mesa-libgl --noeditmenu --removemake --noconfirm "
+                vmware) GPU="xf86-video-vmware xf86-input-vmmouse open-vm-tools net-tools gtkmm mesa mesa-libgl"
                         dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VMware\nInstalar: xf86-video-vmware" 7 80
                 ;;
                 
-                hyper-v) GPUvirt="yay -Sy xf86-video-fbdev mesa-libgl --noeditmenu --noconfirm --removemake"                         
+                hyper-v) GPU="xf86-video-fbdev mesa-libgl"                         
                 ;;
                 
-                *)      GPUvirt="yay -Sy xf86-video-fbdev mesa-libgl --noeditmenu --noconfirm --removemake"
+                *)      GPU="xf86-video-fbdev mesa-libgl"
                 ;;
                 
             esac
@@ -211,8 +212,8 @@ if [ "$VM" == "true" ]; then
             
 else
 
-dialog --title "Driver de Vídeo" --yesno "\n¿Auto-Detectar el Hardware de Vídeo?" 7 60
-
+dialog --title "-| Driver de Vídeo |-" --yesno "\n¿Auto-Detectar el Hardware de Vídeo?" 7 60
+dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Entendido>" --msgbox "$videotext" 10 100
 case $? in
    0)  if (lspci | grep VGA | grep "NVIDIA\|nVidia" &>/dev/null); then
     
@@ -308,7 +309,9 @@ cd config/
 unzip xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
 chmod +x xfce4
 cd xfce4
-cp -rf .config/* ~/.config
+cp -rf .config/* /root/.config
+mkdir /home/$nombre_usuario/.config
+cp -rf .config/* /home/$nombre_usuario/.config
             ;;
         
         2) cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes extras del escritorio XFCE4\n[ ESPACIO ] - Para Seleccionar" 12 70 19)
@@ -371,7 +374,7 @@ do
     case $choice in
         1)
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
-            DMservice=$(systemctl enable $DM | awk -F " " '{print $1}')
+            echo $DM | awk -F " " '{print $1}' > DMservice
             ;;
         2)
             DM="gdm"
@@ -391,9 +394,8 @@ done
 
 
 dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG --noeditmenu --noconfirm --removemake \
-&& sudo -u $nombre_usuario $GPUvirt \
 && sudo -u $nombre_usuario yay -Sy $GPU $DE $DM --noeditmenu --noconfirm --removemake \
-&& $DMservice \
+&& systemctl enable $(cat DMservice) $(cat GPUvirt) \
 && sudo -u $nombre_usuario yay -Sy pulseaudio pavucontrol google-chrome gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer vlc gufw leafpad --noeditmenu --noconfirm --removemake" 27 100
 
 
