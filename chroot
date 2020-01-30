@@ -300,10 +300,9 @@ for choice in $choices
 do
     case $choice in
         1)  DE="xfce4 xfce4-goodies network-manager-applet alacarte papirus-icon-theme deepin-icon-theme sierra-gtk-theme-git"
-git clone https://github.com/CodigoCristo/config | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
-cd config/
-unzip xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
-chmod +x xfce4
+git clone https://github.com/CodigoCristo/config.git | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
+unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
+chmod +x config/
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 cp -rf xfce4/.config/* /root/.config
 mkdir /home/$nombre_usuario/.config
