@@ -304,6 +304,8 @@ dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "git
 unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
 chmod +x xfce4
 cp -rf xfce4/.config/* /root/.config/
+sudo -u $nombre_usuario cp -rf /root/xfce4 /home/$nombre_usuario/
+sudo -u $nombre_usuario chmod +x xfce4
 sudo -u $nombre_usuario cp -rf xfce4/.config/* /home/$nombre_usuario/.config/
 
             ;;

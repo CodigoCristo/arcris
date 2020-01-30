@@ -23,7 +23,7 @@ case $? in
 esac
 fi
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Conexión WiFi |-" --yesno "¿ Tienes red wifi ?" 5 45 
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Conexión WiFi |-" --defaultno --yesno "¿ Tienes red wifi ?" 5 45 
 case $? in 
 	0)	wifi-menu
 		wifinet=$(netctl list | awk -F " " '{print $2}');;
