@@ -303,9 +303,9 @@ do
 dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "git clone https://github.com/CodigoCristo/config.git" 27 100
 unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
-cp -rf config/xfce4/.config/* /root/.config
+cp -rf xfce4/.config/* /root/.config
 mkdir /home/$nombre_usuario/.config
-cp -rf config/xfce4/.config/* /home/$nombre_usuario/.config
+cp -rf xfce4/.config/* /home/$nombre_usuario/.config
 
             ;;
         
@@ -388,8 +388,8 @@ done
 #FIN DISPLAY MANAGER
 
 
-dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG --noeditmenu --noconfirm --removemake \
-&& sudo -u $nombre_usuario yay -Sy $GPU $DE $DM --noeditmenu --noconfirm --removemake \
+dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG --noeditmenu --noconfirm --removemake && \
+sudo -u $nombre_usuario yay -Sy $GPU $DE $DM --noeditmenu --noconfirm --removemake \
 && systemctl enable $(cat DMservice) $(cat GPUvirt) \
 && sudo -u $nombre_usuario yay -Sy pulseaudio pavucontrol google-chrome gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer vlc gufw leafpad --noeditmenu --noconfirm --removemake" 27 100
 
