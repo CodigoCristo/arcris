@@ -209,9 +209,9 @@ if [ "$VM" == "true" ]; then
             esac
 
             
-elif [ "$VM" == "none" ]; then
+else
 
-dialog --title "Driver de Vídeo" --yesno "¿Auto-Detectar el Hardware de Vídeo?" 7 60
+dialog --title "Driver de Vídeo" --yesno "\n¿Auto-Detectar el Hardware de Vídeo?" 7 60
 
 case $? in
    0)  if (lspci | grep VGA | grep "NVIDIA\|nVidia" &>/dev/null); then
@@ -232,7 +232,7 @@ lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl libva-utils vdpauinfo 
 opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers"
 dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
 
-        elif (lspci | grep VGA | grep "ATI\|AMD" &>/dev/null); then
+        elif (lspci | grep VGA | grep "ATI\|AMD/ATI" &>/dev/null); then
                     
 GPU="xf86-video-ati mesa lib32-mesa mesa-vdpau libva-mesa-driver \
 lib32-mesa-vdpau lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl \
@@ -259,9 +259,6 @@ dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msg
 ;;
 esac
 
-else            
-GPU="xf86-video-vesa mesa lib32-mesa"
-dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
 #Final de VIDEO      
 fi
 
@@ -374,6 +371,7 @@ do
     case $choice in
         1)
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
+            DMservice=$(systemctl enable $DM | awk -F " " '{print $1}')
             ;;
         2)
             DM="gdm"
@@ -395,7 +393,7 @@ done
 dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG --noeditmenu --noconfirm --removemake \
 && sudo -u $nombre_usuario $GPUvirt \
 && sudo -u $nombre_usuario yay -Sy $GPU $DE $DM --noeditmenu --noconfirm --removemake \
-&& systemctl enable $DM | awk -F " " '{print $1}' \
+&& $DMservice \
 && sudo -u $nombre_usuario yay -Sy pulseaudio pavucontrol google-chrome gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer vlc gufw leafpad --noeditmenu --noconfirm --removemake" 27 100
 
 
