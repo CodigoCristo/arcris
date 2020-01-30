@@ -305,8 +305,9 @@ unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instala
 chmod +777 xfce4
 cp -rf xfce4/.config/* /root/.config/
 mkdir /home/$nombre_usuario/.config/
-chown -hR $nombre_usuario:users /home/$nombre_usuario/.config \
+chown -hR $nombre_usuario:users /home/$nombre_usuario/.config
 cp -rf xfce4/.config/* /home/$nombre_usuario/.config/
+
 #sudo -u $nombre_usuario cp -rf /root/xfce4 /home/$nombre_usuario/
             ;;
         
