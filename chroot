@@ -1,9 +1,5 @@
 #!/bin/bash
 
-#Load the X11 keymap
-
-localectl --no-convert set-x11-keymap selectedkeymap
-
 #Colores
 clear
 red='\033[38;2;255;0;02m'
@@ -308,10 +304,10 @@ git clone https://github.com/CodigoCristo/config | dialog --no-collapse --cr-wra
 cd config/
 unzip xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
 chmod +x xfce4
-cd xfce4
-cp -rf .config/* /root/.config
+nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
+cp -rf xfce4/.config/* /root/.config
 mkdir /home/$nombre_usuario/.config
-cp -rf .config/* /home/$nombre_usuario/.config
+cp -rf xfce4/.config/* /home/$nombre_usuario/.config
             ;;
         
         2) cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes extras del escritorio XFCE4\n[ ESPACIO ] - Para Seleccionar" 12 70 19)
@@ -415,8 +411,12 @@ sed -i "80i $nombre_usuario ALL=(ALL) ALL" /etc/sudoers
 
 pacman -Syu --noconfirm
 alsi
-#Deshabilitar el inicio de sesión automático root tn tty1
 
+#Load the X11 keymap
+
+localectl set-x11-keymap latam
+
+#Deshabilitar el inicio de sesión automático root tn tty1
 rm -R /etc/systemd/system/getty@tty1.service.d
 sed -i 's/sh chroot//g' /root/.bashrc
 rm /root/.bash_profile
