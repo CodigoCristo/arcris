@@ -173,11 +173,11 @@ VM=false
     
     ####################################################################
 kernel=$(uname -a | tail -c -6)
-videotext=$(sudo lshw -class display | grep "product:\|vendor:")
+videotext=$(sudo lshw -class display | grep "product:")
 
 if [ "$VM" == "true" ]; then
     
-            dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Entendido>" --msgbox "$videotext" 10 100
+            dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Entendido>" --msgbox "$videotext" 8 50
             case "$virt" in
                 
                 vbox)   if [ "$kernel" == "Linux" ]; then
@@ -209,7 +209,7 @@ if [ "$VM" == "true" ]; then
 else
 
 dialog --title "-| Driver de Vídeo |-" --yesno "\n¿Auto-Detectar el Hardware de Vídeo?" 7 60
-dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Entendido>" --msgbox "$videotext" 10 100
+ dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Entendido>" --msgbox "$videotext" 8 50
 case $? in
    0)  if (lspci | grep VGA | grep "NVIDIA\|nVidia" &>/dev/null); then
     
@@ -305,6 +305,7 @@ unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instala
 chmod +777 xfce4
 cp -rf xfce4/.config/* /root/.config/
 mkdir /home/$nombre_usuario/.config/
+chown -hR $nombre_usuario:users /home/$nombre_usuario/.config \
 cp -rf xfce4/.config/* /home/$nombre_usuario/.config/
 #sudo -u $nombre_usuario cp -rf /root/xfce4 /home/$nombre_usuario/
             ;;
