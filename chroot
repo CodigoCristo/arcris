@@ -302,10 +302,7 @@ do
         1)  DE="xfce4 xfce4-goodies network-manager-applet alacarte papirus-icon-theme deepin-icon-theme sierra-gtk-theme-git"
 dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "git clone https://github.com/CodigoCristo/config.git" 27 100
 unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
-nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 cp -rf xfce4/.config/* /root/.config
-mkdir /home/$nombre_usuario/.config
-cp -rf xfce4/.config/* /home/$nombre_usuario/.config
 
             ;;
         
