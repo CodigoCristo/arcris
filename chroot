@@ -306,6 +306,12 @@ for choice in $choices
 do
     case $choice in
         1)  DE="xfce4 xfce4-goodies network-manager-applet alacarte papirus-icon-theme deepin-icon-theme sierra-gtk-theme-git"
+git clone https://github.com/CodigoCristo/config | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
+cd config/
+unzip xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
+chmod +x xfce4
+cd xfce4
+cp -rf .config/* ~/.config
             ;;
         
         2) cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes extras del escritorio XFCE4\n[ ESPACIO ] - Para Seleccionar" 12 70 19)
@@ -367,7 +373,7 @@ for choice in $choices
 do
     case $choice in
         1)
-            DM="lightdm"
+            DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
             ;;
         2)
             DM="gdm"
@@ -389,7 +395,7 @@ done
 dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG --noeditmenu --noconfirm --removemake \
 && sudo -u $nombre_usuario $GPUvirt \
 && sudo -u $nombre_usuario yay -Sy $GPU $DE $DM --noeditmenu --noconfirm --removemake \
-&& systemctl enable $DM \
+&& systemctl enable $DM | awk -F " " '{print $1}' \
 && sudo -u $nombre_usuario yay -Sy pulseaudio pavucontrol google-chrome gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer vlc gufw leafpad --noeditmenu --noconfirm --removemake" 27 100
 
 
@@ -407,7 +413,7 @@ clear
 sed -i '80d' /etc/sudoers
 sed -i "80i $nombre_usuario ALL=(ALL) ALL" /etc/sudoers
 
-pacman -Syu
+pacman -Syu --noconfirm
 alsi
 #Deshabilitar el inicio de sesión automático root tn tty1
 
