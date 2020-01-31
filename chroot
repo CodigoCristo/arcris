@@ -485,6 +485,10 @@ clear
     ####################################################################
 fi
 
+clear
+systemctl enable dhcpcd NetworkManager
+systemctl start dhcpcd NetworkManager
+clear
 
 
 sed -i '80d' /etc/sudoers
