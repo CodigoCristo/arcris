@@ -120,6 +120,14 @@ case $? in
 esac
 fi
 
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Conexión WiFi |-" --defaultno --yesno "¿ Tienes red wifi ?" 5 45 
+case $? in 
+    0) wifinet=$(netctl list | awk -F " " '{print $1}')
+        ;;
+        
+    1)  ;;
+esac
+
 
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 #Para que el sudo no pida clave
@@ -177,24 +185,23 @@ videotext=$(sudo lshw -class display | grep "product:")
 
 if [ "$VM" == "true" ]; then
     
-            dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Entendido>" --msgbox "$videotext" 8 50
+            lshw -class display | grep "product:" | dialog --no-collapse --cr-wrap --progressbox "-| Tarjeta de Vídeo |-" 8 80; sleep 3
             case "$virt" in
                 
                 vbox)   if [ "$kernel" == "Linux" ]; then
                             GPU="virtualbox-guest-utils virtualbox-guest-modules-arch xf86-video-vmware"
                             GPUvirt="vboxservice"
-                            echo $GPUvirt | awk -F " " '{print $1}' > GPUvirt
-                            
-                            dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VirtualBox\nInstalar: VirtualBox Guest" 7 80
+                            echo $GPUvirt | awk -F " " '{print $1}' > GPUvirt                            
+                            dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VirtualBox\nInstalar: VirtualBox Guest" 8 80
                         else
                             GPU="virtualbox-guest-utils virtualbox-guest-dkms"
                             GPUvirt="systemd-modules-load"
                             echo $GPUvirt | awk -F " " '{print $1}' > GPUvirt
-                            dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VirtualBox\nInstalar: VirtualBox Guest-dkms" 7 80
+                            dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VirtualBox\nInstalar: VirtualBox Guest-dkms" 8 80
                         fi
                 ;;
                 vmware) GPU="xf86-video-vmware xf86-input-vmmouse open-vm-tools net-tools gtkmm mesa mesa-libgl"
-                        dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VMware\nInstalar: xf86-video-vmware" 7 80
+                        dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VMware\nInstalar: xf86-video-vmware" 8 80
                 ;;
                 
                 hyper-v) GPU="xf86-video-fbdev mesa-libgl"                         
@@ -209,7 +216,7 @@ if [ "$VM" == "true" ]; then
 else
 
 dialog --title "-| Driver de Vídeo |-" --yesno "\n¿Auto-Detectar el Hardware de Vídeo?" 7 60
- dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Entendido>" --msgbox "$videotext" 8 50
+lshw -class display | grep "product:" | dialog --no-collapse --cr-wrap --progressbox "-| Tarjeta de Vídeo |-" 8 80; sleep 3
 case $? in
    0)  if (lspci | grep VGA | grep "NVIDIA\|nVidia" &>/dev/null); then
     
@@ -263,8 +270,18 @@ fi
     
 titulo="| Instalación de ArchLinux - by: ArcriS |"
 
-#INICIO ESCRITORIO
 
+cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "$titulo" --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu (DE) o (WM) a instalar" 9 50 9)
+
+options=(1 "Entorno de escritorio | (DE)"
+         2 "Gestor de ventanas | (WM)")
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+for choice in $choices
+do
+    case $choice in
+        1) #INICIO (DE)           
 cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "$titulo" --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu escritorio a instalar - (DE)" 19 60 19)
 
 options=(1 " > | xfce4 | Xfce desktop| <"
@@ -286,12 +303,14 @@ for choice in $choices
 do
     case $choice in
         
-        1)
+###########SELECCION (DE)
+        1) #XFCE4
 cmd=(dialog --keep-tite --backtitle "$titulo" \
 --no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Decide en instalar o personalizar las opciones\n\n \
 xfce4 xfce4-goodies network-manager-applet alacarte \n\nSelecciona una opción para XFCE4 \n" 14 60 19)
 
-options=(1 "Predeterminado || Una mejor experiencia "
+options=(1 "Predeterminado || Una mejor experiencia con Themes"
+         2 "Escritorio vacio || Sin themes con paquetes extras"
          2 "Personalizar || Especificar Paquetes básicos")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
@@ -299,7 +318,8 @@ choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 for choice in $choices
 do
     case $choice in
-        1)  DE="xfce4 xfce4-goodies network-manager-applet alacarte papirus-icon-theme deepin-icon-theme sierra-gtk-theme-git"
+        
+        1)  DE="xfce4 xfce4-goodies network-manager-applet alacarte papirus-icon-theme deepin-icon-theme sierra-gtk-theme-git gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer"
 dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "git clone https://github.com/CodigoCristo/config.git" 27 100
 unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
 chmod +777 xfce4
@@ -307,11 +327,16 @@ cp -rf xfce4/.config/* /root/.config/
 mkdir /home/$nombre_usuario/.config/
 chown -hR $nombre_usuario:users /home/$nombre_usuario/.config
 cp -rf xfce4/.config/* /home/$nombre_usuario/.config/
-
-#sudo -u $nombre_usuario cp -rf /root/xfce4 /home/$nombre_usuario/
+DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
+echo $DM | awk -F " " '{print $1}' > DMservice
             ;;
-        
-        2) cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes extras del escritorio XFCE4\n[ ESPACIO ] - Para Seleccionar" 12 70 19)
+            
+        2)  DE="xfce4 xfce4-goodies network-manager-applet alacarte ttf-hack ttf-inconsolata gnome-font-viewer"
+            DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
+            echo $DM | awk -F " " '{print $1}' > DMservice
+            ;;
+            
+        3) cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes extras del escritorio XFCE4\n[ ESPACIO ] - Para Seleccionar" 12 70 19)
             options=(1 "xfce4-goodies || Programas extras de xfce4" off    # any option can be set to default to "on"
                      2 "network-manager-applet || Gestionar conexiones de red" off
                      3 "alacarte || Editar entradas" off)
@@ -331,63 +356,111 @@ cp -rf xfce4/.config/* /home/$nombre_usuario/.config/
                         ;;
                 esac
             done
-            xfce4="xfce4"
+            xfce4="xfce4 gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer"
             DE="$xfce4 $xfce4_2 $xfce4_3 $xfce4_4"
+            DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
+            echo $DM | awk -F " " '{print $1}' > DMservice
             ;;
-                        
     esac
 done
+######FINAL XFCE4
             ;;
+
+        2)  #KDE
+            cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes del escritorio KDE\n[ ESPACIO ] - Para Seleccionar" 12 70 19)
+            options=(1 "kde-applications || Programas extras de KDE" off 
+                     2 "appmenu-gtk || Global Menu GTK2/GTK3" off
+                     3 "bluedevil || Bluetooth" off
+                     4 "print-manager || Impresoras" off)
+            choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+            clear
+            for choice in $choices
+            do
+                case $choice in
+                    1)
+                        KDE2="kde-applications"
+                        ;;
+                    2)
+                        KDE3="appmenu-gtk-module libdbusmenu-glib libdbusmenu-gtk3 libdbusmenu-gtk2"
+                        ;;
+                    3)
+                        KDE4="bluedevil"
+                        ;;
+                    4)
+                        KDE5="print-manager cups"
+                        ;;
+                esac
+            done
+
+            KDE="plasma kdebase gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer discover packagekit-qt5 colord-kde kscreen powerdevil kdegraphics-thumbnailers ffmpegthumbs user-manager kdeconnect sshfs ttf-liberation ttf-dejavu qt5ct"
+
+            DE="$KDE $KDE2 $KDE3 $KDE4 $KDE5"            
+            DM="sddm"
+            echo $DM | awk -F " " '{print $1}' > DMservice
+            ;;
+######FINAL KDE PLASMA
+
+        3) #DEEPIN
+            cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes del escritorio KDE\n[ ESPACIO ] - Para Seleccionar" 15 100 19)
+            options=(1 "> deepin-extra |> Una mejor experiencia" off 
+                     2 "> deepin-topbar |> Barra Superior Style Gnome" off
+                     3 "> deepin-dock-plugin-arch-update" off
+                     4 "> deepin-dock-plugin-cmdu-git" off
+                     5 "> deepin-dock-plugin-netspeedandsysteminfo" off
+                     6 "> deepin-dock-plugin-pineappledatetime-git" off
+                     7 "> deepin-dock-plugin-weather-git" off)
+            choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+            clear
+            for choice in $choices
+            do
+                case $choice in
+                    1)
+                        deepin1="deepin-extra"
+                        ;;
+                    2)
+                        deepin2="deepin-topbar"
+                        ;;
+                    3)
+                        deepin3="deepin-dock-plugin-arch-update"
+                        ;;
+                    4)
+                        deepin4="deepin-dock-plugin-cmdu-git"
+                        ;;
+                    5)
+                        deepin5="deepin-dock-plugin-netspeedandsysteminfo"
+                        ;;
+                    6)
+                        deepin6="deepin-dock-plugin-pineappledatetime-git"
+                        ;;
+                    7)
+                        deepin7="deepin-dock-plugin-weather-git"
+                        ;;
+                esac
+            done
+
+            deepin="deepin gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer ffmpegthumbs"
+            DE="$deepin $deepin1 $deepin2 $deepin3 $deepin4 $deepin5 $deepin6 $deepin7"
+
+            DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
+            echo $DM | awk -F " " '{print $1}' > DMservice
             
-        2)
-            echo "Second Option"
             ;;
-        3)
-            echo "Third Option"
-            ;;
+######FINAL DEEPIN
         4)
             echo "Fourth Option"
             ;;
     esac
 done
-
-
 #FIN ESCRITORIO
-
-#INICIO DISPLAY MANAGER
-
-cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "$titulo" --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel \
-    --menu "Selecciona tu Display Manager a instalar - (DM)\n\nPor defecto es Lightdm" 13 55 19)
-
-options=(1 " > | lightdm || Para Multiples Escritorios| <"
-         2 " > | gdm || Para GNOME y derivadas| <"
-         3 " > | lxdm || Para LXDE| <"
-         4 " > | sddm || Para KDE y LXQt| <")
-
-choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-
-for choice in $choices
-do
-    case $choice in
-        1)
-            DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
-            echo $DM | awk -F " " '{print $1}' > DMservice
             ;;
-        2)
-            DM="gdm"
-            ;;
-        3)
-            DM="lxdm"
-            ;;
-        4)
-            DM="sddm"
+        2) #INICIO (WM)
+            echo "Second Option"
             ;;
     esac
 done
 
-#################################################
 
-#FIN DISPLAY MANAGER
+
 
 
 dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG --noeditmenu --noconfirm --removemake && \
@@ -396,6 +469,9 @@ sudo -u $nombre_usuario yay -Sy $GPU $DE $DM --noeditmenu --noconfirm --removema
 && sudo -u $nombre_usuario yay -Sy pulseaudio pavucontrol google-chrome gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer vlc gufw leafpad --noeditmenu --noconfirm --removemake" 27 100
 
 
+if [[ ! -z $wifinet ]];then
+    ####################################################################
+    #Copia Red
 wifinet=$(netctl list | awk -F " " '{print $1}')
 netctl disable $wifinet
 clear
@@ -406,6 +482,10 @@ clear
 systemctl enable dhcpcd NetworkManager
 systemctl start dhcpcd NetworkManager
 clear
+    ####################################################################
+fi
+
+
 
 sed -i '80d' /etc/sudoers
 sed -i "80i $nombre_usuario ALL=(ALL) ALL" /etc/sudoers

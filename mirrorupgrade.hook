@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = pacman-mirrorlist
+
+[Action]
+Description = Actualizar pacman-mirrorlist con reflector y eliminar pacnew...
+When = PostTransaction
+Depends = reflector
+Exec = /bin/sh -c "reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist; rm -f /etc/pacman.d/mirrorlist.pacnew"
