@@ -1,4 +1,4 @@
-# ArCristo
+# ArcriS
 https://git.io/arcristo
 
 > Arch Linux Install Script Español
