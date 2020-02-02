@@ -499,7 +499,7 @@ done
 
 
 dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG --noeditmenu --noconfirm --removemake && \
-sudo -u $nombre_usuario yay -Sy $GPU $DE $DM --noeditmenu --noconfirm --removemake \
+sudo -u $nombre_usuario yay -Sy $GPU $DE $DM $WM --noeditmenu --noconfirm --removemake \
 && systemctl enable $(cat DMservice) $(cat GPUvirt) \
 && sudo -u $nombre_usuario yay -Sy pulseaudio pavucontrol google-chrome gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer vlc gufw leafpad --noeditmenu --noconfirm --removemake" 27 100
 
