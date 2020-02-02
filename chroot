@@ -454,7 +454,42 @@ done
 #FIN ESCRITORIO
             ;;
         2) #INICIO (WM)
+cmd=(dialog --keep-tite --backtitle "$titulo" \
+--no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Select options:" 22 76 16)
+
+options=(1 "> i3wm | Window manager"
+         2 "> 2bwm | Window manager"
+         3 "> cwm | Window manager" 
+         4 "> fluxbox | Window manager"
+         5 "> openbox | Window manager"
+         6 "> blackbox | Window manager"
+         7 "> Bspwm | Window manager"
+         8 "> awesome | Window manager"
+         9 "> dwm | Window manager"
+         10 "> catwm | Window manager"
+         11 "> qtile | Window manager"
+         12 "> xmonad | Window manager")
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+for choice in $choices
+do
+    case $choice in
+        1)
+            WM="i3 i3-gaps dmenu python-pywal polybar compton-tryone-git rofi rofi-menus-git kitty nerd-fonts-complete ttf-google-sans dunst firefox ranger code ms-office-online whatsapp-nativefier-dark telegram-desktop spotify alsa pacmixer backlight-git acpilight"
+            ;;
+        2)
             echo "Second Option"
+            ;;
+        3)
+            echo "Third Option"
+            ;;
+        4)
+            echo "Fourth Option"
+            ;;
+    esac
+done
+
             ;;
     esac
 done
@@ -487,8 +522,8 @@ fi
 
 clear
 systemctl enable dhcpcd NetworkManager
-systemctl start dhcpcd NetworkManager
 clear
+systemctl start dhcpcd NetworkManager
 
 
 sed -i '80d' /etc/sudoers
