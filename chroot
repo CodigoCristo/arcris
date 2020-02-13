@@ -594,7 +594,7 @@ do
                 libcanberra-pulse libcanberra-gstreamer"
             ;;
         6)
-           UTIL5="pulseaudio pulseaudio-alsa pavucontrol pamixer pulseeffects
+            UTIL6="pulseaudio pulseaudio-alsa pavucontrol pamixer pulseeffects
                 pulseaudio-equalizer lib32-alsa-plugins lib32-libpulse pulseaudio-equalizer-ladspa
                 libcanberra-pulse libcanberra-gstreamer"
             ;;

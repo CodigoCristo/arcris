@@ -615,6 +615,17 @@ arch-chroot /mnt /bin/bash -c "echo $user:$userpasswd | chpasswd"
 #sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
 arch-chroot /mnt /bin/bash -c "hwclock -w"
 
+#activando servicios dhcpcd NetworkManager sshd
+#Actualiza Servicios y Mirrors
+arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd sshd NetworkManager"
+clear
+echo ""
+arch-chroot /mnt /bin/bash -c "pacman-key --populate archlinux"
+echo ""
+echo "  Claves Actualizadas en el Sistema Base, Espere..."
+echo ""
+clear
+
 if [[ ! -z $wifinet ]];then
 	####################################################################
 	#Copia Red
@@ -629,17 +640,6 @@ if [[ ! -z $wifinet ]];then
 	arch-chroot /mnt /bin/bash -c "netctl enable $wifinetnuevo"
 	####################################################################
 fi
-
-#activando servicios dhcpcd NetworkManager sshd
-#Actualiza Servicios y Mirrors
-arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd sshd"
-clear
-echo ""
-arch-chroot /mnt /bin/bash -c "pacman-key --populate archlinux"
-echo ""
-echo "  Claves Actualizadas en el Sistema Base, Espere..."
-echo ""
-clear
 
 uefi=$( parted $disk print | grep -ic gpt )
 
@@ -715,6 +715,8 @@ cp .dialogrc /mnt/root
 chmod +x /mnt/root/.dialogrc
 cp .dialogrc /mnt/root
 chmod +x /mnt/root/.dialogrc
+
+mkdir /mnt/etc/pacman.d/hooks/
 cp mirrorupgrade.hook /mnt/etc/pacman.d/hooks/mirrorupgrade.hook 
 chmod +x /mnt/etc/pacman.d/hooks/mirrorupgrade.hook
 
