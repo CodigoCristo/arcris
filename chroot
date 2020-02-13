@@ -181,27 +181,26 @@ VM=false
     
     ####################################################################
 kernel=$(uname -a | tail -c -6)
-videotext=$(sudo lshw -class display | grep "product:")
 
 if [ "$VM" == "true" ]; then
     
-            lshw -class display | grep "product:" | dialog --no-collapse --cr-wrap --progressbox "-| Tarjeta de Vídeo |-" 8 80; sleep 3
+            inxi -Gx | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "-| Driver de Vídeo |-" 15 100; sleep 5
             case "$virt" in
                 
                 vbox)   if [ "$kernel" == "Linux" ]; then
                             GPU="virtualbox-guest-utils virtualbox-guest-modules-arch xf86-video-vmware"
                             GPUvirt="vboxservice"
                             echo $GPUvirt | awk -F " " '{print $1}' > GPUvirt                            
-                            dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VirtualBox\nInstalar: VirtualBox Guest" 8 80
+                            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VirtualBox\nInstalar: VirtualBox Guest" 8 80
                         else
                             GPU="virtualbox-guest-utils virtualbox-guest-dkms"
                             GPUvirt="systemd-modules-load"
                             echo $GPUvirt | awk -F " " '{print $1}' > GPUvirt
-                            dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VirtualBox\nInstalar: VirtualBox Guest-dkms" 8 80
+                            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VirtualBox\nInstalar: VirtualBox Guest-dkms" 8 80
                         fi
                 ;;
                 vmware) GPU="xf86-video-vmware xf86-input-vmmouse open-vm-tools net-tools gtkmm mesa mesa-libgl"
-                        dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VMware\nInstalar: xf86-video-vmware" 8 80
+                        dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VMware\nInstalar: xf86-video-vmware" 8 80
                 ;;
                 
                 hyper-v) GPU="xf86-video-fbdev mesa-libgl"                         
@@ -216,7 +215,7 @@ if [ "$VM" == "true" ]; then
 else
 
 dialog --title "-| Driver de Vídeo |-" --yesno "\n¿Auto-Detectar el Hardware de Vídeo?" 7 60
-lshw -class display | grep "product:" | dialog --no-collapse --cr-wrap --progressbox "-| Tarjeta de Vídeo |-" 8 80; sleep 3
+inxi -Gx | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "-| Driver de Vídeo |-" 15 100; sleep 5
 case $? in
    0)  if (lspci | grep VGA | grep "NVIDIA\|nVidia" &>/dev/null); then
     
@@ -225,7 +224,7 @@ lib32-mesa-vdpau lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl \
 libva-utils vdpauinfo libvdpau lib32-libvdpau opencl-mesa clinfo ocl-icd \
 lib32-ocl-icd opencl-headers"
 
-dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
+dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
             
 
         elif (lspci | grep VGA | grep "Radeon R\|R2/R3/R4/R5" &>/dev/null); then
@@ -234,30 +233,84 @@ GPU="xf86-video-amdgpu mesa lib32-mesa vulkan-radeon \
 lib32-vulkan-radeon mesa-vdpau libva-mesa-driver lib32-mesa-vdpau \
 lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl libva-utils vdpauinfo \
 opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers"
-dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
+dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
 
         elif (lspci | grep VGA | grep "ATI\|AMD/ATI" &>/dev/null); then
                     
 GPU="xf86-video-ati mesa lib32-mesa mesa-vdpau libva-mesa-driver \
 lib32-mesa-vdpau lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl \
 libva-utils vdpauinfo opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers"
-dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
+dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
 
         elif (lspci | grep VGA | grep "Intel" &>/dev/null); then
             
 GPU="xf86-video-intel vulkan-intel mesa lib32-mesa intel-media-driver \
 libva-intel-driver libva-vdpau-driver libvdpau-va-gl libva-utils vdpauinfo \
 intel-compute-runtime beignet clinfo ocl-icd lib32-ocl-icd opencl-headers"
-dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
+dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
                 
         else
             
 GPU="xf86-video-vesa mesa lib32-mesa"
-dialog --title "-| Tarjeta de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
+dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\n$GPU" 10 80
             
         fi
 ;;
-   1) echo "Proximamente"
+   1) cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Driver de Vídeo |-"  --column-separator "|" --no-tags --ok-label '< Seleccionar >' \
+    --nocancel --menu "Seleciona el driver correcto:" 13 76 16)
+
+options=(1 "Nvidia 440xx|(Privativo)"
+         2 "Nvidia 390xx|(Privativo)"
+         3 "Nvidia|(Open (Open Source)Source)"
+         4 "AMD - Radeon|(Open Source)"
+         5 "AMD - ATI|(Open Source)"
+         6 "INTEL|(Open Source)")
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+for choice in $choices
+do
+    case $choice in
+        1)
+            GPU="nvidia nvidia-settings nvidia-utils lib32-nvidia-utils libva-utils \
+            vdpauinfo libvdpau lib32-libvdpau opencl-nvidia \
+            lib32-opencl-nvidia ffnvcodec-headers libxnvctrl clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Acepto>"  --msgbox "\n$GPU" 10 80
+            ;;
+        2)
+            GPU="nvidia-390xx nvidia-390xx-settings nvidia-390xx-utils \
+            lib32-nvidia-390xx-utils libva-utils vdpauinfo libvdpau lib32-libvdpau \
+            opencl-nvidia-390xx lib32-opencl-nvidia-390xx libxnvctrl-390xx clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Acepto>"  --msgbox "\n$GPU" 10 80
+            ;;
+        3)
+            GPU="xf86-video-nouveau mesa lib32-mesa mesa-vdpau libva-mesa-driver \
+            lib32-mesa-vdpau lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl \
+            libva-utils vdpauinfo libvdpau lib32-libvdpau opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Acepto>"  --msgbox "\n$GPU" 10 80
+            ;;
+        4)
+            GPU="xf86-video-amdgpu mesa lib32-mesa vulkan-radeon \
+            lib32-vulkan-radeon mesa-vdpau libva-mesa-driver lib32-mesa-vdpau \
+            lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl libva-utils vdpauinfo \
+            opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Acepto>"  --msgbox "\n$GPU" 10 80
+            ;;
+        5)
+            GPU="xf86-video-ati mesa lib32-mesa mesa-vdpau libva-mesa-driver \
+            lib32-mesa-vdpau lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl \
+            libva-utils vdpauinfo opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Acepto>"  --msgbox "\n$GPU" 10 80
+            ;;
+            
+        6)
+            GPU="xf86-video-intel vulkan-intel mesa lib32-mesa intel-media-driver \
+            libva-intel-driver libva-vdpau-driver libvdpau-va-gl libva-utils vdpauinfo \
+            intel-compute-runtime beignet clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Acepto>"  --msgbox "\n$GPU" 10 80
+            ;;
+    esac
+done
 ;;
    255) echo "Presiono la tecla [ESC]"
 ;;
@@ -285,7 +338,7 @@ do
 cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "$titulo" --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu escritorio a instalar - (DE)" 19 60 19)
 
 options=(1 " > | xfce4 | Xfce desktop| <"
-         2 " > | plasma | KDE Plasma desktop| <'"
+         2 " > | plasma | KDE Plasma desktop| <"
          3 " > | deepin | Deepin desktop| <"
          4 " > | gnome | GNOME Classic desktop| <"
          5 " > | gnome-flashback | GNOME 2 desktop| <"
@@ -309,8 +362,8 @@ cmd=(dialog --keep-tite --backtitle "$titulo" \
 --no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Decide en instalar o personalizar las opciones\n\n \
 xfce4 xfce4-goodies network-manager-applet alacarte \n\nSelecciona una opción para XFCE4 \n" 14 60 19)
 
-options=(1 "Predeterminado || Una mejor experiencia con Themes"
-         2 "Escritorio vacio || Sin themes con paquetes extras"
+options=(1 "Predeterminado || Una mejor experiencia con tema"
+         2 "Escritorio vacio || Sin tema con paquetes extras"
          2 "Personalizar || Especificar Paquetes básicos")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
@@ -336,7 +389,7 @@ echo $DM | awk -F " " '{print $1}' > DMservice
             echo $DM | awk -F " " '{print $1}' > DMservice
             ;;
             
-        3) cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes extras del escritorio XFCE4\n[ ESPACIO ] - Para Seleccionar" 12 70 19)
+        3) cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes extras del escritorio XFCE4\n[ ESPACIO ] - Para marcar *" 12 70 19)
             options=(1 "xfce4-goodies || Programas extras de xfce4" off    # any option can be set to default to "on"
                      2 "network-manager-applet || Gestionar conexiones de red" off
                      3 "alacarte || Editar entradas" off)
@@ -367,7 +420,7 @@ done
             ;;
 
         2)  #KDE
-            cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes del escritorio KDE\n[ ESPACIO ] - Para Seleccionar" 12 70 19)
+            cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes del escritorio KDE\n[ ESPACIO ] - Para marcar *" 12 70 19)
             options=(1 "kde-applications || Programas extras de KDE" off 
                      2 "appmenu-gtk || Global Menu GTK2/GTK3" off
                      3 "bluedevil || Bluetooth" off
@@ -401,7 +454,7 @@ done
 ######FINAL KDE PLASMA
 
         3) #DEEPIN
-            cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes del escritorio KDE\n[ ESPACIO ] - Para Seleccionar" 15 100 19)
+            cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes del escritorio Deepin\n[ ESPACIO ] - Para marcar *" 15 100 19)
             options=(1 "> deepin-extra |> Una mejor experiencia" off 
                      2 "> deepin-topbar |> Barra Superior Style Gnome" off
                      3 "> deepin-dock-plugin-arch-update" off
@@ -455,20 +508,20 @@ done
             ;;
         2) #INICIO (WM)
 cmd=(dialog --keep-tite --backtitle "$titulo" \
---no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Select options:" 22 76 16)
+--no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu gestor de ventana a instalar - (WM)" 19 55 16)
 
-options=(1 "> i3wm | Window manager"
-         2 "> 2bwm | Window manager"
-         3 "> cwm | Window manager" 
-         4 "> fluxbox | Window manager"
-         5 "> openbox | Window manager"
-         6 "> blackbox | Window manager"
-         7 "> Bspwm | Window manager"
-         8 "> awesome | Window manager"
-         9 "> dwm | Window manager"
-         10 "> catwm | Window manager"
-         11 "> qtile | Window manager"
-         12 "> xmonad | Window manager")
+options=(1 "> i3wm | Window manager <"
+         2 "> 2bwm | Window manager <"
+         3 "> cwm | Window manager <" 
+         4 "> fluxbox | Window manager <"
+         5 "> openbox | Window manager <"
+         6 "> blackbox | Window manager <"
+         7 "> Bspwm | Window manager <"
+         8 "> awesome | Window manager <"
+         9 "> dwm | Window manager <"
+         10 "> catwm | Window manager <"
+         11 "> qtile | Window manager <"
+         12 "> xmonad | Window manager <")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -476,7 +529,7 @@ for choice in $choices
 do
     case $choice in
         1)
-            WM="i3 i3-gaps dmenu python-pywal polybar compton-tryone-git rofi rofi-menus-git kitty nerd-fonts-complete ttf-google-sans dunst firefox ranger code ms-office-online whatsapp-nativefier-dark telegram-desktop spotify alsa pacmixer backlight-git acpilight"
+            WM="i3 i3-gaps dmenu ranger"
             ;;
         2)
             echo "Second Option"
@@ -489,21 +542,217 @@ do
             ;;
     esac
 done
-
+#FINAL (WM)
             ;;
     esac
 done
 
+#UTILIDADES
+cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  \
+--no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Utilidades para tu sistema\n[ ESPACIO ] - Para marcar *" 15 70 20)
+options=(1 "Lectura y formateo de discos incluido Android" on    # any option can be set to default to "on"
+         2 "Compresión y Descompresión de archivos" off
+         3 "Códecs de video, lectura de todos los formatos de vídeo" off
+         4 "Gufw firewall de red" off
+         5 "Pulseaudio + Códecs de audio" off         
+         6 "Jack2      + Códecs de audio" off
+         7 "ALSA       + Códecs de audio" off)
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            UTIL1="android-file-transfer android-tools android-udev msmtp libmtp \
+                libcddb gvfs gvfs-afc gvfs-smb gvfs-gphoto2 gvfs-mtp gvfs-goa gvfs-nfs gvfs-google gst-libav \
+                dosfstools jfsutils f2fs-tools btrfs-progs exfat-utils ntfs-3g \
+                reiserfsprogs udftools xfsprogs nilfs-utils polkit gpart mtools cifs-utils"
+            ;;
+        2)
+            UTIL2="ark xarchiver unarchiver binutils gzip lha lrzip lzip lz4 p7zip tar xz \
+                bzip2 p7zip lbzip2 arj lzop cpio unrar unzip zstd zip lzip unarj zstd"
+            ;;
+        3)
+            UTIL3="ffmpeg aom libde265 x265 x264 libmpeg2 xvidcore libtheora libvpx \
+                schroedinger sdl gstreamer gst-plugins-bad gst-plugins-base gst-plugins-base-libs \
+                gst-plugins-good gst-plugins-ugly xine-lib libdvdcss libdvdread dvd+rw-tools lame \
+                jasper openjpeg libmng vcdimager"
+            ;;
+        4)
+            UTIL4="gufw"
+            ;;
+        5)
+            UTIL5="pulseaudio pulseaudio-alsa pavucontrol pamixer pulseeffects
+                pulseaudio-equalizer lib32-alsa-plugins lib32-libpulse pulseaudio-equalizer-ladspa
+                libcanberra-pulse libcanberra-gstreamer"
+            ;;
+        6)
+           UTIL5="pulseaudio pulseaudio-alsa pavucontrol pamixer pulseeffects
+                pulseaudio-equalizer lib32-alsa-plugins lib32-libpulse pulseaudio-equalizer-ladspa
+                libcanberra-pulse libcanberra-gstreamer"
+            ;;
+        7)
+            UTIL7="alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer"
+            ;;            
+    esac
+done
+UTIL=" $UTIL1 $UTIL2 $UTIL3 $UTIL4 $UTIL5 $UTIL6 $UTIL7 "
+#FINAL DE UTILIDADES
+
+#NAVEGADORES
+cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
+--no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Seleeciona tu navegador web\n[ ESPACIO ] - Para marcar *" 19 100 19)
+options=(1 "Firefox | Open source" on    # any option can be set to default to "on"
+         2 "Chromium | Open source" off
+         3 "Brave | Open source" off
+         4 "Google Chrome | Proprietary browser" off         
+         5 "Opera | Proprietary browser" off
+         6 "Vivaldi | Proprietary browser" off
+         7 "Tor Browser | Open source" off
+         8 "Falkon | Open source" off
+         9 "Qutebrowser | Open source" off
+         10 "elinks | Console browser" off
+         11 "lynx | Console browser" off
+         12 "w3m | Console browser" off)
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            WEB1="firefox"
+            ;;
+        2)
+            WEB2="chromium"
+            ;;
+        3)
+            WEB3="brave-bin"
+            ;;
+        4)
+            WEB4="google-chrome"
+            ;;
+        5)
+            WEB5="opera"
+            ;;
+        6)
+            WEB6="vivaldi"
+            ;;
+        7)
+            WEB7="tor tor-browser"
+            ;;
+        8)
+            WEB8="falkon"
+            ;;
+        9)
+            WEB9="qutebrowser"
+            ;;
+        10)
+            WEB10="elinks"
+            ;;
+        11)
+            WEB11="lynx"
+            ;;
+        12)
+            WEB12="w3m"
+            ;;
+    esac
+done
+WEB=" $WEB1 $WEB3 $WEB4 $WEB5 $WEB6 $WEB7 $WEB8 $WEB9 $WEB10 $WEB11 $WEB12 "
+# FIN NAVEGADORES
+
+#TIPOGRAFIAS
+cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  \
+--no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Seleeciona tu Tipografía para tu sistema\n[ ESPACIO ] - Para marcar *" 20 80 20)
+options=(1 "gnu-free-fonts" on    # any option can be set to default to "on"
+         2 "ttf-hack" on
+         3 "ttf-inconsolata" on
+         4 "ttf-opensans" on         
+         5 "ttf-ubuntu-font-family" off
+         6 "ttf-tahoma" off
+         7 "nerd-fonts-complete" off
+         8 "ttf-google-sans" off
+         9 "cantarell-fonts" off
+         10 "ttf-linux-libertine" off
+         11 "ttf-ms-fonts" off
+         12 "ttf-envy-code-r" off
+         13 "noto-fonts" off
+         14 "nerd-fonts-dejavu-complete" off
+         15 "bdf-unifont" off
+         16 "system-san-francisco-font-git" off
+         17 "adobe-source-sans-pro-fonts" off
+         18 "adobe-source-serif-pro-fonts" off)
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            FONT1="gnu-free-fonts"
+            ;;
+        2)
+            FONT2="ttf-hack"
+            ;;
+        3)
+            FONT3="ttf-inconsolata"
+            ;;
+        4)
+            FONT4="ttf-opensans"
+            ;;
+        5)
+            FONT5="ttf-ubuntu-font-family"
+            ;;
+        6)
+            FONT6="ttf-tahoma"
+            ;;
+        7)
+            FONT7="nerd-fonts-complete"
+            ;;
+        8)
+            FONT8="ttf-google-sans"
+            ;;
+        9)
+            FONT9="cantarell-fonts"
+            ;;
+        10)
+            FONT10="ttf-linux-libertine"
+            ;;
+        11)
+            FONT11="ttf-ms-fonts"
+            ;;
+        12)
+            FONT12="ttf-envy-code-r"
+            ;;
+        13)
+            FONT13="noto-fonts"
+            ;;
+        14)
+            FONT14="nerd-fonts-dejavu-complete"
+            ;;
+        15)
+            FONT15="bdf-unifont"
+            ;;
+        16)
+            FONT16="system-san-francisco-font-git"
+            ;;
+        17)
+            FONT17="adobe-source-sans-pro-fonts"
+            ;;
+        18)
+            FONT18="adobe-source-serif-pro-fonts"
+            ;;
+            
+    esac
+done
+FONT=" gnome-font-viewer $FONT1 $FONT2 $FONT3 $FONT4 $FONT5 $FONT6 $FONT7 $FONT8 $FONT9 $FONT10 $FONT11 $FONT12 $FONT13 $FONT14 $FONT15 $FONT16 $FONT17 $FONT18 "
+# FIN TIPOGRAFIAS
 
 
-
-
-dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG --noeditmenu --noconfirm --removemake && \
-sudo -u $nombre_usuario yay -Sy $GPU $DE $DM $WM --noeditmenu --noconfirm --removemake \
+dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario pacman -Syyu && \
+sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL --noeditmenu --noconfirm \
 && systemctl enable $(cat DMservice) $(cat GPUvirt) \
-&& sudo -u $nombre_usuario yay -Sy pulseaudio pavucontrol google-chrome gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer vlc gufw leafpad --noeditmenu --noconfirm --removemake" 27 100
+&& sudo -u $nombre_usuario yay -Sy gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer vlc leafpad --noeditmenu --noconfirm --removemake" 27 100
 
-
+clear
 if [[ ! -z $wifinet ]];then
     ####################################################################
     #Copia Red
@@ -515,8 +764,8 @@ netctl disable $wifinet
 systemctl disable netctl
 clear
 systemctl enable dhcpcd NetworkManager
-systemctl start dhcpcd NetworkManager
 clear
+systemctl start dhcpcd NetworkManager
     ####################################################################
 fi
 
@@ -528,7 +777,7 @@ systemctl start dhcpcd NetworkManager
 
 sed -i '80d' /etc/sudoers
 sed -i "80i $nombre_usuario ALL=(ALL) ALL" /etc/sudoers
-
+clear
 pacman -Syu --noconfirm
 alsi
 
