@@ -702,7 +702,6 @@ echo "sh chroot" >> /mnt/root/.bashrc
 echo -e "if [ -f ~/.bashrc ]; then\n\tsource ~/.bashrc\nfi" >> /mnt/root/.bash_profile
 
 umount -R /mnt
-swapoff $swap
 
 dialog --no-collapse --cr-wrap --backtitle "$titulo" \
 --stdout --ok-label 'Reiniciar' --title "--| Finalizar |--" \
