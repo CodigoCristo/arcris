@@ -3,12 +3,12 @@
 
 titulo="| Instalación de ArchLinux - by: ArcriS |"
 
-dialog --backtitle "$titulo" --title "-| INTERNET |-" --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
+dialog --backtitle "$titulo" --title "-| INTERNET |-" --ok-label 'Siguiente' --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
 
 if ping -c 2 www.google.com &> /dev/null; then
 	clear
    	dialog --title "-|  Conexión  |-" --backtitle "$titulo" \
-   	--prgbox "ping -c 3 archlinux.org && echo && echo Si Hay Internet!" 15 100 
+   	--ok-label 'Siguiente' --prgbox "ping -c 3 archlinux.org && echo && echo Si Hay Internet!" 15 100 
 
 else
      dialog --title "-|  Conexión a RED  |-" --backtitle "$titulo" \
@@ -182,8 +182,8 @@ partitioning(){
 partitioning
 mount "$rootfs" /mnt
 
-cmd=(dialog --backtitle "$titulo" --separate-output --ok-label 'Montar partición' --cancel-label 'No tengo más particiones' --checklist "Selecciona otros puntos de montajes:\n\
-[SPACE] para marcar varias opciones\n\
+cmd=(dialog --backtitle "$titulo" --separate-output --ok-label 'Montar y formatear selección' --cancel-label 'No tengo más particiones' \--checklist "Selecciona otros puntos de montajes:\n\
+[SPACE] para marcar * \n\
 [ENTER] para continuar." 10 0 0)
 options=("/boot" "Archivos estáticos del cargador de arranque" off   
 	"/efi" "Archivos EFI del cargador de arranque" off
@@ -349,6 +349,8 @@ while [ "$kernel_var" = "0" ] ; do
 dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel reflector \
 && arch-chroot /mnt reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist \
 && arch-chroot /mnt cat /etc/pacman.d/mirrorlist \
+&& arch-chroot /mnt cp pacman.conf /etc/pacman.conf \
+&& arch-chroot /mnt pacman -Syu \
 && cp pacman.conf /mnt/etc/pacman.conf \
 && arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio \
 alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer \
@@ -668,7 +670,8 @@ export $(cat /mnt/etc/locale.conf)
 cp pacman-chroot.conf /mnt/etc/pacman.conf
 echo ""
 echo ""
-arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo "" && arch-chroot /mnt /bin/bash -c "alsi"
+arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo ""
+arch-chroot /mnt /bin/bash -c "alsi"
 echo ""
 echo ""
 echo ""
