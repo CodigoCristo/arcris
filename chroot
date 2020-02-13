@@ -894,8 +894,47 @@ do
     esac
 done
 OFFICE=" $OFFICE1 $OFFICE3 $OFFICE4 $OFFICE5 $OFFICE6 "
-
 # FIN OFFICE
+
+
+#SH
+cmd=(dialog --no-collapse --cr-wrap --title "-| SHELL del Sistema |-" --backtitle "$titulo" \
+--no-tags --ok-label '< Siguiente >' --nocancel --menu "\nSeleccione\n " 15 70 20)
+options=(1 "zsh"   
+         2 "bash"
+         3 "dash"
+         4 "fish"
+         5 "mksh"
+         6 "tcsh")
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            SH="zsh";;
+
+        2)
+            SH="bash";;
+            
+        3)
+            SH="dash";;
+            
+        4)
+            SH="fish";;
+            
+        5)
+            SH="mksh";;
+            
+        6)
+            SH="tcsh";;
+                                                
+    esac
+done
+#FIN_SH
+
+
+
 
 #Load the X11 keymap
 cmd=(dialog --backtitle "$titulo" --title "-| Distribución del teclado para Xorg |-" --keep-tite --menu "\n" 10 0 10)
@@ -976,10 +1015,11 @@ done
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
 dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario sudo pacman -Syyu && \
-sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $OFFICE $REPRO --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $OFFICE $REPRO $SH --noeditmenu --noconfirm && \
 systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
 
 localectl set-x11-keymap $keymap
+chsh -s /usr/bin/$SH $nombre_usuario
 
 clear
 
