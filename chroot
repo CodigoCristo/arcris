@@ -895,8 +895,10 @@ sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $
 && sudo -u $nombre_usuario yay -Sy gnu-free-fonts leafpad --noeditmenu --noconfirm --removemake" 27 100
 
 clear
+
+####################################################################
 if [[ ! -z $wifinet ]];then
-    ####################################################################
+
     #Copia Red
 wifinet=$(netctl list | awk -F " " '{print $1}')
 netctl disable $wifinet
@@ -909,8 +911,9 @@ clear
 systemctl enable dhcpcd NetworkManager
 clear
 systemctl start dhcpcd NetworkManager
-    ####################################################################
+
 fi
+####################################################################
 
 clear
 systemctl enable dhcpcd NetworkManager
