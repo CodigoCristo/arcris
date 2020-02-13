@@ -349,9 +349,8 @@ while [ "$kernel_var" = "0" ] ; do
 dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel reflector \
 && arch-chroot /mnt reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist \
 && arch-chroot /mnt cat /etc/pacman.d/mirrorlist \
-&& arch-chroot /mnt cp pacman.conf /etc/pacman.conf \
-&& arch-chroot /mnt pacman -Syu \
 && cp pacman.conf /mnt/etc/pacman.conf \
+&& arch-chroot /mnt pacman -Syu \
 && arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio \
 alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer \
 dnsmasq ethtool gpm ndisc6 ntp usb_modeswitch usbutils which inetutils usbutils wvdial nano \
