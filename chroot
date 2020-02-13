@@ -1019,7 +1019,10 @@ sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $
 systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
 
 localectl set-x11-keymap $keymap
+
+chsh -s /bin/$SH
 chsh -s /usr/bin/$SH $nombre_usuario
+chsh -s /bin/$SH $nombre_usuario
 
 clear
 
