@@ -774,6 +774,8 @@ FONT=" gnome-font-viewer $FONT1 $FONT2 $FONT3 $FONT4 $FONT5 $FONT6 $FONT7 $FONT8
 # FIN TIPOGRAFIAS
 
 
+nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
+
 dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario pacman -Syyu && \
 sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO --noeditmenu --noconfirm \
 && systemctl enable $(cat DMservice) $(cat GPUvirt) \
