@@ -1046,7 +1046,7 @@ _end=100
 
 for number in $(seq ${_start} ${_end})
 do
-    sleep 0.06
+    sleep 1
     ProgressBar ${number} ${_end}
 done
 #FIN PROGRESS BARR
