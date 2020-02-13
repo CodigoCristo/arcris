@@ -326,6 +326,7 @@ echo ""
 echo "  Claves Actualizadas del LiveCD, Espere..."
 echo ""
 echo ""
+sleep 5
 pacman -Sy reflector --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD, espere... |" 25 80; sleep 3
 reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 for i in $(seq 1 100)
@@ -350,10 +351,11 @@ while [ "$kernel_var" = "0" ] ; do
 dialog --no-collapse --cr-wrap --backtitle "$titulo" \
 --title "-| Instalando Sistema Base - Linux Stable |-" --stdout --ok-label "Siguiente" --prgbox 'pacstrap /mnt base base-devel reflector && \
 arch-chroot /mnt reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist && \
-arch-chroot /mnt cat /etc/pacman.d/mirrorlist &&\
+arch-chroot /mnt cat /etc/pacman.d/mirrorlist && \
 cp pacman.conf /mnt/etc/pacman.conf && \
 arch-chroot /mnt pacman -Syu && \
 arch-chroot /mnt pacman -Syu && \
+sleep 3 && \
 arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio \
 alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer \
 dnsmasq ethtool gpm ndisc6 ntp usb_modeswitch usbutils which inetutils usbutils wvdial nano \
