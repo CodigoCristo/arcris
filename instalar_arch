@@ -346,9 +346,12 @@ while [ "$kernel_var" = "0" ] ; do
     --stdout --ok-label "Seleccionar" --no-cancel --menu "Elige que kernel necesitas: \nLinux Stable es la mejor opción para iniciar\nLas otras opciones tienen un estilo diferente para instalar Drivers\nLas otras modificaciones del kernel trabajan con Drivers Libres" 16 0 2000 linux-stable "Kernel en su versión estable y módulos de Vanilla Linux" linux-hardened "Kernel enfocado en Seguridad" linux-lts "Kernel con soporte de larga duración" linux-zen "Kernel del esfuerzo colaborativo de varios hackers"`
    
   if [ $kernel_select == linux-stable ]; then
-dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel reflector" 25 80
+dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Instalando Sistema Base - Linux Stable |-" \
+--stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel reflector" 25 80
 
 arch-chroot /mnt /bin/bash -c "reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist"
+
+cat /mnt/etc/pacman.d/mirrorlist | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Mirrors List Arch-chroot > Actualizadas, espere..." 25 2000; sleep 3
 
 cp pacman.conf /mnt/etc/pacman.conf
 
