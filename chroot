@@ -617,7 +617,10 @@ cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  \
 options=(1 "Lectura y formateo de discos incluido Android" on    # any option can be set to default to "on"
          2 "Compresión y Descompresión de archivos" off
          3 "Códecs de video, lectura de todos los formatos de vídeo" off
-         4 "Gufw firewall de red" off)
+         4 "Gufw firewall de red" off
+         5 "gnome-disk-utility - Administrador de Discos" off
+         6 "gparted - Administrador de Discos" off)
+
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
 for choice in $choices
@@ -641,10 +644,18 @@ do
             ;;
         4)
             UTIL4="gufw"
-            ;;    
+            ;;
+            
+        5)
+            UTIL5="gnome-disk-utility"
+            ;;
+               
+        6)
+            UTIL6="gparted"
+            ;;   
     esac
 done
-UTIL=" $UTIL1 $UTIL2 $UTIL3 $UTIL4 "
+UTIL=" $UTIL1 $UTIL2 $UTIL3 $UTIL4 $UTIL5 $UTIL6 "
 #FINAL DE UTILIDADES
 
 #REPRODUCTOR
@@ -933,7 +944,36 @@ do
 done
 #FIN_SH
 
+#Administrador de Procesos
+cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  --title "-| Administrador de Procesos |-" \
+--no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 15 70 20)
+options=(1 "gnome-system-monitor" on
+         2 "htop" on
+         3 "gotop" off
+         4 "gtop" off)
 
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            AP1="gnome-system-monitor"
+            ;;
+        2)
+            AP2="htop"
+            ;;
+        3)
+            AP3="gotop"
+            ;;
+        4)
+            AP4="gtop"
+            ;;
+            
+    esac
+done
+AP=" $AP1 $AP2 $AP3 $AP4 "
+#FINAL DE Administrador de Procesos
 
 
 #Load the X11 keymap
@@ -1014,9 +1054,7 @@ done
 
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
-dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario sudo pacman -Syyu && \
-sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $OFFICE $REPRO $SH --noeditmenu --noconfirm && \
-systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
+dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario sudo pacman -Syyu && sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $OFFICE $REPRO $SH $AP --noeditmenu --noconfirm && systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
 
 localectl set-x11-keymap $keymap
 
