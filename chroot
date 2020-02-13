@@ -506,9 +506,19 @@ done
             
             ;;
 ######FINAL DEEPIN
-        4)
-            echo "Fourth Option"
+
+        4)  #INICIO GNOME
+            DE="gnome gnome-extra gnome-shell"
+            DM="gdm accountsservice"
+            echo $DM | awk -F " " '{print $1}' > DMservice
             ;;
+        
+        5)  #INICIO GNOME flashback
+            DE="gnome-flashback gnome-applets sensors-applet gnome-shell"
+            DM="gdm accountsservice"
+            echo $DM | awk -F " " '{print $1}' > DMservice
+            ;;
+            
     esac
 done
 #FIN ESCRITORIO

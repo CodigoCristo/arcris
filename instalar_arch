@@ -355,7 +355,7 @@ arch-chroot /mnt cat /etc/pacman.d/mirrorlist && \
 cp pacman.conf /mnt/etc/pacman.conf && \
 arch-chroot /mnt pacman -Syu && \
 arch-chroot /mnt pacman -Syu && \
-sleep 3 && \
+sleep 5 && \
 arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio \
 alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer \
 dnsmasq ethtool gpm ndisc6 ntp usb_modeswitch usbutils which inetutils usbutils wvdial nano \
