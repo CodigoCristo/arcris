@@ -684,10 +684,14 @@ echo ""
 sleep 6
 
 #Copia el script posterior a la instalación en el disco duro
-cp chroot /mnt/root && chmod +x /mnt/root/chroot
-cp .dialogrc /mnt/root && chmod +x /mnt/root/.dialogrc
-cp .dialogrc /mnt/root && chmod +x /mnt/root/.dialogrc
-cp mirrorupgrade.hook /mnt/etc/pacman.d/hooks/mirrorupgrade.hook && chmod +x /mnt/etc/pacman.d/hooks/mirrorupgrade.hook
+cp chroot /mnt/root
+chmod +x /mnt/root/chroot
+cp .dialogrc /mnt/root
+chmod +x /mnt/root/.dialogrc
+cp .dialogrc /mnt/root
+chmod +x /mnt/root/.dialogrc
+cp mirrorupgrade.hook /mnt/etc/pacman.d/hooks/mirrorupgrade.hook 
+chmod +x /mnt/etc/pacman.d/hooks/mirrorupgrade.hook
 
 sed -i "s/selectedkeymap/${keymap}/g" /mnt/root/chroot
 
