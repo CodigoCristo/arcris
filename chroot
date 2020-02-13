@@ -609,7 +609,7 @@ do
                 reiserfsprogs udftools xfsprogs nilfs-utils polkit gpart mtools cifs-utils"
             ;;
         2)
-            UTIL2="xarchiver unarchiver binutils gzip lha lrzip lzip lz4 p7zip tar xz \
+            UTIL2="ark xarchiver unarchiver binutils gzip lha lrzip lzip lz4 p7zip tar xz \
                 bzip2 p7zip lbzip2 arj lzop cpio unrar unzip zstd zip lzip unarj zstd"
             ;;
         3)
@@ -625,6 +625,70 @@ do
 done
 UTIL=" $UTIL1 $UTIL2 $UTIL3 $UTIL4 "
 #FINAL DE UTILIDADES
+
+#REPRODUCTOR
+cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
+--no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' \
+--title "-| Reproductores Video y Audio |-" --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *" 19 100 19)
+options=(   1 "vlc" on
+            2 "mpv" off
+            3 "mplayer" off
+            4 "nuclear-player-bin" off            
+            5 "elisa" off
+            6 "spotify" off
+            7 "clementine" off
+            8 "audacious" off
+            9 "xplayer" off
+            10 "rhythmbox" off
+            11 "moc" off
+            12 "cmus" off)
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            REPRO1="vlc"
+            ;;
+        2)
+            REPRO2="mpv"
+            ;;
+        3)
+            REPRO3="mplayer"
+            ;;
+        4)
+            REPRO4="nuclear-player-bin"
+            ;;
+        5)
+            REPRO5="elisa"
+            ;;
+        6)
+            REPRO6="spotify"
+            ;;
+        7)
+            REPRO7="clementine"
+            ;;
+        8)
+            REPRO8="audacious"
+            ;;
+        9)
+            REPRO9="xplayer"
+            ;;
+        10)
+            REPRO10="rhythmbox"
+            ;;
+        11)
+            REPRO11="moc"
+            ;;
+        12)
+            REPRO12="cmus"
+            ;;
+    esac
+done
+REPRO=" $REPRO1 $REPRO3 $REPRO4 $REPRO5 $REPRO6 $REPRO7 $REPRO8 $REPRO9 $REPRO10 $REPRO11 $REPRO12 "
+
+# FIN REPRODUCTOR
 
 #NAVEGADORES
 cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
@@ -773,13 +837,52 @@ done
 FONT=" gnome-font-viewer $FONT1 $FONT2 $FONT3 $FONT4 $FONT5 $FONT6 $FONT7 $FONT8 $FONT9 $FONT10 $FONT11 $FONT12 $FONT13 $FONT14 $FONT15 $FONT16 $FONT17 $FONT18 "
 # FIN TIPOGRAFIAS
 
+#OFFICE
+cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
+--no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Suite de Ofimática\n[ ESPACIO ] - Para marcar o desmarcar *" 13 100 13)
+options=(    1 "LibreOffice | libreoffice-still" on
+             2 "LibreOffice | libreoffice-fresh" off
+             3 "WPS Office | wps-office" off
+             4 "OnlyOffice | onlyoffice-bin" off
+             5 "OpenOffice | openoffice" off
+             6 "SoftMaker Office | freeoffice " off)
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            OFFICE1="libreoffice-still libreoffice-still-es"
+            ;;
+        2)
+            OFFICE2="libreoffice-fresh libreoffice-fresh-es"
+            ;;
+        3)
+            OFFICE3="wps-office ttf-wps-fonts wps-office-mui-es-es"
+            ;;
+        4)
+            OFFICE4="onlyoffice-bin"
+            ;;
+        5)
+            OFFICE5="openoffice openoffice-extension-languagetool"
+            ;;
+        6)
+            OFFICE6="freeoffice"
+            ;;
+    esac
+done
+OFFICE=" $OFFICE1 $OFFICE3 $OFFICE4 $OFFICE5 $OFFICE6 "
+
+# FIN OFFICE
+
 
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
 dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario pacman -Syyu && \
-sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO --noeditmenu --noconfirm \
+sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $OFFICE $REPRO --noeditmenu --noconfirm \
 && systemctl enable $(cat DMservice) $(cat GPUvirt) \
-&& sudo -u $nombre_usuario yay -Sy gnu-free-fonts vlc leafpad --noeditmenu --noconfirm --removemake" 27 100
+&& sudo -u $nombre_usuario yay -Sy gnu-free-fonts leafpad --noeditmenu --noconfirm --removemake" 27 100
 
 clear
 if [[ ! -z $wifinet ]];then
@@ -791,6 +894,7 @@ clear
 wifinet=$(netctl list | awk -F " " '{print $2}')
 netctl disable $wifinet
 systemctl disable netctl
+
 clear
 systemctl enable dhcpcd NetworkManager
 clear
