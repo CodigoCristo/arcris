@@ -629,6 +629,7 @@ arch-chroot /mnt /bin/bash -c "pacman-key --populate archlinux"
 echo ""
 echo "  Claves Actualizadas en el Sistema Base, Espere..."
 echo ""
+sleep 5
 clear
 
 if [[ ! -z $wifinet ]];then
