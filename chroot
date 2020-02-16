@@ -57,7 +57,9 @@ dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| INTERNET |" --ms
 if ping -c 2 www.google.com &> /dev/null; then
     
    dialog --title "|  Conexión a RED  |" --backtitle "$titulo" \
-   --prgbox "ping -c 3 archlinux.org && echo && echo Si Hay Internet!" 17 100 
+   --prgbox "ping -c 3 archlinux.org && echo && echo Si Hay Internet!" 17 100
+    wifinet1=$(netctl list | awk -F " " '{print $1}')
+    wifinet2=$(netctl list | awk -F " " '{print $2}')
 
 else
         
@@ -147,6 +149,7 @@ sed -i "80i $nombre_usuario ALL=(ALL) NOPASSWD: ALL" /etc/sudoers
 
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Instalando AUR helper |" --stdout --ok-label "Siguiente" --prgbox "cd /home/$nombre_usuario \
             && git clone https://aur.archlinux.org/yay-bin.git \
+            && chown -R $nombre_usuario:users /home/$nombre_usuario
             && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin \
             && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD \
             && cd /home/$nombre_usuario/yay-bin \
@@ -1065,14 +1068,14 @@ chsh -s /bin/$SH $nombre_usuario
 clear
 
 ####################################################################
-
-wifinet=$(netctl list | awk -F " " '{print $1}')
-netctl disable $wifinet
+if [[ -n $wifinet1 || -n $wifinet2 ]]; then
+wifinet1=$(netctl list | awk -F " " '{print $1}')
+netctl disable $wifinet1
 clear
-wifinet=$(netctl list | awk -F " " '{print $2}')
-netctl disable $wifinet
+wifinet2=$(netctl list | awk -F " " '{print $2}')
+netctl disable $wifinet2
 systemctl disable netctl
-
+fi
 clear
 systemctl enable dhcpcd NetworkManager
 clear
