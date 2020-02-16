@@ -320,13 +320,8 @@ done
 
 clear
 cp pacman.conf /etc/pacman.conf
-echo ""
-pacman-key --populate archlinux 
-echo ""
-echo "  Claves Actualizadas del LiveCD, Espere..."
-echo ""
-echo ""
-sleep 5
+
+pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Claves Actualizadas del LiveCD, Espere... |" 25 80; sleep 3
 pacman -Sy reflector --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD, espere... |" 25 80; sleep 3
 reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 for i in $(seq 1 100)
