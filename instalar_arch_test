@@ -611,12 +611,9 @@ arch-chroot /mnt /bin/bash -c "echo $user:$userpasswd | chpasswd"
 arch-chroot /mnt /bin/bash -c "hwclock -w"
 
 
-WIRED_ETHERNET=`ip link | grep "ens\|eno\|enp\|eth" | awk '{print $2}'| sed 's/://' | sed '1!d'`
-
-
 #activando servicios dhcpcd NetworkManager sshd
 #Actualiza Servicios y Mirrors
-arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd@${WIRED_ETHERNET}.service sshd.service"
+arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd sshd"
 clear
 
 if [[ -n $wifinet ]]; then

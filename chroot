@@ -537,7 +537,8 @@ done
 
         7) ;;
 
-        8)  DE="enlightenment terminology econnman ecrire-git eluminance-git epour epymc-git elemines-git ephoto"
+        8)  DE="enlightenment terminology network-manager-applet eluminance-git ephoto stalonetray"
+            echo exec enlightenment_start > /home/$nombre_usuario/.xinitrc
             DM="entrance-git"
             echo entrance > DMservice
             ;;
@@ -938,7 +939,7 @@ do
             SH="zsh zsh-completions zsh-syntax-highlighting";;
 
         2)
-            SH="bash";;
+            SH="bash bash-completion autojump command-not-found";;
             
         3)
             SH="dash";;
@@ -988,6 +989,47 @@ AP=" $AP1 $AP2 $AP3 $AP4 "
 #FINAL DE Administrador de Procesos
 
 
+#Redes Sociales
+cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  --title "-| Redes Sociales |-" \
+--no-tags --ok-label '< Siguiente >' --column-separator "|" --cancel-label '< No deseo esto >' --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 15 70 20)
+options=(1 "Telegram | telegram-desktop" on
+         2 "IGdm | App de chat de Instagram" off
+         3 "Whatsapp | whatsapp-nativefier-dark" off
+         4 "Facebook Messenger | caprine" off
+         5 "Netflix | netflix-qdesktop" off
+         6 "Skype | skypeforlinux-preview-bin" off)
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            RS1="telegram-desktop aspell-es"
+            ;;
+        2)
+            RS2="igdm-bin aspell-es"
+            ;;
+        3)
+            RS3="whatsapp-nativefier-dark aspell-es"
+            ;;
+        4)
+            RS4="caprine aspell-es"
+            ;;    
+        5)
+            RS5="netflix-qdesktop aspell-es"
+            ;;            
+        6)
+            RS6="skypeforlinux-preview-bin aspell-es"
+            ;;
+            
+    esac
+done
+RS=" $RS1 $RS2 $RS3 $RS4 $RS5 $RS6 "
+#FINAL DE Redes Sociales
+
+
+
 #Load the X11 keymap
 cmd=(dialog --backtitle "$titulo" --title "-| Distribución del teclado para Xorg |-" --keep-tite --menu "\n" 10 0 10)
 
@@ -1034,34 +1076,7 @@ done
 #FIN the X11 keymap
 
 clear
-pacman-key --populate archlinux 
-echo ""
-#INICIO PROGRESS BARR
-function ProgressBar {
-    let _progress=(${1}*100/${2}*100)/100
-    let _done=(${_progress}*6)/10
-    let _left=60-$_done
-# Build progressbar string lengths
-    _fill=$(printf "%${_done}s")
-    _empty=$(printf "%${_left}s")
-
-# 1.2 Build progressbar strings and print the ProgressBar line
-# 1.2.1 Output example:                           
-# 1.2.1.1 Progress : [########################################] 100%
-printf "\r > Cargando : |${_fill// /▇}${_empty// /-}| ${_progress}%%"
-
-}
-# Variables
-_start=1
-
-_end=100
-
-for number in $(seq ${_start} ${_end})
-do
-    sleep 1
-    ProgressBar ${number} ${_end}
-done
-#FIN PROGRESS BARR
+pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Claves Actualizadas del LiveCD, Espere... |" 25 80; sleep 3
 
 
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
@@ -1069,7 +1084,7 @@ nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1)
 mkdir /home/$nombre_usuario/AUR
 chown -R $nombre_usuario:users /home/$nombre_usuario/AUR
 
-dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario sudo pacman -Syyu && sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $OFFICE $REPRO $SH $AP --noeditmenu --noconfirm --builddir /home/$nombre_usuario/AUR  && systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
+dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario sudo pacman -Syyu && sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $OFFICE $REPRO $SH $AP $RS --noeditmenu --noconfirm --builddir /home/$nombre_usuario/AUR && systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
 
 localectl set-x11-keymap $keymap
 
@@ -1101,7 +1116,8 @@ sed -i "80i $nombre_usuario ALL=(ALL) ALL" /etc/sudoers
 clear
 pacman -Syu --noconfirm
 alsi
-
+sleep 5
+clear
 #Deshabilitar el inicio de sesión automático root tn tty1
 rm -R /etc/systemd/system/getty@tty1.service.d
 sed -i 's/sh chroot//g' /root/.bashrc
