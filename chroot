@@ -149,7 +149,7 @@ sed -i "80i $nombre_usuario ALL=(ALL) NOPASSWD: ALL" /etc/sudoers
 
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Instalando AUR helper |" --stdout --ok-label "Siguiente" --prgbox "cd /home/$nombre_usuario \
             && git clone https://aur.archlinux.org/yay-bin.git \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario
+            && chown -R $nombre_usuario:users /home/$nombre_usuario \
             && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin \
             && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD \
             && cd /home/$nombre_usuario/yay-bin \
@@ -1057,7 +1057,10 @@ done
 
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
-dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario sudo pacman -Syyu && sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $OFFICE $REPRO $SH $AP --noeditmenu --noconfirm && systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
+mkdir /home/$nombre_usuario/AUR
+chown -R $nombre_usuario:users /home/$nombre_usuario/AUR
+
+dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario sudo pacman -Syyu && sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $OFFICE $REPRO $SH $AP --noeditmenu --noconfirm --builddir /home/$nombre_usuario/AUR  && systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
 
 localectl set-x11-keymap $keymap
 
