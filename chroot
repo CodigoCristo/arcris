@@ -533,6 +533,15 @@ done
             echo $DM | awk -F " " '{print $1}' > DMservice
             ;;
             
+        6) ;;
+
+        7) ;;
+
+        8)  DE="enlightenment terminology econnman ecrire-git eluminance-git epour epymc-git elemines-git ephoto"
+            DM="entrance-git"
+            echo entrance > DMservice
+            ;;
+            
     esac
 done
 #FIN ESCRITORIO
@@ -926,7 +935,7 @@ for choice in $choices
 do
     case $choice in
         1)
-            SH="zsh";;
+            SH="zsh zsh-completions zsh-syntax-highlighting";;
 
         2)
             SH="bash";;
