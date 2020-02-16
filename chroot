@@ -516,7 +516,7 @@ done
             DE="$deepin $deepin1 $deepin2 $deepin3 $deepin4 $deepin5 $deepin6 $deepin7"
 
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
-            echo $DM | awk -F " " '{print $1}' > DMservice
+            echo lightdm > DMservice
             
             ;;
 ######FINAL DEEPIN
@@ -524,22 +524,21 @@ done
         4)  #INICIO GNOME
             DE="gnome gnome-extra gnome-shell"
             DM="gdm"
-            echo $DM | awk -F " " '{print $1}' > DMservice
+            echo gdm > DMservice
             ;;
         
         5)  #INICIO GNOME flashback
             DE="gnome-flashback gnome-applets sensors-applet gnome-shell"
             DM="gdm"
-            echo $DM | awk -F " " '{print $1}' > DMservice
+            echo gdm > DMservice
             ;;
             
         6) ;;
 
         7) ;;
 
-        8)  DE="enlightenment terminology network-manager-applet eluminance-git ephoto stalonetray"
+        8)  DE="enlightenment entrance-git terminology network-manager-applet eluminance-git ephoto stalonetray"
             echo exec enlightenment_start > /home/$nombre_usuario/.xinitrc
-            DM="entrance-git"
             echo entrance > DMservice
             ;;
             
@@ -1076,22 +1075,35 @@ done
 #FIN the X11 keymap
 
 clear
-pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Claves Actualizadas del LiveCD, Espere... |" 25 80; sleep 3
+pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Claves Actualizadas del LiveCD, Espere... |" 27 100; sleep 3
 
 
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
 mkdir /home/$nombre_usuario/AUR
 chown -R $nombre_usuario:users /home/$nombre_usuario/AUR
+mkdir /home/$nombre_usuario/.gnupg
+chown -R $nombre_usuario:users /home/$nombre_usuario/.gnupg
 
-dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario sudo pacman -Syyu && sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $OFFICE $REPRO $SH $AP $RS --noeditmenu --noconfirm --builddir /home/$nombre_usuario/AUR && systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
+dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $OFFICE $REPRO $SH $AP $RS --noeditmenu --noconfirm --builddir /home/$nombre_usuario/AUR && systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
 
 localectl set-x11-keymap $keymap
 
+echo $SH | awk -F " " '{print $1}' >> shell
+SH=$(cat shell)
 chsh -s /bin/$SH
 chsh -s /usr/bin/$SH $nombre_usuario
 chsh -s /bin/$SH $nombre_usuario
+rm shell
 
+clear
+
+sed -i '80d' /etc/sudoers
+sed -i "80i $nombre_usuario ALL=(ALL) ALL" /etc/sudoers
+clear
+pacman -Syu --noconfirm
+alsi
+sleep 5
 clear
 
 ####################################################################
@@ -1107,17 +1119,9 @@ clear
 systemctl enable dhcpcd NetworkManager
 clear
 systemctl start dhcpcd NetworkManager
-
+clear
 ####################################################################
 
-
-sed -i '80d' /etc/sudoers
-sed -i "80i $nombre_usuario ALL=(ALL) ALL" /etc/sudoers
-clear
-pacman -Syu --noconfirm
-alsi
-sleep 5
-clear
 #Deshabilitar el inicio de sesión automático root tn tty1
 rm -R /etc/systemd/system/getty@tty1.service.d
 sed -i 's/sh chroot//g' /root/.bashrc

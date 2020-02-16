@@ -355,7 +355,7 @@ cat /mnt/etc/pacman.d/mirrorlist | dialog --no-collapse --cr-wrap --backtitle "I
 cp pacman.conf /mnt/etc/pacman.conf
 
 dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
---title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio cryptsetup lvm2 logrotate nano espeakup alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager openssh  iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils hddtemp alsi inxi-git unzip zip --noconfirm" 25 80
+--title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio cryptsetup lvm2 logrotate nano espeak-ng alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager openssh  iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils hddtemp alsi inxi-git unzip zip --noconfirm" 25 80
 
 ##################################################################################
 
@@ -690,7 +690,8 @@ do
     ProgressBar ${number} ${_end}
 done
 #FIN PROGRESS BARR
-arch-chroot /mnt /bin/bash -c "espeak -a 200 'Bienvenido a, Arch Linux, hecho por código cristo, gracias por su preferencia' -v es"
+arch-chroot /mnt /bin/bash -c "amixer set Master 100%+"
+arch-chroot /mnt /bin/bash -c "espeak-ng -a 200 'Bienvenido a su sistema, Arch Linux, hecho por, código, cristo. Visite nuestro grupo en Tele,gram' -v es"
 #Copia el script posterior a la instalación en el disco duro
 cp chroot /mnt/root
 chmod +x /mnt/root/chroot
@@ -717,6 +718,6 @@ dialog --no-collapse --cr-wrap --backtitle "$titulo" \
 --stdout --ok-label 'Reiniciar' --title "--| Finalizar |--" \
 --msgbox "\n| La computadora se reiniciara para finalizar |\n| Cuando este apagada la computadora retire la USB o CD |" 8 66
 
-arch-chroot /mnt /bin/bash -c "espeak -a 200 'RETIRE SU U-S-B | CUANDO EL EQUIPO ESTE APAGADO' -v es"
+arch-chroot /mnt /bin/bash -c "espeak-ng -a 200 'RETIRE SU U-S-B, | ,CUANDO EL EQUIPO, ESTE ,APAGADO..' -v es"
 
 reboot
