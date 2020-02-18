@@ -320,15 +320,16 @@ done
 
 clear
 cp pacman.conf /etc/pacman.conf
-echo ""
-pacman-key --populate archlinux 
-echo ""
-echo "  Claves Actualizadas del LiveCD, Espere..."
-echo ""
-echo ""
-sleep 5
-pacman -Sy reflector --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD, espere... |" 25 80; sleep 3
+
+pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Claves Actualizadas del LiveCD, Espere... |" 25 80; sleep 3
+pacman -Sy reflector alsa-utils espeak-ng --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando Reflector en el LiveCD, espere... |" 25 80; sleep 3
 reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+amixer sset Master unmute
+clear
+amixer sset Master 100%+
+clear
+alsactl init
+clear
 for i in $(seq 1 100)
 do
     sleep 0.04 
@@ -360,7 +361,7 @@ cat /mnt/etc/pacman.d/mirrorlist | dialog --no-collapse --cr-wrap --backtitle "I
 cp pacman.conf /mnt/etc/pacman.conf
 
 dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
---title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer dnsmasq ethtool gpm ndisc6 ntp usb_modeswitch usbutils which inetutils usbutils wvdial nano dhcp dhcpcd dhclient ppp netctl networkmanager openssh iw iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice ntfs-3g mtools exfat-utils cifs-utils hddtemp alsi inxi-git unzip zip --noconfirm" 25 80
+--title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio cryptsetup lvm2 logrotate nano alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager openssh  iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils hddtemp alsi inxi-git unzip zip --noconfirm" 25 80
 
 ##################################################################################
 
@@ -376,15 +377,16 @@ r8168=$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'RTL8111/8168/8411' ")
 
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Microcode |" --yesno "\n¿Actualizaciones para el microcódigo del procesador?" 7 58 
 case $? in 
-	0) microcode=$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'Host bridge: Intel' ")
+	0) microcode=$(lspci -k | grep 'Host bridge: Intel')
+		lspci -k | grep 'Host bridge:'  > procesador
 		if [[ $microcode  = *Intel* || $microcode = *intel* || $microcode = *INTEL* ]]
 		then			
-		dialog --backtitle "$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'Host bridge: Intel'")" --title "| Microcode |" --stdout --ok-label "Siguiente" \
+		dialog --backtitle "$(cat procesador)" --title "| Microcode |" --stdout --ok-label "Siguiente" \
 				--prgbox "arch-chroot /mnt pacman -Sy intel-ucode --noconfirm" 25 80
 
 		else
 			
-		dialog --backtitle "$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'Host bridge: AMD'")" --title "| Microcode |" --stdout --ok-label "Siguiente" \
+		dialog --backtitle "$(cat procesador)" --title "| Microcode |" --stdout --ok-label "Siguiente" \
 				--prgbox "arch-chroot /mnt pacman -Sy amd-ucode --noconfirm" 25 80
 		fi;;
 	1) 
@@ -400,7 +402,7 @@ case $? in
 		else
 			
 		dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
-		--prgbox "arch-chroot /mnt pacman -Sy wireless-regdb wpa_supplicant wireless_tools --noconfirm" 25 80
+		--prgbox "arch-chroot /mnt pacman -Sy iw wireless_tools wpa_supplicant dialog wireless-regdb --noconfirm" 25 80
 				
 		fi;;
 	1) 
@@ -614,12 +616,13 @@ arch-chroot /mnt /bin/bash -c "echo $user:$userpasswd | chpasswd"
 #sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
 arch-chroot /mnt /bin/bash -c "hwclock -w"
 
+
 #activando servicios dhcpcd NetworkManager sshd
 #Actualiza Servicios y Mirrors
 arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd sshd"
 clear
 
-
+if [[ -n $wifinet ]]; then
 #Copia Red
 wlan=$(echo /proc/net/dev*/w*)
 lan=${wlan##*/}
@@ -630,6 +633,7 @@ wifinetnuevo=$(netctl list | awk -F " " '{print $2}' | tail -c +${numeronetctl} 
 cp /etc/netctl/$wifinet /mnt/etc/netctl/$wifinetnuevo
 arch-chroot /mnt /bin/bash -c "netctl enable $wifinetnuevo"
 clear
+fi
 #Copia Red
 
 
@@ -665,13 +669,6 @@ arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo ""
 arch-chroot /mnt /bin/bash -c "alsi"
 echo ""
 echo ""
-echo "                          /////////////////////////////////||"
-echo "                          //                               ||"
-echo "                          //   Bienvenido a Arch Linux     ||"
-echo "                          //                               ||"
-echo "                          /////////////////////////////////||"
-echo ""
-echo ""
 
 #INICIO PROGRESS BARR
 function ProgressBar {
@@ -700,6 +697,9 @@ do
 done
 #FIN PROGRESS BARR
 
+
+
+espeak-ng -a 200 'Bienvenido a su sistema, Arch Linux, hecho por, código, cristo. Visite nuestro grupo en Tele,gram' -v es
 #Copia el script posterior a la instalación en el disco duro
 cp chroot /mnt/root
 chmod +x /mnt/root/chroot
@@ -725,5 +725,7 @@ umount -R /mnt
 dialog --no-collapse --cr-wrap --backtitle "$titulo" \
 --stdout --ok-label 'Reiniciar' --title "--| Finalizar |--" \
 --msgbox "\n| La computadora se reiniciara para finalizar |\n| Cuando este apagada la computadora retire la USB o CD |" 8 66
+
+espeak-ng -a 200 'RETIRE SU U-S-B, | ,CUANDO EL EQUIPO, ESTE ,APAGADO..' -v es
 
 reboot

@@ -140,12 +140,8 @@ esac
 fi
 
 
-
-
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 #Para que el sudo no pida clave
-sed -i "80i $nombre_usuario ALL=(ALL) NOPASSWD: ALL" /etc/sudoers
-
 
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Instalando AUR helper |" --stdout --ok-label "Siguiente" --prgbox "cd /home/$nombre_usuario \
             && git clone https://aur.archlinux.org/yay-bin.git \
@@ -414,11 +410,11 @@ echo $DM | awk -F " " '{print $1}' > DMservice
             options=(1 "xfce4-goodies || Programas extras de xfce4" off    # any option can be set to default to "on"
                      2 "network-manager-applet || Gestionar conexiones de red" off
                      3 "alacarte || Editar entradas" off)
-            choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+            choices2=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
             clear
-            for choice in $choices
+            for choice2 in $choices2
             do
-                case $choice in
+                case $choice2 in
                     1)
                         xfce4_2="xfce4-goodies"
                         ;;
@@ -1080,12 +1076,21 @@ pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --back
 
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
-mkdir /home/$nombre_usuario/AUR
-chown -R $nombre_usuario:users /home/$nombre_usuario/AUR
-mkdir /home/$nombre_usuario/.gnupg
-chown -R $nombre_usuario:users /home/$nombre_usuario/.gnupg
-
-dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $OFFICE $REPRO $SH $AP $RS --noeditmenu --noconfirm --builddir /home/$nombre_usuario/AUR && systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
+dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $GPU --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $DE --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $DM --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $WM --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $WEB --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $FONT --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $UTIL --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $AUDIO --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $OFFICE --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $REPRO --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $SH --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $AP --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $RS --noeditmenu --noconfirm && \
+systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
 
 localectl set-x11-keymap $keymap
 
