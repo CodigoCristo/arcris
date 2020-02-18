@@ -704,6 +704,9 @@ chmod +x /mnt/root/pacman-chroot.conf
 
 cp chroot /mnt/root
 chmod +x /mnt/root/chroot
+cp zshrc /mnt/root
+chmod +x /mnt/root/zshrc
+
 cp .dialogrc /mnt/root
 chmod +x /mnt/root/.dialogrc
 cp .dialogrc /mnt/root

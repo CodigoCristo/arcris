@@ -1063,7 +1063,9 @@ for choice in $choices
 do
     case $choice in
         1)
-            SH="zsh zsh-completions zsh-syntax-highlighting";;
+            SH="zsh zsh-completions zsh-syntax-highlighting"
+            cp zshrc /home/$nombre_usuario/.zshrc
+            ;;
 
         2)
             SH="bash bash-completion autojump command-not-found";;
