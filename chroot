@@ -144,15 +144,15 @@ nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1)
 #Para que el sudo no pida clave
 
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Instalando AUR helper |" --stdout --ok-label "Siguiente" --prgbox "cd /home/$nombre_usuario \
-            && git clone https://aur.archlinux.org/yay-bin.git \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin \
-            && chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD \
-            && cd /home/$nombre_usuario/yay-bin \
-            && sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm \
-            && pacman -U *.pkg.tar.xz --noconfirm \
-            && rm -Rf /home/$nombre_usuario/yay-bin \
-            && cd" 25 100
+&& git clone https://aur.archlinux.org/yay-bin.git \
+&& chown -R $nombre_usuario:users /home/$nombre_usuario \
+&& chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin \
+&& chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD \
+&& cd /home/$nombre_usuario/yay-bin \
+&& sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm \
+&& pacman -U *.pkg.tar.xz --noconfirm \
+&& rm -Rf /home/$nombre_usuario/yay-bin \
+&& cd && yay" 25 100
             
 # yay -S gotop-git --noeditmenu --noconfirm --removemake
 
@@ -1086,7 +1086,68 @@ do
 done
 #FIN_SH
 
+dialog --title "-| AUR Helper |-" --backtitle "$titulo" --yesno "\n¿Desea un asistente para hacer descargas en Arch User Repository?" 7 70
 
+case $? in
+   0) #AUR
+cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  --title "-| AUR Helper |-" \
+--no-tags --ok-label '< Siguiente >' --column-separator "|" --cancel-label '< No deseo esto >' --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 20 80 20)
+options=(1 "yay | Terminal" on
+         2 "trizen | Terminal" off
+         3 "pikaur | Terminal" off
+         4 "aurman | Terminal" off
+         5 "pakku | Terminal" off
+         6 "Pamac | Graphical" on
+         7 "Octopi | Graphical" off
+         8 "Cylon | Graphical" off
+         9 "Argon | Graphical" off
+         10 "Pakku GUI | Graphical" off)
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            AUR1="yay"
+            ;;
+        2)
+            AUR2="trizen"
+            ;;
+        3)
+            AUR3="pikaur"
+            ;;
+        4)
+            AUR4="aurman"
+            ;;    
+        5)
+            AUR5="pakku"
+            ;;            
+        6)
+            AUR6="pamac-aur pamac-tray-appindicator pamac-zsh-completions"
+            ;;
+        7)
+            AUR7="octopi"
+            ;; 
+        8)
+            AUR8="cylon"
+            ;;
+        9)
+            AUR9="argon"
+            ;; 
+        10)
+            AUR10="pakku-gui"
+            ;; 
+
+    esac
+done
+AUR=" $AUR1 $AUR2 $AUR3 $AUR4 $AUR5 $AUR6 $AUR7 $AUR8 $AUR9 $AUR10 "
+#FINAL DE AUR
+;;
+   1) AUR_DELETE="yay-bin";;
+
+   255) echo "[ESC] key pressed.";;
+esac
 
 #Load the X11 keymap
 cmd=(dialog --backtitle "$titulo" --title "-| Distribución del teclado para Xorg |-" --keep-tite --menu "\n" 10 0 10)
@@ -1139,7 +1200,7 @@ pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --back
 
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
-dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $OFFICE $REPRO $SH $AP $RS --noeditmenu --noconfirm && systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
+dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $OFFICE $REPRO $SH $AP $RS --noeditmenu --noconfirm && systemctl enable $(cat DMservice) $(cat GPUvirt) && pacman -R $AUR_DELETE" 27 100
 
 localectl set-x11-keymap $keymap
 
