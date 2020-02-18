@@ -975,41 +975,6 @@ OFFICE=" $OFFICE1 $OFFICE3 $OFFICE4 $OFFICE5 $OFFICE6 "
 # FIN OFFICE
 
 
-#SH
-cmd=(dialog --no-collapse --cr-wrap --title "-| SHELL del Sistema |-" --backtitle "$titulo" \
---no-tags --ok-label '< Siguiente >' --nocancel --menu "\nSeleccione\n " 15 70 20)
-options=(1 "zsh"   
-         2 "bash"
-         3 "dash"
-         4 "fish"
-         5 "mksh"
-         6 "tcsh")
-choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-clear
-for choice in $choices
-do
-    case $choice in
-        1)
-            SH="zsh zsh-completions zsh-syntax-highlighting";;
-
-        2)
-            SH="bash bash-completion autojump command-not-found";;
-            
-        3)
-            SH="dash";;
-            
-        4)
-            SH="fish";;
-            
-        5)
-            SH="mksh";;
-            
-        6)
-            SH="tcsh";;
-                                                
-    esac
-done
-#FIN_SH
 
 #Administrador de Procesos
 cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  --title "-| Administrador de Procesos |-" \
@@ -1081,6 +1046,43 @@ do
 done
 RS=" $RS1 $RS2 $RS3 $RS4 $RS5 $RS6 "
 #FINAL DE Redes Sociales
+
+
+#SH
+cmd=(dialog --no-collapse --cr-wrap --title "-| SHELL del Sistema |-" --backtitle "$titulo" \
+--no-tags --ok-label '< Siguiente >' --nocancel --menu "\nSeleccione\n " 15 70 20)
+options=(1 "zsh"   
+         2 "bash"
+         3 "dash"
+         4 "fish"
+         5 "mksh"
+         6 "tcsh")
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            SH="zsh zsh-completions zsh-syntax-highlighting";;
+
+        2)
+            SH="bash bash-completion autojump command-not-found";;
+            
+        3)
+            SH="dash";;
+            
+        4)
+            SH="fish";;
+            
+        5)
+            SH="mksh";;
+            
+        6)
+            SH="tcsh";;
+                                                
+    esac
+done
+#FIN_SH
 
 
 
