@@ -365,7 +365,10 @@ options=(1 " > | xfce4 | Xfce desktop| <"
          9 " > | lxde-gtk3| The Lightweight X11 desktop| <"
          10 " > | lxde | The Lightweight X11 GTK2| <"
          11 " > | lxqt | LXDE-Qt y Razor-qt projects| <"
-         12 " > | mate | Mate GTK3 desktop| <")
+         12 " > | mate | Mate GTK3 desktop| <"
+         13 " > | liri | Desktop| <"
+         14 " > | lumina | Desktop| <"
+         15 " > | Pantheon | Desktop| <")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -381,7 +384,7 @@ xfce4 xfce4-goodies network-manager-applet alacarte \n\nSelecciona una opción p
 
 options=(1 "Predeterminado || Una mejor experiencia con tema"
          2 "Escritorio vacio || Sin tema con paquetes extras"
-         2 "Personalizar || Especificar Paquetes básicos")
+         3 "Personalizar || Especificar Paquetes básicos")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -406,15 +409,14 @@ echo $DM | awk -F " " '{print $1}' > DMservice
             echo $DM | awk -F " " '{print $1}' > DMservice
             ;;
             
-        3) cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes extras del escritorio XFCE4\n[ ESPACIO ] - Para marcar o desmarcar *" 12 70 19)
+        3)  cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes extras del escritorio XFCE4\n[ ESPACIO ] - Para marcar o desmarcar *" 12 70 19)
             options=(1 "xfce4-goodies || Programas extras de xfce4" off    # any option can be set to default to "on"
                      2 "network-manager-applet || Gestionar conexiones de red" off
                      3 "alacarte || Editar entradas" off)
-            choices2=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-            clear
-            for choice2 in $choices2
+            choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+            for choice in $choices
             do
-                case $choice2 in
+                case $choice in
                     1)
                         xfce4_2="xfce4-goodies"
                         ;;
@@ -465,8 +467,8 @@ done
             KDE="plasma kdebase gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer discover packagekit-qt5 colord-kde kscreen powerdevil kdegraphics-thumbnailers ffmpegthumbs user-manager kdeconnect sshfs ttf-liberation ttf-dejavu qt5ct"
 
             DE="$KDE $KDE2 $KDE3 $KDE4 $KDE5"            
-            DM="sddm"
-            echo $DM | awk -F " " '{print $1}' > DMservice
+            DM="sddm libxcb qt5-virtualkeyboard"
+            echo sddm > DMservice
             ;;
 ######FINAL KDE PLASMA
 
@@ -529,15 +531,72 @@ done
             echo gdm > DMservice
             ;;
             
-        6) ;;
+        6) #INICIO cinnamon
+            DE="cinnamon xed xviewer xreader xplayer pix"
+            DM="gdm"
+            echo -e "exec cinnamon-session" > /home/$nombre_usuario/.xinitrc
+            echo gdm > DMservice
+            ;;
 
-        7) ;;
+        7) #INICIO budgie-desktop
+            DE="budgie-desktop gnome gnome-shell gnome-control-center dconf-editor"
+            DM="gdm"
+            echo -e "export XDG_CURRENT_DESKTOP=Budgie:GNOME\nexec budgie-desktop" > /home/$nombre_usuario/.xinitrc
+            echo gdm > DMservice
+            ;;
 
         8)  DE="enlightenment entrance-git terminology network-manager-applet eluminance-git ephoto stalonetray"
-            echo exec enlightenment_start > /home/$nombre_usuario/.xinitrc
+            echo -e "exec enlightenment_start" > /home/$nombre_usuario/.xinitrc
             echo entrance > DMservice
             ;;
             
+        9) #INICIO lxde-gtk3
+            DE="lxde-gtk3 lxde-common lxsession openbox lxmed"
+            DM="lxdm-gtk3"
+            echo -e "exec startlxde" > /home/$nombre_usuario/.xinitrc
+            echo lxdm > DMservice
+            ;;
+            
+        10) #INICIO lxde
+            DE="lxde lxde-common lxsession openbox lxmed"
+            DM="lxdm"
+            echo -e "exec startlxde" > /home/$nombre_usuario/.xinitrc
+            echo lxdm > DMservice
+            ;;
+            
+        11) #INICIO lxqt
+            DE="lxqt breeze-icons oxygen-icons lxqt-connman-applet slock xdg-utils-slock"
+            DM="sddm sddm-config-editor-git qt5-virtualkeyboard libxcb"
+            echo -e "exec startlxqt" > /home/$nombre_usuario/.xinitrc
+            echo sddm > DMservice
+            ;;
+        
+        12) #INICIO mate
+            DE="mate mate-extra mate-media mate-menu brisk-menu marco mate-themes libcanberra-pulse mate-panel mate-session-manager mate-screensaver mate-applet-dock mate-applet-streamer mate-power-manager network-manager-applet system-config-printer eom engrampa"
+            DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
+            echo -e "exec mate-session" > /home/$nombre_usuario/.xinitrc
+            echo lightdm > DMservice
+            ;;
+        
+        13) #INICIO Liri
+            DE="liri-git-meta network-manager-applet"
+            DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
+            echo -e "exec liri-session" > /home/$nombre_usuario/.xinitrc
+            echo lightdm > DMservice
+            ;;
+        14) #INICIO lumina
+            DE="lumina-desktop-git network-manager-applet"
+            DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
+            echo -e "exec start-lumina-desktop" > /home/$nombre_usuario/.xinitrc
+            echo lightdm > DMservice
+            ;;
+        15) #INICIO Pantheon
+            DE="pantheon-session-git pantheon-terminal network-manager-applet wingpanel-git plank pantheon-default-settings-git pantheon-polkit-agent-git pantheon-files"
+            DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
+            echo -e "exec cerbere" > /home/$nombre_usuario/.xinitrc
+            echo lightdm > DMservice
+            ;;
+
     esac
 done
 #FIN ESCRITORIO
@@ -1076,21 +1135,7 @@ pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --back
 
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
-dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $GPU --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $DE --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $DM --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $WM --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $WEB --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $FONT --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $UTIL --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $AUDIO --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $OFFICE --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $REPRO --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $SH --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $AP --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $RS --noeditmenu --noconfirm && \
-systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
+dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $OFFICE $REPRO $SH $AP $RS --noeditmenu --noconfirm && systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
 
 localectl set-x11-keymap $keymap
 
@@ -1105,6 +1150,7 @@ clear
 
 sed -i '80d' /etc/sudoers
 sed -i "80i $nombre_usuario ALL=(ALL) ALL" /etc/sudoers
+cp pacman-chroot.conf /etc/pacman.conf
 clear
 pacman -Syu --noconfirm
 alsi
