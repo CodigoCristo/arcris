@@ -352,16 +352,16 @@ while [ "$kernel_var" = "0" ] ; do
 ##################################################################################
 
 dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Instalando Sistema Base - Linux Stable |-" \
---stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel reflector" 25 100
-
-arch-chroot /mnt /bin/bash -c "reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist"
-
-cat /mnt/etc/pacman.d/mirrorlist | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Mirrors List Arch-chroot > Actualizadas, espere..." 25 2000; sleep 3
-
-cp pacman.conf /mnt/etc/pacman.conf
-
-dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
---title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" --prgbox "arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio cryptsetup lvm2 logrotate nano alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager openssh  iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils hddtemp alsi inxi-git unzip zip --noconfirm" 25 80
+--stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel reflector && \
+arch-chroot /mnt /bin/bash -c 'reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist' && \
+cat /mnt/etc/pacman.d/mirrorlist && \
+cp pacman.conf /mnt/etc/pacman.conf \
+arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio \
+cryptsetup lvm2 logrotate nano alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer \
+dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager openssh \
+iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion \
+e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils \
+hddtemp alsi inxi-git unzip zip --noconfirm" 25 80
 
 ##################################################################################
 
