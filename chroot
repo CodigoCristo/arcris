@@ -1217,12 +1217,8 @@ sudo -u $nombre_usuario yay -Sy $SH --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario yay -Sy $AP --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario yay -Sy $RS --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario yay -Sy $AUR --noeditmenu --noconfirm && \
-pacman -R $AUR_DELETE && \
+pacman -R $AUR_DELETE --noconfirm && \
 systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
-
-
-
-
 
 localectl set-x11-keymap $keymap
 
