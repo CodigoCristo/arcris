@@ -1193,6 +1193,9 @@ done
 clear
 pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Claves Actualizadas, Espere... |" 27 100; sleep 3
 
+sed -i '100d' /etc/pacman.conf
+sed -i '99d' /etc/pacman.conf
+sed -i '98d' /etc/pacman.conf
 
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1)
 
