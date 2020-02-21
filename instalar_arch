@@ -91,7 +91,7 @@ dialog --backtitle "$titulo" --title "-| Mensaje |-" --stdout  --ok-label 'Sigui
 umount -R /mnt
 
 
-dialog --title "-| Particionado de Disco |-" --yesno "\n    ¿ Desea particionar su disco de manera automatica ?\n \nPresione Si - Automatico \nPresione No - Manera Manual" 9 62
+dialog --title "-| Particionado de Disco |-" --yesno "\n    ¿ Desea particionar su disco de manera automatica ?\n \nPresione Si - Automatico (Borrado y creado automatico)\nPresione No - Manera Manual" 9 62
 case $? in
    0) #Inicio de automatico
 part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
@@ -112,7 +112,7 @@ sgdisk ${disk} -n=1:0:+1G -t=1:ef00 && \
 sgdisk ${disk} -n=3:0:+${swapsize}G -t=3:8200 && \
 sgdisk ${disk} -n=4:0:0 && \
 fdisk -l ${disk} > /tmp/partitions && \
-cat /tmp/partitions" 10 100
+cat /tmp/partitions" 13 100
 
 
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1}')"
@@ -128,7 +128,7 @@ mkfs.fat -F 32 $(cat boot-efi) && \
 mkdir -p /mnt/efi && \
 mount $(cat boot-efi) /mnt/efi && \
 mkswap $(cat swap-efi) && \
-swapon $(cat swap-efi)" 10 100
+swapon $(cat swap-efi)" 20 150
 
 else  
 
@@ -138,7 +138,7 @@ sgdisk ${disk} -n=1:0:+1G -t=1:ef02 && \
 sgdisk ${disk} -n=3:0:+${swapsize}G -t=3:8200 && \
 sgdisk ${disk} -n=4:0:0 && \
 fdisk -l ${disk} > /tmp/partitions && \
-cat /tmp/partitions" 10 100
+cat /tmp/partitions" 13 100
 
 
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1}')"
@@ -154,7 +154,7 @@ mkfs.fat -F 32 $(cat boot-efi) && \
 mkdir -p /mnt/boot && \
 mount $(cat boot-efi) /mnt/boot && \
 mkswap $(cat swap-efi) && \
-swapon $(cat swap-efi)" 10 100
+swapon $(cat swap-efi)" 20 150
 
 fi
 		
