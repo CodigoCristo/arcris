@@ -1047,7 +1047,7 @@ done
 RS=" $RS1 $RS2 $RS3 $RS4 $RS5 $RS6 "
 #FINAL DE Redes Sociales
 
-
+nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1)
 #SH
 cmd=(dialog --no-collapse --cr-wrap --title "-| SHELL del Sistema |-" --backtitle "$titulo" \
 --no-tags --ok-label '< Siguiente >' --nocancel --menu "\nSeleccione\n " 15 70 20)
