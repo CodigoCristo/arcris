@@ -532,7 +532,7 @@ done
             ;;
             
         6) #INICIO cinnamon
-            DE="cinnamon xed xviewer xreader xplayer pix"
+            DE="cinnamon cinnamon-translations xed xviewer xreader xplayer pix"
             DM="gdm"
             echo -e "exec cinnamon-session" > /home/$nombre_usuario/.xinitrc
             echo gdm > DMservice
@@ -798,12 +798,11 @@ options=(1 "Firefox | Open source" on    # any option can be set to default to "
          4 "Google Chrome | Proprietary browser" off         
          5 "Opera | Proprietary browser" off
          6 "Vivaldi | Proprietary browser" off
-         7 "Tor Browser | Open source" off
-         8 "Falkon | Open source" off
-         9 "Qutebrowser | Open source" off
-         10 "elinks | Console browser" off
+         7 "Falkon | Open source" off
+         8 "Qutebrowser | Open source" off
+         9 "elinks | Console browser" off
          11 "lynx | Console browser" off
-         12 "w3m | Console browser" off)
+         11 "w3m | Console browser" off)
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
 for choice in $choices
@@ -828,26 +827,23 @@ do
             WEB6="vivaldi"
             ;;
         7)
-            WEB7="tor tor-browser"
-            ;;
-        8)
             WEB8="falkon"
             ;;
-        9)
+        8)
             WEB9="qutebrowser"
             ;;
-        10)
+        9)
             WEB10="elinks"
             ;;
-        11)
+        10)
             WEB11="lynx"
             ;;
-        12)
+        11)
             WEB12="w3m"
             ;;
     esac
 done
-WEB=" $WEB1 $WEB3 $WEB4 $WEB5 $WEB6 $WEB7 $WEB8 $WEB9 $WEB10 $WEB11 $WEB12 "
+WEB=" $WEB1 $WEB3 $WEB4 $WEB5 $WEB6 $WEB7 $WEB8 $WEB9 $WEB10 $WEB11 "
 # FIN NAVEGADORES
 
 #TIPOGRAFIAS
@@ -1064,7 +1060,7 @@ do
     case $choice in
         1)
             SH="zsh zsh-completions zsh-syntax-highlighting"
-            cp zshrc /home/$nombre_usuario/.zshrc
+            cp /root/zshrc /home/$nombre_usuario/.zshrc
             ;;
 
         2)
