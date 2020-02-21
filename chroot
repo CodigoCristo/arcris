@@ -1195,12 +1195,32 @@ done
 #FIN the X11 keymap
 
 clear
-pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Claves Actualizadas del LiveCD, Espere... |" 27 100; sleep 3
+pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Claves Actualizadas, Espere... |" 27 100; sleep 3
 
 
 nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
 
-dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Sy $XORG $GPU $DE $DM $WM $WEB $FONT $UTIL $AUDIO $OFFICE $REPRO $SH $AP $RS --noeditmenu --noconfirm && systemctl enable $(cat DMservice) $(cat GPUvirt) && pacman -R $AUR_DELETE" 27 100
+
+dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "pacman -Syu && \
+sudo -u $nombre_usuario yay -Sy $XORG --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $GPU --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $DE --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $DM --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $WM --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $WEB --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $FONT --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $UTIL --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $AUDIO --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $OFFICE --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $REPRO --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $SH --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $AP --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $RS --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $AUR --noeditmenu --noconfirm && \
+pacman -R $AUR_DELETE --noeditmenu --noconfirm && \
+systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
+
+
 
 localectl set-x11-keymap $keymap
 
