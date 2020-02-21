@@ -139,20 +139,20 @@ case $? in
 esac
 fi
 
-
-nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
+nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1)
 #Para que el sudo no pida clave
 
-dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Instalando AUR helper |" --stdout --ok-label "Siguiente" --prgbox 'cd /home/$nombre_usuario \
-&& git clone https://aur.archlinux.org/yay-bin.git \
-&& chown -R $nombre_usuario:users /home/$nombre_usuario \
-&& chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin \
-&& chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD \
-&& cd /home/$nombre_usuario/yay-bin \
-&& sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm \
-&& pacman -U *.pkg.tar.xz --noconfirm \
-&& rm -Rf /home/$nombre_usuario/yay-bin \
-&& cd && yay' 25 100
+cd /home/$nombre_usuario
+
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Instalando AUR helper |" --stdout --ok-label "Siguiente" --prgbox "git clone https://>
+chown -R $nombre_usuario:users /home/$nombre_usuario && \
+chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin && \
+chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD && \
+cd /home/$nombre_usuario/yay-bin && \
+sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm && \
+pacman -U *.pkg.tar.xz --noconfirm && \
+rm -Rf /home/$nombre_usuario/yay-bin && \
+cd && yay" 25 100
             
 # yay -S gotop-git --noeditmenu --noconfirm --removemake
 
@@ -1198,10 +1198,10 @@ clear
 pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Claves Actualizadas, Espere... |" 27 100; sleep 3
 
 
-nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1) 
+nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1)
 
 
-dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox 'pacman -Syu && \
+dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "pacman -Syu && \
 sudo -u $nombre_usuario yay -Sy $XORG --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario yay -Sy $GPU --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario yay -Sy $DE --noeditmenu --noconfirm && \
@@ -1217,8 +1217,10 @@ sudo -u $nombre_usuario yay -Sy $SH --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario yay -Sy $AP --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario yay -Sy $RS --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario yay -Sy $AUR --noeditmenu --noconfirm && \
-pacman -R $AUR_DELETE --noeditmenu --noconfirm && \
-systemctl enable $(cat DMservice) $(cat GPUvirt)' 27 100
+pacman -R $AUR_DELETE && \
+systemctl enable $(cat DMservice) $(cat GPUvirt)" 27 100
+
+
 
 
 
