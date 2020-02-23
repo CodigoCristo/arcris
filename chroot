@@ -1,4 +1,8 @@
 #!/bin/bash
+#Gracias:
+#@konrc 
+#@edu4rdt
+#@nahuelwexd
 
 #Colores
 clear
@@ -393,15 +397,14 @@ do
     case $choice in
         
         1)  DE="xfce4 xfce4-goodies network-manager-applet alacarte papirus-icon-theme deepin-icon-theme sierra-gtk-theme-git gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer"
-dialog  --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "git clone https://github.com/CodigoCristo/config.git" 27 100
-unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
+git clone https://github.com/CodigoCristo/config.git && unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
 chmod +777 xfce4
 cp -rf xfce4/.config/* /root/.config/
 mkdir /home/$nombre_usuario/.config/
 chown -hR $nombre_usuario:users /home/$nombre_usuario/.config
 cp -rf xfce4/.config/* /home/$nombre_usuario/.config/
 DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
-echo $DM | awk -F " " '{print $1}' > DMservice
+echo lightdm > DMservice
             ;;
             
         2)  DE="xfce4 xfce4-goodies network-manager-applet alacarte ttf-hack ttf-inconsolata gnome-font-viewer"
@@ -764,8 +767,13 @@ do
             ;;
         6)
             REPRO6="spotify"
-            gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 931FF8E79F0876134EDDBDCCA87FF9DF48BF1C90
-            gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 2EBF997C15BDA244B6EBF5D84773BD5E130D1D45
+            printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
+            echo -e ""
+            echo -e "\t\t\t         Actualizando          "
+            printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+            echo -e ""
+            gpg --recv-keys 931FF8E79F0876134EDDBDCCA87FF9DF48BF1C90
+            gpg --recv-keys 2EBF997C15BDA244B6EBF5D84773BD5E130D1D45
             ;;
         7)
             REPRO7="clementine"
@@ -799,12 +807,13 @@ options=(1 "Firefox | Open source" on    # any option can be set to default to "
          3 "Brave | Open source" off
          4 "Google Chrome | Proprietary browser" off         
          5 "Opera | Proprietary browser" off
-         6 "Vivaldi | Proprietary browser" off
-         7 "Falkon | Open source" off
-         8 "Qutebrowser | Open source" off
-         9 "elinks | Console browser" off
+         6 "Tor Browser | anonymous browsing" off
+         7 "Vivaldi | Proprietary browser" off
+         8 "Falkon | Open source" off
+         9 "Qutebrowser | Open source" off
+         10 "elinks | Console browser" off
          11 "lynx | Console browser" off
-         11 "w3m | Console browser" off)
+         12 "w3m | Console browser" off)
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
 for choice in $choices
@@ -825,28 +834,98 @@ do
         5)
             WEB5="opera"
             ;;
-        6)
-            WEB6="vivaldi"
+            
+        6)  WEB6="tor-browser"
+            printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+            echo -e ""
+            echo -e "\t\t\t         Actualizando          "
+            printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+            echo -e ""
+            gpg --auto-key-locate nodefault,wkd --locate-keys torbrowser@torproject.org
             ;;
+            
         7)
-            WEB8="falkon"
+            WEB7="vivaldi"
             ;;
         8)
-            WEB9="qutebrowser"
+            WEB8="falkon"
             ;;
         9)
-            WEB10="elinks"
+            WEB9="qutebrowser"
             ;;
         10)
-            WEB11="lynx"
+            WEB10="elinks"
             ;;
         11)
+            WEB11="lynx"
+            ;;
+        12)
             WEB12="w3m"
             ;;
     esac
 done
-WEB=" $WEB1 $WEB3 $WEB4 $WEB5 $WEB6 $WEB7 $WEB8 $WEB9 $WEB10 $WEB11 "
+WEB=" $WEB1 $WEB3 $WEB4 $WEB5 $WEB6 $WEB7 $WEB8 $WEB9 $WEB10 $WEB11 $WEB12 "
 # FIN NAVEGADORES
+
+
+#IDE'S
+cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
+--no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Seleeciona Editor de Texto\n[ ESPACIO ] - Para marcar o desmarcar *" 19 100 19)
+options=(1 "Vim | Open source" on    # any option can be set to default to "on"
+         2 "GVim | Open source" off
+         3 "Neovim | Open source" off
+         4 "VSCode | Code editor" off         
+         5 "Brackets | Code editor" off
+         6 "Sublime Text 3 | Code editor" off
+         7 "Emacs | Code editor" off
+         8 "Gedit | Code editor" off
+         9 "Geany | Code editor" off
+         10 "Netbeans | Code editor" off
+         11 "Codeblocks | Code editor" off)
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            IDE1="vim"
+            ;;
+        2)
+            IDE2="gvim"
+            ;;
+        3)
+            IDE3="neovim"
+            ;;
+        4)
+            IDE4="visual-studio-code-bin"
+            ;;
+        5)
+            IDE5="brackets-bin"
+            ;;
+            
+        6)  IDE6="sublime-text-dev"
+            ;;
+            
+        7)  IDE7="emacs"
+            ;;
+        
+        8)  IDE8="gedit"
+            ;;
+            
+        9)  IDE9="geany"
+            ;;
+            
+        10) IDE10="netbeans"
+            ;;
+            
+        11) IDE11="codeblocks"
+            ;;
+
+    esac
+done
+IDE=" $IDE1 $IDE3 $IDE4 $IDE5 $IDE6 $IDE7 $IDE8 $IDE9 $IDE10 $IDE11 "
+# FIN IDE'S
+
 
 #TIPOGRAFIAS
 cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  \
@@ -1066,8 +1145,9 @@ do
             ;;
 
         2)
-            SH="bash bash-completion autojump command-not-found";;
-            
+            SH="bash bash-completion autojump command-not-found"
+            cp /root/.bashrc /home/$nombre_usuario/.bashrc
+            ;;
         3)
             SH="dash";;
             
@@ -1107,7 +1187,7 @@ for choice in $choices
 do
     case $choice in
         1)
-            AUR1="yay"
+            AUR1="yay-bin"
             ;;
         2)
             AUR2="trizen"
@@ -1219,7 +1299,8 @@ sudo -u $nombre_usuario yay -Sy $AP --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario yay -Sy $RS --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario yay -Sy $AUR --noeditmenu --noconfirm && \
 systemctl enable $(cat DMservice) $(cat GPUvirt) && \
-pacman -R $AUR_DELETE --noconfirm" 27 100
+pacman -R $AUR_DELETE --noconfirm && \
+clear && echo TODO LISTO ! && echo https://t.me/ArchLinuxCristo" 27 100
 
 localectl set-x11-keymap $keymap
 

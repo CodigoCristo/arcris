@@ -395,13 +395,8 @@ esac
 clear
 pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Claves Actualizadas del LiveCD, Espere... |" 25 80; sleep 3
 cp pacman.conf /etc/pacman.conf
-pacman -Sy reflector alsa-utils espeak-ng --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando paquetes en el LiveCD, espere... |" 25 80; sleep 3
+pacman -Sy reflector --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando paquetes en el LiveCD, espere... |" 25 80; sleep 3
 reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
-amixer sset Master unmute
-clear
-amixer sset Master 100%+
-clear
-alsactl init
 clear
 for i in $(seq 1 100)
 do
@@ -769,9 +764,8 @@ done
 nombre_usuario=$(cat /mnt/etc/passwd | grep '/home' | cut -d: -f1) 
 sed -i "80i $nombre_usuario ALL=(ALL) NOPASSWD: ALL" /mnt/etc/sudoers
 
-espeak-ng -a 200 'Bienvenido a su sistema, Arch Linux, hecho por, código, cristo. Visite nuestro grupo en Tele,gram' -v es
-#Copia el script posterior a la instalación en el disco duro
 
+#Copia el script posterior a la instalación en el disco duro
 cp pacman.conf /mnt/etc/pacman.conf
 cp pacman-chroot.conf /mnt/root
 chmod +x /mnt/root/pacman-chroot.conf
@@ -780,6 +774,8 @@ cp chroot /mnt/root
 chmod +x /mnt/root/chroot
 cp zshrc /mnt/root
 chmod +x /mnt/root/zshrc
+cp .bashrc /mnt/root
+chmod +x /mnt/root/.bashrc
 
 cp .dialogrc /mnt/root
 chmod +x /mnt/root/.dialogrc
@@ -803,7 +799,5 @@ umount -R /mnt
 dialog --no-collapse --cr-wrap --backtitle "$titulo" \
 --stdout --ok-label 'Reiniciar' --title "--| Finalizar |--" \
 --msgbox "\n| La computadora se reiniciara para finalizar |\n| Cuando este apagada la computadora retire la USB o CD |" 8 66
-
-espeak-ng -a 200 'RETIRE SU U-S-B, | ,CUANDO EL EQUIPO, ESTE ,APAGADO..' -v es
 
 reboot
