@@ -774,8 +774,8 @@ cp chroot /mnt/root
 chmod +x /mnt/root/chroot
 cp zshrc /mnt/root
 chmod +x /mnt/root/zshrc
-cp .bashrc /mnt/root
-chmod +x /mnt/root/.bashrc
+cp .bashrc /mnt/root/bashrc
+chmod +x /mnt/root/bashrc
 
 cp .dialogrc /mnt/root
 chmod +x /mnt/root/.dialogrc

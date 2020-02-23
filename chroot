@@ -1146,7 +1146,7 @@ do
 
         2)
             SH="bash bash-completion autojump command-not-found"
-            cp /root/.bashrc /home/$nombre_usuario/.bashrc
+            cp /root/bashrc /home/$nombre_usuario/.bashrc
             ;;
         3)
             SH="dash";;
