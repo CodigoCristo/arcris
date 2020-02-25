@@ -764,6 +764,8 @@ done
 nombre_usuario=$(cat /mnt/etc/passwd | grep '/home' | cut -d: -f1) 
 sed -i "80i $nombre_usuario ALL=(ALL) NOPASSWD: ALL" /mnt/etc/sudoers
 
+echo ""
+printf "\n| La computadora se reiniciara para finalizar |\n| Cuando este apagada la computadora retire la USB o CD |\n\n"
 
 #Copia el script posterior a la instalación en el disco duro
 cp pacman.conf /mnt/etc/pacman.conf
@@ -795,9 +797,5 @@ echo "sh chroot" >> /mnt/root/.bashrc
 echo -e "if [ -f ~/.bashrc ]; then\n\tsource ~/.bashrc\nfi" >> /mnt/root/.bash_profile
 
 umount -R /mnt
-
-dialog --no-collapse --cr-wrap --backtitle "$titulo" \
---stdout --ok-label 'Reiniciar' --title "--| Finalizar |--" \
---msgbox "\n| La computadora se reiniciara para finalizar |\n| Cuando este apagada la computadora retire la USB o CD |" 8 66
 
 reboot
