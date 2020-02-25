@@ -397,7 +397,8 @@ do
     case $choice in
         
         1)  DE="xfce4 xfce4-goodies network-manager-applet alacarte papirus-icon-theme deepin-icon-theme sierra-gtk-theme-git gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer"
-git clone https://github.com/CodigoCristo/config.git && unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
+git clone https://github.com/CodigoCristo/config.git | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80
+unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
 chmod +777 xfce4
 cp -rf xfce4/.config/* /root/.config/
 mkdir /home/$nombre_usuario/.config/
@@ -807,13 +808,12 @@ options=(1 "Firefox | Open source" on    # any option can be set to default to "
          3 "Brave | Open source" off
          4 "Google Chrome | Proprietary browser" off         
          5 "Opera | Proprietary browser" off
-         6 "Tor Browser | anonymous browsing" off
-         7 "Vivaldi | Proprietary browser" off
-         8 "Falkon | Open source" off
-         9 "Qutebrowser | Open source" off
-         10 "elinks | Console browser" off
-         11 "lynx | Console browser" off
-         12 "w3m | Console browser" off)
+         6 "Vivaldi | Proprietary browser" off
+         7 "Falkon | Open source" off
+         8 "Qutebrowser | Open source" off
+         9 "elinks | Console browser" off
+         10 "lynx | Console browser" off
+         11 "w3m | Console browser" off)
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
 for choice in $choices
@@ -834,37 +834,27 @@ do
         5)
             WEB5="opera"
             ;;
-            
-        6)  WEB6="tor-browser"
-            printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
-            echo -e ""
-            echo -e "\t\t\t         Actualizando          "
-            printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
-            echo -e ""
-            gpg --auto-key-locate nodefault,wkd --locate-keys torbrowser@torproject.org
-            ;;
-            
-        7)
+        6)
             WEB7="vivaldi"
             ;;
-        8)
+        7)
             WEB8="falkon"
             ;;
-        9)
+        8)
             WEB9="qutebrowser"
             ;;
-        10)
+        9)
             WEB10="elinks"
             ;;
-        11)
+        10)
             WEB11="lynx"
             ;;
-        12)
+        11)
             WEB12="w3m"
             ;;
     esac
 done
-WEB=" $WEB1 $WEB3 $WEB4 $WEB5 $WEB6 $WEB7 $WEB8 $WEB9 $WEB10 $WEB11 $WEB12 "
+WEB=" $WEB1 $WEB3 $WEB4 $WEB5 $WEB6 $WEB7 $WEB8 $WEB9 $WEB10 $WEB11 "
 # FIN NAVEGADORES
 
 
@@ -1015,7 +1005,7 @@ FONT=" gnome-font-viewer $FONT1 $FONT2 $FONT3 $FONT4 $FONT5 $FONT6 $FONT7 $FONT8
 
 #OFFICE
 cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
---no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Suite de Ofimática\n[ ESPACIO ] - Para marcar o desmarcar *" 13 100 13)
+--no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Suite de Ofimática\n[ ESPACIO ] - Para marcar o desmarcar *" 14 100 14)
 options=(    1 "LibreOffice | libreoffice-still" on
              2 "LibreOffice | libreoffice-fresh" off
              3 "WPS Office | wps-office" off
@@ -1293,6 +1283,7 @@ sudo -u $nombre_usuario yay -Sy $FONT --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario yay -Sy $UTIL --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario yay -Sy $AUDIO --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario yay -Sy $OFFICE --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $IDE --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario yay -Sy $REPRO --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario yay -Sy $SH --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario yay -Sy $AP --noeditmenu --noconfirm && \
@@ -1300,7 +1291,7 @@ sudo -u $nombre_usuario yay -Sy $RS --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario yay -Sy $AUR --noeditmenu --noconfirm && \
 systemctl enable $(cat DMservice) $(cat GPUvirt) && \
 pacman -R $AUR_DELETE --noconfirm && \
-clear && echo TODO LISTO ! && echo https://t.me/ArchLinuxCristo" 27 100
+echo TODO LISTO ! && echo https://t.me/ArchLinuxCristo" 27 100
 
 localectl set-x11-keymap $keymap
 

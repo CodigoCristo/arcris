@@ -148,17 +148,16 @@ echo $partitions | awk -F ' ' '{print $2}' >  swap-boot
 echo $partitions | awk -F ' ' '{print $3}' >  root-boot
 
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - UEFI |-" --stdout --ok-label "Siguiente" \
---prgbox "mkfs.ext4 $(cat root-efi) && \
-mount $(cat root-efi) /mnt && \
-mkfs.fat -F 32 $(cat boot-efi) && \
+--prgbox "mkfs.ext4 $(cat root-boot) && \
+mount $(cat root-boot) /mnt && \
+mkfs.fat -F 32 $(cat boot-boot) && \
 mkdir -p /mnt/boot && \
-mount $(cat boot-efi) /mnt/boot && \
-mkswap $(cat swap-efi) && \
-swapon $(cat swap-efi)" 20 150
+mount $(cat boot-boot) /mnt/boot && \
+mkswap $(cat swap-boot) && \
+swapon $(cat swap-boot)" 20 150
 
 fi
-		
-		;;
+;;
 		
    1) #--title "| Selección de Disco |"
 part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
@@ -460,7 +459,7 @@ case $? in
 	1) 
 esac
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --defaultno  --yesno "\n¿Tienes Tarjeta de Wifi?" 7 45 
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Driver para WiFi |-" --defaultno  --yesno "\n¿Tienes Tarjeta de Wifi?" 7 45 
 case $? in 
 	0) broadcom=$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'Network controller: Broadcom' ")
 		if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
@@ -476,13 +475,13 @@ case $? in
 	1) 
 esac
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --defaultno --yesno "\n¿Tienes Touchpad?" 7 45 
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Driver para Touchpad |-" --defaultno --yesno "\n¿Tienes Touchpad?" 7 45 
 case $? in 
 	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "pacstrap  /mnt xf86-input-synaptics xf86-input-libinput xorg-xinput" 25 80;;
 	1) 
 esac
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Laptops" --defaultno --yesno "\n¿Tienes Bluetooth?" 7 45 
+dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Driver para Bluetooth |-" --defaultno --yesno "\n¿Tienes Bluetooth?" 7 45 
 case $? in 
 	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth blueman" 25 80
@@ -726,8 +725,9 @@ dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instal
 fi
 
 clear
-arch-chroot /mnt /bin/bash -c "pacman -Sy xdg-user-dirs --noconfirm && xdg-user-dirs-update" | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando xdg-user-dirs... |" 25 80; sleep 3
+arch-chroot /mnt /bin/bash -c "pacman -Sy xdg-user-dirs --noconfirm" | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando xdg-user-dirs... |" 25 80; sleep 3
 clear
+arch-chroot /mnt /bin/bash -c "xdg-user-dirs-update"
 export $(cat /mnt/etc/locale.conf)
 
 cp pacman-chroot.conf /mnt/etc/pacman.conf
