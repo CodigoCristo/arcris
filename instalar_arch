@@ -134,9 +134,7 @@ else
 
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - UEFI |-" --stdout --ok-label "Siguiente" \
 --prgbox "sgdisk --zap-all ${disk} && parted ${disk} mklabel msdos && \
-sgdisk ${disk} -n=1:0:+1G -t=1:ef02 && \
-sgdisk ${disk} -n=3:0:+${swapsize}G -t=3:8200 && \
-sgdisk ${disk} -n=4:0:0 && \
+(echo o; echo n; echo p; echo 1; echo ""; echo +250M; echo n; echo p; echo 2; echo ""; echo +${swapsize}G; echo n; echo p; echo 3; echo ""; echo ""; echo t; echo 2; echo 82; echo a; echo 1; echo w; echo q) | fdisk /dev/sda && \
 fdisk -l ${disk} > /tmp/partitions && \
 cat /tmp/partitions" 13 100
 
@@ -150,7 +148,7 @@ echo $partitions | awk -F ' ' '{print $3}' >  root-boot
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - UEFI |-" --stdout --ok-label "Siguiente" \
 --prgbox "mkfs.ext4 $(cat root-boot) && \
 mount $(cat root-boot) /mnt && \
-mkfs.fat -F 32 $(cat boot-boot) && \
+mkfs.ext4 $(cat boot-boot) && \
 mkdir -p /mnt/boot && \
 mount $(cat boot-boot) /mnt/boot && \
 mkswap $(cat swap-boot) && \
