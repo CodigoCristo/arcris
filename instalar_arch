@@ -157,10 +157,6 @@ mount $(cat boot-boot) /mnt/boot && \
 mkswap $(cat swap-boot) && \
 swapon $(cat swap-boot)" 20 150
 
-else
-	
-	echo alv
-
 fi
 ;;
 		
