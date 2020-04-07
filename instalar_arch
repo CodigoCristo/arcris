@@ -391,6 +391,11 @@ esac
 
 #mkdir -p /mnt/{"$bootdir","$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
 
+
+timedatectl set-timezone $(curl https://ipapi.co/timezone) | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Zona Horaria en LiveCD, Espere... |" 25 80; sleep 3
+ntpd -qg | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Zona Horaria en LiveCD, Espere... |" 25 80; sleep 3
+hwclock --systohc | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Zona Horaria en LiveCD, Espere... |" 25 80; sleep 3
+date | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Zona Horaria en LiveCD, Espere... |" 25 80; sleep 5
 clear
 pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Claves Actualizadas del LiveCD, Espere... |" 25 80; sleep 3
 cp pacman.conf /etc/pacman.conf
@@ -404,6 +409,7 @@ do
 done | dialog --title '| Actualizando MirrorLists |' --gauge "\nActualizando MirrorList en el LiveCD..." 7 60 0
 
 cat /etc/pacman.d/mirrorlist | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Mirrors List del LiveCD > Actualizadas, espere..." 25 2000; sleep 5
+
 
 
 
