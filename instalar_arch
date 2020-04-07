@@ -132,7 +132,7 @@ swapon $(cat swap-efi)" 20 150
 
 else
 
-dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - UEFI |-" --stdout --ok-label "Siguiente" \
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - BIOS LEGACY |-" --stdout --ok-label "Siguiente" \
 --prgbox "sgdisk --zap-all ${disk} && parted ${disk} mklabel msdos && \
 (echo o; echo n; echo p; echo 1; echo ""; echo +250M; echo n; echo p; echo 2; echo ""; echo +${swapsize}G; echo n; echo p; echo 3; echo ""; echo ""; echo t; echo 2; echo 82; echo a; echo 1; echo w; echo q) | fdisk /dev/sda && \
 fdisk -l ${disk} > /tmp/partitions && \
@@ -145,7 +145,7 @@ echo $partitions | awk -F ' ' '{print $1}' >  boot-boot
 echo $partitions | awk -F ' ' '{print $2}' >  swap-boot
 echo $partitions | awk -F ' ' '{print $3}' >  root-boot
 
-dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - UEFI |-" --stdout --ok-label "Siguiente" \
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - BIOS LEGACY |-" --stdout --ok-label "Siguiente" \
 --prgbox "mkfs.ext4 $(cat root-boot) && \
 mount $(cat root-boot) /mnt && \
 mkfs.ext4 $(cat boot-boot) && \
@@ -389,14 +389,15 @@ esac
 
 #mkdir -p /mnt/{"$bootdir","$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
 
-
+clear
 timedatectl set-timezone $(curl https://ipapi.co/timezone)
 ntpd -qg | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Zona Horaria en LiveCD, Espere... |" 25 80; sleep 3
 hwclock --systohc
-timedatectl status | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Zona Horaria en LiveCD, Espere... |" 25 80; sleep 5
+timedatectl status | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Zona Horaria en LiveCD, Espere... |" 25 50; sleep 5
 clear
-pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Claves Actualizadas del LiveCD, Espere... |" 25 80; sleep 3
+pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Claves Actualizadas del LiveCD, Espere... |" 25 100; sleep 3
 cp pacman.conf /etc/pacman.conf
+
 pacman -Sy reflector --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando paquetes en el LiveCD, espere... |" 25 80; sleep 3
 reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 clear
