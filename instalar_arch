@@ -107,7 +107,7 @@ if [ $uefi == 1 ]
 then
     
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - UEFI |-" --stdout --ok-label "Siguiente" \
---prgbox 'sgdisk --zap-all ${disk} && parted ${disk} mklabel gpt && \
+--prgbox 'parted ${disk} mklabel gpt && sgdisk --zap-all ${disk} && parted ${disk} mklabel gpt && \
 sgdisk ${disk} -n=1:0:+1G -t=1:ef00 && \
 sgdisk ${disk} -n=3:0:+${swapsize}G -t=3:8200 && \
 sgdisk ${disk} -n=4:0:0 && \
