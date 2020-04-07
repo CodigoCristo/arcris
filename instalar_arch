@@ -133,7 +133,7 @@ swapon $(cat swap-efi)" 20 150
 else
 
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - BIOS LEGACY |-" --stdout --ok-label "Siguiente" \
---prgbox "sgdisk --zap-all ${disk} && parted ${disk} mklabel msdos && \
+--prgbox "sgdisk --zap-all ${disk} && \
 (echo o; echo n; echo p; echo 1; echo ""; echo +250M; echo n; echo p; echo 2; echo ""; echo +${swapsize}G; echo n; echo p; echo 3; echo ""; echo ""; echo t; echo 2; echo 82; echo a; echo 1; echo w; echo q) | fdisk /dev/sda && \
 fdisk -l ${disk} > /tmp/partitions && \
 cat /tmp/partitions" 13 100
