@@ -130,8 +130,7 @@ mount $(cat boot-efi) /mnt/efi && \
 mkswap $(cat swap-efi) && \
 swapon $(cat swap-efi)" 20 150
 
-elif [ $uefi == 0 ]
-then
+else
 
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - UEFI |-" --stdout --ok-label "Siguiente" \
 --prgbox "sgdisk --zap-all ${disk} && parted ${disk} mklabel msdos && \
