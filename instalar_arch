@@ -1,33 +1,33 @@
 #!/bin/bash
 
 
-titulo="| Instalación de ArchLinux - by: ArcriS |"
+titulo="| Instalación de ArchLinux en Español - https://t.me/ArchLinuxCristo |"
 
 dialog --backtitle "$titulo" --title "-| INTERNET |-" --ok-label 'Siguiente' --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
 
 if ping -c 2 www.google.com &> /dev/null; then
-	clear
-   	dialog --title "-|  Conexión  |-" --backtitle "$titulo" \
-   	--ok-label 'Siguiente' --prgbox "ping -c 3 archlinux.org && echo && echo Si Hay Internet!" 15 100 
+  clear
+    dialog --title "-|  Conexión  |-" --backtitle "$titulo" \
+    --ok-label 'Siguiente' --prgbox "ping -c 3 archlinux.org && echo && echo Si Hay Internet!" 15 100 
 
 else
      dialog --title "-|  Conexión a RED  |-" --backtitle "$titulo" \
    --prgbox "\n\nping -c 3 archlinux.org && echo && echo No hay conexión a Internet" 6 100 
-  dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Error de RED |-" --msgbox "No hay conexión a Internet" 5 60
-  dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Conexión WiFi |-" --yesno "¿ Tienes red wifi ?" 5 45 
+  dialog --backtitle "$titulo" --title "-| Error de RED |-" --msgbox "No hay conexión a Internet" 5 60
+  dialog --backtitle "$titulo" --title "-| Conexión WiFi |-" --yesno "¿ Tienes red wifi ?" 5 45 
 case $? in 
-	0)	wifi-menu
-		wifinet=$(netctl list | awk -F " " '{print $2}');;
-	1)	dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Ethernet |-" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuevamente..." 8 50
-   		exit;;
+  0)  wifi-menu
+    wifinet=$(netctl list | awk -F " " '{print $2}');;
+  1)  dialog --backtitle "$titulo" --title "-| Ethernet |-" --msgbox "\nPruebe conectando bien su cable de Ethernet\nIntentalo nuevamente..." 8 50
+      exit;;
 esac
 fi
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Conexión WiFi |-" --defaultno --yesno "¿ Tienes red wifi ?" 5 45 
+dialog --backtitle "$titulo" --title "-| Conexión WiFi |-" --defaultno --yesno "¿ Tienes red wifi ?" 5 45 
 case $? in 
-	0)	wifi-menu
-		wifinet=$(netctl list | awk -F " " '{print $2}');;
-	1)	;;
+  0)  wifi-menu
+    wifinet=$(netctl list | awk -F " " '{print $2}');;
+  1)  ;;
 esac
 
 
@@ -36,10 +36,10 @@ umount -R /mnt
 
 cmd=(dialog --backtitle "$titulo" --title "-| Distribución del teclado |-" --keep-tite --menu "\n" 10 0 10)
 
-options=(la-latin1	"LatinoAmericano"
-         es 		"Español"
-         us 		"Ingles"
-         otros 		"(+)Teclados")
+options=(la-latin1  "LatinoAmericano"
+         es     "Español"
+         us     "Ingles"
+         otros    "(+)Teclados")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -48,38 +48,38 @@ do
     case $choice in
         es)
             loadkeys es
-			keyboard="es"
-			loadkeys=$keyboard 
-			keymap=$keyboard  
+      keyboard="es"
+      loadkeys=$keyboard 
+      keymap=$keyboard  
             ;;
             
         la-latin1)
             loadkeys la-latin1
-			keyboard="la-latin1"
-			loadkeys=$keyboard 
-			keymap=$keyboard 
+      keyboard="la-latin1"
+      loadkeys=$keyboard 
+      keymap=$keyboard 
             ;;
             
         us)
             loadkeys us
-			keyboard="us"
-			loadkeys=$keyboard 
-			keymap=$keyboard  
+      keyboard="us"
+      loadkeys=$keyboard 
+      keymap=$keyboard  
             ;;
             
         otros)
             selected=0 
-			while [ $selected == "0" ];do 
-				locales="$(localectl list-keymaps | awk '$locales=$locales" Keyboard"')" && locales=$(echo "$locales") 
-				keyboard=$(dialog --backtitle "$titulo" --clear --title "-| Distribución del teclado: |-" --menu "\n" 15 0 15 	${locales} 2>&1 > /dev/tty) 
-				if [ $? == 0 ];then 
-					loadkeys $keyboard 
-					keymap=$keyboard 
-					selected=1 
-				else 
-					dialog --backtitle "$titulo" --title "-| ERROR |-" --stdout --ok-label 'Siguiente' --msgbox "Ingrese una distribución del teclado para continuar" 5 55 
-				fi
-			done
+      while [ $selected == "0" ];do 
+        locales="$(localectl list-keymaps | awk '$locales=$locales" Keyboard"')" && locales=$(echo "$locales") 
+        keyboard=$(dialog --backtitle "$titulo" --clear --title "-| Distribución del teclado: |-" --menu "\n" 15 0 15   ${locales} 2>&1 > /dev/tty) 
+        if [ $? == 0 ];then 
+          loadkeys $keyboard 
+          keymap=$keyboard 
+          selected=1 
+        else 
+          dialog --backtitle "$titulo" --title "-| ERROR |-" --stdout --ok-label 'Siguiente' --msgbox "Ingrese una distribución del teclado para continuar" 5 55 
+        fi
+      done
             ;;
     esac
 done
@@ -213,7 +213,7 @@ partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | se
 p="$(echo "$partitions")"
 #--title "| Elige la partición de Administrador |"
 part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear \
-  --menu "Selecciona la partición para Root:[ / ]" 15 43 0 ${p} 2>&1 > /dev/tty)
+  --menu "Selecciona la partición para Root: [ / ]" 15 43 0 ${p} 2>&1 > /dev/tty)
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Verificando estado de Disco |-" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 rootfs=$part
 
@@ -496,6 +496,7 @@ esac
   kernel_var=1
 
 
+#####hardened
   elif [ $kernel_select == linux-hardened ]; then
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Hardened |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel ntfs-3g mtools linux-hardened linux-hardened-headers linux-firmware mkinitcpio pulseaudio alsa-plugins alsa-oss dhclient dnsmasq ethtool gpm ndisc6 nfs-utils ntp usb_modeswitch usbutils wvdial nano reflector dhcp dhcpcd dhclient ppp netctl iw iwd net-tools networkmanager ifplugd openssh dialog" 25 80
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "\n¿Tienes Tarjeta de Wifi?" 7 45 
@@ -518,6 +519,7 @@ esac
   kernel_var=1
 
 
+######LTS
   elif [ $kernel_select == linux-lts ]; then
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux LTS |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel ntfs-3g mtools linux-lts linux-lts-headers linux-firmware mkinitcpio pulseaudio alsa-plugins alsa-oss dhclient dnsmasq ethtool gpm ndisc6 nfs-utils ntp usb_modeswitch usbutils wvdial nano reflector dhcp dhcpcd dhclient ppp netctl iw iwd net-tools networkmanager ifplugd openssh dialog" 25 80
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "\n¿Tienes Tarjeta de Wifi?" 7 45 
@@ -539,6 +541,8 @@ case $? in
 esac
   kernel_var=1  
 
+
+###### ZEN
   elif [ $kernel_select == linux-zen ]; then
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux ZEN |" --stdout --ok-label "Siguiente" --prgbox "pacstrap /mnt base base-devel ntfs-3g mtools linux-zen linux-zen-headers linux-firmware mkinitcpio pulseaudio alsa-plugins alsa-oss dhclient dnsmasq ethtool gpm ndisc6 nfs-utils ntp usb_modeswitch usbutils wvdial nano reflector dhcp dhcpcd dhclient ppp netctl iw iwd net-tools networkmanager ifplugd openssh dialog" 25 80
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "Conexión WiFi" --yesno "\n¿Tienes Tarjeta de Wifi?" 7 45 
@@ -709,6 +713,9 @@ fi
 #Copia Red
 
 
+
+## GRUB
+
 uefi=$( parted $disk print | grep -ic gpt )
 
 if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]; then
@@ -730,7 +737,7 @@ dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instal
 fi
 
 clear
-arch-chroot /mnt /bin/bash -c "pacman -Sy xdg-user-dirs --noconfirm" | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Instalando xdg-user-dirs... |" 25 80; sleep 3
+arch-chroot /mnt /bin/bash -c "pacman -Sy xdg-user-dirs --noconfirm" | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Creando Directorios... |" 25 80; sleep 3
 clear
 arch-chroot /mnt /bin/bash -c "xdg-user-dirs-update"
 export $(cat /mnt/etc/locale.conf)
