@@ -121,7 +121,7 @@ fdisk -l "$disk" > /tmp/partitions
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
 part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Elige la partición de Administrador |" \
-  --menu ">> Selecciona la partición para Root: / <<" 0 0 0 ${p} 2>&1 > /dev/tty)
+  --menu ">> Selecciona la partición para Root: / <<" 0 47 0 ${p} 2>&1 > /dev/tty)
 rootfs=$part
 p=$(echo "$p" | grep -v $part)
 
