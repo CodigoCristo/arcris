@@ -134,7 +134,7 @@ else
 
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - BIOS LEGACY |-" --stdout --ok-label "Siguiente" \
 --prgbox "sgdisk --zap-all ${disk} && \
-(echo o; echo n; echo p; echo 1; echo ""; echo +250M; echo n; echo p; echo 2; echo ""; echo +${swapsize}G; echo n; echo p; echo 3; echo ""; echo ""; echo t; echo 2; echo 82; echo a; echo 1; echo w; echo q) | fdisk /dev/sda && \
+(echo o; echo n; echo p; echo 1; echo ""; echo +250M; echo n; echo p; echo 2; echo ""; echo +${swapsize}G; echo n; echo p; echo 3; echo ""; echo ""; echo t; echo 2; echo 82; echo a; echo 1; echo w; echo q) | fdisk ${disk} && \
 fdisk -l ${disk} > /tmp/partitions && \
 cat /tmp/partitions" 13 100
 
@@ -393,7 +393,7 @@ clear
 timedatectl set-timezone $(curl https://ipapi.co/timezone)
 ntpd -qg | dialog --no-collapse --cr-wrap --backtitle "$titulo" --progressbox "| Zona Horaria en LiveCD, Espere... |" 25 80; sleep 3
 hwclock --systohc
-timedatectl status | dialog --no-collapse --cr-wrap --backtitle "$titulo" --progressbox "| Hora Local - Espere... |" 10 65; sleep 5
+timedatectl status | dialog --no-collapse --cr-wrap --backtitle "$titulo" --progressbox "| Hora Local - Espere... |" 13 65; sleep 5
 clear
 pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --backtitle "$titulo" --progressbox "| Claves Actualizadas del LiveCD, Espere... |" 25 100; sleep 3
 cp pacman.conf /etc/pacman.conf
@@ -407,7 +407,7 @@ do
     echo $i
 done | dialog --backtitle "$titulo" --title '| Actualizando MirrorLists |' --gauge "\nActualizando MirrorList en el LiveCD..." 7 60 0
 
-cat /etc/pacman.d/mirrorlist | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "Mirrors List del LiveCD > Actualizadas, espere..." 25 2000; sleep 5
+cat /etc/pacman.d/mirrorlist | dialog --no-collapse --cr-wrap --backtitle "$titulo" --progressbox "Mirrors List del LiveCD > Actualizadas, espere..." 25 2000; sleep 5
 
 
 
@@ -416,7 +416,7 @@ cat /etc/pacman.d/mirrorlist | dialog --no-collapse --cr-wrap --backtitle "Insta
 kernel_var=0 
 while [ "$kernel_var" = "0" ] ; do
 
-  kernel_select=`dialog --title "| KERNEL LINUX |" --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
+  kernel_select=`dialog --title "| KERNEL LINUX |" --backtitle "$titulo" \
     --stdout --ok-label "Seleccionar" --no-cancel --menu "Elige que kernel necesitas: \nLinux Stable es la mejor opción para iniciar\nLas otras opciones tienen un estilo diferente para instalar Drivers\nLas otras modificaciones del kernel trabajan con Drivers Libres" 16 0 2000 linux-stable "Kernel en su versión estable y módulos de Vanilla Linux" linux-hardened "Kernel enfocado en Seguridad" linux-lts "Kernel con soporte de larga duración" linux-zen "Kernel del esfuerzo colaborativo de varios hackers"`
    
   if [ $kernel_select == linux-stable ]; then
@@ -430,7 +430,7 @@ cat /mnt/etc/pacman.d/mirrorlist && \
 cp pacman.conf /mnt/etc/pacman.conf && \
 arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio \
 cryptsetup lvm2 logrotate nano alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer \
-dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager openssh \
+dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager \
 iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion \
 e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils \
 hddtemp alsi inxi-git unzip zip --noconfirm' 25 80
@@ -447,7 +447,7 @@ r8168=$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'RTL8111/8168/8411' ")
 		fi
 		
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Microcode |" --yesno "\n¿Actualizaciones para el microcódigo del procesador?" 7 58 
+dialog --backtitle "$titulo" --title "| Microcode |" --yesno "\n¿Actualizaciones para el microcódigo del procesador?" 7 58 
 case $? in 
 	0) microcode=$(lspci -k | grep 'Host bridge: Intel')
 		lspci -k | grep 'Host bridge:'  > procesador
@@ -464,7 +464,7 @@ case $? in
 	1) 
 esac
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Driver para WiFi |-" --defaultno  --yesno "\n¿Tienes Tarjeta de Wifi?" 7 45 
+dialog --backtitle "$titulo" --title "-| Driver para WiFi |-" --defaultno  --yesno "\n¿Tienes Tarjeta de Wifi?" 7 45 
 case $? in 
 	0) broadcom=$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'Network controller: Broadcom' ")
 		if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
@@ -480,17 +480,18 @@ case $? in
 	1) 
 esac
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Driver para Touchpad |-" --defaultno --yesno "\n¿Tienes Touchpad?" 7 45 
+dialog --backtitle "$titulo" --title "-| Driver para Touchpad |-" --defaultno --yesno "\n¿Tienes Touchpad?" 7 45 
 case $? in 
-	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
+	0) dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "pacstrap  /mnt xf86-input-synaptics xf86-input-libinput xorg-xinput" 25 80;;
 	1) 
 esac
 dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Driver para Bluetooth |-" --defaultno --yesno "\n¿Tienes Bluetooth?" 7 45 
 case $? in 
-	0) dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
+	0) dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth blueman" 25 80
-		arch-chroot /mnt /bin/bash -c "systemctl enable bluetooth.service";;
+		arch-chroot /mnt /bin/bash -c "systemctl enable bluetooth.service"
+		clear;;
 	1) 
 esac
   kernel_var=1
@@ -778,6 +779,7 @@ sed -i "80i $nombre_usuario ALL=(ALL) NOPASSWD: ALL" /mnt/etc/sudoers
 
 echo ""
 printf "\n| La computadora se reiniciara para finalizar |\n| Cuando este apagada la computadora retire la USB o CD |\n\n"
+sleep 5
 
 #Copia el script posterior a la instalación en el disco duro
 cp pacman.conf /mnt/etc/pacman.conf
