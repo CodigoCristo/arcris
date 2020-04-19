@@ -490,7 +490,7 @@ do
     case $choice in
         
         1)  DE="xfce4 xfce4-goodies network-manager-applet alacarte papirus-icon-theme deepin-icon-theme sierra-gtk-theme-git gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer"
-            git clone https://github.com/CodigoCristo/config.git | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80
+            git clone https://github.com/CodigoCristo/config.git
             unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
             chmod +777 xfce4
             cp -rf xfce4/.config/* /root/.config/
