@@ -100,16 +100,24 @@ disk=$(dialog --backtitle "$titulo" --clear  --ok-label 'Seleccionar' --no-cance
 
 uefi=$( ls /sys/firmware/efi/ | grep -ic efivars )
 
-swapsize=$( free -m | grep "Mem" | awk '{ print $2 }' )
-swapsize=$(( ( swapsize / 2000 ) + 1 ))
+#swapsize=$( free -m | grep "Mem" | awk '{ print $2 }' )
+#swapsize=$(( ( swapsize / 2000 ) + 1 ))
 
 if [ $uefi == 1 ]
 then
     
+#DIALOG PARA YES Y NO CASOS
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Memoria SWAP |-" --yesno "¿ Deseas agregar RAM virutal ?" 5 35
+
+case $? in
+   0) swapsize=$(dialog --no-cancel --backtitle "$titulo" --title "-| Memoria SWAP |-" \
+--form "\nIngresa la cantidad de Memoria Virtual\n\nGigabytes (G) - Megabytes (M) - Kibibyte (K)\n\n> No dejar espacios al inicio\n> No olvidar su etiqueta al final del número\n> [Tabulador] para cambiar opciones\n" 0 0 0 \
+" Memoria SWAP:" 1 1 "4G" 1 17 25 30 2>&1 > /dev/tty)
+        
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - UEFI |-" --stdout --ok-label "Siguiente" \
 --prgbox "sgdisk --zap-all ${disk} && parted ${disk} mklabel gpt && \
 sgdisk ${disk} -n=1:0:+1G -t=1:ef00 && \
-sgdisk ${disk} -n=3:0:+${swapsize}G -t=3:8200 && \
+sgdisk ${disk} -n=3:0:+${swapsize} -t=3:8200 && \
 sgdisk ${disk} -n=4:0:0 && \
 fdisk -l ${disk} > /tmp/partitions && \
 cat /tmp/partitions" 13 100
@@ -129,12 +137,50 @@ mkdir -p /mnt/efi && \
 mount $(cat boot-efi) /mnt/efi && \
 mkswap $(cat swap-efi) && \
 swapon $(cat swap-efi)" 20 150
+;;
+
+
+   1) dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - UEFI |-" --stdout --ok-label "Siguiente" \
+--prgbox "sgdisk --zap-all ${disk} && parted ${disk} mklabel gpt && \
+sgdisk ${disk} -n=1:0:+1G -t=1:ef00 && \
+sgdisk ${disk} -n=4:0:0 && \
+fdisk -l ${disk} > /tmp/partitions && \
+cat /tmp/partitions" 13 100
+
+
+partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1}')"
+
+echo $partitions | awk -F ' ' '{print $1}' >  boot-efi
+echo $partitions | awk -F ' ' '{print $2}' >  root-efi
+
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - UEFI |-" --stdout --ok-label "Siguiente" \
+--prgbox "mkfs.ext4 $(cat root-efi) && \
+mount $(cat root-efi) /mnt && \
+mkfs.fat -F 32 $(cat boot-efi) && \
+mkdir -p /mnt/efi && \
+mount $(cat boot-efi) /mnt/efi" 20 150
+;;
+
+
+   255) echo "[ESC] Salir."
+        exit
+        ;;
+esac
+
 
 else
 
+#DIALOG PARA YES Y NO CASOS
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Memoria SWAP |-" --yesno "¿ Deseas agregar RAM virutal ?" 5 35
+
+case $? in
+   0) swapsize=$(dialog --no-cancel --backtitle "$titulo" --title "-| Memoria SWAP |-" \
+--form "\nIngresa la cantidad de Memoria Virtual\n\nGigabytes (G) - Megabytes (M) - Kibibyte (K)\n\n> No dejar espacios al inicio\n> No olvidar su etiqueta al final del número\n> [Tabulador] para cambiar opciones\n" 0 0 0 \
+" Memoria SWAP:" 1 1 "4G" 1 17 25 30 2>&1 > /dev/tty)
+        
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - BIOS LEGACY |-" --stdout --ok-label "Siguiente" \
 --prgbox "sgdisk --zap-all ${disk} && \
-(echo o; echo n; echo p; echo 1; echo ""; echo +250M; echo n; echo p; echo 2; echo ""; echo +8G; echo n; echo p; echo 3; echo ""; echo ""; echo t; echo 2; echo 82; echo a; echo 1; echo w; echo q) | fdisk ${disk} && \
+(echo o; echo n; echo p; echo 1; echo ""; echo +250M; echo n; echo p; echo 2; echo ""; echo +${swapsize}; echo n; echo p; echo 3; echo ""; echo ""; echo t; echo 2; echo 82; echo a; echo 1; echo w; echo q) | fdisk ${disk} && \
 fdisk -l ${disk} > /tmp/partitions && \
 cat /tmp/partitions" 13 100
 
@@ -153,6 +199,35 @@ mkdir -p /mnt/boot && \
 mount $(cat boot-boot) /mnt/boot && \
 mkswap $(cat swap-boot) && \
 swapon $(cat swap-boot)" 20 150
+;;
+
+
+   1) dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - BIOS LEGACY |-" --stdout --ok-label "Siguiente" \
+--prgbox "sgdisk --zap-all ${disk} && \
+(echo o; echo n; echo p; echo 1; echo ""; echo +250M; echo n; echo p; echo 2; echo ""; echo t; echo 2; echo 82; echo a; echo 1; echo w; echo q) | fdisk ${disk} && \
+fdisk -l ${disk} > /tmp/partitions && \
+cat /tmp/partitions" 13 100
+
+
+partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1}')"
+
+echo $partitions | awk -F ' ' '{print $1}' >  boot-boot
+echo $partitions | awk -F ' ' '{print $2}' >  root-boot
+
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - BIOS LEGACY |-" --stdout --ok-label "Siguiente" \
+--prgbox "mkfs.ext4 $(cat root-boot) && \
+mount $(cat root-boot) /mnt && \
+mkfs.ext4 $(cat boot-boot) && \
+mkdir -p /mnt/boot && \
+mount $(cat boot-boot) /mnt/boot" 20 150
+;;
+
+
+   255) echo "[ESC] Salir."
+        exit
+        ;;
+esac
+
 
 fi
 ;;
@@ -748,6 +823,9 @@ echo ""
 echo ""
 arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo ""
 arch-chroot /mnt /bin/bash -c "alsi"
+echo ""
+echo ""
+arch-chroot /mnt /bin/bash -c "inxi -Gx"
 echo ""
 echo ""
 
