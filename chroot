@@ -56,9 +56,11 @@ echo -e '\033[m'
 titulo="| Instalación de ArchLinux en Español - https://t.me/ArchLinuxCristo |"
 
 
-dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| INTERNET |" --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| ESPERE... |" --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
 
-if ping -c 2 www.google.com &> /dev/null; then
+sleep 10
+
+if ping -c 5 www.google.com &> /dev/null; then
     
    dialog --title "|  Conexión a RED  |" --backtitle "$titulo" \
    --prgbox "ping -c 3 archlinux.org && echo && echo Si Hay Internet!" 17 100
