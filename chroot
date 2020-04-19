@@ -53,8 +53,8 @@ echo -e '\033[m'
 
 
 
+titulo="| Instalación de ArchLinux en Español - https://t.me/ArchLinuxCristo |"
 
-titulo="| Instalación de ArchLinux - by: ArcriS |"
 
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| INTERNET |" --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
 
@@ -273,17 +273,26 @@ dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbo
         fi
 ;;
    1) inxi -Gx | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
---progressbox "-| Driver de Vídeo, lea su información, espere... |-" 15 100; sleep 7
+    --progressbox "-| Driver de Vídeo, lea su información, espere... |-" 15 100; sleep 7
 
-cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Driver de Vídeo |-"  --column-separator "|" --no-tags --ok-label '< Seleccionar >' \
-    --nocancel --menu "Seleciona el driver correcto:" 13 76 16)
+GPUHYBR=false
 
-options=(1 "Nvidia 440xx|(Privativo)"
-         2 "Nvidia 390xx|(Privativo)"
-         3 "Nvidia|(Open (Open Source)Source)"
-         4 "AMD - Radeon|(Open Source)"
-         5 "AMD - ATI|(Open Source)"
-         6 "INTEL|(Open Source)")
+cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Driver de Vídeo |-"  --column-separator "|" --no-tags --ok-label "< Seleccionar >" \
+    --nocancel --menu "Seleciona el driver correcto:" 20 76 16)
+
+options=(1 "Nvidia 440xx|(Linux Stable)"
+         2 "Nvidia 390xx|(Linux Stable)"
+         3 "Nvidia 340xx|(Linux Stable)"
+         4 "Nvidia 440xx|(Linux Stable + Intel)"
+         5 "Nvidia 390xx|(Linux Stable + Intel)"
+         6 "Nvidia 440xx|(Linux LTS)"
+         7 "Nvidia 390xx|(Linux LTS)"
+         8 "Nvidia 440xx|(Linux Hardened - Zen)"
+         9 "Nvidia 390xx|(Linux Hardened - Zen)"
+         10 "Nvidia|(Open Source)"
+         11 "AMD - Radeon|(Open Source)"
+         12 "AMD - ATI|(Open Source)"
+         13 "Intel|(Open Source)")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -291,46 +300,101 @@ for choice in $choices
 do
     case $choice in
         1)
-            GPU='nvidia nvidia-settings nvidia-utils lib32-nvidia-utils libva-utils \
+            GPU="nvidia nvidia-settings nvidia-utils lib32-nvidia-utils libva-utils \
             vdpauinfo libvdpau lib32-libvdpau opencl-nvidia \
-            lib32-opencl-nvidia ffnvcodec-headers libxnvctrl clinfo ocl-icd lib32-ocl-icd opencl-headers'
-            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\n$GPU" 10 80
-            ;;
-        2)
-            GPU='nvidia-390xx nvidia-390xx-settings nvidia-390xx-utils \
-            lib32-nvidia-390xx-utils libva-utils vdpauinfo libvdpau lib32-libvdpau \
-            opencl-nvidia-390xx lib32-opencl-nvidia-390xx libxnvctrl-390xx clinfo ocl-icd lib32-ocl-icd opencl-headers'
-            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\n$GPU" 10 80
-            ;;
-        3)
-            GPU='xf86-video-nouveau mesa lib32-mesa mesa-vdpau libva-mesa-driver \
-            lib32-mesa-vdpau lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl \
-            libva-utils vdpauinfo libvdpau lib32-libvdpau opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers'
-            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\n$GPU" 10 80
-            ;;
-        4)
-            GPU='xf86-video-amdgpu mesa lib32-mesa vulkan-radeon \
-            lib32-vulkan-radeon mesa-vdpau libva-mesa-driver lib32-mesa-vdpau \
-            lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl libva-utils vdpauinfo \
-            opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers'
-            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\n$GPU" 10 80
-            ;;
-        5)
-            GPU='xf86-video-ati mesa lib32-mesa mesa-vdpau libva-mesa-driver \
-            lib32-mesa-vdpau lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl \
-            libva-utils vdpauinfo opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers'
-            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\n$GPU" 10 80
+            lib32-opencl-nvidia ffnvcodec-headers libxnvctrl clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
             ;;
             
+        2)
+            GPU="nvidia-390xx nvidia-390xx-settings nvidia-390xx-utils \
+            lib32-nvidia-390xx-utils libva-utils vdpauinfo libvdpau lib32-libvdpau \
+            opencl-nvidia-390xx lib32-opencl-nvidia-390xx libxnvctrl-390xx clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
+            ;;
+        
+        3)
+            GPU="nvidia-340xx nvidia-340xx-settings nvidia-340xx-utils \
+            lib32-nvidia-340xx-utils libva-utils vdpauinfo libvdpau lib32-libvdpau \
+            opencl-nvidia-340xx lib32-opencl-nvidia-340xx libxnvctrl-340xx clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
+            ;;
+        
+        4)
+            GPU="nvidia nvidia-settings nvidia-utils lib32-nvidia-utils libva-utils xf86-video-intel optimus-manager bbswitch optimus-manager-qt \
+            vdpauinfo libvdpau lib32-libvdpau opencl-nvidia \
+            lib32-opencl-nvidia ffnvcodec-headers libxnvctrl clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
+            GPUHYBR=true
+            ;;
+            
+        5)
+            GPU="nvidia-390xx nvidia-390xx-settings nvidia-390xx-utils xf86-video-intel optimus-manager bbswitch optimus-manager-qt \
+            lib32-nvidia-390xx-utils libva-utils vdpauinfo libvdpau lib32-libvdpau \
+            opencl-nvidia-390xx lib32-opencl-nvidia-390xx libxnvctrl-390xx clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
+            GPUHYBR=true
+            ;;
+        
         6)
-            GPU='xf86-video-intel vulkan-intel mesa lib32-mesa intel-media-driver \
+            GPU="nvidia-lts nvidia-settings nvidia-utils lib32-nvidia-utils libva-utils \
+            vdpauinfo libvdpau lib32-libvdpau opencl-nvidia \
+            lib32-opencl-nvidia ffnvcodec-headers libxnvctrl clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
+            ;;
+        
+        7)
+            GPU="nvidia-390xx-lts nvidia-390xx-settings nvidia-390xx-utils \
+            lib32-nvidia-390xx-utils libva-utils vdpauinfo libvdpau lib32-libvdpau \
+            opencl-nvidia-390xx lib32-opencl-nvidia-390xx libxnvctrl-390xx clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
+            ;;
+        
+        
+        8)
+            GPU="nvidia-dkms nvidia-settings nvidia-utils lib32-nvidia-utils libva-utils \
+            vdpauinfo libvdpau lib32-libvdpau opencl-nvidia \
+            lib32-opencl-nvidia ffnvcodec-headers libxnvctrl clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
+            ;;
+        
+        9)
+            GPU="nvidia-390xx-dkms nvidia-390xx-settings nvidia-390xx-utils \
+            lib32-nvidia-390xx-utils libva-utils vdpauinfo libvdpau lib32-libvdpau \
+            opencl-nvidia-390xx lib32-opencl-nvidia-390xx libxnvctrl-390xx clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
+            ;;        
+            
+        10)
+            GPU="xf86-video-nouveau mesa lib32-mesa mesa-vdpau libva-mesa-driver \
+            lib32-mesa-vdpau lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl \
+            libva-utils vdpauinfo libvdpau lib32-libvdpau opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
+            ;;
+        11)
+            GPU="xf86-video-amdgpu mesa lib32-mesa vulkan-radeon \
+            lib32-vulkan-radeon mesa-vdpau libva-mesa-driver lib32-mesa-vdpau \
+            lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl libva-utils vdpauinfo \
+            opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
+            ;;
+        12)
+            GPU="xf86-video-ati mesa lib32-mesa mesa-vdpau libva-mesa-driver \
+            lib32-mesa-vdpau lib32-libva-mesa-driver libva-vdpau-driver libvdpau-va-gl \
+            libva-utils vdpauinfo opencl-mesa clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
+            ;;
+            
+        13)
+            GPU="xf86-video-intel vulkan-intel mesa lib32-mesa intel-media-driver \
             libva-intel-driver libva-vdpau-driver libvdpau-va-gl libva-utils vdpauinfo \
-            intel-compute-runtime beignet clinfo ocl-icd lib32-ocl-icd opencl-headers'
-            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\n$GPU" 10 80
+            intel-compute-runtime beignet clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
             ;;
     esac
 done
 ;;
+
 
 
    255) echo "Presiono la tecla [ESC]"
@@ -340,11 +404,12 @@ esac
 #Final de VIDEO      
 fi
 
+
+
     ####################################################################
     
-titulo="| Instalación de ArchLinux - by: ArcriS |"
-
-
+    
+    
 cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "$titulo" --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu (DE) o (WM) a instalar" 9 50 9)
 
 options=(1 "Entorno de escritorio | (DE)"
@@ -397,15 +462,15 @@ do
     case $choice in
         
         1)  DE="xfce4 xfce4-goodies network-manager-applet alacarte papirus-icon-theme deepin-icon-theme sierra-gtk-theme-git gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer"
-git clone https://github.com/CodigoCristo/config.git | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80
-unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
-chmod +777 xfce4
-cp -rf xfce4/.config/* /root/.config/
-mkdir /home/$nombre_usuario/.config/
-chown -hR $nombre_usuario:users /home/$nombre_usuario/.config
-cp -rf xfce4/.config/* /home/$nombre_usuario/.config/
-DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
-echo lightdm > DMservice
+            git clone https://github.com/CodigoCristo/config.git | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80
+            unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
+            chmod +777 xfce4
+            cp -rf xfce4/.config/* /root/.config/
+            mkdir /home/$nombre_usuario/.config/
+            chown -hR $nombre_usuario:users /home/$nombre_usuario/.config
+            cp -rf xfce4/.config/* /home/$nombre_usuario/.config/
+            DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
+            echo lightdm > DMservice
             ;;
             
         2)  DE="xfce4 xfce4-goodies network-manager-applet alacarte ttf-hack ttf-inconsolata gnome-font-viewer"
@@ -1263,7 +1328,7 @@ done
 #FIN the X11 keymap
 
 clear
-pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Claves Actualizadas, Espere... |" 27 100; sleep 3
+#  pacman -Sy archlinux-keyring --noconfirm | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Claves Actualizadas, Espere... |" 27 100; sleep 3
 
 sed -i '100d' /etc/pacman.conf
 sed -i '99d' /etc/pacman.conf
@@ -1273,25 +1338,34 @@ nombre_usuario=$(cat /etc/passwd | grep '/home' | cut -d: -f1)
 
 
 dialog  --backtitle "$titulo" --title "-| Instalando |-" --stdout --ok-label "Siguiente" --prgbox "pacman -Syu && \
-sudo -u $nombre_usuario yay -Sy $XORG --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $GPU --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $DE --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $DM --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $WM --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $WEB --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $FONT --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $UTIL --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $AUDIO --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $OFFICE --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $IDE --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $REPRO --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $SH --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $AP --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $RS --noeditmenu --noconfirm && \
-sudo -u $nombre_usuario yay -Sy $AUR --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario yay -Sy $XORG --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -Sy $GPU --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -Sy $DE --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -Sy $DM --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -Sy $WM --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -Sy $WEB --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -Sy $FONT --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -Sy $UTIL --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -Sy $AUDIO --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -Sy $OFFICE --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -Sy $IDE --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -Sy $REPRO --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -Sy $SH --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -Sy $AP --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -Sy $RS --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -Sy $AUR --noeditmenu --noconfirm --needed && \
 systemctl enable $(cat DMservice) $(cat GPUvirt) && \
 pacman -R $AUR_DELETE --noconfirm && \
 echo TODO LISTO ! && echo https://t.me/ArchLinuxCristo" 27 100
+
+
+if [ "$GPUHYBR" == "true" ]; then
+    
+optimus-manager --switch hybrid
+    
+fi
+
+
 
 localectl set-x11-keymap $keymap
 
