@@ -480,6 +480,8 @@ do
 
 #zip -r xfce4.zip .config
 
+xfce4tema=false
+
 cmd=(dialog --keep-tite --backtitle "$titulo" \
 --no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Decide en instalar o personalizar las opciones\n\n \
 xfce4 xfce4-goodies network-manager-applet alacarte \n\nSelecciona una opción para XFCE4 \n" 14 60 19)
@@ -502,10 +504,12 @@ do
             chmod +777 .config
             chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
             cp -rf .config/* /home/$nombre_usuario/.config/
+            cp -rf .config/5336864_orig.png /usr/share/backgrounds/xfce4/usb.png
+            cp -rf .config/logo2.png /usr/share/backgrounds/xfce4/logo-arch.png
             chmod +700 .config
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
             echo lightdm > DMservice
-            
+            xfce4tema=true
             ;;
             
         2)  DE="xfce4 xfce4-goodies network-manager-applet alacarte ttf-hack ttf-inconsolata gnome-font-viewer"
@@ -1371,6 +1375,12 @@ systemctl enable $(cat GPUvirt)
 elif [ "$VMqemu" == "true" ]; then
     
 systemctl enable $(cat GPUvirt)
+
+
+elif [ "$xfce4tema" == "true" ]; then
+
+cp -rf .config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
+rm -R config/
 
 elif [ "$aurherlp" == "true" ]; then
     
