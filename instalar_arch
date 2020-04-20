@@ -117,8 +117,8 @@ case $? in
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - UEFI |-" --stdout --ok-label "Siguiente" \
 --prgbox "sgdisk --zap-all ${disk} && parted ${disk} mklabel gpt && \
 sgdisk ${disk} -n=1:0:+1G -t=1:ef00 && \
-sgdisk ${disk} -n=3:0:+${swapsize} -t=3:8200 && \
-sgdisk ${disk} -n=4:0:0 && \
+sgdisk ${disk} -n=2:0:+${swapsize} -t=3:8200 && \
+sgdisk ${disk} -n=3:0:0 && \
 fdisk -l ${disk} > /tmp/partitions && \
 cat /tmp/partitions" 13 100
 
@@ -143,7 +143,7 @@ swapon $(cat swap-efi)" 20 150
    1) dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - UEFI |-" --stdout --ok-label "Siguiente" \
 --prgbox "sgdisk --zap-all ${disk} && parted ${disk} mklabel gpt && \
 sgdisk ${disk} -n=1:0:+1G -t=1:ef00 && \
-sgdisk ${disk} -n=4:0:0 && \
+sgdisk ${disk} -n=2:0:0 && \
 fdisk -l ${disk} > /tmp/partitions && \
 cat /tmp/partitions" 13 100
 
