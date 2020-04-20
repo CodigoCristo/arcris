@@ -502,6 +502,7 @@ do
             chmod +777 .config
             chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
             cp -rf .config/* /home/$nombre_usuario/.config/
+            chmod +700 .config
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
             echo lightdm > DMservice
             
