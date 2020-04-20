@@ -499,7 +499,7 @@ do
             unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
             mkdir /home/$nombre_usuario/.config/
             chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
-            cp -rf /root/xfce4/.config/* /home/$nombre_usuario/.config/
+            cp -rf xfce4/.config/* /home/$nombre_usuario/.config/
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
             echo lightdm > DMservice
             
