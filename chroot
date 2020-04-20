@@ -1351,29 +1351,17 @@ if [ "$GPUHYBR" == "true" ]; then
     
 optimus-manager --switch hybrid
     
-fi
-
-clear
-
-if [ "$VMbox" == "true" ]; then
+elif [ "$VMbox" == "true" ]; then
     
 modprobe vboxdrv
 VBoxClient-all
 systemctl enable $(cat GPUvirt)
     
-fi
-
-clear
-
-if [ "$VMqemu" == "true" ]; then
+elif [ "$VMqemu" == "true" ]; then
     
 systemctl enable $(cat GPUvirt)
-    
-fi
 
-clear
-
-if [ "$aurherlp" == "true" ]; then
+elif [ "$aurherlp" == "true" ]; then
     
 pacman -R $AUR_DELETE --noconfirm
     
