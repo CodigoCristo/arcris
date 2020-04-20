@@ -107,7 +107,7 @@ if [ $uefi == 1 ]
 then
     
 #DIALOG PARA YES Y NO CASOS
-dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Memoria SWAP |-" --yesno "\n ¿ Deseas agregar RAM virutal ?" 7 35
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Memoria SWAP |-" --yesno "\n ¿ Deseas agregar RAM Virtual ?" 7 35
 
 case $? in
    0) swapsize=$(dialog --no-cancel --backtitle "$titulo" --title "-| Memoria SWAP |-" \
@@ -171,7 +171,7 @@ esac
 else
 
 #DIALOG PARA YES Y NO CASOS
-dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Memoria SWAP |-" --yesno "\n ¿ Deseas agregar RAM virutal ?" 7 35
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Memoria SWAP |-" --yesno "\n ¿ Deseas agregar RAM Virtual ?" 7 35
 
 case $? in
    0) swapsize=$(dialog --no-cancel --backtitle "$titulo" --title "-| Memoria SWAP |-" \
@@ -816,7 +816,7 @@ fi
 clear
 arch-chroot /mnt /bin/bash -c "pacman -Sy xdg-user-dirs --noconfirm" | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Creando Directorios... |" 25 80; sleep 3
 clear
-arch-chroot /mnt /bin/bash -c "xdg-user-dirs-update"
+arch-chroot /mnt /bin/bash -c "xdg-user-dirs-update --force"
 export $(cat /mnt/etc/locale.conf)
 
 cp pacman-chroot.conf /mnt/etc/pacman.conf

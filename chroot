@@ -166,8 +166,7 @@ chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD && \
 cd /home/$nombre_usuario/yay-bin && \
 sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm && \
 pacman -U *.pkg.tar.xz --noconfirm && \
-rm -Rf /home/$nombre_usuario/yay-bin && \
-cd && yay" 25 100
+rm -Rf /home/$nombre_usuario/yay-bin" 25 100
             
 # yay -S gotop-git --noeditmenu --noconfirm --removemake
 
@@ -217,13 +216,13 @@ if [ "$VM" == "true" ]; then
             case "$virt" in
                 
                 vbox)   if [ "$kernel" == "Linux" ]; then
-                            GPU="virtualbox-guest-utils virtualbox-guest-modules-arch xf86-video-vmware virtualbox-host-modules-arch mesa mesa-libgl"
+                            GPU="virtualbox-guest-utils xf86-video-vmware virtualbox-host-modules-arch mesa mesa-libgl"
                             GPUvirt="vboxservice"
                             echo $GPUvirt | awk -F " " '{print $1}' > GPUvirt                            
-                            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VirtualBox\nInstalar: VirtualBox Guest" 8 80
+                            dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VirtualBox\nInstalar: VirtualBox Guest utils" 8 80
                             VMbox=true
                         else
-                            GPU="virtualbox-guest-utils virtualbox-guest-dkms virtualbox-host-dkms mesa mesa-libgl"
+                            GPU="virtualbox-guest-dkms virtualbox-host-dkms mesa mesa-libgl"
                             GPUvirt="systemd-modules-load"
                             echo $GPUvirt | awk -F " " '{print $1}' > GPUvirt
                             dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VirtualBox\nInstalar: VirtualBox Guest-dkms" 8 80
@@ -242,7 +241,8 @@ if [ "$VM" == "true" ]; then
                 
                 qemu) GPU="xf86-video-fbdev mesa mesa-libgl qemu-guest-agent"
                       GPUvirt="qemu-ga"
-                      VMqemu=true                       
+                      VMqemu=true
+                      dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado VirtualBox\nInstalar: qemu-guest-agent" 8 80                   
                 ;;
                 
                 
@@ -473,6 +473,11 @@ do
         
 ###########SELECCION (DE)
         1) #XFCE4
+
+#cp -rf xfce4/.config/* /root/.config/
+#chmod +777 xfce4
+#chown -hR $nombre_usuario:users /home/$nombre_usuario/.config
+
 cmd=(dialog --keep-tite --backtitle "$titulo" \
 --no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Decide en instalar o personalizar las opciones\n\n \
 xfce4 xfce4-goodies network-manager-applet alacarte \n\nSelecciona una opción para XFCE4 \n" 14 60 19)
@@ -488,15 +493,14 @@ do
     case $choice in
         
         1)  DE="xfce4 xfce4-goodies network-manager-applet alacarte papirus-icon-theme deepin-icon-theme sierra-gtk-theme-git gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer"
+            clear
             git clone https://github.com/CodigoCristo/config.git
             unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
-            chmod +777 xfce4
-            cp -rf xfce4/.config/* /root/.config/
-            mkdir /home/$nombre_usuario/.config/
-            chown -hR $nombre_usuario:users /home/$nombre_usuario/.config
-            cp -rf xfce4/.config/* /home/$nombre_usuario/.config/
+            mkdir /home/$nombre_usuario/.config/            
+            sudo -u $nombre_usuario cp -rf /root/xfce4/.config/ /home/$nombre_usuario/.config/
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
             echo lightdm > DMservice
+            
             ;;
             
         2)  DE="xfce4 xfce4-goodies network-manager-applet alacarte ttf-hack ttf-inconsolata gnome-font-viewer"
@@ -1341,9 +1345,10 @@ sudo -u $nombre_usuario yay -S $SH --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $AP --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $RS --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $AUR --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay --noeditmenu --noconfirm && \
+sudo -u $nombre_usuario xdg-user-dirs-update --force && \
 systemctl enable $(cat DMservice) && \
-echo TODO LISTO ! && echo https://t.me/ArchLinuxCristo" 27 100
-
+echo '' && echo '' && echo TODO LISTO ! && echo '' && echo https://t.me/ArchLinuxCristo" 27 100
 
 clear
 
@@ -1354,6 +1359,7 @@ optimus-manager --switch hybrid
 elif [ "$VMbox" == "true" ]; then
     
 modprobe vboxdrv
+modprobe -a vboxguest vboxsf vboxvideo
 VBoxClient-all
 systemctl enable $(cat GPUvirt)
     
@@ -1416,14 +1422,18 @@ done
 
 
 localectl set-x11-keymap $keymap
+clear
+
 
 echo $SH | awk -F " " '{print $1}' >> shell
 SH=$(cat shell)
 chsh -s /bin/$SH
 chsh -s /usr/bin/$SH $nombre_usuario
 chsh -s /bin/$SH $nombre_usuario
-rm shell
 
+rm shell
+rm DMservice
+rm GPUvirt
 clear
 
 sed -i '80d' /etc/sudoers
