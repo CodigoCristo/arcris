@@ -478,6 +478,7 @@ do
 #chmod +777 xfce4
 #chown -hR $nombre_usuario:users /home/$nombre_usuario/.config
 
+
 cmd=(dialog --keep-tite --backtitle "$titulo" \
 --no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Decide en instalar o personalizar las opciones\n\n \
 xfce4 xfce4-goodies network-manager-applet alacarte \n\nSelecciona una opción para XFCE4 \n" 14 60 19)
@@ -496,7 +497,8 @@ do
             clear
             git clone https://github.com/CodigoCristo/config.git
             unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
-            mkdir /home/$nombre_usuario/.config/            
+            mkdir /home/$nombre_usuario/.config/
+            chown -hR $nombre_usuario:users /home/$nombre_usuario/.config
             sudo -u $nombre_usuario cp -rf /root/xfce4/.config/ /home/$nombre_usuario/.config/
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
             echo lightdm > DMservice
