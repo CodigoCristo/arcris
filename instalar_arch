@@ -772,7 +772,7 @@ arch-chroot /mnt /bin/bash -c "hwclock -w"
 
 #activando servicios dhcpcd NetworkManager sshd
 #Actualiza Servicios y Mirrors
-arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd sshd"
+arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd NetworkManager"
 clear
 
 if [[ -n $wifinet ]]; then

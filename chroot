@@ -47,19 +47,18 @@ _end=100
 # Proof of concept
 for number in $(seq ${_start} ${_end})
 do
-    sleep 0.7
+    sleep 0.4
     ProgressBar ${number} ${_end}
 done
 echo -e ''
 echo -e ''
 
-systemctl enable dhcpcd NetworkManager
-systemctl start dhcpcd NetworkManager
+ping -c 5 archlinux.org
 
 echo -e ''
 echo -e ''
 
-ping -c 5  archlinux.org
+pacman -Syyu
 
 echo -e '\033[m'
 
@@ -68,10 +67,9 @@ titulo="| Instalación de ArchLinux en Español - https://t.me/ArchLinuxCristo |
 
 
 #dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| ESPERE... |" --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
+#sleep 5
 
-sleep 5
-
-if ping -c 5 www.google.com &> /dev/null; then
+if ping -c 3 www.google.com &> /dev/null; then
     
    dialog --title "|  Conexión a RED  |" --backtitle "$titulo" \
    --prgbox "ping -c 3 archlinux.org && echo && echo Si Hay Internet!" 17 100
