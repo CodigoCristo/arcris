@@ -478,6 +478,7 @@ do
 #chmod +777 xfce4
 #chown -hR $nombre_usuario:users /home/$nombre_usuario/.config
 
+#zip -r xfce4.zip .config
 
 cmd=(dialog --keep-tite --backtitle "$titulo" \
 --no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Decide en instalar o personalizar las opciones\n\n \
@@ -498,8 +499,9 @@ do
             git clone https://github.com/CodigoCristo/config.git
             unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
             mkdir /home/$nombre_usuario/.config/
+            chmod +777 .config
             chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
-            cp -rf xfce4/.config/* /home/$nombre_usuario/.config/
+            cp -rf .config/* /home/$nombre_usuario/.config/
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
             echo lightdm > DMservice
             
@@ -1443,7 +1445,8 @@ sed -i "80i $nombre_usuario ALL=(ALL) ALL" /etc/sudoers
 cp pacman-chroot.conf /etc/pacman.conf
 clear
 pacman -Syu --noconfirm
-alsi
+echo ""
+neofetch
 sleep 5
 clear
 
