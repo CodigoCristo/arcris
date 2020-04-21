@@ -1380,8 +1380,6 @@ systemctl enable $(cat GPUvirt)
 elif [ "$xfce4tema" == "true" ]; then
 
 cp -rf .config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
-cp -rf /home/$nombre_usuario/.config/5336864_orig.png /usr/usb.png
-cp -rf /home/$nombre_usuario/.config/logo2.png /usr/logo-arch.png
 
 rm -R config/
 
