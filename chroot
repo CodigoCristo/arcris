@@ -833,6 +833,95 @@ done
 UTIL=" $UTIL1 $UTIL2 $UTIL3 $UTIL4 $UTIL5 $UTIL6 "
 #FINAL DE UTILIDADES
 
+
+#TIPOGRAFIAS
+cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  \
+--no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Seleeciona tu Tipografía para tu sistema\n[ ESPACIO ] - Para marcar o desmarcar *" 20 80 20)
+options=(1 "gnu-free-fonts" on    # any option can be set to default to "on"
+         2 "ttf-hack" on
+         3 "ttf-inconsolata" on
+         4 "ttf-opensans" on         
+         5 "ttf-ubuntu-font-family" off
+         6 "ttf-tahoma" off
+         7 "nerd-fonts-complete" off
+         8 "ttf-google-sans" off
+         9 "cantarell-fonts" off
+         10 "ttf-linux-libertine" off
+         11 "ttf-ms-fonts" off
+         12 "ttf-envy-code-r" off
+         13 "noto-fonts" off
+         14 "nerd-fonts-dejavu-complete" off
+         15 "bdf-unifont" off
+         16 "system-san-francisco-font-git" off
+         17 "adobe-source-sans-pro-fonts" off
+         18 "adobe-source-serif-pro-fonts" off)
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            FONT1="gnu-free-fonts"
+            ;;
+        2)
+            FONT2="ttf-hack"
+            ;;
+        3)
+            FONT3="ttf-inconsolata"
+            ;;
+        4)
+            FONT4="ttf-opensans"
+            ;;
+        5)
+            FONT5="ttf-ubuntu-font-family"
+            ;;
+        6)
+            FONT6="ttf-tahoma"
+            ;;
+        7)
+            FONT7="nerd-fonts-complete"
+            ;;
+        8)
+            FONT8="ttf-google-sans"
+            ;;
+        9)
+            FONT9="cantarell-fonts"
+            ;;
+        10)
+            FONT10="ttf-linux-libertine"
+            ;;
+        11)
+            FONT11="ttf-ms-fonts"
+            ;;
+        12)
+            FONT12="ttf-envy-code-r"
+            ;;
+        13)
+            FONT13="noto-fonts"
+            ;;
+        14)
+            FONT14="nerd-fonts-dejavu-complete"
+            ;;
+        15)
+            FONT15="bdf-unifont"
+            ;;
+        16)
+            FONT16="system-san-francisco-font-git"
+            ;;
+        17)
+            FONT17="adobe-source-sans-pro-fonts"
+            ;;
+        18)
+            FONT18="adobe-source-serif-pro-fonts"
+            ;;
+            
+    esac
+done
+FONT=" gnome-font-viewer $FONT1 $FONT2 $FONT3 $FONT4 $FONT5 $FONT6 $FONT7 $FONT8 $FONT9 $FONT10 $FONT11 $FONT12 $FONT13 $FONT14 $FONT15 $FONT16 $FONT17 $FONT18 "
+# FIN TIPOGRAFIAS
+
+
+
 #REPRODUCTOR
 cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
 --no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' \
@@ -962,150 +1051,10 @@ WEB=" $WEB1 $WEB3 $WEB4 $WEB5 $WEB6 $WEB7 $WEB8 $WEB9 $WEB10 $WEB11 "
 # FIN NAVEGADORES
 
 
-#IDE'S
-cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
---no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Seleeciona Editor de Texto\n[ ESPACIO ] - Para marcar o desmarcar *" 19 100 19)
-options=(1 "Vim | Open source" on    # any option can be set to default to "on"
-         2 "GVim | Open source" off
-         3 "Neovim | Open source" off
-         4 "VSCode | Code editor" off         
-         5 "Brackets | Code editor" off
-         6 "Sublime Text 3 | Code editor" off
-         7 "Emacs | Code editor" off
-         8 "Gedit | Code editor" off
-         9 "Geany | Code editor" off
-         10 "Netbeans | Code editor" off
-         11 "Codeblocks | Code editor" off)
-choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-clear
-for choice in $choices
-do
-    case $choice in
-        1)
-            IDE1="vim"
-            ;;
-        2)
-            IDE2="gvim"
-            ;;
-        3)
-            IDE3="neovim"
-            ;;
-        4)
-            IDE4="visual-studio-code-bin"
-            ;;
-        5)
-            IDE5="brackets-bin"
-            ;;
-            
-        6)  IDE6="sublime-text-dev"
-            ;;
-            
-        7)  IDE7="emacs"
-            ;;
-        
-        8)  IDE8="gedit"
-            ;;
-            
-        9)  IDE9="geany"
-            ;;
-            
-        10) IDE10="netbeans"
-            ;;
-            
-        11) IDE11="codeblocks"
-            ;;
-
-    esac
-done
-IDE=" $IDE1 $IDE3 $IDE4 $IDE5 $IDE6 $IDE7 $IDE8 $IDE9 $IDE10 $IDE11 "
-# FIN IDE'S
 
 
-#TIPOGRAFIAS
-cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  \
---no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Seleeciona tu Tipografía para tu sistema\n[ ESPACIO ] - Para marcar o desmarcar *" 20 80 20)
-options=(1 "gnu-free-fonts" on    # any option can be set to default to "on"
-         2 "ttf-hack" on
-         3 "ttf-inconsolata" on
-         4 "ttf-opensans" on         
-         5 "ttf-ubuntu-font-family" off
-         6 "ttf-tahoma" off
-         7 "nerd-fonts-complete" off
-         8 "ttf-google-sans" off
-         9 "cantarell-fonts" off
-         10 "ttf-linux-libertine" off
-         11 "ttf-ms-fonts" off
-         12 "ttf-envy-code-r" off
-         13 "noto-fonts" off
-         14 "nerd-fonts-dejavu-complete" off
-         15 "bdf-unifont" off
-         16 "system-san-francisco-font-git" off
-         17 "adobe-source-sans-pro-fonts" off
-         18 "adobe-source-serif-pro-fonts" off)
-choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-clear
-for choice in $choices
-do
-    case $choice in
-        1)
-            FONT1="gnu-free-fonts"
-            ;;
-        2)
-            FONT2="ttf-hack"
-            ;;
-        3)
-            FONT3="ttf-inconsolata"
-            ;;
-        4)
-            FONT4="ttf-opensans"
-            ;;
-        5)
-            FONT5="ttf-ubuntu-font-family"
-            ;;
-        6)
-            FONT6="ttf-tahoma"
-            ;;
-        7)
-            FONT7="nerd-fonts-complete"
-            ;;
-        8)
-            FONT8="ttf-google-sans"
-            ;;
-        9)
-            FONT9="cantarell-fonts"
-            ;;
-        10)
-            FONT10="ttf-linux-libertine"
-            ;;
-        11)
-            FONT11="ttf-ms-fonts"
-            ;;
-        12)
-            FONT12="ttf-envy-code-r"
-            ;;
-        13)
-            FONT13="noto-fonts"
-            ;;
-        14)
-            FONT14="nerd-fonts-dejavu-complete"
-            ;;
-        15)
-            FONT15="bdf-unifont"
-            ;;
-        16)
-            FONT16="system-san-francisco-font-git"
-            ;;
-        17)
-            FONT17="adobe-source-sans-pro-fonts"
-            ;;
-        18)
-            FONT18="adobe-source-serif-pro-fonts"
-            ;;
-            
-    esac
-done
-FONT=" gnome-font-viewer $FONT1 $FONT2 $FONT3 $FONT4 $FONT5 $FONT6 $FONT7 $FONT8 $FONT9 $FONT10 $FONT11 $FONT12 $FONT13 $FONT14 $FONT15 $FONT16 $FONT17 $FONT18 "
-# FIN TIPOGRAFIAS
+
+
 
 #OFFICE
 cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
@@ -1113,9 +1062,7 @@ cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --co
 options=(    1 "LibreOffice | libreoffice-still" on
              2 "LibreOffice | libreoffice-fresh" off
              3 "WPS Office | wps-office" off
-             4 "OnlyOffice | onlyoffice-bin" off
-             5 "OpenOffice | openoffice" off
-             6 "SoftMaker Office | freeoffice " off)
+             4 "SoftMaker Office | freeoffice " off)
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
@@ -1132,17 +1079,11 @@ do
             OFFICE3="wps-office ttf-wps-fonts wps-office-mui-es-es"
             ;;
         4)
-            OFFICE4="onlyoffice-bin"
-            ;;
-        5)
-            OFFICE5="openoffice openoffice-extension-languagetool"
-            ;;
-        6)
-            OFFICE6="freeoffice"
+            OFFICE4="freeoffice"
             ;;
     esac
 done
-OFFICE=" $OFFICE1 $OFFICE3 $OFFICE4 $OFFICE5 $OFFICE6 "
+OFFICE=" $OFFICE1 $OFFICE2 $OFFICE3 $OFFICE4  "
 # FIN OFFICE
 
 
