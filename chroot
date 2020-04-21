@@ -47,7 +47,7 @@ _end=100
 # Proof of concept
 for number in $(seq ${_start} ${_end})
 do
-    sleep 0.4
+    sleep 0.1
     ProgressBar ${number} ${_end}
 done
 echo -e ''
@@ -122,7 +122,7 @@ case $? in
             sleep 1
             done
             ) |
-            $DIALOG --title "| Conectando a Red Wifi |" --gauge "\n\nConectándose, espere..." 10 50 0
+            $DIALOG --backtitle "$titulo" --title "| Conectando a Red Wifi |" --gauge "\n\nConectándose, espere..." 10 50 0
             
 
             dialog --backtitle "$titulo" --title "| Estado de Conexión |" \
@@ -790,7 +790,7 @@ AUDIO=" $AUDIO1 $AUDIO2 $AUDIO3 "
 cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  \
 --no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Utilidades para tu sistema\n[ ESPACIO ] - Para marcar o desmarcar *" 15 70 20)
 options=(1 "Lectura y formateo de discos incluido Android" on    # any option can be set to default to "on"
-         2 "Compresión y Descompresión de archivos" off
+         2 "Compresión y Descompresión de archivos" on
          3 "Códecs de video, lectura de todos los formatos de vídeo" off
          4 "Gufw firewall de red" off
          5 "gnome-disk-utility - Administrador de Discos" off
@@ -838,23 +838,25 @@ UTIL=" $UTIL1 $UTIL2 $UTIL3 $UTIL4 $UTIL5 $UTIL6 "
 cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  \
 --no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Seleeciona tu Tipografía para tu sistema\n[ ESPACIO ] - Para marcar o desmarcar *" 20 80 20)
 options=(1 "gnu-free-fonts" on    # any option can be set to default to "on"
-         2 "ttf-hack" on
-         3 "ttf-inconsolata" on
-         4 "ttf-opensans" on         
+         2 "ttf-opensans" on 
+         3 "ttf-hack" off
+         4 "ttf-inconsolata" off
          5 "ttf-ubuntu-font-family" off
          6 "ttf-tahoma" off
-         7 "nerd-fonts-complete" off
-         8 "ttf-google-sans" off
-         9 "cantarell-fonts" off
-         10 "ttf-linux-libertine" off
-         11 "ttf-ms-fonts" off
-         12 "ttf-envy-code-r" off
-         13 "noto-fonts" off
-         14 "nerd-fonts-dejavu-complete" off
-         15 "bdf-unifont" off
-         16 "system-san-francisco-font-git" off
-         17 "adobe-source-sans-pro-fonts" off
-         18 "adobe-source-serif-pro-fonts" off)
+         7 "ttf-google-sans" off
+         8 "ttf-linux-libertine" off
+         9 "ttf-envy-code-r" off
+         10 "ttf-font-awesome > icons" on
+         11 "ttf-ionicons > icons" off
+         12 "ttf-font-icons > icons" off
+         13 "nerd-fonts-complete > +2.3 GiB" off
+         14 "noto-fonts" off
+         15 "cantarell-fonts" off
+         16 "nerd-fonts-dejavu-complete" off
+         17 "bdf-unifont" off
+         18 "system-san-francisco-font-git" off
+         19 "adobe-source-sans-pro-fonts" off
+         20 "adobe-source-serif-pro-fonts" off)
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
 for choice in $choices
@@ -864,13 +866,13 @@ do
             FONT1="gnu-free-fonts"
             ;;
         2)
-            FONT2="ttf-hack"
+            FONT2="ttf-opensans"
             ;;
         3)
-            FONT3="ttf-inconsolata"
+            FONT3="ttf-hack"
             ;;
         4)
-            FONT4="ttf-opensans"
+            FONT4="ttf-inconsolata"
             ;;
         5)
             FONT5="ttf-ubuntu-font-family"
@@ -879,45 +881,51 @@ do
             FONT6="ttf-tahoma"
             ;;
         7)
-            FONT7="nerd-fonts-complete"
+            FONT7="nerd-google-sans"
             ;;
         8)
-            FONT8="ttf-google-sans"
+            FONT8="ttf-linux-libertine"
             ;;
         9)
-            FONT9="cantarell-fonts"
+            FONT9="ttf-envy-code-r"
             ;;
         10)
-            FONT10="ttf-linux-libertine"
+            FONT10="ttf-font-awesome awesome-terminal-fonts"
             ;;
         11)
-            FONT11="ttf-ms-fonts"
+            FONT11="ttf-ionicons"
             ;;
         12)
-            FONT12="ttf-envy-code-r"
+            FONT12="ttf-font-icons"
             ;;
         13)
-            FONT13="noto-fonts"
+            FONT13="nerd-fonts-complete"
             ;;
         14)
-            FONT14="nerd-fonts-dejavu-complete"
+            FONT14="noto-fonts"
             ;;
         15)
-            FONT15="bdf-unifont"
+            FONT15="cantarell-fonts"
             ;;
         16)
-            FONT16="system-san-francisco-font-git"
+            FONT16="nerd-fonts-dejavu-complete"
             ;;
         17)
-            FONT17="adobe-source-sans-pro-fonts"
+            FONT17="bdf-unifont"
             ;;
         18)
-            FONT18="adobe-source-serif-pro-fonts"
+            FONT18="system-san-francisco-font-git"
+            ;;
+        19)
+            FONT19="adobe-source-sans-pro-fonts"
+            ;;
+        20)
+            FONT20="adobe-source-serif-pro-fonts"
             ;;
             
     esac
 done
-FONT=" gnome-font-viewer $FONT1 $FONT2 $FONT3 $FONT4 $FONT5 $FONT6 $FONT7 $FONT8 $FONT9 $FONT10 $FONT11 $FONT12 $FONT13 $FONT14 $FONT15 $FONT16 $FONT17 $FONT18 "
+FONT=" gnome-font-viewer $FONT1 $FONT2 $FONT3 $FONT4 $FONT5 $FONT6 $FONT7 $FONT8 $FONT9 $FONT10 $FONT11 $FONT12 $FONT13 $FONT14 $FONT15 $FONT16 $FONT17 $FONT18 $FONT19 $FONT20 "
 # FIN TIPOGRAFIAS
 
 
@@ -961,6 +969,7 @@ do
             ;;
         6)
             REPRO6="spotify"
+            clear
             printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
             echo -e ""
             echo -e "\t\t\t         Actualizando          "
@@ -995,18 +1004,13 @@ REPRO=" $REPRO1 $REPRO3 $REPRO4 $REPRO5 $REPRO6 $REPRO7 $REPRO8 $REPRO9 $REPRO10
 
 #NAVEGADORES
 cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
---no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Seleeciona tu navegador web\n[ ESPACIO ] - Para marcar o desmarcar *" 19 100 19)
+--no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Seleeciona tu navegador web\n[ ESPACIO ] - Para marcar o desmarcar *" 13 100 19)
 options=(1 "Firefox | Open source" on    # any option can be set to default to "on"
          2 "Chromium | Open source" off
-         3 "Brave | Open source" off
-         4 "Google Chrome | Proprietary browser" off         
+         3 "Brave | AUR - Open source" off
+         4 "Google Chrome | AUR - Proprietary browser" off         
          5 "Opera | Proprietary browser" off
-         6 "Vivaldi | Proprietary browser" off
-         7 "Falkon | Open source" off
-         8 "Qutebrowser | Open source" off
-         9 "elinks | Console browser" off
-         10 "lynx | Console browser" off
-         11 "w3m | Console browser" off)
+         6 "Vivaldi | AUR - Proprietary browser" off)
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
 for choice in $choices
@@ -1028,27 +1032,13 @@ do
             WEB5="opera"
             ;;
         6)
-            WEB7="vivaldi"
-            ;;
-        7)
-            WEB8="falkon"
-            ;;
-        8)
-            WEB9="qutebrowser"
-            ;;
-        9)
-            WEB10="elinks"
-            ;;
-        10)
-            WEB11="lynx"
-            ;;
-        11)
-            WEB12="w3m"
+            WEB6="vivaldi"
             ;;
     esac
 done
-WEB=" $WEB1 $WEB3 $WEB4 $WEB5 $WEB6 $WEB7 $WEB8 $WEB9 $WEB10 $WEB11 "
+WEB=" $WEB1 $WEB2 $WEB3 $WEB4 $WEB5 $WEB6 "
 # FIN NAVEGADORES
+
 
 
 
@@ -1061,8 +1051,8 @@ cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --co
 --no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Suite de Ofimática\n[ ESPACIO ] - Para marcar o desmarcar *" 14 100 14)
 options=(    1 "LibreOffice | libreoffice-still" on
              2 "LibreOffice | libreoffice-fresh" off
-             3 "WPS Office | wps-office" off
-             4 "SoftMaker Office | freeoffice " off)
+             3 "WPS Office | AUR - wps-office" off
+             4 "SoftMaker Office | AUR - freeoffice " off)
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
@@ -1093,7 +1083,7 @@ cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  --title "-| Administr
 --no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 15 70 20)
 options=(1 "gnome-system-monitor" on
          2 "htop" on
-         3 "gotop" off
+         3 "gotop - AUR" off
          4 "gtop" off)
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
@@ -1124,11 +1114,11 @@ AP=" $AP1 $AP2 $AP3 $AP4 "
 cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  --title "-| Redes Sociales |-" \
 --no-tags --ok-label '< Siguiente >' --column-separator "|" --cancel-label '< No deseo esto >' --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 15 70 20)
 options=(1 "Telegram | telegram-desktop" on
-         2 "IGdm | App de chat de Instagram" off
-         3 "Whatsapp | whatsapp-nativefier-dark" off
-         4 "Facebook Messenger | caprine" off
-         5 "Netflix | netflix-qdesktop" off
-         6 "Skype | skypeforlinux-preview-bin" off)
+         2 "IGdm - AUR | App de chat de Instagram" off
+         3 "Whatsapp - AUR | whatsapp-nativefier-dark" off
+         4 "Facebook Messenger - AUR | caprine" off
+         5 "Netflix - AUR | netflix-qdesktop" off
+         6 "Skype - AUR | skypeforlinux-preview-bin" off)
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
@@ -1177,6 +1167,7 @@ do
         1)
             SH="zsh zsh-completions zsh-syntax-highlighting"
             cp /root/zshrc /home/$nombre_usuario/.zshrc
+            cp /root/zshrc /root/.zshrc
             ;;
 
         2)
@@ -1289,12 +1280,12 @@ sudo -u $nombre_usuario yay -S $FONT --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $UTIL --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $AUDIO --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $OFFICE --noeditmenu --noconfirm --needed && \
-sudo -u $nombre_usuario yay -S $IDE --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $REPRO --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $SH --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $AP --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $RS --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $AUR --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -S gedit viewnior --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario xdg-user-dirs-update --force && \
 systemctl enable $(cat DMservice) && \
@@ -1308,8 +1299,7 @@ optimus-manager --switch hybrid
     
 elif [ "$VMbox" == "true" ]; then
     
-modprobe vboxdrv
-modprobe -a vboxguest vboxsf vboxvideo
+modprobe -a vboxguest vboxsf vboxvideo vboxdrv
 VBoxClient-all
 systemctl enable $(cat GPUvirt)
     
@@ -1387,7 +1377,7 @@ SH=$(cat shell)
 chsh -s /bin/$SH
 chsh -s /usr/bin/$SH $nombre_usuario
 chsh -s /bin/$SH $nombre_usuario
-
+cp /root/bashrc /root/.bashrc
 rm shell
 rm DMservice
 rm GPUvirt
