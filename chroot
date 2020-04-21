@@ -503,7 +503,6 @@ do
             mkdir /home/$nombre_usuario/.config/
             chmod +777 .config
             chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
-            chown -hR $nombre_usuario:users /usr/
             cp -rf .config/* /home/$nombre_usuario/.config/
             cp -rf .config/5336864_orig.png /usr/usb.png
             cp -rf .config/logo2.png /usr/logo-arch.png
