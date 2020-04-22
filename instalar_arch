@@ -576,7 +576,7 @@ esac
 #####hardened
   elif [ $kernel_select == linux-hardened ]; then
 
-dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Instalando Sistema Base - Linux Stable |-" \
+dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Instalando Sistema Base - Linux Hardened |-" \
 --stdout --ok-label "Siguiente" --prgbox 'pacstrap /mnt base base-devel reflector && \
 reflector --latest 10 --sort rate --save /mnt/etc/pacman.d/mirrorlist && \
 cat /mnt/etc/pacman.d/mirrorlist && \
@@ -643,7 +643,7 @@ esac
   elif [ $kernel_select == linux-lts ]; then
 ##################################################################################
 
-dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Instalando Sistema Base - Linux Stable |-" \
+dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Instalando Sistema Base - Linux LTS |-" \
 --stdout --ok-label "Siguiente" --prgbox 'pacstrap /mnt base base-devel reflector && \
 reflector --latest 10 --sort rate --save /mnt/etc/pacman.d/mirrorlist && \
 cat /mnt/etc/pacman.d/mirrorlist && \
@@ -720,7 +720,7 @@ esac
 
 ###### ZEN
   elif [ $kernel_select == linux-zen ]; then
-dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Instalando Sistema Base - Linux Stable |-" \
+dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Instalando Sistema Base - Linux ZEN |-" \
 --stdout --ok-label "Siguiente" --prgbox 'pacstrap /mnt base base-devel reflector && \
 reflector --latest 10 --sort rate --save /mnt/etc/pacman.d/mirrorlist && \
 cat /mnt/etc/pacman.d/mirrorlist && \
