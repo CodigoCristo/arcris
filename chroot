@@ -881,7 +881,7 @@ do
             FONT6="ttf-tahoma"
             ;;
         7)
-            FONT7="nerd-google-sans"
+            FONT7="ttf-google-sans"
             ;;
         8)
             FONT8="ttf-linux-libertine"
