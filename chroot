@@ -551,7 +551,10 @@ done
             options=(1 "kde-applications || Programas extras de KDE" off 
                      2 "appmenu-gtk || Global Menu GTK2/GTK3" off
                      3 "bluedevil || Bluetooth" off
-                     4 "print-manager || Impresoras" off)
+                     4 "print-manager || Impresoras" off
+                     5 "latte-dock || Dock Plasma"
+                     6 "discover || Tienda KDE")
+            
             choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
             clear
             for choice in $choices
@@ -732,7 +735,8 @@ for choice in $choices
 do
     case $choice in
         1)  #https://github.com/josevega96/scripts/blob/Linux-i3/restore.sh
-            WM="i3 i3-gaps dmenu ranger"
+            WM="i3-gaps i3lock rofi ranger ly-git gtk-theme-shades-of-gray polybar alacritty"
+            echo ly > DMservice
             ;;
         2)
             echo "Second Option"
