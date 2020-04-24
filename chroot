@@ -735,7 +735,7 @@ for choice in $choices
 do
     case $choice in
         1)  #https://github.com/josevega96/scripts/blob/Linux-i3/restore.sh
-            WM="i3-gaps i3lock rofi ranger ly-git gtk-theme-shades-of-gray polybar alacritty"
+            WM="i3-gaps dmenu i3lock rofi ranger ly-git gtk-theme-shades-of-gray polybar alacritty rxvt-unicode"
             echo ly > DMservice
             ;;
         2)
