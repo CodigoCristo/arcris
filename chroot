@@ -735,7 +735,7 @@ for choice in $choices
 do
     case $choice in
         1)  #https://github.com/josevega96/scripts/blob/Linux-i3/restore.sh
-            WM="i3-gaps dmenu i3lock rofi ranger ly-git gtk-theme-shades-of-gray polybar alacritty rxvt-unicode"
+            WM="i3-gaps i3blocks i3lock i3status dmenu rofi ly-git alacritty rxvt-unicode"
             echo ly > DMservice
             ;;
         2)
@@ -843,7 +843,7 @@ cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  \
 --no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Seleeciona tu Tipografía para tu sistema\n[ ESPACIO ] - Para marcar o desmarcar *" 20 80 20)
 options=(1 "gnu-free-fonts" on    # any option can be set to default to "on"
          2 "ttf-opensans" on 
-         3 "ttf-hack" off
+         3 "ttf-hack" on
          4 "ttf-inconsolata" off
          5 "ttf-ubuntu-font-family" off
          6 "ttf-tahoma" off
