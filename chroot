@@ -502,11 +502,10 @@ do
             unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
             mkdir /home/$nombre_usuario/.config/
             chmod +777 .config
-            chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
             cp -rf .config/* /home/$nombre_usuario/.config/
             cp -rf .config/5336864_orig.png /usr/usb.png
             cp -rf .config/logo2.png /usr/logo-arch.png
-            chmod +700 .config
+            chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
             echo lightdm > DMservice
             xfce4tema=true

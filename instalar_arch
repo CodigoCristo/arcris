@@ -808,7 +808,7 @@ arch-chroot /mnt /bin/bash -c "locale-gen" | dialog --backtitle "-| Instalación
 
 arch-chroot /mnt /bin/bash -c "export $(cat /mnt/etc/locale.conf)" 
 
-echo "KEYMAP=$keymap" > /mnt/etc/vconsole.conf && cat /mnt/etc/vconsole.conf | dialog --backtitle "-| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |-" --progressbox "Idioma y teclado > Actualizando" 10 50; sleep 3
+echo "KEYMAP=$keymap" > /mnt/etc/vconsole.conf && cat /mnt/etc/vconsole.conf | dialog --backtitle "-| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |-" --progressbox "Idioma del Sistema > Actualizando" 10 50; sleep 3
 
 #ZONA HORARIA
 URL="https://ipapi.co/timezone"
