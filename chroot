@@ -713,6 +713,8 @@ done
 #FIN ESCRITORIO
             ;;
         2) #INICIO (WM)
+i3tema=false
+
 cmd=(dialog --keep-tite --backtitle "$titulo" \
 --no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu gestor de ventana a instalar - (WM)" 19 55 16)
 
@@ -735,8 +737,15 @@ for choice in $choices
 do
     case $choice in
         1)  #https://github.com/josevega96/scripts/blob/Linux-i3/restore.sh
-            WM="i3-gaps i3blocks i3lock i3status dmenu rofi ly-git alacritty rxvt-unicode"
+            
+            # WM="i3-gaps i3blocks i3lock i3status dmenu rofi ly-git thunar rxvt-unicode gnome-themes-extra"
+            # echo ly > DMservice
+            
+            WM="i3-gaps i3blocks i3lock i3status dmenu rofi ly-git alacritty rxvt-unicode lxappearance gnu-free-fonts awesome-terminal-fonts papirus-icon-theme gnome-themes-extra thunar xfce4-terminal kitty feh i3lock-fancy-git bumblebee-status"
             echo ly > DMservice
+            i3tema=true
+
+            # zip -r i3.zip .config
             ;;
         2)
             echo "Second Option"
@@ -768,10 +777,10 @@ for choice in $choices
 do
     case $choice in
         1)
-            AUDIO1="pulseaudio pulseaudio-alsa pavucontrol pamixer pulseeffects \
-            pulseaudio-equalizer lib32-alsa-plugins lib32-libpulse pulseaudio-equalizer-ladspa \
-            libcanberra-pulse libcanberra-gstreamer"
+            AUDIO1="pulseaudio pulseaudio-alsa pavucontrol pamixer \
+            pulseaudio-equalizer lib32-alsa-plugins lib32-libpulse pulseaudio-equalizer-ladspa"
             #https://wiki.archlinux.org/index.php/PulseAudio
+            #pulseeffects libcanberra-pulse libcanberra-gstreamer
             ;;
         2)
             AUDIO2="realtime-privileges jack2 lib32-jack2 a2jmidid libffado python-dbus waf pro-audio lv2-plugins ladspa-plugins dssi-plugins vst-plugins"
@@ -812,7 +821,7 @@ do
                 reiserfsprogs udftools xfsprogs nilfs-utils polkit gpart mtools cifs-utils"
             ;;
         2)
-            UTIL2="ark xarchiver unarchiver binutils gzip lha lrzip lzip lz4 p7zip tar xz \
+            UTIL2="xarchiver unarchiver binutils gzip lha lrzip lzip lz4 p7zip tar xz \
                 bzip2 p7zip lbzip2 arj lzop cpio unrar unzip zstd zip lzip unarj zstd"
             ;;
         3)
@@ -1317,6 +1326,28 @@ elif [ "$xfce4tema" == "true" ]; then
 cp -rf .config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
 
 rm -R config/
+
+elif [ "$i3tema" == "true" ]; then
+    
+clear
+git clone https://github.com/CodigoCristo/config.git
+unzip config/i3.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando tema de i3wm, espere... |" 25 80; sleep 2
+mkdir /home/$nombre_usuario/.config/
+chmod +777 .config
+chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
+cp -rf .config/* /home/$nombre_usuario/.config/
+chmod +700 .config       
+clear
+git clone https://aur.archlinux.org/bumblebee-status.git 
+chown -R $nombre_usuario:users /home/$nombre_usuario 
+chown -R $nombre_usuario:users /home/$nombre_usuario/bumblebee-status
+chown -R $nombre_usuario:users /home/$nombre_usuario/bumblebee-status/PKGBUILD
+cd /home/$nombre_usuario/bumblebee-status
+sudo -u $nombre_usuario makepkg -sicr --noconfirm
+#pacman -U *.pkg.tar.xz --noconfirm
+rm -Rf /home/$nombre_usuario/bumblebee-status
+
+
 
 elif [ "$aurherlp" == "true" ]; then
     
