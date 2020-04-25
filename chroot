@@ -1330,14 +1330,31 @@ rm -R config/
 elif [ "$i3tema" == "true" ]; then
     
 clear
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
+echo -e ""
+echo -e "\t\t\t\t\t\t\t Instalando Tema de i3WM...          "
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
 git clone https://github.com/CodigoCristo/config.git
 unzip config/i3.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando tema de i3wm, espere... |" 25 80; sleep 2
+clear
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
+echo -e ""
+echo -e "\t\t\t\t\t\t\t Instalando Tema de i3WM...          "
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
 mkdir /home/$nombre_usuario/.config/
 chmod +777 .config
 chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
 cp -rf .config/* /home/$nombre_usuario/.config/
 chmod +700 .config       
 clear
+clear
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
+echo -e ""
+echo -e "\t\t\t\t\t\t\t Instalando Tema de i3WM...          "
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
 git clone https://aur.archlinux.org/bumblebee-status.git 
 chown -R $nombre_usuario:users /home/$nombre_usuario 
 chown -R $nombre_usuario:users /home/$nombre_usuario/bumblebee-status
