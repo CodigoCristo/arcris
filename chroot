@@ -496,16 +496,7 @@ for choice in $choices
 do
     case $choice in
         
-        1)  DE="xfce4 xfce4-goodies network-manager-applet alacarte papirus-icon-theme deepin-icon-theme sierra-gtk-theme-git gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer"
-            clear
-            git clone https://github.com/CodigoCristo/config.git
-            unzip config/xfce4.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando XFCE4, espere... |" 25 80; sleep 2
-            mkdir /home/$nombre_usuario/.config/
-            chmod +777 .config
-            cp -rf .config/* /home/$nombre_usuario/.config/
-            cp -rf .config/5336864_orig.png /usr/usb.png
-            cp -rf .config/logo2.png /usr/logo-arch.png
-            chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
+        1)  DE="xfce4 xfce4-goodies network-manager-applet alacarte papirus-icon-theme deepin-icon-theme sierra-gtk-theme-git gnu-free-fonts gnome-font-viewer"
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
             echo lightdm > DMservice
             xfce4tema=true
@@ -583,9 +574,9 @@ done
 ######FINAL KDE PLASMA
 
         3) #DEEPIN
-            cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes del escritorio Deepin\n[ ESPACIO ] - Para marcar o desmarcar *" 15 100 19)
-            options=(1 "> deepin-extra |> Una mejor experiencia" off 
-                     2 "> deepin-topbar |> Barra Superior Style Gnome" off
+            cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' \
+                --nocancel --checklist "Seleeciona paquetes del escritorio Deepin\n[ ESPACIO ] - Para marcar o desmarcar *" 14 100 19)
+            options=(2 "> deepin-topbar" off
                      3 "> deepin-dock-plugin-arch-update" off
                      4 "> deepin-dock-plugin-cmdu-git" off
                      5 "> deepin-dock-plugin-netspeedandsysteminfo" off
@@ -596,9 +587,7 @@ done
             for choice in $choices
             do
                 case $choice in
-                    1)
-                        deepin1="deepin-extra"
-                        ;;
+
                     2)
                         deepin2="deepin-topbar"
                         ;;
@@ -620,7 +609,7 @@ done
                 esac
             done
 
-            deepin="deepin gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer ffmpegthumbs"
+            deepin="deepin deepin-extra gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer ffmpegthumbs"
             DE="$deepin $deepin1 $deepin2 $deepin3 $deepin4 $deepin5 $deepin6 $deepin7"
 
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
@@ -718,17 +707,17 @@ cmd=(dialog --keep-tite --backtitle "$titulo" \
 --no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu gestor de ventana a instalar - (WM)" 19 55 16)
 
 options=(1 "> i3wm | 150MB de RAM "
-         2 "> 2bwm | Window manager <"
-         3 "> cwm | Window manager <" 
-         4 "> fluxbox | Window manager <"
-         5 "> openbox | Window manager <"
-         6 "> blackbox | Window manager <"
-         7 "> Bspwm | Window manager <"
-         8 "> awesome | Window manager <"
-         9 "> dwm | Window manager <"
-         10 "> catwm | Window manager <"
-         11 "> qtile | Window manager <"
-         12 "> xmonad | Window manager <")
+         2 "> 2bwm | Aún no disponible <"
+         3 "> cwm | Aún no disponible <" 
+         4 "> fluxbox | Aún no disponible <"
+         5 "> openbox | Aún no disponible <"
+         6 "> blackbox | Aún no disponible <"
+         7 "> Bspwm | Aún no disponible <"
+         8 "> awesome | Aún no disponible <"
+         9 "> dwm | Aún no disponible <"
+         10 "> catwm | Aún no disponible <"
+         11 "> qtile | Aún no disponible <"
+         12 "> xmonad | Aún no disponible <")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -1319,6 +1308,8 @@ echo '' && echo '' && echo TODO LISTO ! && echo '' && echo https://t.me/ArchLinu
 
 clear
 
+# mkdir /home/$nombre_usuario/.config/  
+
 if [ "$GPUHYBR" == "true" ]; then
     
 optimus-manager --switch hybrid
@@ -1335,35 +1326,39 @@ systemctl enable $(cat GPUvirt)
 
 
 elif [ "$xfce4tema" == "true" ]; then
-
+    
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
+echo -e ""
+echo -e "\t\t\t\t\t\t\t Instalando Tema de XFCE4...          "
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
+git clone https://github.com/CodigoCristo/config.git
+unzip config/xfce4.zip
+mkdir /home/$nombre_usuario/.config/
+cp -rf .config/* /home/$nombre_usuario/.config/
+cp -rf .config/5336864_orig.png /usr/usb.png
+cp -rf .config/logo2.png /usr/logo-arch.png
 cp -rf .config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
-
 rm -R config/
+chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
+sleep 7
 
 elif [ "$i3tema" == "true" ]; then
 
-clear
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
 echo -e ""
 echo -e "\t\t\t\t\t\t\t Instalando Tema de i3WM...          "
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
 echo -e ""
 git clone https://github.com/CodigoCristo/config.git
-unzip config/i3.zip
-printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
-echo -e ""
-echo -e "\t\t\t\t\t\t\t Instalando Tema de i3WM...          "
-printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
-echo -e ""
-# mkdir /home/$nombre_usuario/.config/          
+unzip config/i3.zip        
 cp -rf .config/* /home/$nombre_usuario/.config/
 rm -R config/
 chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
-sleep 2
+sleep 7
 
 elif [ "$sporitykey" == "true" ]; then
 
-clear
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
 echo -e ""
 echo -e "\t\t\t         Actualizando          "
