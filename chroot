@@ -718,7 +718,7 @@ i3tema=false
 cmd=(dialog --keep-tite --backtitle "$titulo" \
 --no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu gestor de ventana a instalar - (WM)" 19 55 16)
 
-options=(1 "> i3wm | Window manager <"
+options=(1 "> i3wm | 150MB de RAM "
          2 "> 2bwm | Window manager <"
          3 "> cwm | Window manager <" 
          4 "> fluxbox | Window manager <"
@@ -736,26 +736,35 @@ choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 for choice in $choices
 do
     case $choice in
-        1)  #https://github.com/josevega96/scripts/blob/Linux-i3/restore.sh
-            
-            # WM="i3-gaps i3blocks i3lock i3status dmenu rofi ly-git thunar rxvt-unicode gnome-themes-extra"
-            # echo ly > DMservice
-            
-            WM="i3-gaps i3blocks i3lock i3status dmenu rofi alacritty rxvt-unicode lxappearance gnu-free-fonts awesome-terminal-fonts papirus-icon-theme gnome-themes-extra thunar xfce4-terminal kitty feh i3lock-fancy-git bumblebee-status"
-            clear
-            git clone https://github.com/CodigoCristo/config.git
-            unzip config/i3.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando tema de i3wm, espere... |" 25 80; sleep 2
-            clear
-            mkdir /home/$nombre_usuario/.config/          
-            cp -rf .config/* /home/$nombre_usuario/.config/
-            rm -R config/
-            chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
-            
-            DM="ly-git"
-            echo ly > DMservice
-            i3tema=true
+        1)  # zip -r i3.zip .config
 
-            # zip -r i3.zip .config
+            cmd=(dialog --keep-tite --backtitle "$titulo" \
+            --no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Cualquier elección trae por defecto:\n\n\
+            ++ i3-gaps i3blocks i3lock i3status dmenu ly-git rxvt ++\n\nSelecciona una opción para i3wm \n" 13  73 19)
+
+            options=(1 "Predeterminado || 250MB RAM || Incluye Compton y personalización"
+                     2 "Escritorio vacio || 150MB RAM || Incluye todo lo minimo para i3wm")
+
+            choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+            for choice in $choices
+            do
+                case $choice in
+                    
+                    1)  WM="i3-gaps i3blocks i3lock i3status dmenu rofi alacritty compton-tryone-git rxvt-unicode lxappearance gnu-free-fonts awesome-terminal-fonts papirus-icon-theme gnome-themes-extra thunar xfce4-terminal kitty feh i3lock-fancy-git bumblebee-status"
+                        DM="ly-git"
+                        echo ly > DMservice
+                        i3tema=true
+                        ;;
+                        
+                        
+                    2)  WM="i3-gaps i3blocks i3lock i3status dmenu ly-git rxvt-unicode gnome-themes-extra"
+                        DM="ly-git"
+                        echo ly > DMservice
+                        ;;
+                        
+                esac
+            done
             ;;
         2)
             echo "Second Option"
@@ -954,6 +963,8 @@ FONT=" gnome-font-viewer $FONT1 $FONT2 $FONT3 $FONT4 $FONT5 $FONT6 $FONT7 $FONT8
 
 
 #REPRODUCTOR
+sporitykey=false
+
 cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
 --no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' \
 --title "-| Reproductores Video y Audio |-" --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *" 19 100 19)
@@ -992,14 +1003,7 @@ do
             ;;
         6)
             REPRO6="spotify"
-            clear
-            printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
-            echo -e ""
-            echo -e "\t\t\t         Actualizando          "
-            printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
-            echo -e ""
-            gpg --recv-keys 931FF8E79F0876134EDDBDCCA87FF9DF48BF1C90
-            gpg --recv-keys 2EBF997C15BDA244B6EBF5D84773BD5E130D1D45
+            sporitykey=true
             ;;
         7)
             REPRO7="clementine"
@@ -1227,7 +1231,7 @@ options=(1 "yay | Terminal" on
          3 "pikaur | Terminal" off
          4 "aurman | Terminal" off
          5 "pakku | Terminal" off
-         6 "Pamac | Graphical" on
+         6 "Pamac | Graphical" off
          7 "Octopi | Graphical" off
          8 "Cylon | Graphical" off
          9 "Argon | Graphical" off
@@ -1336,6 +1340,38 @@ elif [ "$xfce4tema" == "true" ]; then
 cp -rf .config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
 
 rm -R config/
+
+elif [ "$i3tema" == "true" ]; then
+
+clear
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
+echo -e ""
+echo -e "\t\t\t\t\t\t\t Instalando Tema de i3WM...          "
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
+git clone https://github.com/CodigoCristo/config.git
+unzip config/i3.zip
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
+echo -e ""
+echo -e "\t\t\t\t\t\t\t Instalando Tema de i3WM...          "
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
+# mkdir /home/$nombre_usuario/.config/          
+cp -rf .config/* /home/$nombre_usuario/.config/
+rm -R config/
+chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
+sleep 2
+
+elif [ "$sporitykey" == "true" ]; then
+
+clear
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
+echo -e ""
+echo -e "\t\t\t         Actualizando          "
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
+gpg --recv-keys 931FF8E79F0876134EDDBDCCA87FF9DF48BF1C90
+gpg --recv-keys 2EBF997C15BDA244B6EBF5D84773BD5E130D1D45
 
 
 elif [ "$aurherlp" == "true" ]; then

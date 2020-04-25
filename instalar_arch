@@ -88,10 +88,7 @@ do
 done
 
 
-dialog --backtitle "$titulo" --title "-| Mensaje |-" --stdout  --ok-label 'Siguiente'  \
---msgbox "\n> UEFI trabaja con discos en GPT \n\n> UEFI su partición boot es formateada en FAT32 \n\n> BIOS LEGACY trabaja con discos en DOS/MBR\n\n> BIOS LEGACY su partición boot es formateada en EXT4\n( La partición boot en linux es opcional )" 14 60
-   
-umount -R /mnt
+dialog --backtitle "$titulo" --title "-| Mensaje |-" --infobox "\n> UEFI trabaja con discos en GPT \n\n> UEFI su partición boot es formateada en FAT32 \n\n> BIOS LEGACY trabaja con discos en DOS/MBR\n\n> BIOS LEGACY su partición boot es formateada en EXT4\n( La partición boot en linux es opcional )" 12 60; sleep 5
 
 
 dialog --backtitle "$titulo" --title "-| Particionado de Disco |-" --yesno "\n    ¿ Desea particionar su disco de manera automatica ?\n \nPresione Si - Automatico (Borrado y creado automatico)\nPresione No - Manera Manual" 9 62
@@ -346,11 +343,11 @@ do
 	case $choice in
 		"/boot")
 
-#			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
-			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
+#			dialog --backtitle "$titulo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
+			part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: boot |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			bootfs="$part"
-			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+			dialog --backtitle "$titulo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			bootdir="boot"
 			mkdir -p /mnt/boot
@@ -360,11 +357,11 @@ do
 			
 		"/efi")
 
-#			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
-			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
+#			dialog --backtitle "$titulo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
+			part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: efi |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			efifs="$part"
-			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+			dialog --backtitle "$titulo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			efidir="efi"
 			mkdir -p /mnt/efi
@@ -374,11 +371,11 @@ do
 				
 		"/home")
 
-#			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
-			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
+#			dialog --backtitle "$titulo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
+			part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: home |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			homefs="$part"
-			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+			dialog --backtitle "$titulo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			homedir="home"
 			mkdir -p /mnt/home
@@ -387,11 +384,11 @@ do
 			;;
 		"/tmp")
 
-#			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
-			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
+#			dialog --backtitle "$titulo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
+			part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: tmp |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			tmpfs="$part"
-			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+			dialog --backtitle "$titulo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			tmpdir="tmp"
 			mkdir -p /mnt/tmp
@@ -400,11 +397,11 @@ do
 			;;
 		"/usr")
 
-#			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
-			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
+#			dialog --backtitle "$titulo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
+			part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: usr |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			usrfs="$part"
-			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+			dialog --backtitle "$titulo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			usrdir="usr"
 			mkdir -p /mnt/usr
@@ -413,11 +410,11 @@ do
 			;;
 		"/var")
 
-#			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
-			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
+#			dialog --backtitle "$titulo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
+			part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: var |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			varfs="$part"
-			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+			dialog --backtitle "$titulo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			vardir="var"
 			mkdir -p /mnt/var
@@ -426,11 +423,11 @@ do
 			;;
 		"/srv")
 
-#			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
-			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
+#			dialog --backtitle "$titulo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
+			part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: srv |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			srvfs="$part"
-			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+			dialog --backtitle "$titulo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			srvdir="srv"
 			mkdir -p /mnt/srv
@@ -439,11 +436,11 @@ do
 			;;
 		"/opt")
 
-#			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
-			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
+#			dialog --backtitle "$titulo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
+			part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: opt |" 0 0 0 ${p} 2>&1 > /dev/tty )
 			optfs="$part"
-			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+			dialog --backtitle "$titulo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 			partitioning
 			optdir="opt"
 			mkdir -p /mnt/opt
@@ -451,8 +448,8 @@ do
 			p=$(echo "$p" | grep -v "$part")
 			;;
 		"swap")
-#			dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
-			part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
+#			dialog --backtitle "$titulo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
+			part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
 				--menu "| Elige la partición que desea usar para: swap |" 0 0 0 ${p} 2>&1 > /dev/tty)
 			dialog --title "| Formateando Swap Linux |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkswap $part && swapon $part" 10 100
 			swap="$part"
@@ -501,7 +498,7 @@ while [ "$kernel_var" = "0" ] ; do
 
 ##################################################################################
 
-dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Instalando Sistema Base - Linux Stable |-" \
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Instalando Sistema Base - Linux Stable |-" \
 --stdout --ok-label "Siguiente" --prgbox 'pacstrap /mnt base base-devel reflector && \
 reflector --latest 10 --sort rate --save /mnt/etc/pacman.d/mirrorlist && \
 cat /mnt/etc/pacman.d/mirrorlist && \
@@ -548,11 +545,11 @@ case $? in
 	0) broadcom=$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'Network controller: Broadcom' ")
 		if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
 		then			
-		dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
+		dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "arch-chroot /mnt pacman -Sy broadcom-wl wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && arch-chroot /mnt /bin/bash -c 'modprobe wl' " 25 100
 		else
 			
-		dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
+		dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "arch-chroot /mnt pacman -Sy iw wireless_tools wpa_supplicant dialog wireless-regdb --noconfirm" 25 80
 				
 		fi;;
@@ -565,7 +562,7 @@ case $? in
 		--prgbox "pacstrap  /mnt xf86-input-synaptics xf86-input-libinput xorg-xinput" 25 80;;
 	1) 
 esac
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Driver para Bluetooth |-" --defaultno --yesno "\n¿Tienes Bluetooth?" 7 45 
+dialog --backtitle "$titulo" --title "-| Driver para Bluetooth |-" --defaultno --yesno "\n¿Tienes Bluetooth?" 7 45 
 case $? in 
 	0) dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth blueman" 25 80
@@ -579,7 +576,7 @@ esac
 #####hardened
   elif [ $kernel_select == linux-hardened ]; then
 
-dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Instalando Sistema Base - Linux Hardened |-" \
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Instalando Sistema Base - Linux Hardened |-" \
 --stdout --ok-label "Siguiente" --prgbox 'pacstrap /mnt base base-devel reflector && \
 reflector --latest 10 --sort rate --save /mnt/etc/pacman.d/mirrorlist && \
 cat /mnt/etc/pacman.d/mirrorlist && \
@@ -613,11 +610,11 @@ case $? in
 	0) broadcom=$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'Network controller: Broadcom' ")
 		if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
 		then			
-		dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
+		dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "arch-chroot /mnt pacman -Sy broadcom-wl-dkms wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && arch-chroot /mnt /bin/bash -c 'modprobe wl' " 25 100
 		else
 			
-		dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
+		dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "arch-chroot /mnt pacman -Sy iw wireless_tools wpa_supplicant dialog wireless-regdb --noconfirm" 25 80
 				
 		fi;;
@@ -630,7 +627,7 @@ case $? in
 		--prgbox "pacstrap  /mnt xf86-input-synaptics xf86-input-libinput xorg-xinput" 25 80;;
 	1) 
 esac
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Driver para Bluetooth |-" --defaultno --yesno "\n¿Tienes Bluetooth?" 7 45 
+dialog --backtitle "$titulo" --title "-| Driver para Bluetooth |-" --defaultno --yesno "\n¿Tienes Bluetooth?" 7 45 
 case $? in 
 	0) dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth blueman" 25 80
@@ -646,7 +643,7 @@ esac
   elif [ $kernel_select == linux-lts ]; then
 ##################################################################################
 
-dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Instalando Sistema Base - Linux LTS |-" \
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Instalando Sistema Base - Linux LTS |-" \
 --stdout --ok-label "Siguiente" --prgbox 'pacstrap /mnt base base-devel reflector && \
 reflector --latest 10 --sort rate --save /mnt/etc/pacman.d/mirrorlist && \
 cat /mnt/etc/pacman.d/mirrorlist && \
@@ -693,11 +690,11 @@ case $? in
 	0) broadcom=$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'Network controller: Broadcom' ")
 		if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
 		then			
-		dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
+		dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "arch-chroot /mnt pacman -Sy broadcom-wl-dkms wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && arch-chroot /mnt /bin/bash -c 'modprobe wl' " 25 100
 		else
 			
-		dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
+		dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "arch-chroot /mnt pacman -Sy iw wireless_tools wpa_supplicant dialog wireless-regdb --noconfirm" 25 80
 				
 		fi;;
@@ -710,7 +707,7 @@ case $? in
 		--prgbox "pacstrap  /mnt xf86-input-synaptics xf86-input-libinput xorg-xinput" 25 80;;
 	1) 
 esac
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Driver para Bluetooth |-" --defaultno --yesno "\n¿Tienes Bluetooth?" 7 45 
+dialog --backtitle "$titulo" --title "-| Driver para Bluetooth |-" --defaultno --yesno "\n¿Tienes Bluetooth?" 7 45 
 case $? in 
 	0) dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth blueman" 25 80
@@ -723,7 +720,7 @@ esac
 
 ###### ZEN
   elif [ $kernel_select == linux-zen ]; then
-dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Instalando Sistema Base - Linux ZEN |-" \
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Instalando Sistema Base - Linux ZEN |-" \
 --stdout --ok-label "Siguiente" --prgbox 'pacstrap /mnt base base-devel reflector && \
 reflector --latest 10 --sort rate --save /mnt/etc/pacman.d/mirrorlist && \
 cat /mnt/etc/pacman.d/mirrorlist && \
@@ -757,11 +754,11 @@ case $? in
 	0) broadcom=$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'Network controller: Broadcom' ")
 		if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
 		then			
-		dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
+		dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "arch-chroot /mnt pacman -Sy broadcom-wl-dkms wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && arch-chroot /mnt /bin/bash -c 'modprobe wl' " 25 100
 		else
 			
-		dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
+		dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "arch-chroot /mnt pacman -Sy iw wireless_tools wpa_supplicant dialog wireless-regdb --noconfirm" 25 80
 				
 		fi;;
@@ -774,7 +771,7 @@ case $? in
 		--prgbox "pacstrap  /mnt xf86-input-synaptics xf86-input-libinput xorg-xinput" 25 80;;
 	1) 
 esac
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "-| Driver para Bluetooth |-" --defaultno --yesno "\n¿Tienes Bluetooth?" 7 45 
+dialog --backtitle "$titulo" --title "-| Driver para Bluetooth |-" --defaultno --yesno "\n¿Tienes Bluetooth?" 7 45 
 case $? in 
 	0) dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
 		--prgbox "pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth blueman" 25 80
@@ -795,19 +792,19 @@ genfstab -U -p /mnt > /mnt/etc/fstab
 dialog --backtitle "-| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |-" --title "| Archivo FSTAB |"   --stdout --ok-label 'Siguiente' --msgbox "$(cat /mnt/etc/fstab)" 20 1000
 
 locales="$(cat /mnt/etc/locale.gen | grep .UTF-8 | sed '1,4d' | sed 's/\(.\{1\}\)//')"
-locale=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selecciona tu país |" \
+locale=$(dialog --backtitle "$titulo" --clear --title "| Selecciona tu país |" \
 	--menu "\nEjemplos:\nes_PE = Perú\nes_AR = Argentina\nes_MX = Mexico" 25 0 20 ${locales} 2>&1 > /dev/tty)
 sed -i "/${locale}/ s/# *//" /mnt/etc/locale.gen
 
 
 locales="$(cat /mnt/etc/locale.gen | grep .UTF-8 | sed '/#/d')"
-locale=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selecciona tu país |" \
+locale=$(dialog --backtitle "$titulo" --clear --title "| Selecciona tu país |" \
 	--menu "Confirma tu idioma y país" 0 0 0 ${locales} 2>&1 > /dev/tty)
 
 
-echo "LANG=$locale" > /mnt/etc/locale.conf && cat /mnt/etc/locale.conf | dialog --backtitle "-| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |-" --progressbox "Idioma y teclado > Actualizando" 10 50; sleep 3
+echo "LANG=$locale" > /mnt/etc/locale.conf && cat /mnt/etc/locale.conf | dialog --backtitle "-| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |-" --progressbox "Idioma del Sistema > Actualizando" 10 50; sleep 3
 
-arch-chroot /mnt /bin/bash -c "locale-gen" | dialog --backtitle "-| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |-" --progressbox "Idioma y teclado > Actualizando" 10 50; sleep 2
+arch-chroot /mnt /bin/bash -c "locale-gen" | dialog --backtitle "-| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |-" --progressbox "Idioma del Sistema > Actualizando" 10 50; sleep 2
 
 arch-chroot /mnt /bin/bash -c "export $(cat /mnt/etc/locale.conf)" 
 
@@ -821,9 +818,9 @@ do
     sleep 0.025 
     echo $i_conta_zona
 done |  \
-dialog  --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| ZONA HORARIA |" --gauge "Gracias https://ipapi.co/timezone" 6 60
+dialog  --backtitle "$titulo" --title "| ZONA HORARIA |" --gauge "Gracias https://ipapi.co/timezone" 6 60
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| ZONA HORARIA |" --defaultno --yesno "\n       >>> $(cat timezone) <<<\n\n       ¿Deseas modificarlo?" 8 40 
+dialog --backtitle "$titulo" --title "| ZONA HORARIA |" --defaultno --yesno "\n       >>> $(cat timezone) <<<\n\n       ¿Deseas modificarlo?" 8 40 
 
 
 if [ "$?" = "0" ]; then
@@ -866,10 +863,12 @@ ln -sf /usr/share/zoneinfo/$zone /mnt/etc/localtime
 fi
 
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| REGLAS EN PERFILES NUEVOS |" --msgbox '\n> No se permite iniciar nombre\n> Con números / Caracteres especiales / Mayús\n> Máximo de 8 caracteres\n> En su CLAVE no use la letra “ñ”\n> Ni letras con tilde\n> Por ejemplo: è, ü, etc...\n> Ni otros caracteres especiales\n> ~!@#$%^&*_-+=|\(){}[]:;<;>;,.?/\n\n     >>  Ya que pueden causar errores  <<' 15 50
+dialog --backtitle "$titulo" \
+--title "| REGLAS EN PERFILES NUEVOS |" \
+--msgbox '\n> No se permite iniciar nombre en Mayúsculas \n> Ni con números o Caracteres especiales\n> Máximo de 8 caracteres\n> En su CLAVE no use la letra “ñ”\n> Ni letras con tilde\n> Por ejemplo: è, ü, etc...\n> Ni otros caracteres especiales\n> ~!@#$%^&*_-+=|\(){}[]:;<;>;,.?/\n\n     >>  Ya que pueden causar errores  <<' 15 50
 
 #nombre de pc (hostname)
-hostname=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Hostname |" --inputbox "|  Nombre del computador  |" 0 0 2>&1 > /dev/tty)
+hostname=$(dialog --backtitle "$titulo" --title "| Hostname |" --inputbox "|  Nombre del computador  |" 0 0 2>&1 > /dev/tty)
 echo "$hostname" > /mnt/etc/hostname
 echo "$hostname" > hostname
 echo "127.0.1.1 $(cat hostname).localdomain $(cat hostname)" > /mnt/etc/hosts
@@ -878,22 +877,22 @@ rm hostname
 #Clave para root
 while [ $rootpasswd != $rootpasswd2 ]
 do 
-    rootpasswd=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Clave de Root  |" --insecure --passwordbox "|  Ingrese contraseña de root  |" 8 40 2>&1 > /dev/tty)
-    rootpasswd2=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Clave de Root |" --insecure --passwordbox "|  Confirme contraseña de root  |" 8 40 2>&1 > /dev/tty)
+    rootpasswd=$(dialog --backtitle "$titulo" --title "|  Clave de Root  |" --insecure --passwordbox "|  Ingrese contraseña de root  |" 8 40 2>&1 > /dev/tty)
+    rootpasswd2=$(dialog --backtitle "$titulo" --title "|  Clave de Root |" --insecure --passwordbox "|  Confirme contraseña de root  |" 8 40 2>&1 > /dev/tty)
     if [ $rootpasswd != $rootpasswd2 ];then 
-     dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Clave incorrecta |" --msgbox 'Las contraseñas no coinciden\n      Intente nuevamente...' 6 50
+     dialog --backtitle "$titulo" --title "| Clave incorrecta |" --msgbox 'Las contraseñas no coinciden\n      Intente nuevamente...' 6 50
   else 
     clear
   fi
 done
 
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Clave Correcta |" --msgbox '\nContraseña Conrrecta!' 7 40
+dialog --backtitle "$titulo" --title "| Clave Correcta |" --msgbox '\nContraseña Conrrecta!' 7 40
 arch-chroot /mnt /bin/sh -c "echo root:$rootpasswd | chpasswd"
 
 
 
 #Agregando usuario
-username=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Creación de usuario  |" \
+username=$(dialog --backtitle "$titulo" --title "|  Creación de usuario  |" \
            --form "\nIngresa tu Usuario Nuevo\n\nDebe iniciar en letra y en minúscula\nNada de caracteres especiales\n " 0 0 0 \
            " Usuario Nuevo:" 1 1 "user" 1 17 25 30 2>&1 > /dev/tty)
 
@@ -901,15 +900,15 @@ user=$(echo "$username" | sed -n 1p)
 arch-chroot /mnt /bin/sh -c "useradd -m -g users -s /bin/bash $user"
 while [ $userpasswd != $userpasswd2 ]
 do 
-    userpasswd=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Contraseña de $user" 8 36 2>&1 > /dev/tty)
-    userpasswd2=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Confirma tu clave de $user" 8 36 2>&1 > /dev/tty)
+    userpasswd=$(dialog --backtitle "$titulo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Contraseña de $user" 8 36 2>&1 > /dev/tty)
+    userpasswd2=$(dialog --backtitle "$titulo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Confirma tu clave de $user" 8 36 2>&1 > /dev/tty)
     if [ $userpasswd != $userpasswd2 ];then 
-     dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title " Clave incorrecta " --msgbox 'Las contraseñas no coinciden\n      Intente nuevamente...' 6 50
+     dialog --backtitle "$titulo" --title " Clave incorrecta " --msgbox 'Las contraseñas no coinciden\n      Intente nuevamente...' 6 50
   else 
     clear
   fi
 done
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Clave Correcta |" --msgbox '\nContraseña Conrrecta!' 7 40
+dialog --backtitle "$titulo" --title "| Clave Correcta |" --msgbox '\nContraseña Conrrecta!' 7 40
 arch-chroot /mnt /bin/bash -c "echo $user:$userpasswd | chpasswd"
 #sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
 arch-chroot /mnt /bin/bash -c "hwclock -w"
@@ -959,7 +958,7 @@ dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instal
 fi
 
 clear
-arch-chroot /mnt /bin/bash -c "pacman -Sy xdg-user-dirs --noconfirm" | dialog --no-collapse --cr-wrap --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --progressbox "| Creando Directorios... |" 25 80; sleep 3
+arch-chroot /mnt /bin/bash -c "pacman -Sy xdg-user-dirs --noconfirm" | dialog --no-collapse --cr-wrap --backtitle "$titulo" --progressbox "| Creando Directorios... |" 25 80; sleep 3
 clear
 arch-chroot /mnt /bin/bash -c "xdg-user-dirs-update --force"
 export $(cat /mnt/etc/locale.conf)
