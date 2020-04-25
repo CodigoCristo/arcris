@@ -31,6 +31,10 @@ case $? in
 esac
 
 
+#Desmontamos todo disco y swapoff
+
+fdisk -l | grep "/dev/\|swap" | grep swap | awk -F ' ' '{print $1}'
+
 umount -R /mnt
 
 
@@ -964,7 +968,7 @@ export $(cat /mnt/etc/locale.conf)
 cp pacman-chroot.conf /mnt/etc/pacman.conf
 echo ""
 echo ""
-arch-chroot /mnt /bin/bash -c "pacman -Syu" && echo "" && echo ""
+arch-chroot /mnt /bin/bash -c "pacman -Syu --noconfirm" && echo "" && echo ""
 arch-chroot /mnt /bin/bash -c "alsi"
 echo ""
 echo ""

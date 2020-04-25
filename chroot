@@ -741,7 +741,22 @@ do
             # WM="i3-gaps i3blocks i3lock i3status dmenu rofi ly-git thunar rxvt-unicode gnome-themes-extra"
             # echo ly > DMservice
             
-            WM="i3-gaps i3blocks i3lock i3status dmenu rofi ly-git alacritty rxvt-unicode lxappearance gnu-free-fonts awesome-terminal-fonts papirus-icon-theme gnome-themes-extra thunar xfce4-terminal kitty feh i3lock-fancy-git bumblebee-status"
+            WM="i3-gaps i3blocks i3lock i3status dmenu rofi alacritty rxvt-unicode lxappearance gnu-free-fonts awesome-terminal-fonts papirus-icon-theme gnome-themes-extra thunar xfce4-terminal kitty feh i3lock-fancy-git bumblebee-status"
+            clear
+            printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
+            echo -e ""
+            echo -e "\t\t\t\t\t\t\t Instalando Tema de i3WM...          "
+            printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+            echo -e ""
+            git clone https://github.com/CodigoCristo/config.git
+            unzip config/i3.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando tema de i3wm, espere... |" 25 80; sleep 2
+            clear
+            mkdir /home/$nombre_usuario/.config/
+            chmod +777 .config
+            chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
+            cp -rf .config/* /home/$nombre_usuario/.config/
+            chmod +700 .config   
+            DM="ly-git"
             echo ly > DMservice
             i3tema=true
 
@@ -1329,26 +1344,6 @@ rm -R config/
 
 elif [ "$i3tema" == "true" ]; then
     
-clear
-printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
-echo -e ""
-echo -e "\t\t\t\t\t\t\t Instalando Tema de i3WM...          "
-printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
-echo -e ""
-git clone https://github.com/CodigoCristo/config.git
-unzip config/i3.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando tema de i3wm, espere... |" 25 80; sleep 2
-clear
-printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
-echo -e ""
-echo -e "\t\t\t\t\t\t\t Instalando Tema de i3WM...          "
-printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
-echo -e ""
-mkdir /home/$nombre_usuario/.config/
-chmod +777 .config
-chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
-cp -rf .config/* /home/$nombre_usuario/.config/
-chmod +700 .config       
-clear
 clear
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
 echo -e ""
