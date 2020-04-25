@@ -742,6 +742,15 @@ do
             # echo ly > DMservice
             
             WM="i3-gaps i3blocks i3lock i3status dmenu rofi alacritty rxvt-unicode lxappearance gnu-free-fonts awesome-terminal-fonts papirus-icon-theme gnome-themes-extra thunar xfce4-terminal kitty feh i3lock-fancy-git bumblebee-status"
+            clear
+            git clone https://github.com/CodigoCristo/config.git
+            unzip config/i3.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando tema de i3wm, espere... |" 25 80; sleep 2
+            clear
+            mkdir /home/$nombre_usuario/.config/          
+            cp -rf .config/* /home/$nombre_usuario/.config/
+            rm -R config/
+            chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
+            
             DM="ly-git"
             echo ly > DMservice
             i3tema=true
