@@ -742,20 +742,6 @@ do
             # echo ly > DMservice
             
             WM="i3-gaps i3blocks i3lock i3status dmenu rofi alacritty rxvt-unicode lxappearance gnu-free-fonts awesome-terminal-fonts papirus-icon-theme gnome-themes-extra thunar xfce4-terminal kitty feh i3lock-fancy-git bumblebee-status"
-            clear
-            printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
-            echo -e ""
-            echo -e "\t\t\t\t\t\t\t Instalando Tema de i3WM...          "
-            printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
-            echo -e ""
-            git clone https://github.com/CodigoCristo/config.git
-            unzip config/i3.zip | dialog --no-collapse --cr-wrap --progressbox "| Instalando tema de i3wm, espere... |" 25 80; sleep 2
-            clear
-            mkdir /home/$nombre_usuario/.config/
-            chmod +777 .config
-            chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
-            cp -rf .config/* /home/$nombre_usuario/.config/
-            chmod +700 .config   
             DM="ly-git"
             echo ly > DMservice
             i3tema=true
@@ -1341,24 +1327,6 @@ elif [ "$xfce4tema" == "true" ]; then
 cp -rf .config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
 
 rm -R config/
-
-elif [ "$i3tema" == "true" ]; then
-    
-clear
-printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
-echo -e ""
-echo -e "\t\t\t\t\t\t\t Instalando Tema de i3WM...          "
-printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
-echo -e ""
-git clone https://aur.archlinux.org/bumblebee-status.git 
-chown -R $nombre_usuario:users /home/$nombre_usuario 
-chown -R $nombre_usuario:users /home/$nombre_usuario/bumblebee-status
-chown -R $nombre_usuario:users /home/$nombre_usuario/bumblebee-status/PKGBUILD
-cd /home/$nombre_usuario/bumblebee-status
-sudo -u $nombre_usuario makepkg -sicr --noconfirm
-#pacman -U *.pkg.tar.xz --noconfirm
-rm -Rf /home/$nombre_usuario/bumblebee-status
-
 
 
 elif [ "$aurherlp" == "true" ]; then

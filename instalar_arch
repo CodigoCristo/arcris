@@ -32,10 +32,9 @@ esac
 
 
 #Desmontamos todo disco y swapoff
-
-fdisk -l | grep "/dev/\|swap" | grep swap | awk -F ' ' '{print $1}'
-
+swapdisco=$( fdisk -l | grep "/dev/\|swap" | grep swap | awk -F ' ' '{print $1}' )
 umount -R /mnt
+swapoff ${swapdisco}
 
 
 cmd=(dialog --backtitle "$titulo" --title "-| Distribución del teclado |-" --keep-tite --menu "\n" 10 0 10)
