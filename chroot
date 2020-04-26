@@ -739,7 +739,7 @@ do
             do
                 case $choice in
                     
-                    1)  WM="i3-gaps i3blocks i3lock i3status dmenu rofi alacritty compton-tryone-git rxvt-unicode lxappearance gnu-free-fonts awesome-terminal-fonts papirus-icon-theme gnome-themes-extra thunar xfce4-terminal kitty feh i3lock-fancy-git bumblebee-status"
+                    1)  WM="i3-gaps i3blocks i3lock i3status dmenu rofi alacritty deepin-screenshot-copy-patch xclip compton-tryone-git rxvt-unicode lxappearance gnu-free-fonts awesome-terminal-fonts papirus-icon-theme gnome-themes-extra thunar xfce4-terminal kitty feh i3lock-fancy-git bumblebee-status"
                         DM="ly-git"
                         echo ly > DMservice
                         i3tema=true
@@ -1326,7 +1326,8 @@ systemctl enable $(cat GPUvirt)
 
 
 elif [ "$xfce4tema" == "true" ]; then
-    
+#TITULO EN BARRAS
+clear    
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
 echo -e ""
 echo -e "\t\t\t\t\t\t\t Instalando Tema de XFCE4...          "
@@ -1335,6 +1336,14 @@ echo -e ""
 git clone https://github.com/CodigoCristo/config.git
 unzip config/xfce4.zip
 mkdir /home/$nombre_usuario/.config/
+
+clear    
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
+echo -e ""
+echo -e "\t\t\t\t\t\t\t Instalando Tema de XFCE4...          "
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
+
 cp -rf .config/* /home/$nombre_usuario/.config/
 cp -rf .config/5336864_orig.png /usr/usb.png
 cp -rf .config/logo2.png /usr/logo-arch.png
@@ -1344,14 +1353,24 @@ chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
 sleep 7
 
 elif [ "$i3tema" == "true" ]; then
-
+#TITULO EN BARRAS
+clear
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
 echo -e ""
 echo -e "\t\t\t\t\t\t\t Instalando Tema de i3WM...          "
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
 echo -e ""
+
 git clone https://github.com/CodigoCristo/config.git
-unzip config/i3.zip        
+unzip config/i3.zip
+
+clear
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
+echo -e ""
+echo -e "\t\t\t\t\t\t\t Instalando Tema de i3WM...          "
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
+        
 cp -rf .config/* /home/$nombre_usuario/.config/
 rm -R config/
 chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
