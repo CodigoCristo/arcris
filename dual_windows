@@ -958,7 +958,7 @@ fdisk -l $disk > /tmp/partitions
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
 part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'No tengo' --clear --title "| Partición Boot Windows |" \
-  --menu "\nSelecciona la partición de arranque \n\n$(fdisk -l $disk | grep 100M && fdisk -l $disk | grep 499M && fdisk -l $disk | grep 500M && fdisk -l $disk | grep 549M )\n " 12 67 0 ${p} 2>&1 > /dev/tty)
+  --menu "\nSelecciona la partición de arranque \n\n$(fdisk -l $disk | "100M\|499M\|500M\|549M" )\n " 12 67 0 ${p} 2>&1 > /dev/tty)
 boot_osfs=$part
 
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
