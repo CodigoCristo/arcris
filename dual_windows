@@ -1072,8 +1072,11 @@ part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCri
   --menu "\nSelecciona la partición de arranque \n\n$(fdisk -l $disk | grep '100M\|499M\|500M\|549M' )\n " 12 80 0 ${p} 2>&1 > /dev/tty)
 boot_osfs=$part
 mkdir -p /mnt/mnt
+clear
 mkdir -p /mnt/mnt/bootwin
+clear
 mount "$boot_osfs" /mnt/mnt/bootwin
+clear
 p=$(echo "$p" | grep -v "$part")
 
 
@@ -1082,8 +1085,11 @@ part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCri
   --menu "\nElige la partición donde esta el Disco C:\\\nLa ruta donde estara es: /media/windows en NTFS\n " 10 80 0 ${p} 2>&1 > /dev/tty)
 datosc_osfs=$part
 mkdir -p /mnt/media
+clear
 mkdir -p /mnt/media/windows
+clear
 mount "$datosc_osfs" /mnt/media/windows
+clear
 p=$(echo "$p" | grep -v "$part")
 
 
