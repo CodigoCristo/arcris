@@ -39,7 +39,7 @@ swapoff -a
 swapon -a
 
 
-cmd=(dialog --backtitle "$titulo" --title "-| Distribución del teclado |-" --keep-tite --menu "\n" 10 0 10)
+cmd=(dialog --backtitle "$titulo" --title "-| Distribución del teclado |-" --keep-tite --menu "\n" 10 50 10)
 
 options=(la-latin1  "LatinoAmericano"
          es     "Español"
@@ -76,7 +76,7 @@ do
             selected=0 
       while [ $selected == "0" ];do 
         locales="$(localectl list-keymaps | awk '$locales=$locales" Keyboard"')" && locales=$(echo "$locales") 
-        keyboard=$(dialog --backtitle "$titulo" --clear --title "-| Distribución del teclado: |-" --menu "\n" 15 0 15   ${locales} 2>&1 > /dev/tty) 
+        keyboard=$(dialog --backtitle "$titulo" --clear --title "-| Distribución del teclado: |-" --menu "\n" 15 50 15   ${locales} 2>&1 > /dev/tty) 
         if [ $? == 0 ];then 
           loadkeys $keyboard 
           keymap=$keyboard 
