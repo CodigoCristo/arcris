@@ -90,7 +90,8 @@ do
 done
 
 
-dialog --backtitle "$titulo" --title "-| Mensaje |-" --infobox "\n> UEFI trabaja con discos en GPT \n\n> UEFI su partición boot es formateada en FAT32 \n\n> BIOS LEGACY trabaja con discos en DOS/MBR\n\n> BIOS LEGACY su partición boot es formateada en EXT4\n( La partición boot en linux es opcional )" 12 60; sleep 4
+dialog --backtitle "$titulo" --title "-| Mensaje |-" --infobox "\n> UEFI trabaja con discos en GPT \n\n> UEFI su partición boot es formateada en FAT32 \n\n> BIOS LEGACY trabaja con discos en DOS/MBR\n\n> BIOS LEGACY su partición boot es formateada en EXT4\n( La partición boot en linux es opcional )" 12 60
+sleep 5
 
 
 
@@ -101,12 +102,9 @@ fdisk -l $disk > /tmp/partitions
 
 
 #SISTEMA UEFI O BIOS
-uefi=$( parted $disk print | grep -ic gpt )
-
 parted $disk print | grep gpt > uefi2.txt
 echo "Partition Table: gpt" > uefi3.txt
-
-
+uefi=$( parted $disk print | grep -ic gpt )
 
 #UEFI WINDOWS
 if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]
@@ -903,7 +901,7 @@ elif [ $uefi == 0 ]
 then
   
 
-dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "|  SISTEMA UEFI |"  --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && cat /tmp/partitions | grep gpt && echo "Su disco SI es compatible para continuar" && echo "" && cat /tmp/partitions | grep /dev/ )" 18 150
+dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO MBR  |" --title "|  SISTEMA BIOS LEGACY |"  --stdout --ok-label 'Siguiente' --msgbox '$(echo "" && cat /tmp/partitions | grep gpt && echo "Su disco SI es compatible para continuar" && echo "" && cat /tmp/partitions | grep /dev/ )' 18 150
 partitioner=$(dialog --backtitle "$titulo" --clear --title "| ELIGE UN PROGRAMA |" --ok-label 'Seleccionar' --no-cancel --menu "Crear particiones correctamente" 0 0 0\
     "cfdisk" "Un particionador casi grafico" \
     "fdisk" "Un particionador de linea de comandos" \
