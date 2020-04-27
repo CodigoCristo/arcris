@@ -1069,7 +1069,7 @@ p="$(echo "$partitions")"
 
 
 part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'No tengo' --clear --title "| Partición Boot Windows |" \
-  --menu "\nSelecciona la partición de arranque \n\n$(fdisk -l $disk | grep '100M\|499M\|500M\|549M' )\n " 12 67 0 ${p} 2>&1 > /dev/tty)
+  --menu "\nSelecciona la partición de arranque \n\n$(fdisk -l $disk | grep '100M\|499M\|500M\|549M' )\n " 12 80 0 ${p} 2>&1 > /dev/tty)
 boot_osfs=$part
 mkdir -p /mnt/mnt
 mkdir -p /mnt/mnt/bootwin
@@ -1079,7 +1079,7 @@ p=$(echo "$p" | grep -v "$part")
 
 
 part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'No tengo' --clear --title "| Disco C:\\ |" \
-  --menu "\nElige la partición donde esta el Disco C:\\\nLa ruta donde estara es: /media/windows en NTFS\n " 10 60 0 ${p} 2>&1 > /dev/tty)
+  --menu "\nElige la partición donde esta el Disco C:\\\nLa ruta donde estara es: /media/windows en NTFS\n " 10 80 0 ${p} 2>&1 > /dev/tty)
 datosc_osfs=$part
 mkdir -p /mnt/media
 mkdir -p /mnt/media/windows
