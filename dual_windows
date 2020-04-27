@@ -916,7 +916,7 @@ partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | se
 p="$(echo "$partitions")"
 #--title "| Elige la partición de Administrador |"
 part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear \
-  --menu "Selecciona la partición para Root: [ / ]" 15 65 0 ${p} 2>&1 > /dev/tty)
+  --menu "Selecciona la partición para Root: [ / ]" 10 65 0 ${p} 2>&1 > /dev/tty)
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Verificando estado de Disco |-" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 rootfs=$part
 
@@ -1050,7 +1050,7 @@ do
     "swap")
 #     dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
       part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
-        --menu "| Elige la partición que desea usar para: swap |" 0 0 0 ${p} 2>&1 > /dev/tty)
+        --menu "| Elige la partición que desea usar para: swap |" 0 50 0 ${p} 2>&1 > /dev/tty)
       dialog --title "| Formateando Swap Linux |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkswap $part && swapon $part" 10 100
       swap="$part"
       p=$(echo "$p" | grep -v "$part")
