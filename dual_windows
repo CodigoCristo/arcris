@@ -1079,7 +1079,7 @@ p=$(echo "$p" | grep -v "$part")
 
 
 part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'No tengo' --clear --title "| Disco C:\\ |" \
-  --menu "\nElige la partición donde esta el Disco C:\\\nLa ruta donde estara es: /mnt/windows en NTFS\n " 10 60 0 ${p} 2>&1 > /dev/tty)
+  --menu "\nElige la partición donde esta el Disco C:\\\nLa ruta donde estara es: /media/windows en NTFS\n " 10 60 0 ${p} 2>&1 > /dev/tty)
 datosc_osfs=$part
 mkdir -p /mnt/media
 mkdir -p /mnt/media/windows
