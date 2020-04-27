@@ -96,7 +96,7 @@ sleep 5
 
 
 part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
-disk=$(dialog --backtitle "$titulo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "Elige el disco para Linux" 0 50 0 ${part} 2>&1 >/dev/tty)
+disk=$(dialog --backtitle "$titulo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "Elige el disco para Linux" 10 50 0 ${part} 2>&1 >/dev/tty)
 
 fdisk -l $disk > /tmp/partitions
 
@@ -749,8 +749,8 @@ user=$(echo "$username" | sed -n 1p)
 arch-chroot /mnt /bin/sh -c "useradd -m -g users -s /bin/bash $user"
 while [ $userpasswd != $userpasswd2 ]
 do 
-    userpasswd=$(dialog --backtitle "$titulo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Contraseña de $user" 8 36 2>&1 > /dev/tty)
-    userpasswd2=$(dialog --backtitle "$titulo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Confirma tu clave de $user" 8 36 2>&1 > /dev/tty)
+    userpasswd=$(dialog --backtitle "$titulo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Contraseña de $user" 8 40 2>&1 > /dev/tty)
+    userpasswd2=$(dialog --backtitle "$titulo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Confirma tu clave de $user" 8 40 2>&1 > /dev/tty)
     if [ $userpasswd != $userpasswd2 ];then 
      dialog --backtitle "$titulo" --title " Clave incorrecta " --msgbox 'Las contraseñas no coinciden\n      Intente nuevamente...' 6 50
   else 
@@ -1102,7 +1102,8 @@ clear
 
 
 clear
-timedatectl set-timezone $(curl https://ipapi.co/timezone)
+zonahorariaok=$(curl https://ipapi.co/timezone)
+timedatectl set-timezone $zonahorariaok
 ntpd -qg | dialog --no-collapse --cr-wrap --backtitle "$titulo" --progressbox "| Zona Horaria en LiveCD, Espere... |" 25 80; sleep 3
 hwclock --systohc
 timedatectl status | dialog --no-collapse --cr-wrap --backtitle "$titulo" --progressbox "| Hora Local - Espere... |" 13 65; sleep 5
@@ -1448,16 +1449,16 @@ arch-chroot /mnt /bin/bash -c "export $(cat /mnt/etc/locale.conf)"
 echo "KEYMAP=$keymap" > /mnt/etc/vconsole.conf && cat /mnt/etc/vconsole.conf | dialog --backtitle "-| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |-" --progressbox "Idioma del Sistema > Actualizando" 10 50; sleep 3
 
 #ZONA HORARIA
-URL="https://ipapi.co/timezone"
-wget "$URL" 2>&1 | \
- for i_conta_zona in $(seq 1 100)
-do
-    sleep 0.025 
-    echo $i_conta_zona
-done |  \
-dialog  --backtitle "$titulo" --title "| ZONA HORARIA |" --gauge "Gracias https://ipapi.co/timezone" 6 60
+# URL="https://ipapi.co/timezone"
+# wget "$URL" 2>&1 | \
+# for i_conta_zona in $(seq 1 100)
+# do
+#    sleep 0.025 
+#    echo $i_conta_zona
+# done |  \
+# dialog  --backtitle "$titulo" --title "| ZONA HORARIA |" --gauge "Gracias https://ipapi.co/timezone" 6 60
 
-dialog --backtitle "$titulo" --title "| ZONA HORARIA |" --defaultno --yesno "\n       >>> $(cat timezone) <<<\n\n       ¿Deseas modificarlo?" 8 40 
+dialog --backtitle "$titulo" --title "| ZONA HORARIA |" --defaultno --yesno "\n       >>> $zonahorariaok <<<\n\n       ¿Deseas modificarlo?" 8 40 
 
 
 if [ "$?" = "0" ]; then
