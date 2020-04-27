@@ -8,7 +8,7 @@ titulo="| Instalación de ArchLinux en Español - https://t.me/ArchLinuxCristo |
 if ping -c 3 www.google.com &> /dev/null; then
   clear
   
-dialog --backtitle "$titulo" --title "-| Mensaje |-" --infobox "\n$(ping -c 3 archlinux.org && echo && echo Si Hay Internet!)" 12 60
+dialog --backtitle "$titulo" --title "-| Mensaje |-" --infobox "\n$(ping -c 3 archlinux.org && echo && echo Si Hay Internet!)" 15 100
 sleep 5
 
 else
