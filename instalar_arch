@@ -869,18 +869,20 @@ done
 
 else
 
-zone="$(cat timezone)"
-ln -sf /usr/share/zoneinfo/$zone /mnt/etc/localtime
+#zone="$(cat timezone)"
+ln -sf /usr/share/zoneinfo/$zonahorariaok /mnt/etc/localtime
 
 fi
+
 
 
 dialog --backtitle "$titulo" \
 --title "| REGLAS EN PERFILES NUEVOS |" \
 --msgbox '\n> No se permite iniciar nombre en Mayúsculas \n> Ni con números o Caracteres especiales\n> Máximo de 8 caracteres\n> En su CLAVE no use la letra “ñ”\n> Ni letras con tilde\n> Por ejemplo: è, ü, etc...\n> Ni otros caracteres especiales\n> ~!@#$%^&*_-+=|\(){}[]:;<;>;,.?/\n\n     >>  Ya que pueden causar errores  <<' 15 50
 
+
 #nombre de pc (hostname)
-hostname=$(dialog --backtitle "$titulo" --title "| Hostname |" --inputbox "|  Nombre del computador  |" 0 0 2>&1 > /dev/tty)
+hostname=$(dialog --backtitle "$titulo" --title "| Hostname |" --inputbox "|  Nombre del computador  |" 8 40 2>&1 > /dev/tty)
 echo "$hostname" > /mnt/etc/hostname
 echo "$hostname" > hostname
 echo "127.0.1.1 $(cat hostname).localdomain $(cat hostname)" > /mnt/etc/hosts
@@ -898,7 +900,7 @@ do
   fi
 done
 
-dialog --backtitle "$titulo" --title "| Clave Correcta |" --msgbox '\nContraseña Conrrecta!' 7 40
+dialog --backtitle "$titulo" --title "| Clave Correcta |" --msgbox '\nContraseña Conrrecta!' 8 40
 arch-chroot /mnt /bin/sh -c "echo root:$rootpasswd | chpasswd"
 
 
@@ -912,15 +914,15 @@ user=$(echo "$username" | sed -n 1p)
 arch-chroot /mnt /bin/sh -c "useradd -m -g users -s /bin/bash $user"
 while [ $userpasswd != $userpasswd2 ]
 do 
-    userpasswd=$(dialog --backtitle "$titulo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Contraseña de $user" 8 36 2>&1 > /dev/tty)
-    userpasswd2=$(dialog --backtitle "$titulo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Confirma tu clave de $user" 8 36 2>&1 > /dev/tty)
+    userpasswd=$(dialog --backtitle "$titulo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Contraseña de $user" 8 40 2>&1 > /dev/tty)
+    userpasswd2=$(dialog --backtitle "$titulo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Confirma tu clave de $user" 8 40 2>&1 > /dev/tty)
     if [ $userpasswd != $userpasswd2 ];then 
      dialog --backtitle "$titulo" --title " Clave incorrecta " --msgbox 'Las contraseñas no coinciden\n      Intente nuevamente...' 6 50
   else 
     clear
   fi
 done
-dialog --backtitle "$titulo" --title "| Clave Correcta |" --msgbox '\nContraseña Conrrecta!' 7 40
+dialog --backtitle "$titulo" --title "| Clave Correcta |" --msgbox '\nContraseña Conrrecta!' 8 40
 arch-chroot /mnt /bin/bash -c "echo $user:$userpasswd | chpasswd"
 #sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
 arch-chroot /mnt /bin/bash -c "hwclock -w"

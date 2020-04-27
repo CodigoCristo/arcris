@@ -111,21 +111,27 @@ if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]
 then
 
 dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "|  SISTEMA UEFI |"  --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && cat /tmp/partitions | grep gpt && echo "Su disco SI es compatible para continuar" && echo "" && cat /tmp/partitions | grep /dev/ )" 18 150
-partitioner=$(dialog --backtitle "$titulo" --clear --title "| ELIGE UN PROGRAMA |" --ok-label 'Seleccionar' --no-cancel --menu "Crear particiones correctamente" 0 0 0\
+
+
+partitioner=$(dialog --backtitle "$titulo" --clear --title "-| Particionado de Disco |-" --ok-label 'Seleccionar' --no-cancel --menu ">\n> Crear particiones correctamente\n>" 9 0 0\
     "cfdisk" "Un particionador casi grafico" \
     "fdisk" "Un particionador de linea de comandos" \
     "parted" "Un particionador de linea de comandos" 2>&1 > /dev/tty)
 $partitioner $disk
 
+clear
 partprobe
-
 fdisk -l "$disk" > /tmp/partitions
 
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
-part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Elige la partición de Administrador |" \
-  --menu ">> Selecciona la partición para Root: / <<" 0 47 0 ${p} 2>&1 > /dev/tty)
+#--title "| Elige la partición de Administrador |"
+part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear \
+  --menu "Selecciona la partición para Root: [ / ]" 15 60 0 ${p} 2>&1 > /dev/tty)
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Verificando estado de Disco |-" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 rootfs=$part
+
+
 p=$(echo "$p" | grep -v $part)
 
 
@@ -133,15 +139,15 @@ p=$(echo "$p" | grep -v $part)
 partitioning(){
   fs="$(ls /bin/* | grep mkfs | awk '{if (NR!=1) {print}}' | sed 's/^.\{10\}//g' | awk '{print substr($0, 0, length($0)-0)}' | awk '$fs=$fs" Type"' |  awk '{if (NR!=1) {print}}' | grep -v cramfs | grep -v hfsplus | grep -v  bfs | grep -v msdos | grep -v minix)"
   format=$(dialog --backtitle "$titulo" --clear --title '-| FORMATO DE PARTICIÓN |-' \
-          --ok-label 'Seleccionar' --cancel-label 'No formatear' --menu "\nElige el tipo de sistema de archivos\n\nEXT4 >> Para Linux\nFAT >> Para FAT32 para la partición UEFI\nNTFS >> Para Windows\n\n$(fdisk -l $disk | grep dos || fdisk -l $disk | grep gpt)" 15 45 0 ${fs} 2>&1 > /dev/tty)      
+          --ok-label 'Seleccionar' --cancel-label 'No formatear' --menu "\nElige el tipo de sistema de archivos\n\nEXT4 >> Para Linux\nFAT >> Para FAT32 para la partición UEFI\nNTFS >> Para Windows\n\n$(fdisk -l $disk | grep dos || fdisk -l $disk | grep gpt)" 15 50 0 ${fs} 2>&1 > /dev/tty)      
 
   case $format in
     ext2) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en EXT2 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext2 -F $part" 20 80;;
       ext3) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en EXT3 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext3 -F $part" 20 80;;
       ext4) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en EXT4 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext4 -F $part" 20 80;;
       reiserfs) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en ReiserFS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.reiserfs -f -f $part" 20 80;;
-      vfat) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en FAT 32 | Uso General para particiones UEFI... |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.vfat -F 32 $part" 7 80;;
-      fat) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en FAT 32 | Uso General para particiones UEFI... |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.fat -F 32 $part" 7 80;;
+      vfat) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en FAT 32 | Uso General para particiones UEFI... |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.vfat -F32 $part" 7 80;;
+      fat) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en FAT 32 | Uso General para particiones UEFI... |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.fat -F32 $part" 7 80;;
       exfat) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en ExFAT |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.exfat $part" 20 80;;
       ntfs) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en NTFS - Windows |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ntfs -Q $part" 20 80;;
       f2fs) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en F2FS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && modprobe f2fs && mkfs.f2fs $part" 20 80;;
@@ -153,56 +159,13 @@ partitioning(){
   esac
 }
 
-
 partitioning
 mount "$rootfs" /mnt
 
 
-
-#WINDOWS
-part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
-disk=$(dialog --backtitle "$titulo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "\nUbicación de Windows\n " 10 50 0 ${part} 2>&1 >/dev/tty)
-fdisk -l $disk > /tmp/partitions
-
-partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-p="$(echo "$partitions")"
-part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --cancel-label 'No tengo' --clear --title "| Partición Boot Windows |" \
-  --menu "\nSelecciona la partición de arranque \n\n$(fdisk -l $disk | grep EFI)\n " 12 67 0 ${p} 2>&1 > /dev/tty)
-#Variablepara EFI WINDOWS
-efiwin_osfs=$part
-mkdir -p /mnt/efi
-mount "$efiwin_osfs" /mnt/efi
-clear
-
-
-partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-p="$(echo "$partitions")"
-part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --cancel-label 'No tengo' --clear --title "| Disco C:\\ |" \
-  --menu "\nElige la partición donde esta el Disco C:\\\nLa ruta donde estara es: /media/windows en NTFS\n " 10 60 0 ${p} 2>&1 > /dev/tty)
-#VariableparadatosDISCO C
-datoscwin_osfs=$part
-mkdir -p /mnt/media/windows
-mount "$datoscwin_osfs" /mnt/media/windows
-clear
-
-
-# part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
-# disk=$(dialog --backtitle "$titulo" --clear --title "| Disco Windows - Datos |"  --ok-label 'Seleccionar' --no-cancel --menu "Selecciona el disco Datos de Windows" 0 50 0 ${part} 2>&1 >/dev/tty)
-# fdisk -l $disk > /tmp/partitions
-
-# partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-# p="$(echo "$partitions")"
-# part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --cancel-label 'No tengo' --clear --title "| Partición Boot Windows |" \
-#  --menu "\nElige la partición donde esta el Disco de Datos Windows\nLa ruta donde estara es: /mnt/datos en NTFS\n " 13 67 0 ${p} 2>&1 > /dev/tty)
-#Variableparadatos
-# datos_osfs=$part
-# mkdir -p /mnt/mnt/datos
-# mount "$datos_osfs" /mnt/mnt/datos
-
-
 cmd=(dialog --backtitle "$titulo" --separate-output --ok-label 'Montar y formatear selección' --cancel-label 'No tengo más particiones' \--checklist "Selecciona otros puntos de montajes:\n\
 [SPACE] para marcar * \n\
-[ENTER] para continuar." 10 0 0)
+[ENTER] para continuar." 10 80 0)
 options=(
   "/home" "Archivos de usuario" off
   "/tmp" "Archivos temporales" off
@@ -221,7 +184,7 @@ do
 
 #     dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
       part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
-        --menu "| Elige la partición que desea usar para: home |" 0 0 0 ${p} 2>&1 > /dev/tty )
+        --menu "| Elige la partición que desea usar para: home |" 0 55 0 ${p} 2>&1 > /dev/tty )
       homefs="$part"
       dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
       partitioning
@@ -234,7 +197,7 @@ do
 
 #     dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
       part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
-        --menu "| Elige la partición que desea usar para: tmp |" 0 0 0 ${p} 2>&1 > /dev/tty )
+        --menu "| Elige la partición que desea usar para: tmp |" 0 55 0 ${p} 2>&1 > /dev/tty )
       tmpfs="$part"
       dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
       partitioning
@@ -247,7 +210,7 @@ do
 
 #     dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
       part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
-        --menu "| Elige la partición que desea usar para: usr |" 0 0 0 ${p} 2>&1 > /dev/tty )
+        --menu "| Elige la partición que desea usar para: usr |" 0 55 0 ${p} 2>&1 > /dev/tty )
       usrfs="$part"
       dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
       partitioning
@@ -260,7 +223,7 @@ do
 
 #     dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
       part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
-        --menu "| Elige la partición que desea usar para: var |" 0 0 0 ${p} 2>&1 > /dev/tty )
+        --menu "| Elige la partición que desea usar para: var |" 0 55 0 ${p} 2>&1 > /dev/tty )
       varfs="$part"
       dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
       partitioning
@@ -273,7 +236,7 @@ do
 
 #     dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
       part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
-        --menu "| Elige la partición que desea usar para: srv |" 0 0 0 ${p} 2>&1 > /dev/tty )
+        --menu "| Elige la partición que desea usar para: srv |" 0 55 0 ${p} 2>&1 > /dev/tty )
       srvfs="$part"
       dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
       partitioning
@@ -286,7 +249,7 @@ do
 
 #     dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
       part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
-        --menu "| Elige la partición que desea usar para: opt |" 0 0 0 ${p} 2>&1 > /dev/tty )
+        --menu "| Elige la partición que desea usar para: opt |" 0 55 0 ${p} 2>&1 > /dev/tty )
       optfs="$part"
       dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
       partitioning
@@ -298,12 +261,54 @@ do
     "swap")
 #     dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
       part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
-        --menu "| Elige la partición que desea usar para: swap |" 0 0 0 ${p} 2>&1 > /dev/tty)
+        --menu "| Elige la partición que desea usar para: swap |" 0 55 0 ${p} 2>&1 > /dev/tty)
       dialog --title "| Formateando Swap Linux |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkswap $part && swapon $part" 10 100
       swap="$part"
       p=$(echo "$p" | grep -v "$part")
   esac
 done
+
+
+
+--backtitle "$titulo"
+
+
+#WINDOWS
+part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
+disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "\nSelecciona el disco de Windows\n " 10 50 0 ${part} 2>&1 >/dev/tty)
+fdisk -l $disk > /tmp/partitions
+
+partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
+p="$(echo "$partitions")"
+
+
+
+
+part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --cancel-label 'No tengo' --clear --title "| Partición EFI System |" \
+  --menu "\nSelecciona la partición de arranque EFI\n\n$(fdisk -l $disk | grep EFI)\n " 12 80 0 ${p} 2>&1 > /dev/tty)
+#Variablepara EFI WINDOWS
+efiwin_osfs=$part
+mkdir -p /mnt/efi
+clear
+mount "$efiwin_osfs" /mnt/efi
+clear
+p=$(echo "$p" | grep -v "$part")
+
+
+
+
+part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --cancel-label 'No tengo' --clear --title "| Disco C:\\ |" \
+  --menu "\nElige la partición donde esta el Disco C:\\\nLa ruta donde estara es: /media/windows en NTFS\n " 12 80 0 ${p} 2>&1 > /dev/tty)
+#VariableparadatosDISCO C
+datoscwin_osfs=$part
+mkdir -p /mnt/media
+clear
+mkdir -p /mnt/media/windows
+clear
+mount "$datoscwin_osfs" /mnt/media/windows
+clear
+p=$(echo "$p" | grep -v "$part")
+
 
 
 clear
@@ -312,9 +317,9 @@ clear
 
 
 
-
 clear
-timedatectl set-timezone $(curl https://ipapi.co/timezone)
+zonahorariaok=$(curl https://ipapi.co/timezone)
+timedatectl set-timezone $zonahorariaok
 ntpd -qg | dialog --no-collapse --cr-wrap --backtitle "$titulo" --progressbox "| Zona Horaria en LiveCD, Espere... |" 25 80; sleep 3
 hwclock --systohc
 timedatectl status | dialog --no-collapse --cr-wrap --backtitle "$titulo" --progressbox "| Hora Local - Espere... |" 13 65; sleep 5
@@ -341,7 +346,7 @@ kernel_var=0
 while [ "$kernel_var" = "0" ] ; do
 
   kernel_select=`dialog --title "| KERNEL LINUX |" --backtitle "$titulo" \
-    --stdout --ok-label "Seleccionar" --no-cancel --menu "Elige que kernel necesitas: \nLinux Stable es la mejor opción para iniciar\nLas otras opciones tienen un estilo diferente para instalar Drivers\nLas otras modificaciones del kernel trabajan con Drivers Libres" 16 0 2000 linux-stable "Kernel en su versión estable y módulos de Vanilla Linux" linux-hardened "Kernel enfocado en Seguridad" linux-lts "Kernel con soporte de larga duración" linux-zen "Kernel del esfuerzo colaborativo de varios hackers"`
+    --stdout --ok-label "Seleccionar" --no-cancel --menu "Elige que kernel necesitas: \nLinux Stable es la mejor opción para iniciar\nLas otras opciones tienen un estilo diferente para instalar Drivers\nLas otras modificaciones del kernel trabajan con Drivers Libres" 14 0 2000 linux-stable "Kernel en su versión estable y módulos de Vanilla Linux" linux-hardened "Kernel enfocado en Seguridad" linux-lts "Kernel con soporte de larga duración" linux-zen "Kernel del esfuerzo colaborativo de varios hackers"`
    
   if [ $kernel_select == linux-stable ]; then
 
@@ -660,16 +665,16 @@ arch-chroot /mnt /bin/bash -c "export $(cat /mnt/etc/locale.conf)"
 echo "KEYMAP=$keymap" > /mnt/etc/vconsole.conf && cat /mnt/etc/vconsole.conf | dialog --backtitle "-| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |-" --progressbox "Idioma del Sistema > Actualizando" 10 50; sleep 3
 
 #ZONA HORARIA
-URL="https://ipapi.co/timezone"
-wget "$URL" 2>&1 | \
- for i_conta_zona in $(seq 1 100)
-do
-    sleep 0.025 
-    echo $i_conta_zona
-done |  \
-dialog  --backtitle "$titulo" --title "| ZONA HORARIA |" --gauge "Gracias https://ipapi.co/timezone" 6 60
+# URL="https://ipapi.co/timezone"
+# wget "$URL" 2>&1 | \
+# for i_conta_zona in $(seq 1 100)
+# do
+#    sleep 0.025 
+#    echo $i_conta_zona
+# done |  \
+# dialog  --backtitle "$titulo" --title "| ZONA HORARIA |" --gauge "Gracias https://ipapi.co/timezone" 6 60
 
-dialog --backtitle "$titulo" --title "| ZONA HORARIA |" --defaultno --yesno "\n       >>> $(cat timezone) <<<\n\n       ¿Deseas modificarlo?" 8 40 
+dialog --backtitle "$titulo" --title "| ZONA HORARIA |" --defaultno --yesno "\n       >>> $zonahorariaok <<<\n\n       ¿Deseas modificarlo?" 8 40 
 
 
 if [ "$?" = "0" ]; then
@@ -706,18 +711,20 @@ done
 
 else
 
-zone="$(cat timezone)"
-ln -sf /usr/share/zoneinfo/$zone /mnt/etc/localtime
+#zone="$(cat timezone)"
+ln -sf /usr/share/zoneinfo/$zonahorariaok /mnt/etc/localtime
 
 fi
+
 
 
 dialog --backtitle "$titulo" \
 --title "| REGLAS EN PERFILES NUEVOS |" \
 --msgbox '\n> No se permite iniciar nombre en Mayúsculas \n> Ni con números o Caracteres especiales\n> Máximo de 8 caracteres\n> En su CLAVE no use la letra “ñ”\n> Ni letras con tilde\n> Por ejemplo: è, ü, etc...\n> Ni otros caracteres especiales\n> ~!@#$%^&*_-+=|\(){}[]:;<;>;,.?/\n\n     >>  Ya que pueden causar errores  <<' 15 50
 
+
 #nombre de pc (hostname)
-hostname=$(dialog --backtitle "$titulo" --title "| Hostname |" --inputbox "|  Nombre del computador  |" 0 0 2>&1 > /dev/tty)
+hostname=$(dialog --backtitle "$titulo" --title "| Hostname |" --inputbox "|  Nombre del computador  |" 8 40 2>&1 > /dev/tty)
 echo "$hostname" > /mnt/etc/hostname
 echo "$hostname" > hostname
 echo "127.0.1.1 $(cat hostname).localdomain $(cat hostname)" > /mnt/etc/hosts
@@ -735,7 +742,7 @@ do
   fi
 done
 
-dialog --backtitle "$titulo" --title "| Clave Correcta |" --msgbox '\nContraseña Conrrecta!' 7 40
+dialog --backtitle "$titulo" --title "| Clave Correcta |" --msgbox '\nContraseña Conrrecta!' 8 40
 arch-chroot /mnt /bin/sh -c "echo root:$rootpasswd | chpasswd"
 
 
@@ -757,7 +764,7 @@ do
     clear
   fi
 done
-dialog --backtitle "$titulo" --title "| Clave Correcta |" --msgbox '\nContraseña Conrrecta!' 7 40
+dialog --backtitle "$titulo" --title "| Clave Correcta |" --msgbox '\nContraseña Conrrecta!' 8 40
 arch-chroot /mnt /bin/bash -c "echo $user:$userpasswd | chpasswd"
 #sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
 arch-chroot /mnt /bin/bash -c "hwclock -w"
@@ -784,7 +791,6 @@ fi
 
 
 ## GRUB
-
 uefi=$( parted $disk print | grep -ic gpt )
 
 dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --title "|  SISTEMA UEFI Y DISCO GPT  |" --infobox "\n           | SU SISTEMA ES UEFI |" 5 50; sleep 5
@@ -793,6 +799,7 @@ dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB -
   sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
   sed -i '7d' /mnt/etc/default/grub
 dialog --backtitle "|  SISTEMA UEFI Y DISCO GPT  |" --title "| Instalando GRUB - UEFI |" --stdout --ok-label "Siguiente" --prgbox "echo '' && arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg && echo '' && echo 'ls -l /mnt/boot' && ls -l /mnt/boot && echo '' && echo 'Lea bien que no tenga ningún error marcado' && echo '> Confirme tener las IMG de linux para el arranque' && echo '> Confirme tener la carpeta de GRUB para el arranque' " 25 80
+# FIN GRUB
 
 
 clear
@@ -878,7 +885,6 @@ swapoff -a
 swapon -a
 
 reboot
-
 
 
 
@@ -1501,9 +1507,11 @@ ln -sf /usr/share/zoneinfo/$zonahorariaok /mnt/etc/localtime
 fi
 
 
+
 dialog --backtitle "$titulo" \
 --title "| REGLAS EN PERFILES NUEVOS |" \
 --msgbox '\n> No se permite iniciar nombre en Mayúsculas \n> Ni con números o Caracteres especiales\n> Máximo de 8 caracteres\n> En su CLAVE no use la letra “ñ”\n> Ni letras con tilde\n> Por ejemplo: è, ü, etc...\n> Ni otros caracteres especiales\n> ~!@#$%^&*_-+=|\(){}[]:;<;>;,.?/\n\n     >>  Ya que pueden causar errores  <<' 15 50
+
 
 #nombre de pc (hostname)
 hostname=$(dialog --backtitle "$titulo" --title "| Hostname |" --inputbox "|  Nombre del computador  |" 8 40 2>&1 > /dev/tty)
@@ -1524,7 +1532,7 @@ do
   fi
 done
 
-dialog --backtitle "$titulo" --title "| Clave Correcta |" --msgbox '\nContraseña Conrrecta!' 7 40
+dialog --backtitle "$titulo" --title "| Clave Correcta |" --msgbox '\nContraseña Conrrecta!' 8 40
 arch-chroot /mnt /bin/sh -c "echo root:$rootpasswd | chpasswd"
 
 
@@ -1538,15 +1546,15 @@ user=$(echo "$username" | sed -n 1p)
 arch-chroot /mnt /bin/sh -c "useradd -m -g users -s /bin/bash $user"
 while [ $userpasswd != $userpasswd2 ]
 do 
-    userpasswd=$(dialog --backtitle "$titulo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Contraseña de $user" 8 36 2>&1 > /dev/tty)
-    userpasswd2=$(dialog --backtitle "$titulo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Confirma tu clave de $user" 8 36 2>&1 > /dev/tty)
+    userpasswd=$(dialog --backtitle "$titulo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Contraseña de $user" 8 40 2>&1 > /dev/tty)
+    userpasswd2=$(dialog --backtitle "$titulo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Confirma tu clave de $user" 8 40 2>&1 > /dev/tty)
     if [ $userpasswd != $userpasswd2 ];then 
      dialog --backtitle "$titulo" --title " Clave incorrecta " --msgbox 'Las contraseñas no coinciden\n      Intente nuevamente...' 6 50
   else 
     clear
   fi
 done
-dialog --backtitle "$titulo" --title "| Clave Correcta |" --msgbox '\nContraseña Conrrecta!' 7 40
+dialog --backtitle "$titulo" --title "| Clave Correcta |" --msgbox '\nContraseña Conrrecta!' 8 40
 arch-chroot /mnt /bin/bash -c "echo $user:$userpasswd | chpasswd"
 #sed -i '/%wheel ALL=(ALL) ALL/s/^#//g' /mnt/etc/sudoers
 arch-chroot /mnt /bin/bash -c "hwclock -w"

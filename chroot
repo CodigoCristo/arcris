@@ -739,10 +739,11 @@ do
             do
                 case $choice in
                     
-                    1)  WM="i3-gaps i3blocks i3lock i3status dmenu rofi alacritty network-manager-applet deepin-screenshot-copy-patch xclip compton-tryone-git rxvt-unicode lxappearance gnu-free-fonts awesome-terminal-fonts papirus-icon-theme gnome-themes-extra thunar xfce4-terminal kitty feh i3lock-fancy-git bumblebee-status"
+                    1)  WM="i3-gaps i3blocks i3lock i3status dmenu rofi alacritty network-manager-applet compton-tryone-git rxvt-unicode lxappearance ttf-hack gnu-free-fonts awesome-terminal-fonts papirus-icon-theme gnome-themes-extra thunar xfce4-terminal kitty feh i3lock-fancy-git bumblebee-status"
                         DM="ly-git"
                         echo ly > DMservice
                         i3tema=true
+                        # twmn deepin-screenshot-copy-patch xclip
                         ;;
                         
                         
@@ -860,7 +861,7 @@ cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  \
 --no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Seleeciona tu Tipografía para tu sistema\n[ ESPACIO ] - Para marcar o desmarcar *" 20 80 20)
 options=(1 "gnu-free-fonts" on    # any option can be set to default to "on"
          2 "ttf-opensans" on 
-         3 "ttf-hack" off
+         3 "ttf-hack" on
          4 "ttf-inconsolata" off
          5 "ttf-ubuntu-font-family" off
          6 "ttf-google-sans" off
