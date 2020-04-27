@@ -902,21 +902,25 @@ then
   
 
 dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO MBR  |" --title "|  SISTEMA BIOS LEGACY |"  --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && cat /tmp/partitions | grep dos && echo "Su disco si es compatible para continuar" && echo "" && cat /tmp/partitions | grep /dev/ )" 15 150
-partitioner=$(dialog --backtitle "$titulo" --clear --title "| ELIGE UN PROGRAMA |" --ok-label 'Seleccionar' --no-cancel --menu "Crear particiones correctamente" 0 0 0\
+
+
+partitioner=$(dialog --backtitle "$titulo" --clear --title "-| Particionado de Disco |-" --ok-label 'Seleccionar' --no-cancel --menu ">\n> Crear particiones correctamente\n>" 9 0 0\
     "cfdisk" "Un particionador casi grafico" \
     "fdisk" "Un particionador de linea de comandos" \
     "parted" "Un particionador de linea de comandos" 2>&1 > /dev/tty)
 $partitioner $disk
 
-partprobe
-
 fdisk -l "$disk" > /tmp/partitions
 
 partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
-part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Elige la partición de Administrador |" \
-  --menu ">> Selecciona la partición para Root: / <<" 0 47 0 ${p} 2>&1 > /dev/tty)
+#--title "| Elige la partición de Administrador |"
+part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear \
+  --menu "Selecciona la partición para Root: [ / ]" 15 50 0 ${p} 2>&1 > /dev/tty)
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Verificando estado de Disco |-" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
 rootfs=$part
+
+
 p=$(echo "$p" | grep -v $part)
 
 
@@ -931,8 +935,8 @@ partitioning(){
       ext3) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en EXT3 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext3 -F $part" 20 80;;
       ext4) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en EXT4 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext4 -F $part" 20 80;;
       reiserfs) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en ReiserFS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.reiserfs -f -f $part" 20 80;;
-      vfat) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en FAT 32 | Uso General para particiones UEFI... |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.vfat -F 32 $part" 7 80;;
-      fat) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en FAT 32 | Uso General para particiones UEFI... |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.fat -F 32 $part" 7 80;;
+      vfat) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en FAT 32 | Uso General para particiones UEFI... |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.vfat -F32 $part" 7 80;;
+      fat) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en FAT 32 | Uso General para particiones UEFI... |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.fat -F32 $part" 7 80;;
       exfat) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en ExFAT |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.exfat $part" 20 80;;
       ntfs) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en NTFS - Windows |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ntfs -Q $part" 20 80;;
       f2fs) dialog --clear --no-collapse --cr-wrap --backtitle "$titulo" --title "| Formateando partición en F2FS |" --stdout --ok-label "Siguiente" --prgbox "echo "" && modprobe f2fs && mkfs.f2fs $part" 20 80;;
@@ -944,35 +948,8 @@ partitioning(){
   esac
 }
 
-
 partitioning
 mount "$rootfs" /mnt
-
-
-
-#WINDOWS
-part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
-disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "\nSelecciona el disco de Windows\n " 10 50 0 ${part} 2>&1 >/dev/tty)
-fdisk -l $disk > /tmp/partitions
-
-partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-p="$(echo "$partitions")"
-part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'No tengo' --clear --title "| Partición Boot Windows |" \
-  --menu "\nSelecciona la partición de arranque \n\n$(fdisk -l $disk | grep '100M\|499M\|500M\|549M' )\n " 12 67 0 ${p} 2>&1 > /dev/tty)
-boot_osfs=$part
-
-partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-p="$(echo "$partitions")"
-part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'No tengo' --clear --title "| Disco C:\\ |" \
-  --menu "\nElige la partición donde esta el Disco C:\\\nLa ruta donde estara es: /mnt/windows en NTFS\n " 10 60 0 ${p} 2>&1 > /dev/tty)
-datosc_osfs=$part
-
-
-#mkdir -p /mnt/mnt/bootwin
-#mkdir -p /mnt/mnt/windows
-
-#mount "$boot_osfs" /mnt/mnt/bootwin
-#mount "$datosc_osfs" /mnt/mnt/windows
 
 
 cmd=(dialog --backtitle "$titulo" --separate-output --ok-label 'Montar y formatear selección' --cancel-label 'No tengo más particiones' \--checklist "Selecciona otros puntos de montajes:\n\
@@ -1079,6 +1056,36 @@ do
       p=$(echo "$p" | grep -v "$part")
   esac
 done
+
+
+
+#WINDOWS
+part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
+disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "\nSelecciona el disco de Windows\n " 10 50 0 ${part} 2>&1 >/dev/tty)
+fdisk -l $disk > /tmp/partitions
+
+partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
+p="$(echo "$partitions")"
+
+
+part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'No tengo' --clear --title "| Partición Boot Windows |" \
+  --menu "\nSelecciona la partición de arranque \n\n$(fdisk -l $disk | grep '100M\|499M\|500M\|549M' )\n " 12 67 0 ${p} 2>&1 > /dev/tty)
+boot_osfs=$part
+mkdir -p /mnt/mnt
+mkdir -p /mnt/mnt/bootwin
+mount "$boot_osfs" /mnt/mnt/bootwin
+p=$(echo "$p" | grep -v "$part")
+
+
+
+part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'No tengo' --clear --title "| Disco C:\\ |" \
+  --menu "\nElige la partición donde esta el Disco C:\\\nLa ruta donde estara es: /mnt/windows en NTFS\n " 10 60 0 ${p} 2>&1 > /dev/tty)
+datosc_osfs=$part
+mkdir -p /mnt/media
+mkdir -p /mnt/media/windows
+mount "$datosc_osfs" /mnt/media/windows
+p=$(echo "$p" | grep -v "$part")
+
 
 
 clear
@@ -1558,12 +1565,7 @@ fi
 #Copia Red
 
 
-mkdir -p /mnt/tmp/bootwin
-mkdir -p /mnt/media
-mkdir -p /mnt/media/windows
 
-mount "$boot_osfs" /mnt/tmp/bootwin
-mount "$datosc_osfs" /mnt/media/windows
 
 
 #GRUB-BIOS
