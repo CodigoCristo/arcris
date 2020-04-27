@@ -70,14 +70,16 @@ sleep 3
 #FONT=ter-v14b  /etc/vconsole.conf 
 #partprobe
 
+
 #Inicio
-dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" \
---column-separator "|" --no-tags --title "| Código Cristo |" --ok-label 'Seleccionar' --no-cancel --menu "\nInstalador rápido de Arch Linux\n " 14 55 20 \
-1 ' > | Instalar | Arch Linux| <' \
-2 ' > | Instalar | Arch con Cifrado| <' \
-3 ' > | Dual Boot | Windows Instalado| <' \
-4 ' > | Dual Boot | GNU/Linux Instalado| <' \
-5 ' > | GRUB | Recuperar Arranque de Sistema| <' 2>temp
+dialog --backtitle "| Instalación de ArchLinux en Español - https://t.me/ArchLinuxCristo |" \
+--column-separator "|" --no-tags --title "| Arch Linux |" --ok-label 'Seleccionar' --no-cancel --menu "\nScript de instalación rápida de Arch Linux\n " 12 50 20 \
+1 'Instalar  |> Arch Linux' \
+3 'Dual Boot |> Arch Linux con Windows' \
+5 'GRUB |> Reparación de Arranque' 2>temp
+
+#2 ' > | Instalar | Arch con Cifrado| <' \
+#4 ' > | Dual Boot | GNU/Linux Instalado| <' \
 
 #Opciones
 if [ "$?" = "0" ]

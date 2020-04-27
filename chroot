@@ -860,23 +860,18 @@ cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  \
 --no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Seleeciona tu Tipografía para tu sistema\n[ ESPACIO ] - Para marcar o desmarcar *" 20 80 20)
 options=(1 "gnu-free-fonts" on    # any option can be set to default to "on"
          2 "ttf-opensans" on 
-         3 "ttf-hack" on
+         3 "ttf-hack" off
          4 "ttf-inconsolata" off
          5 "ttf-ubuntu-font-family" off
-         6 "ttf-tahoma" off
-         7 "ttf-google-sans" off
-         8 "ttf-linux-libertine" off
-         9 "ttf-envy-code-r" off
-         10 "ttf-font-awesome > icons" on
-         11 "ttf-ionicons > icons" off
-         12 "ttf-font-icons > icons" off
-         14 "noto-fonts" off
-         15 "cantarell-fonts" off
-         16 "nerd-fonts-dejavu-complete" off
-         17 "bdf-unifont" off
-         18 "system-san-francisco-font-git" off
-         19 "adobe-source-sans-pro-fonts" off
-         20 "adobe-source-serif-pro-fonts" off)
+         6 "ttf-google-sans" off
+         7 "ttf-linux-libertine" off
+         8 "ttf-font-awesome > iconos" on
+         9 "ttf-ionicons > iconos" off
+         10 "noto-fonts" off
+         11 "cantarell-fonts" off
+         12 "bdf-unifont" off
+         13 "adobe-source-sans-pro-fonts" off
+         14 "adobe-source-serif-pro-fonts" off)
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
 for choice in $choices
@@ -898,51 +893,37 @@ do
             FONT5="ttf-ubuntu-font-family"
             ;;
         6)
-            FONT6="ttf-tahoma"
+            FONT6="ttf-google-sans"
             ;;
         7)
-            FONT7="ttf-google-sans"
+            FONT7="ttf-linux-libertine"
             ;;
         8)
-            FONT8="ttf-linux-libertine"
+            FONT8="ttf-font-awesome awesome-terminal-fonts"
             ;;
         9)
-            FONT9="ttf-envy-code-r"
+            FONT9="ttf-ionicons"
             ;;
         10)
-            FONT10="ttf-font-awesome awesome-terminal-fonts"
+            FONT10="noto-fonts"
             ;;
         11)
-            FONT11="ttf-ionicons"
+            FONT11="cantarell-fonts"
             ;;
         12)
-            FONT12="ttf-font-icons"
+            FONT12="bdf-unifont"
             ;;
         13)
-            FONT13="nerd-fonts-complete"
+            FONT13="adobe-source-sans-pro-fonts"
             ;;
-        15)
-            FONT15="cantarell-fonts"
+        14)
+            FONT14="adobe-source-serif-pro-fonts"
             ;;
-        16)
-            FONT16="nerd-fonts-dejavu-complete"
-            ;;
-        17)
-            FONT17="bdf-unifont"
-            ;;
-        18)
-            FONT18="system-san-francisco-font-git"
-            ;;
-        19)
-            FONT19="adobe-source-sans-pro-fonts"
-            ;;
-        20)
-            FONT20="adobe-source-serif-pro-fonts"
-            ;;
+       
             
     esac
 done
-FONT=" gnome-font-viewer $FONT1 $FONT2 $FONT3 $FONT4 $FONT5 $FONT6 $FONT7 $FONT8 $FONT9 $FONT10 $FONT11 $FONT12 $FONT13 $FONT14 $FONT15 $FONT16 $FONT17 $FONT18 $FONT19 $FONT20 "
+FONT=" gnome-font-viewer $FONT1 $FONT2 $FONT3 $FONT4 $FONT5 $FONT6 $FONT7 $FONT8 $FONT9 $FONT10 $FONT11 $FONT12 $FONT13 $FONT14 "
 # FIN TIPOGRAFIAS
 
 
@@ -1294,13 +1275,13 @@ sudo -u $nombre_usuario yay --noeditmenu --noconfirm && \
 sudo -u $nombre_usuario xdg-user-dirs-update --force && \
 sudo -u $nombre_usuario yay -S $UTIL --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $AUDIO --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -S $FONT --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $SH --noeditmenu --noconfirm --needed && \
-sudo -u $nombre_usuario yay -S $AP --noeditmenu --noconfirm --needed && \
-sudo -u $nombre_usuario yay -S $REPRO --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $WEB --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -S $REPRO --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -S $AP --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $OFFICE --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $AUR --noeditmenu --noconfirm --needed && \
-sudo -u $nombre_usuario yay -S $FONT --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $RS --noeditmenu --noconfirm --needed && \
 clear && \
 sudo -u $nombre_usuario ls -l && \

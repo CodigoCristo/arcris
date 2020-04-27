@@ -90,7 +90,10 @@ do
 done
 
 
-dialog --backtitle "$titulo" --title "-| Mensaje |-" --infobox "\n> UEFI trabaja con discos en GPT \n\n> UEFI su partición boot es formateada en FAT32 \n\n> BIOS LEGACY trabaja con discos en DOS/MBR\n\n> BIOS LEGACY su partición boot es formateada en EXT4\n( La partición boot en linux es opcional )" 12 60; sleep 5
+dialog --backtitle "$titulo" --title "-| Mensaje |-" --infobox "\n> UEFI trabaja con discos en GPT \n\n> UEFI su partición boot es formateada en FAT32 \n\n> BIOS LEGACY trabaja con discos en DOS/MBR\n\n> BIOS LEGACY su partición boot es formateada en EXT4\n( La partición boot en linux es opcional )" 12 60; sleep 4
+
+
+
 
 
 dialog --backtitle "$titulo" --title "-| Particionado de Disco |-" --yesno "\n    ¿ Desea particionar su disco de manera automatica ?\n \nPresione Si - Automatico (Borrado y creado automatico)\nPresione No - Manera Manual" 9 62
@@ -463,8 +466,14 @@ done
 esac    
 
 
-
 #mkdir -p /mnt/{"$bootdir","$homedir","$tmpdir","$usrdir","$vardir","$srvdir","$optdir"}
+
+clear
+partprobe
+clear
+
+
+
 
 clear
 timedatectl set-timezone $(curl https://ipapi.co/timezone)
@@ -958,6 +967,8 @@ dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instal
   sed -i '7d' /mnt/etc/default/grub
 dialog --backtitle "|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |" --title "| Instalando GRUB - BIOS LEGACY |" --stdout --ok-label "Siguiente" --prgbox "echo '' && arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg && echo '' && echo 'ls -l /mnt/boot' && ls -l /mnt/boot && echo '' && echo 'Lea bien que no tenga ningún error marcado' && echo '> Confirme tener las IMG de linux para el arranque' && echo '> Confirme tener la carpeta de GRUB para el arranque' " 25 80
 fi
+# FIN GRUB
+
 
 clear
 arch-chroot /mnt /bin/bash -c "pacman -Sy xdg-user-dirs --noconfirm" | dialog --no-collapse --cr-wrap --backtitle "$titulo" --progressbox "| Creando Directorios... |" 25 80; sleep 3
@@ -1035,6 +1046,10 @@ echo -e "[Service]\nExecStart=\nExecStart=-/sbin/agetty --autologin root --nocle
 echo "sh chroot" >> /mnt/root/.bashrc
 echo -e "if [ -f ~/.bashrc ]; then\n\tsource ~/.bashrc\nfi" >> /mnt/root/.bash_profile
 
+swapdisco=$( fdisk -l | grep "/dev/\|swap" | grep swap | awk -F ' ' '{print $1}' )
 umount -R /mnt
+swapoff ${swapdisco}
+swapoff -a
+swapon -a
 
 reboot
