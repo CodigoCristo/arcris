@@ -1062,14 +1062,14 @@ done
 #WINDOWS
 part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}')" 
 disk=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --clear --title "| Selección de Disco |"  --ok-label 'Seleccionar' --no-cancel --menu "\nSelecciona el disco de Windows\n " 10 50 0 ${part} 2>&1 >/dev/tty)
-fdisk -l $disk > /tmp/winpartitions
+fdisk -l $disk > /tmp/partitions
 
-winpartitions="$(cat /tmp/winpartitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
-winp="$(echo "$winpartitions")"
+partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
 p="$(echo "$partitions")"
 
+
 part=$(dialog --backtitle "Instalación de ArchLinux - https://t.me/ArchLinuxCristo" --ok-label 'Seleccionar' --cancel-label 'No tengo' --clear --title "| Partición Boot Windows |" \
-  --menu "\nSelecciona la partición de arranque \n\n$(fdisk -l $disk | grep '*\|100M\|499M\|500M\|549M' )\n " 12 80 0 ${p} 2>&1 > /dev/tty)
+  --menu "\nSelecciona la partición de arranque \n\n$(fdisk -l $disk | grep '100M\|499M\|500M\|549M' )\n " 12 80 0 ${p} 2>&1 > /dev/tty)
 boot_osfs=$part
 mkdir -p /mnt/mnt
 clear
@@ -1077,7 +1077,7 @@ mkdir -p /mnt/mnt/bootwin
 clear
 mount "$boot_osfs" /mnt/mnt/bootwin
 clear
-winp=$(echo "$p" | grep -v "$part" && echo "$winp" | grep -v "$part")
+p=$(echo "$p" | grep -v "$part")
 
 
 
@@ -1090,7 +1090,7 @@ mkdir -p /mnt/media/windows
 clear
 mount "$datosc_osfs" /mnt/media/windows
 clear
-winp=$(echo "$p" | grep -v "$part" && echo "$winp" | grep -v "$part")
+p=$(echo "$p" | grep -v "$part")
 
 
 
