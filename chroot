@@ -739,7 +739,7 @@ do
             do
                 case $choice in
                     
-                    1)  WM="i3-gaps i3blocks i3lock i3status dmenu rofi alacritty network-manager-applet compton-tryone-git rxvt-unicode lxappearance ttf-hack gnu-free-fonts awesome-terminal-fonts papirus-icon-theme gnome-themes-extra thunar xfce4-terminal kitty feh i3lock-fancy-git bumblebee-status"
+                    1)  WM="i3-gaps i3blocks i3lock i3status dmenu rofi alacritty network-manager-applet compton-tryone-git rxvt-unicode lxsession lxappearance ttf-hack gnu-free-fonts awesome-terminal-fonts papirus-icon-theme gnome-themes-extra thunar xfce4-terminal kitty feh i3lock-fancy-git bumblebee-status"
                         DM="ly-git"
                         echo ly > DMservice
                         i3tema=true
@@ -836,7 +836,7 @@ do
             UTIL3="ffmpeg aom libde265 x265 x264 libmpeg2 xvidcore libtheora libvpx \
                 schroedinger sdl gstreamer gst-plugins-bad gst-plugins-base gst-plugins-base-libs \
                 gst-plugins-good gst-plugins-ugly xine-lib libdvdcss libdvdread dvd+rw-tools lame \
-                jasper openjpeg libmng vcdimager"
+                jasper libmng vcdimager"
             ;;
         4)
             UTIL4="gufw"
@@ -1284,7 +1284,6 @@ sudo -u $nombre_usuario yay -S $AP --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $OFFICE --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $AUR --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $RS --noeditmenu --noconfirm --needed && \
-clear && \
 sudo -u $nombre_usuario ls -l && \
 echo '' && echo '' && echo TODO LISTO ! && echo '' && echo https://t.me/ArchLinuxCristo" 27 100
 
@@ -1292,11 +1291,11 @@ clear
 
 # mkdir /home/$nombre_usuario/.config/  
 
-if [ "$GPUHYBR" == "true" ]; then
+#if [ "$GPUHYBR" == "true" ]; then
     
-optimus-manager --switch hybrid
+#optimus-manager --switch hybrid
     
-elif [ "$VMbox" == "true" ]; then
+if [ "$VMbox" == "true" ]; then
     
 modprobe -a vboxguest vboxsf vboxvideo vboxdrv
 VBoxClient-all
