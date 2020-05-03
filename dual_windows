@@ -400,7 +400,7 @@ case $? in
     if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
     then      
     dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
-    --prgbox "arch-chroot /mnt pacman -Sy broadcom-wl wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && arch-chroot /mnt /bin/bash -c 'modprobe wl' " 25 100
+    --prgbox "arch-chroot /mnt pacman -Sy broadcom-wl wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'modprobe wl' && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && echo listo" 25 100
     else
       
     dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
@@ -465,7 +465,7 @@ case $? in
     if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
     then      
     dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
-    --prgbox "arch-chroot /mnt pacman -Sy broadcom-wl-dkms wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && arch-chroot /mnt /bin/bash -c 'modprobe wl' " 25 100
+    --prgbox "arch-chroot /mnt pacman -Sy broadcom-wl-dkms wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'modprobe wl' && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && echo listo" 25 100
     else
       
     dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
@@ -545,7 +545,7 @@ case $? in
     if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
     then      
     dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
-    --prgbox "arch-chroot /mnt pacman -Sy broadcom-wl-dkms wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && arch-chroot /mnt /bin/bash -c 'modprobe wl' " 25 100
+    --prgbox "arch-chroot /mnt pacman -Sy broadcom-wl-dkms wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'modprobe wl' && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && echo listo" 25 100
     else
       
     dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
@@ -609,7 +609,7 @@ case $? in
     if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
     then      
     dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
-    --prgbox "arch-chroot /mnt pacman -Sy broadcom-wl-dkms wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && arch-chroot /mnt /bin/bash -c 'modprobe wl' " 25 100
+    --prgbox "arch-chroot /mnt pacman -Sy broadcom-wl-dkms wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'modprobe wl' && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && echo listo" 25 100
     else
       
     dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
@@ -1190,7 +1190,7 @@ case $? in
     if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
     then      
     dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
-    --prgbox "arch-chroot /mnt pacman -Sy broadcom-wl wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && arch-chroot /mnt /bin/bash -c 'modprobe wl' " 25 100
+    --prgbox "arch-chroot /mnt pacman -Sy broadcom-wl wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'modprobe wl' && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && echo listo" 25 100
     else
       
     dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
@@ -1255,7 +1255,7 @@ case $? in
     if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
     then      
     dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
-    --prgbox "arch-chroot /mnt pacman -Sy broadcom-wl-dkms wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && arch-chroot /mnt /bin/bash -c 'modprobe wl' " 25 100
+    --prgbox "arch-chroot /mnt pacman -Sy broadcom-wl-dkms wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'modprobe wl' && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && echo listo" 25 100
     else
       
     dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
@@ -1335,7 +1335,7 @@ case $? in
     if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
     then      
     dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
-    --prgbox "arch-chroot /mnt pacman -Sy broadcom-wl-dkms wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && arch-chroot /mnt /bin/bash -c 'modprobe wl' " 25 100
+    --prgbox "arch-chroot /mnt pacman -Sy broadcom-wl-dkms wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'modprobe wl' && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && echo listo" 25 100
     else
       
     dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
@@ -1399,7 +1399,7 @@ case $? in
     if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
     then      
     dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
-    --prgbox "arch-chroot /mnt pacman -Sy broadcom-wl-dkms wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && arch-chroot /mnt /bin/bash -c 'modprobe wl' " 25 100
+    --prgbox "arch-chroot /mnt pacman -Sy broadcom-wl-dkms wireless-regdb wpa_supplicant wireless_tools --noconfirm && arch-chroot /mnt /bin/bash -c 'modprobe wl' && arch-chroot /mnt /bin/bash -c 'rmmod b43' && arch-chroot /mnt /bin/bash -c 'rmmod ssb' && echo listo" 25 100
     else
       
     dialog --backtitle "$titulo" --title "| Instalando Sistema Base - Linux Stable |" --stdout --ok-label "Siguiente" \
