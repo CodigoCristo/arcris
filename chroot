@@ -310,7 +310,7 @@ options=(1 "Nvidia 440xx|(Linux Stable)"
          2 "Nvidia 390xx|(Linux Stable)"
          3 "Nvidia 340xx|(Linux Stable)"
          4 "Nvidia 440xx|(Linux Stable + Intel)"
-         5 "Nvidia 390xx|(Linux Stable + Intel)"
+         5 "Nvidia 390xx|(Linux Stable + Intel) No hybrid"
          6 "Nvidia 440xx|(Linux LTS)"
          7 "Nvidia 390xx|(Linux LTS)"
          8 "Nvidia 440xx|(Linux Hardened - Zen)"
@@ -496,13 +496,13 @@ for choice in $choices
 do
     case $choice in
         
-        1)  DE="xfce4 xfce4-goodies network-manager-applet alacarte papirus-icon-theme deepin-icon-theme sierra-gtk-theme-git gnu-free-fonts gnome-font-viewer"
+        1)  DE="xfce4 xfce4-goodies network-manager-applet alacarte papirus-icon-theme deepin-icon-theme sierra-gtk-theme-git gnu-free-fonts gnome-font-viewer tumbler ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer"
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
             echo lightdm > DMservice
             xfce4tema=true
             ;;
             
-        2)  DE="xfce4 xfce4-goodies network-manager-applet alacarte ttf-hack ttf-inconsolata gnome-font-viewer"
+        2)  DE="xfce4 xfce4-goodies network-manager-applet alacarte ttf-hack ttf-inconsolata gnome-font-viewer tumbler ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer"
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
             echo $DM | awk -F " " '{print $1}' > DMservice
             ;;
@@ -526,7 +526,7 @@ do
                         ;;
                 esac
             done
-            xfce4="xfce4 gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer"
+            xfce4="xfce4 gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer tumbler ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer"
             DE="$xfce4 $xfce4_2 $xfce4_3 $xfce4_4"
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
             echo $DM | awk -F " " '{print $1}' > DMservice
@@ -565,7 +565,7 @@ done
                 esac
             done
 
-            KDE="plasma kdebase gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer discover packagekit-qt5 colord-kde kscreen powerdevil kdegraphics-thumbnailers ffmpegthumbs user-manager kdeconnect sshfs ttf-liberation ttf-dejavu qt5ct"
+            KDE="plasma kdebase gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer discover packagekit-qt5 colord-kde kscreen powerdevil kdegraphics-thumbnailers ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer user-manager kdeconnect sshfs ttf-liberation ttf-dejavu qt5ct"
 
             DE="$KDE $KDE2 $KDE3 $KDE4 $KDE5"            
             DM="sddm libxcb qt5-virtualkeyboard"
@@ -609,7 +609,7 @@ done
                 esac
             done
 
-            deepin="deepin deepin-extra gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer ffmpegthumbs"
+            deepin="deepin deepin-extra gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer"
             DE="$deepin $deepin1 $deepin2 $deepin3 $deepin4 $deepin5 $deepin6 $deepin7"
 
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
@@ -619,7 +619,7 @@ done
 ######FINAL DEEPIN
 
         4)  #INICIO GNOME
-            DE="gnome gnome-extra gnome-shell"
+            DE="gnome gnome-extra gnome-shell tumbler ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer"
             DM="gdm"
             echo gdm > DMservice
             ;;
@@ -739,7 +739,7 @@ do
             do
                 case $choice in
                     
-                    1)  WM="i3-gaps i3blocks i3lock i3status dmenu rofi alacritty numlockx network-manager-applet compton-tryone-git rxvt-unicode deepin-screenshot-copy-patch xclip polkit-gnome gnome-keyring lxsession lxappearance ttf-hack gnu-free-fonts awesome-terminal-fonts papirus-icon-theme gnome-themes-extra thunar xfce4-terminal kitty feh i3lock-fancy-git bumblebee-status"
+                    1)  WM="i3-gaps i3blocks i3lock i3status dmenu rofi tumbler ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer network-manager-applet rxvt-unicode polkit-gnome gnome-keyring lxappearance ttf-hack gnu-free-fonts awesome-terminal-fonts papirus-icon-theme gnome-themes-extra thunar xfce4-terminal kitty alacritty feh bumblebee-status compton-tryone-git deepin-screenshot-copy-patch xclip i3lock-fancy-git"
                         DM="ly-git"
                         echo ly > DMservice
                         i3tema=true
@@ -836,7 +836,7 @@ do
             UTIL3="ffmpeg aom libde265 x265 x264 libmpeg2 xvidcore libtheora libvpx \
                 schroedinger sdl gstreamer gst-plugins-bad gst-plugins-base gst-plugins-base-libs \
                 gst-plugins-good gst-plugins-ugly xine-lib libdvdcss libdvdread dvd+rw-tools lame \
-                jasper libmng vcdimager"
+                jasper libmng libraw libkdcraw vcdimager"
             ;;
         4)
             UTIL4="gufw"
@@ -862,17 +862,15 @@ cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  \
 options=(1 "gnu-free-fonts" on    # any option can be set to default to "on"
          2 "ttf-opensans" on 
          3 "ttf-hack" on
-         4 "ttf-inconsolata" off
-         5 "ttf-ubuntu-font-family" off
-         6 "ttf-google-sans" off
-         7 "ttf-linux-libertine" off
-         8 "ttf-font-awesome > iconos" on
-         9 "ttf-ionicons > iconos" off
-         10 "noto-fonts" off
-         11 "cantarell-fonts" off
-         12 "bdf-unifont" off
-         13 "adobe-source-sans-pro-fonts" off
-         14 "adobe-source-serif-pro-fonts" off)
+         4 "ttf-ubuntu-font-family" off
+         5 "ttf-google-sans" off
+         6 "ttf-font-awesome > iconos" on
+         7 "noto-fonts-emoji > iconos" on
+         8 "noto-fonts" off
+         9 "cantarell-fonts" off
+         10 "bdf-unifont" off
+         11 "adobe-source-han-sans-jp-fonts > font japón" off
+         12 "adobe-source-han-sans-cn-fonts > font chino" off)
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
 for choice in $choices
@@ -888,39 +886,32 @@ do
             FONT3="ttf-hack"
             ;;
         4)
-            FONT4="ttf-inconsolata"
+            FONT4="ttf-ubuntu-font-family"
             ;;
         5)
-            FONT5="ttf-ubuntu-font-family"
+            FONT5="ttf-google-sans"
             ;;
         6)
-            FONT6="ttf-google-sans"
+            FONT6="ttf-font-awesome awesome-terminal-fonts"
             ;;
         7)
-            FONT7="ttf-linux-libertine"
+            FONT7="noto-fonts-emoji"
             ;;
         8)
-            FONT8="ttf-font-awesome awesome-terminal-fonts"
+            FONT8="noto-fonts"
             ;;
         9)
-            FONT9="ttf-ionicons"
+            FONT9="cantarell-fonts"
             ;;
         10)
-            FONT10="noto-fonts"
+            FONT10="bdf-unifont"
             ;;
         11)
-            FONT11="cantarell-fonts"
+            FONT11="adobe-source-han-sans-jp-fonts"
             ;;
         12)
-            FONT12="bdf-unifont"
-            ;;
-        13)
-            FONT13="adobe-source-sans-pro-fonts"
-            ;;
-        14)
-            FONT14="adobe-source-serif-pro-fonts"
-            ;;
-       
+            FONT12="adobe-source-han-sans-cn-fonts"
+            ;;       
             
     esac
 done
@@ -971,7 +962,13 @@ do
             ;;
         6)
             REPRO6="spotify"
-            sporitykey=true
+            printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
+            echo -e ""
+            echo -e "\t\t\t         Actualizando          "
+            printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+            echo -e ""
+            gpg --recv-keys 931FF8E79F0876134EDDBDCCA87FF9DF48BF1C90
+            gpg --recv-keys 2EBF997C15BDA244B6EBF5D84773BD5E130D1D45
             ;;
         7)
             REPRO7="clementine"
@@ -994,8 +991,8 @@ do
     esac
 done
 REPRO=" $REPRO1 $REPRO3 $REPRO4 $REPRO5 $REPRO6 $REPRO7 $REPRO8 $REPRO9 $REPRO10 $REPRO11 $REPRO12 "
-
 # FIN REPRODUCTOR
+
 
 #NAVEGADORES
 cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
@@ -1043,11 +1040,10 @@ WEB=" $WEB1 $WEB2 $WEB3 $WEB4 $WEB5 $WEB6 "
 
 #OFFICE
 cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
---no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Suite de Ofimática\n[ ESPACIO ] - Para marcar o desmarcar *" 14 100 14)
-options=(    1 "LibreOffice | libreoffice-still" on
-             2 "LibreOffice | libreoffice-fresh" off
-             3 "WPS Office | AUR - wps-office" off
-             4 "SoftMaker Office | AUR - freeoffice " off)
+--no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Suite de Ofimática\n[ ESPACIO ] - Para marcar o desmarcar *" 11 70 14)
+options=(    1 "LibreOffice | libreoffice-fresh" on
+             2 "WPS Office | AUR - wps-office" off
+             3 "SoftMaker Office | AUR - freeoffice " off)
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
@@ -1055,21 +1051,19 @@ for choice in $choices
 do
     case $choice in
         1)
-            OFFICE1="libreoffice-still libreoffice-still-es"
+            OFFICE1="libreoffice-fresh libreoffice-fresh-es hunspell hunspell-es_es hunspell-es_any hyphen hyphen-es mythes-es"
             ;;
         2)
-            OFFICE2="libreoffice-fresh libreoffice-fresh-es"
+            OFFICE3="wps-office ttf-wps-fonts wps-office-mui-es-es hunspell hunspell-es_es hunspell-es_any"
             ;;
         3)
-            OFFICE3="wps-office ttf-wps-fonts wps-office-mui-es-es"
-            ;;
-        4)
-            OFFICE4="freeoffice"
+            OFFICE4="freeoffice hunspell hunspell-es_es hunspell-es_any hyphen hyphen-es mythes-es"
             ;;
     esac
 done
-OFFICE=" $OFFICE1 $OFFICE2 $OFFICE3 $OFFICE4  "
+OFFICE=" $OFFICE1 $OFFICE2 $OFFICE3 "
 # FIN OFFICE
+
 
 
 
@@ -1291,22 +1285,26 @@ clear
 
 # mkdir /home/$nombre_usuario/.config/  
 
-#if [ "$GPUHYBR" == "true" ]; then
+if [ "$GPUHYBR" == "true" ]; then
+systemctl enable optimus-manager.service
+optimus-manager --switch auto
+optimus-manager --set-startup intel
+    fi
     
-#optimus-manager --switch hybrid
-    
+
 if [ "$VMbox" == "true" ]; then
-    
 modprobe -a vboxguest vboxsf vboxvideo vboxdrv
 VBoxClient-all
 systemctl enable $(cat GPUvirt)
+    fi
+
     
-elif [ "$VMqemu" == "true" ]; then
-    
+if [ "$VMqemu" == "true" ]; then
 systemctl enable $(cat GPUvirt)
+    fi
 
 
-elif [ "$xfce4tema" == "true" ]; then
+if [ "$xfce4tema" == "true" ]; then
 #TITULO EN BARRAS
 clear    
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
@@ -1317,14 +1315,12 @@ echo -e ""
 git clone https://github.com/CodigoCristo/config.git
 unzip config/xfce4.zip
 mkdir /home/$nombre_usuario/.config/
-
 clear    
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
 echo -e ""
 echo -e "\t\t\t\t\t\t\t Instalando Tema de XFCE4...          "
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
 echo -e ""
-
 cp -rf .config/* /home/$nombre_usuario/.config/
 cp -rf .config/5336864_orig.png /usr/usb.png
 cp -rf .config/logo2.png /usr/logo-arch.png
@@ -1332,8 +1328,10 @@ cp -rf .config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
 rm -R config/
 chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
 sleep 7
+    fi
 
-elif [ "$i3tema" == "true" ]; then
+
+if [ "$i3tema" == "true" ]; then
 #TITULO EN BARRAS
 clear
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
@@ -1341,38 +1339,34 @@ echo -e ""
 echo -e "\t\t\t\t\t\t\t Instalando Tema de i3WM...          "
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
 echo -e ""
-
 git clone https://github.com/CodigoCristo/config.git
 unzip config/i3.zip
-
 clear
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
 echo -e ""
 echo -e "\t\t\t\t\t\t\t Instalando Tema de i3WM...          "
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
 echo -e ""
-        
 cp -rf .config/* /home/$nombre_usuario/.config/
 rm -R config/
 chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
 sleep 7
-
-elif [ "$sporitykey" == "true" ]; then
-
-printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
-echo -e ""
-echo -e "\t\t\t         Actualizando          "
-printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
-echo -e ""
-gpg --recv-keys 931FF8E79F0876134EDDBDCCA87FF9DF48BF1C90
-gpg --recv-keys 2EBF997C15BDA244B6EBF5D84773BD5E130D1D45
+    fi
 
 
-elif [ "$aurherlp" == "true" ]; then
-    
+
+if [ "$aurherlp" == "true" ]; then
 pacman -R $AUR_DELETE --noconfirm
-    
-fi
+    fi
+
+
+# Ejemplo 
+# variable=false
+# variable=true
+# if [ "$variable" == "true" ]; then
+#    echo contenido_a_mostrar
+#    fi
+
 
 
 #Load the X11 keymap
