@@ -739,7 +739,7 @@ do
             do
                 case $choice in
                     
-                    1)  WM="i3-gaps i3blocks i3lock i3status dmenu rofi tumbler ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer network-manager-applet rxvt-unicode polkit-gnome gnome-keyring lxappearance ttf-hack gnu-free-fonts awesome-terminal-fonts papirus-icon-theme gnome-themes-extra thunar xfce4-terminal kitty alacritty feh bumblebee-status compton-tryone-git deepin-screenshot-copy-patch xclip i3lock-fancy-git"
+                    1)  WM="i3-gaps i3blocks i3lock i3status dmenu rofi tumbler ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer network-manager-applet rxvt-unicode polkit-gnome gnome-keyring lxappearance ttf-hack gnu-free-fonts awesome-terminal-fonts papirus-icon-theme gnome-themes-extra thunar xfce4-terminal kitty alacritty feh bumblebee-status tk compton-tryone-git deepin-screenshot-copy-patch xclip i3lock-fancy-git"
                         DM="ly-git"
                         echo ly > DMservice
                         i3tema=true
