@@ -1,6 +1,6 @@
 # ArcriS
 
-> Arch Linux Install Script Español
+> Instalar Arch Linux en Español
 ```
 pacman -Sy git dialog --noconfirm
 git clone git://github.com/CodigoCristo/arcris
