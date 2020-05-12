@@ -512,7 +512,7 @@ while [ "$kernel_var" = "0" ] ; do
 
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Instalando Sistema Base - Linux Stable |-" \
 --stdout --ok-label "Siguiente" --prgbox 'pacstrap /mnt base base-devel reflector && \
-reflector --latest 10 --sort rate --save /mnt/etc/pacman.d/mirrorlist && \
+reflector --latest 15 --sort rate --save /mnt/etc/pacman.d/mirrorlist && \
 cat /mnt/etc/pacman.d/mirrorlist && \
 cp pacman.conf /mnt/etc/pacman.conf && \
 arch-chroot /mnt pacman -Sy linux linux-headers linux-firmware mkinitcpio \
@@ -590,7 +590,7 @@ esac
 
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Instalando Sistema Base - Linux Hardened |-" \
 --stdout --ok-label "Siguiente" --prgbox 'pacstrap /mnt base base-devel reflector && \
-reflector --latest 10 --sort rate --save /mnt/etc/pacman.d/mirrorlist && \
+reflector --latest 15 --sort rate --save /mnt/etc/pacman.d/mirrorlist && \
 cat /mnt/etc/pacman.d/mirrorlist && \
 cp pacman.conf /mnt/etc/pacman.conf && \
 arch-chroot /mnt pacman -Sy linux-hardened linux-hardened-headers linux-firmware mkinitcpio \
@@ -657,7 +657,7 @@ esac
 
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Instalando Sistema Base - Linux LTS |-" \
 --stdout --ok-label "Siguiente" --prgbox 'pacstrap /mnt base base-devel reflector && \
-reflector --latest 10 --sort rate --save /mnt/etc/pacman.d/mirrorlist && \
+reflector --latest 15 --sort rate --save /mnt/etc/pacman.d/mirrorlist && \
 cat /mnt/etc/pacman.d/mirrorlist && \
 cp pacman.conf /mnt/etc/pacman.conf && \
 arch-chroot /mnt pacman -Sy linux-lts linux-lts-headers linux-firmware mkinitcpio \
@@ -734,7 +734,7 @@ esac
   elif [ $kernel_select == linux-zen ]; then
 dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Instalando Sistema Base - Linux ZEN |-" \
 --stdout --ok-label "Siguiente" --prgbox 'pacstrap /mnt base base-devel reflector && \
-reflector --latest 10 --sort rate --save /mnt/etc/pacman.d/mirrorlist && \
+reflector --latest 15 --sort rate --save /mnt/etc/pacman.d/mirrorlist && \
 cat /mnt/etc/pacman.d/mirrorlist && \
 cp pacman.conf /mnt/etc/pacman.conf && \
 arch-chroot /mnt pacman -Sy linux-zen linux-zen-headers linux-firmware mkinitcpio \
