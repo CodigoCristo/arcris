@@ -740,7 +740,7 @@ do
                 case $choice in
                     
                     1)  i3wm="i3-gaps i3blocks i3lock i3status dmenu rofi rxvt-unicode"
-						i3wm1="tumbler ffmpegthumbs ffmpegthumbnailer raw-thumbnailer freetype2 poppler-glib libgsf"
+						i3wm1="tumbler ffmpegthumbs ffmpegthumbnailer raw-thumbnailer freetype2"
 						i3wm2="network-manager-applet polkit-gnome gnome-keyring lxappearance"
 						i3wm3="ttf-hack gnu-free-fonts awesome-terminal-fonts"
 						i3wm4="papirus-icon-theme gnome-themes-extra"
