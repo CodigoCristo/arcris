@@ -155,15 +155,17 @@ esac
 fi
 
 nombre_usuario=$(cat /etc/passwd | grep '/home/' | cut -d: -f1)
+
 #Para que el sudo no pida clave
-dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Instalando AUR helper |" --stdout --ok-label "Siguiente" --prgbox "cd /home/$nombre_usuario && \
-git clone https://aur.archlinux.org/yay-bin.git && \
-chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin && \
-chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD && \
-cd /home/$nombre_usuario/yay-bin && \
-sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm && \
-pacman -U *.pkg.tar.xz --noconfirm && \
-rm -Rf /home/$nombre_usuario/yay-bin" 25 100
+#dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Instalando AUR helper |" --stdout --ok-label "Siguiente" --prgbox "cd /home/$nombre_usuario && \
+#git clone https://aur.archlinux.org/yay-bin.git && \
+#chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin && \
+#chown -R $nombre_usuario:users /home/$nombre_usuario/yay-bin/PKGBUILD && \
+#cd /home/$nombre_usuario/yay-bin && \
+#sudo -u $nombre_usuario makepkg -smp PKGBUILD --noconfirm && \
+#pacman -U *.pkg.tar.xz --noconfirm && \
+#rm -Rf /home/$nombre_usuario/yay-bin" 25 100
+
 # yay -S gotop-git --noeditmenu --noconfirm --removemake
 
 
