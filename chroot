@@ -1294,8 +1294,8 @@ sudo -u $nombre_usuario yay -S $WEB --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $REPRO --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $AP --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $OFFICE --noeditmenu --noconfirm --needed && \
-sudo -u $nombre_usuario yay -S $AUR --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario yay -S $RS --noeditmenu --noconfirm --needed && \
+sudo -u $nombre_usuario yay -S $AUR --noeditmenu --noconfirm --needed && \
 sudo -u $nombre_usuario ls -l && \
 echo '' && echo '' && echo TODO LISTO ! && echo '' && echo https://t.me/ArchLinuxCristo" 27 100
 
