@@ -337,15 +337,19 @@ do
         2)
             GPU="nvidia-390xx nvidia-390xx-utils \
             lib32-nvidia-390xx-utils libva-utils vdpauinfo libvdpau lib32-libvdpau \
-            opencl-nvidia-390xx lib32-opencl-nvidia-390xx libxnvctrl-390xx clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            opencl-nvidia-390xx lib32-opencl-nvidia-390xx clinfo ocl-icd lib32-ocl-icd opencl-headers"
             dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
+            #libxnvctrl-390xx
+            #nvidia-390xx-settings
             ;;
         
         3)
             GPU="nvidia-340xx nvidia-340xx-utils \
             lib32-nvidia-340xx-utils libva-utils vdpauinfo libvdpau lib32-libvdpau \
-            opencl-nvidia-340xx lib32-opencl-nvidia-340xx libxnvctrl-340xx clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            opencl-nvidia-340xx lib32-opencl-nvidia-340xx clinfo ocl-icd lib32-ocl-icd opencl-headers"
             dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
+            #libxnvctrl-340xx
+            #nvidia-340xx-settings
             ;;
         
         4)
@@ -359,7 +363,7 @@ do
         5)
             GPU="nvidia-390xx nvidia-390xx-utils xf86-video-intel optimus-manager bbswitch optimus-manager-qt \
             lib32-nvidia-390xx-utils libva-utils vdpauinfo libvdpau lib32-libvdpau \
-            opencl-nvidia-390xx lib32-opencl-nvidia-390xx libxnvctrl-390xx clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            opencl-nvidia-390xx lib32-opencl-nvidia-390xx clinfo ocl-icd lib32-ocl-icd opencl-headers"
             dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
             GPUHYBR=true
             ;;
@@ -374,7 +378,7 @@ do
         7)
             GPU="nvidia-390xx-lts nvidia-390xx-utils \
             lib32-nvidia-390xx-utils libva-utils vdpauinfo libvdpau lib32-libvdpau \
-            opencl-nvidia-390xx lib32-opencl-nvidia-390xx libxnvctrl-390xx clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            opencl-nvidia-390xx lib32-opencl-nvidia-390xx clinfo ocl-icd lib32-ocl-icd opencl-headers"
             dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
             ;;
         
@@ -389,7 +393,7 @@ do
         9)
             GPU="nvidia-390xx-dkms nvidia-390xx-utils \
             lib32-nvidia-390xx-utils libva-utils vdpauinfo libvdpau lib32-libvdpau \
-            opencl-nvidia-390xx lib32-opencl-nvidia-390xx libxnvctrl-390xx clinfo ocl-icd lib32-ocl-icd opencl-headers"
+            opencl-nvidia-390xx lib32-opencl-nvidia-390xx clinfo ocl-icd lib32-ocl-icd opencl-headers"
             dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Aceptar>"  --msgbox "\nyay -Sy $GPU" 10 80
             ;;        
             
