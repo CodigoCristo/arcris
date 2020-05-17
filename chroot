@@ -1360,6 +1360,7 @@ echo ""
 echo ""
 }
 
+
 function mensaje_install {
 echo ""
 echo ""
@@ -1389,10 +1390,14 @@ sudo -u $nombre_usuario yay -S $XORG --noeditmenu --noconfirm --needed && mensaj
 
 titulo_progreso="Instalando DE/WM/DM"
 barra_progreso
-sudo -u $nombre_usuario yay -S $DE --noeditmenu --noconfirm --needed
-sudo -u $nombre_usuario yay -S $WM --noeditmenu --noconfirm --needed
+sudo -u $nombre_usuario yay -S $DE gedit viewnior --noeditmenu --noconfirm --needed
+sudo -u $nombre_usuario yay -S $WM gedit viewnior --noeditmenu --noconfirm --needed
 sudo -u $nombre_usuario yay -S $DM --noeditmenu --noconfirm --needed
-sudo -u $nombre_usuario yay -S gedit viewnior --noeditmenu --noconfirm --needed
+clear
+echo -e ""
+echo -e "\t\t\t\tActivando Servicio Display Manager"
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
 systemctl enable $(cat DMservice) && mensaje_install
 
 
@@ -1419,7 +1424,6 @@ sudo -u $nombre_usuario yay -S $SH --noeditmenu --noconfirm --needed && mensaje_
 titulo_progreso="Instalando Tipografias"
 barra_progreso
 sudo -u $nombre_usuario yay -S $FONT --noeditmenu --noconfirm --needed && mensaje_install
-
 
 
 
@@ -1524,6 +1528,7 @@ printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
 echo -e ""
 cp -rf .config/* /home/$nombre_usuario/.config/
 rm -R config/
+chown -hR $nombre_usuario:users /home/$nombre_usuario/
 chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
 sleep 5
     fi
