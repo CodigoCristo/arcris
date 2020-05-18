@@ -362,7 +362,7 @@ cryptsetup lvm2 logrotate nano  \
 dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager \
 iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion \
 e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils \
-hddtemp alsi inxi-git unzip zip --noconfirm' 25 80
+hddtemp alsi inxi-git unzip zip yay-bin --noconfirm' 25 80
 
 #alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer
 ##################################################################################
@@ -440,7 +440,7 @@ cryptsetup lvm2 logrotate nano  \
 dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager \
 iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion \
 e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils \
-hddtemp alsi inxi-git unzip zip --noconfirm' 25 80
+hddtemp alsi inxi-git unzip zip yay-bin --noconfirm' 25 80
 
 dialog --backtitle "$titulo" --title "| Microcode |" --yesno "\n¿Actualizaciones para el microcódigo del procesador?" 7 58 
 case $? in 
@@ -507,7 +507,7 @@ cryptsetup lvm2 logrotate nano  \
 dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager \
 iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion \
 e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils \
-hddtemp alsi inxi-git unzip zip --noconfirm' 25 80
+hddtemp alsi inxi-git unzip zip yay-bin --noconfirm' 25 80
 
 #alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer
 ##################################################################################
@@ -584,7 +584,7 @@ cryptsetup lvm2 logrotate nano  \
 dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager \
 iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion \
 e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils \
-hddtemp alsi inxi-git unzip zip --noconfirm' 25 80
+hddtemp alsi inxi-git unzip zip yay-bin --noconfirm' 25 80
 
 dialog --backtitle "$titulo" --title "| Microcode |" --yesno "\n¿Actualizaciones para el microcódigo del procesador?" 7 58 
 case $? in 
@@ -850,9 +850,9 @@ printf "\n| La computadora se reiniciara para finalizar |\n| Cuando este apagada
 sleep 5
 
 #Copia el script posterior a la instalación en el disco duro
-cp pacman.conf /mnt/etc/pacman.conf
-cp pacman-chroot.conf /mnt/root
-chmod +x /mnt/root/pacman-chroot.conf
+# cp pacman.conf /mnt/etc/pacman.conf
+# cp pacman-chroot.conf /mnt/root
+# chmod +x /mnt/root/pacman-chroot.conf
 
 cp chroot /mnt/root
 chmod +x /mnt/root/chroot
@@ -1152,7 +1152,7 @@ cryptsetup lvm2 logrotate nano  \
 dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager \
 iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion \
 e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils \
-hddtemp alsi inxi-git unzip zip --noconfirm' 25 80
+hddtemp alsi inxi-git unzip zip yay-bin --noconfirm' 25 80
 
 #alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer
 ##################################################################################
@@ -1230,7 +1230,7 @@ cryptsetup lvm2 logrotate nano  \
 dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager \
 iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion \
 e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils \
-hddtemp alsi inxi-git unzip zip --noconfirm' 25 80
+hddtemp alsi inxi-git unzip zip yay-bin --noconfirm' 25 80
 
 dialog --backtitle "$titulo" --title "| Microcode |" --yesno "\n¿Actualizaciones para el microcódigo del procesador?" 7 58 
 case $? in 
@@ -1297,7 +1297,7 @@ cryptsetup lvm2 logrotate nano  \
 dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager \
 iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion \
 e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils \
-hddtemp alsi inxi-git unzip zip --noconfirm' 25 80
+hddtemp alsi inxi-git unzip zip yay-bin --noconfirm' 25 80
 
 #alsa-utils alsa-plugins alsa-oss alsa-firmware pamixer
 ##################################################################################
@@ -1374,7 +1374,7 @@ cryptsetup lvm2 logrotate nano  \
 dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager \
 iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion \
 e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils \
-hddtemp alsi inxi-git unzip zip --noconfirm' 25 80
+hddtemp alsi inxi-git unzip zip yay-bin --noconfirm' 25 80
 
 dialog --backtitle "$titulo" --title "| Microcode |" --yesno "\n¿Actualizaciones para el microcódigo del procesador?" 7 58 
 case $? in 
@@ -1647,9 +1647,9 @@ printf "\n| La computadora se reiniciara para finalizar |\n| Cuando este apagada
 sleep 5
 
 #Copia el script posterior a la instalación en el disco duro
-cp pacman.conf /mnt/etc/pacman.conf
-cp pacman-chroot.conf /mnt/root
-chmod +x /mnt/root/pacman-chroot.conf
+# cp pacman.conf /mnt/etc/pacman.conf
+# cp pacman-chroot.conf /mnt/root
+# chmod +x /mnt/root/pacman-chroot.conf
 
 cp chroot /mnt/root
 chmod +x /mnt/root/chroot
