@@ -12,8 +12,13 @@ red='\033[38;2;255;0;02m'
 r8168=$(lspci -k | grep 'RTL8111/8168/8411')
 if [[ $r8168  = *RTL8111/8168/8411* || $r8168 = *Rtl8111/8168/8411* || $r8168 = *rtl8111/8168/8411* ]]
 then            
-modprobe r8168
+echo ""
+echo ""
 echo "Modulo especial de Ethernet 8168 Detectado"
+modprobe r8168
+rmmod r8169
+modprobe -r r8169
+modprobe -v r8168
 else
 echo ""
 fi
@@ -21,11 +26,13 @@ fi
 
 broadcom=$(lspci -k | grep 'Network controller: Broadcom')
 if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
-then            
+then    
+echo ""
+echo ""    
+echo "Modulo especial de Wifi Broadcom Detectado"    
 modprobe wl
 rmmod b43
 rmmod ssb
-echo "Modulo especial de Wifi Broadcom Detectado"
 else
 echo "" 
 fi
