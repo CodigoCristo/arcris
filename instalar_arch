@@ -23,13 +23,6 @@ case $? in
 esac
 fi
 
-dialog --backtitle "$titulo" --title "-| Conexión WiFi |-" --defaultno --yesno "¿ Tienes red wifi ?" 5 45 
-case $? in 
-  0)  wifi-menu
-    wifinet=$(netctl list | awk -F " " '{print $2}');;
-  1)  ;;
-esac
-
 
 #Desmontamos todo disco y swapoff
 swapdisco=$( fdisk -l | grep "/dev/\|swap" | grep swap | awk -F ' ' '{print $1}' )
@@ -933,18 +926,18 @@ arch-chroot /mnt /bin/bash -c "hwclock -w"
 arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd NetworkManager"
 clear
 
-if [[ -n $wifinet ]]; then
-#Copia Red
-wlan=$(echo /proc/net/dev*/w*)
-lan=${wlan##*/}
-wifinet=$(netctl list | awk -F " " '{print $2}')
-numeronetctl=$(echo $lan | wc -c)
-wifinetnuevo=$(netctl list | awk -F " " '{print $2}' | tail -c +${numeronetctl} | tail -c +2)
-
-cp /etc/netctl/$wifinet /mnt/etc/netctl/$wifinetnuevo
-arch-chroot /mnt /bin/bash -c "netctl enable $wifinetnuevo"
-clear
-fi
+#  if [[ -n $wifinet ]]; then
+#  #Copia Red
+#  wlan=$(echo /proc/net/dev*/w*)
+#  lan=${wlan##*/}
+#  wifinet=$(netctl list | awk -F " " '{print $2}')
+#  numeronetctl=$(echo $lan | wc -c)
+#  wifinetnuevo=$(netctl list | awk -F " " '{print $2}' | tail -c +${numeronetctl} | tail -c +2)
+#
+#  cp /etc/netctl/$wifinet /mnt/etc/netctl/$wifinetnuevo
+#  arch-chroot /mnt /bin/bash -c "netctl enable $wifinetnuevo"
+#  clear
+#  fi
 #Copia Red
 
 

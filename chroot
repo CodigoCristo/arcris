@@ -7,6 +7,29 @@
 #Colores
 clear
 red='\033[38;2;255;0;02m'
+
+
+r8168=$(lspci -k | grep 'RTL8111/8168/8411')
+if [[ $r8168  = *RTL8111/8168/8411* || $r8168 = *Rtl8111/8168/8411* || $r8168 = *rtl8111/8168/8411* ]]
+then            
+modprobe r8168
+echo "Modulo especial de Ethernet 8168 Detectado"
+else
+echo ""
+fi
+
+
+broadcom=$(lspci -k | grep 'Network controller: Broadcom')
+if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
+then            
+modprobe wl
+rmmod b43
+rmmod ssb
+echo "Modulo especial de Wifi Broadcom Detectado"
+else
+echo "" 
+fi
+
 echo ""
 echo ""
 echo -e $red ">-------------------------------------------------------------------------<";
@@ -47,7 +70,7 @@ _end=100
 # Proof of concept
 for number in $(seq ${_start} ${_end})
 do
-    sleep 0.7
+    sleep 0.5
     ProgressBar ${number} ${_end}
 done
 echo -e ''
@@ -62,36 +85,29 @@ pacman -Syyu
 
 echo -e '\033[m'
 
-
 titulo="| Instalación de ArchLinux en Español - https://t.me/ArchLinuxCristo |"
 
 
 #dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| ESPERE... |" --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
 #sleep 5
-
-if ping -c 3 www.google.com &> /dev/null; then
-    
-   dialog --title "|  Conexión a RED  |" --backtitle "$titulo" \
-   --prgbox "ping -c 3 archlinux.org && echo && echo Si Hay Internet!" 17 100
-    wifinet1=$(netctl list | awk -F " " '{print $1}')
-    wifinet2=$(netctl list | awk -F " " '{print $2}')
-
-else
         
-    dialog --backtitle "$titulo" --title "| Error de RED |" --ok-label 'Siguiente' --msgbox "\nNo hay conexión de Internet\n" 7 35
-    wifinet=$(netctl list | awk -F " " '{print $1}')
-    netctl disable $wifinet
-    wifinet=$(netctl list | awk -F " " '{print $2}')
-    netctl disable $wifinet
-    clear
-    systemctl disable netctl
-    systemctl disable netctl-auto@$(ls /sys/class/net | grep "^w").service
+    dialog --backtitle "$titulo" --title "| Error de RED |" --ok-label 'Siguiente' --msgbox "\nNo hay conexión de Internet" 7 35
+    #wifinet=$(netctl list | awk -F " " '{print $1}')
+    #netctl disable $wifinet
+    #wifinet=$(netctl list | awk -F " " '{print $2}')
+    #netctl disable $wifinet
+    #clear
+    #systemctl disable netctl
+    #systemctl disable netctl-auto@$(ls /sys/class/net | grep "^w").service
     systemctl enable dhcpcd NetworkManager
     systemctl start dhcpcd NetworkManager
     clear
+    wifi_var=0 
+    wlan=$(echo /proc/net/dev*/w*)
+    lan=${wlan##*/}
     
     #--title "| Conexión WiFi |"
-    dialog --backtitle "$titulo"  --yesno "\n¿Tienes Wi-Fi?\n" 7 20
+    dialog --backtitle "$titulo" --title "¿ Tienes Wi-Fi ?" --yesno "$(echo "" && echo /proc/net/dev*/w* && echo "" && iw dev $lan scan | grep SSID:)" 10 40
 
 case $? in
    0)       wifi_var=0 
@@ -99,11 +115,11 @@ case $? in
             lan=${wlan##*/}
             
             nombre_red="$(iw dev $lan scan | grep SSID: | awk -F " " '{print $2}' | head -1)"
-            clave_red=" Clave"
-            dialog --title "| LISTA DE REDES WIFI SSID: |" --backtitle "$titulo" --ok-label "Conectar" --no-cancel \
+            clave_red="Clave"
+            dialog --title "" --backtitle "$titulo" --ok-label "Conectar" --no-cancel \
               --stdout --form "$(iw dev $lan scan | grep SSID:)" 15 50 0 \
               "Nombre de Red :  " 0 0 "$nombre_red" 1 20 20 0 \
-              "Contraseña    :  " 2 1 "$clave_red" 2 20 20 0 > output.txt
+              "Contraseña    :  " 2 0 "$clave_red" 2 20 20 0 > output.txt
             nombre_red=$(cat output.txt | head -1)
             clave_red=$(cat output.txt | head -2 | tail -1)
             
@@ -135,8 +151,8 @@ case $? in
         ;;   
 
    1)   
-        systemctl disable netctl
-        systemctl disable netctl-auto@$(ls /sys/class/net | grep "^w").service
+        #systemctl disable netctl
+        #systemctl disable netctl-auto@$(ls /sys/class/net | grep "^w").service
         systemctl enable dhcpcd NetworkManager
         systemctl start dhcpcd NetworkManager
         clear
@@ -157,7 +173,7 @@ fi
 nombre_usuario=$(cat /etc/passwd | grep '/home/' | cut -d: -f1)
 #Para que el sudo no pida clave
 
-dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Actualizando Sistema |" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Syu --noeditmenu --noconfirm --needed" 25 100
+# dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Actualizando Sistema |" --stdout --ok-label "Siguiente" --prgbox "sudo -u $nombre_usuario yay -Syu --noeditmenu --noconfirm --needed" 25 100
 
 #dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| Instalando AUR helper |" --stdout --ok-label "Siguiente" --prgbox "cd /home/$nombre_usuario && \
 #git clone https://aur.archlinux.org/yay-bin.git && \
