@@ -369,8 +369,6 @@ r8168=$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'RTL8111/8168/8411' ")
     clear
     arch-chroot /mnt /bin/bash -c "modprobe r8168"
     arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd@enp4s0.service"
-    arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd@eth0.service"
-    arch-chroot /mnt /bin/bash -c "systemctl enable ifplugd@eth0.service"
     arch-chroot /mnt /bin/bash -c "systemctl enable ifplugd@enp4s0.service"
     else
     echo ""
@@ -520,8 +518,6 @@ r8168=$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'RTL8111/8168/8411' ")
     clear
     arch-chroot /mnt /bin/bash -c "modprobe r8168"
     arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd@enp4s0.service"
-    arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd@eth0.service"
-    arch-chroot /mnt /bin/bash -c "systemctl enable ifplugd@eth0.service"
     arch-chroot /mnt /bin/bash -c "systemctl enable ifplugd@enp4s0.service"
     else
     echo ""
@@ -1172,8 +1168,6 @@ r8168=$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'RTL8111/8168/8411' ")
     clear
     arch-chroot /mnt /bin/bash -c "modprobe r8168"
     arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd@enp4s0.service"
-    arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd@eth0.service"
-    arch-chroot /mnt /bin/bash -c "systemctl enable ifplugd@eth0.service"
     arch-chroot /mnt /bin/bash -c "systemctl enable ifplugd@enp4s0.service"
     else
     echo ""
@@ -1323,8 +1317,6 @@ r8168=$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'RTL8111/8168/8411' ")
     clear
     arch-chroot /mnt /bin/bash -c "modprobe r8168"
     arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd@enp4s0.service"
-    arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd@eth0.service"
-    arch-chroot /mnt /bin/bash -c "systemctl enable ifplugd@eth0.service"
     arch-chroot /mnt /bin/bash -c "systemctl enable ifplugd@enp4s0.service"
     else
     echo ""
