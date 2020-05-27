@@ -16,9 +16,16 @@ echo ""
 echo ""
 echo "Modulo especial de Ethernet 8168 Detectado"
 modprobe r8168
-rmmod r8169
-modprobe -r r8169
+echo ""
+echo "modprobe r8168"
+sleep 5
+lsmod | grep r8168
+echo ""
+echo "rmmod r8169"
+sleep 5
+echo "modprobe -r r8169"
 modprobe -v r8168
+sleep 5
 else
 echo ""
 fi
@@ -31,8 +38,13 @@ echo ""
 echo ""    
 echo "Modulo especial de Wifi Broadcom Detectado"    
 modprobe wl
+echo ""
+echo "modprobe wl"
 rmmod b43
+echo "rmmod b43"
 rmmod ssb
+echo "rmmod ssb"
+sleep 5
 else
 echo "" 
 fi
@@ -97,7 +109,14 @@ titulo="| Instalación de ArchLinux en Español - https://t.me/ArchLinuxCristo |
 
 #dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "| ESPERE... |" --msgbox "\n| Primero necesitamos saber si hay conexión a Internet |" 7 60
 #sleep 5
-        
+
+if ping -c 3 www.google.com &> /dev/null; then  
+
+   dialog --title "|  Conexión a RED  |" --backtitle "$titulo" \
+   --prgbox "ping -c 3 archlinux.org && echo && echo Si Hay Internet!" 17 100   
+
+else
+
     dialog --backtitle "$titulo" --title "| Error de RED |" --ok-label 'Siguiente' --msgbox "\nNo hay conexión de Internet" 7 35
     #wifinet=$(netctl list | awk -F " " '{print $1}')
     #netctl disable $wifinet
