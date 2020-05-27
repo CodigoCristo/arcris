@@ -585,13 +585,14 @@ done
             ;;
 
         2)  #KDE
-            cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes del escritorio KDE\n[ ESPACIO ] - Para marcar o desmarcar *" 12 70 19)
+            cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
+            --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes del escritorio KDE\n[ ESPACIO ] - Para marcar o desmarcar *" 15 70 19)
             options=(1 "kde-applications || Programas extras de KDE" off 
                      2 "appmenu-gtk || Global Menu GTK2/GTK3" off
                      3 "bluedevil || Bluetooth" off
                      4 "print-manager || Impresoras" off
-                     5 "latte-dock || Dock Plasma"
-                     6 "discover || Tienda KDE")
+                     5 "latte-dock || Dock Plasma" off
+                     6 "discover || Tienda KDE" off)
             
             choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
             clear
@@ -610,12 +611,18 @@ done
                     4)
                         KDE5="print-manager cups"
                         ;;
+                    5)
+                        KDE6="latte-dock"
+                        ;;
+                    6)
+                        KDE7="discover"
+                        ;;
                 esac
             done
 
             KDE="plasma kdebase gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer discover packagekit-qt5 colord-kde kscreen powerdevil kdegraphics-thumbnailers ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer user-manager kdeconnect sshfs ttf-liberation ttf-dejavu qt5ct"
 
-            DE="$KDE $KDE2 $KDE3 $KDE4 $KDE5"            
+            DE="$KDE $KDE2 $KDE3 $KDE4 $KDE5 $KDE6 $KDE7"            
             DM="sddm libxcb qt5-virtualkeyboard"
             echo sddm > DMservice
             ;;
@@ -1325,6 +1332,7 @@ do
         6)
             AUR6="pamac-aur pamac-tray-appindicator pamac-zsh-completions"
             AUR_condicion=true
+            AUR_pamac=true
             ;;
         7)
             AUR7="octopi"
@@ -1510,6 +1518,29 @@ barra_progreso
 sudo -u $nombre_usuario yay -S $AUR --noeditmenu --noconfirm --needed && mensaje_install
     fi
 
+
+if [ "$AUR_pamac" == "true" ]; then
+clear
+echo ""
+echo "###############################################################################"
+echo "###                  Author    :   Erik Dubois                             ####"
+echo "###                  Ver Iconos en Pamac                                   ####"
+echo "###############################################################################"
+sleep 2
+# https://aur.archlinux.org/packages/pamac-aur/
+echo "Fix to show icons and applications in pamac-aur"
+echo "Downgrading is another solution - see forum for that one"
+
+zcat /usr/share/app-info/xmls/community.xml.gz | sed 's|<em>||g;s|<\/em>||g;' | gzip > "/tmp/new.xml.gz"
+cp /tmp/new.xml.gz /usr/share/app-info/xmls/community.xml.gz
+pacman -S appstream --noconfirm --needed
+appstreamcli refresh-cache --force
+mensaje_install
+sleep 8
+    fi
+
+
+
 #    AUR_condicion=true
 # mkdir /home/$nombre_usuario/.config/  
 
@@ -1674,14 +1705,14 @@ mensaje_install
 clear
 
 ####################################################################
-if [[ -n $wifinet1 || -n $wifinet2 ]]; then
-wifinet1=$(netctl list | awk -F " " '{print $1}')
-netctl disable $wifinet1
-clear
-wifinet2=$(netctl list | awk -F " " '{print $2}')
-netctl disable $wifinet2
-systemctl disable netctl
-fi
+#if [[ -n $wifinet1 || -n $wifinet2 ]]; then
+#wifinet1=$(netctl list | awk -F " " '{print $1}')
+#netctl disable $wifinet1
+#clear
+#wifinet2=$(netctl list | awk -F " " '{print $2}')
+#netctl disable $wifinet2
+#systemctl disable netctl
+#fi
 clear
 systemctl enable dhcpcd NetworkManager
 clear
