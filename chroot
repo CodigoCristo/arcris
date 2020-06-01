@@ -924,65 +924,7 @@ UTIL=" $UTIL1 $UTIL2 $UTIL3 $UTIL4 $UTIL5 $UTIL6 $UTIL7 "
 
 
 #TIPOGRAFIAS
-cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  \
---no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Seleeciona tu Tipografía para tu sistema\n[ ESPACIO ] - Para marcar o desmarcar *" 20 80 20)
-options=(1 "gnu-free-fonts" on    # any option can be set to default to "on"
-         2 "ttf-opensans" on 
-         3 "ttf-hack" on
-         4 "ttf-ubuntu-font-family" off
-         5 "ttf-google-sans" off
-         6 "ttf-font-awesome > iconos" on
-         7 "noto-fonts-emoji > iconos" on
-         8 "noto-fonts" off
-         9 "cantarell-fonts" off
-         10 "bdf-unifont" off
-         11 "adobe-source-han-sans-jp-fonts > font japón" off
-         12 "adobe-source-han-sans-cn-fonts > font chino" off)
-choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-clear
-for choice in $choices
-do
-    case $choice in
-        1)
-            FONT1="gnu-free-fonts"
-            ;;
-        2)
-            FONT2="ttf-opensans"
-            ;;
-        3)
-            FONT3="ttf-hack"
-            ;;
-        4)
-            FONT4="ttf-ubuntu-font-family"
-            ;;
-        5)
-            FONT5="ttf-google-sans"
-            ;;
-        6)
-            FONT6="ttf-font-awesome awesome-terminal-fonts"
-            ;;
-        7)
-            FONT7="noto-fonts-emoji"
-            ;;
-        8)
-            FONT8="noto-fonts"
-            ;;
-        9)
-            FONT9="cantarell-fonts"
-            ;;
-        10)
-            FONT10="bdf-unifont"
-            ;;
-        11)
-            FONT11="adobe-source-han-sans-jp-fonts"
-            ;;
-        12)
-            FONT12="adobe-source-han-sans-cn-fonts"
-            ;;       
-            
-    esac
-done
-FONT=" gnome-font-viewer $FONT1 $FONT2 $FONT3 $FONT4 $FONT5 $FONT6 $FONT7 $FONT8 $FONT9 $FONT10 $FONT11 $FONT12 $FONT13 $FONT14 "
+FONT=" gnu-free-fonts ttf-opensans ttf-hack ttf-font-awesome awesome-terminal-fonts noto-fonts-emoji adobe-source-han-sans-jp-fonts adobe-source-han-sans-cn-fonts gnome-font-viewer "
 # FIN TIPOGRAFIAS
 
 
@@ -1075,7 +1017,7 @@ REPRO=" $REPRO1 $REPRO3 $REPRO4 $REPRO5 $REPRO6 $REPRO7 $REPRO8 $REPRO9 $REPRO10
 
 #NAVEGADORES
 cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
---no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Seleeciona tu navegador web\n[ ESPACIO ] - Para marcar o desmarcar *" 13 100 19)
+--no-tags --ok-label '< Siguiente >' --cancel-label '< No deseo esto >' --checklist "Seleeciona tu navegador web\n[ ESPACIO ] - Para marcar o desmarcar *" 14 100 19)
 options=(1 "Firefox | Open source" on    # any option can be set to default to "on"
          2 "Chromium | Open source" off
          3 "Brave | AUR - Open source" off
