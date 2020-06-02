@@ -1560,6 +1560,17 @@ barra_progreso
 mkdir -p /home/$nombre_usuario/.config/qtile/
 cp /usr/share/doc/qtile/default_config.py /home/$nombre_usuario/.config/qtile/config.py
 python2 -m py_compile /home/$nombre_usuario/.config/qtile/config.py
+echo -e ""
+echo -e ""
+echo -e "\t> Copiando archivo /.config/qtile/config.py"
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
+sleep 3
+echo -e ""
+echo -e "\t> Ejecutando: python2 -m py_compile /.config/qtile/config.py"
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
+sleep 3
 
 chown -hR $nombre_usuario:users /home/$nombre_usuario/
 chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/qtile/
