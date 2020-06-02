@@ -762,7 +762,7 @@ cmd=(dialog --keep-tite --backtitle "$titulo" \
 --no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu gestor de ventana a instalar - (WM)" 19 55 16)
 
 options=(1 "> i3wm | 150MB de RAM "
-         2 "> 2bwm | Aún no disponible <"
+         2 "> qtile | Disponible <"
          3 "> cwm | Aún no disponible <" 
          4 "> fluxbox | Aún no disponible <"
          5 "> openbox | Aún no disponible <"
@@ -771,7 +771,7 @@ options=(1 "> i3wm | 150MB de RAM "
          8 "> awesome | Aún no disponible <"
          9 "> dwm | Aún no disponible <"
          10 "> catwm | Aún no disponible <"
-         11 "> qtile | Aún no disponible <"
+         11 "> 2bwm | Aún no disponible <"
          12 "> xmonad | Aún no disponible <")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
@@ -818,7 +818,10 @@ do
             done
             ;;
         2)
-            echo "Second Option"
+            WM="qtile python python2 thunar alacritty network-manager-applet polkit-gnome gnome-keyring lxappearance ly-git rxvt-unicode gnome-themes-extra"
+            DM="ly-git"
+            echo ly > DMservice
+            qtile_config=true
             ;;
         3)
             echo "Third Option"
@@ -1545,6 +1548,22 @@ cp -rf .config/* /home/$nombre_usuario/.config/
 rm -R config/
 chown -hR $nombre_usuario:users /home/$nombre_usuario/
 chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
+sleep 5
+    fi
+
+    
+if [ "$qtile_config" == "true" ]; then
+#TITULO EN BARRAS
+titulo_progreso="Configurando Qtile"
+barra_progreso
+
+mkdir -p /home/$nombre_usuario/.config/qtile/
+cp /usr/share/doc/qtile/default_config.py /home/$nombre_usuario/.config/qtile/config.py
+python2 -m py_compile /home/$nombre_usuario/.config/qtile/config.py
+
+chown -hR $nombre_usuario:users /home/$nombre_usuario/
+chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/qtile/
+chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/qtile/config.py
 sleep 5
     fi
 
