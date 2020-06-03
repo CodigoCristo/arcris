@@ -1632,7 +1632,7 @@ mkdir /home/$nombre_usuario/.local
 mkdir /home/$nombre_usuario/.kde4
 
 wget https://raw.githubusercontent.com/CodigoCristo/config/master/kde.zip
-unzip config/i3.zip
+unzip kde.zip
 cp -rf kde/config/* /home/$nombre_usuario/.config/
 cp -rf kde/local/* /home/$nombre_usuario/.local/
 cp -rf kde/kde4/* /home/$nombre_usuario/.kde4/
