@@ -639,7 +639,7 @@ for choice in $choices
 do
     case $choice in
         
-        1)  DE="plasma kdebase vlc konsole deepin-icon-theme gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer discover packagekit-qt5 colord-kde kscreen powerdevil kdegraphics-thumbnailers ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer user-manager kdeconnect sshfs ttf-liberation ttf-dejavu qt5ct"          
+        1)  DE="plasma kdebase vlc konsole appmenu-gtk-module libdbusmenu-glib libdbusmenu-gtk3 libdbusmenu-gtk2 deepin-icon-theme gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer discover packagekit-qt5 colord-kde kscreen powerdevil kdegraphics-thumbnailers ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer user-manager kdeconnect sshfs ttf-liberation ttf-dejavu qt5ct"          
             DM="sddm libxcb qt5-virtualkeyboard"
             echo sddm > DMservice
             plasmatema=true
