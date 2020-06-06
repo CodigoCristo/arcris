@@ -743,7 +743,7 @@ done
 ######FINAL DEEPIN
 
         4)  #INICIO GNOME
-            DE="gnome gnome-extra gnome-shell tumbler ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer"
+            DE="gnome gnome-shell gnome-tweaks tumbler ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer"
             DM="gdm"
             echo gdm > DMservice
             ;;
