@@ -851,11 +851,11 @@ do
         1)  # zip -r i3.zip .config
 
             cmd=(dialog --keep-tite --backtitle "$titulo" \
-            --no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Cualquier elección trae por defecto:\n\n\
-            ++ i3-gaps i3blocks i3lock i3status dmenu ly-git rxvt ++\n\nSelecciona una opción para i3wm \n" 13  73 19)
+            --no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Cualquier elección trae por defecto:\n> i3-gaps i3blocks i3lock dmenu ly-git rxvt \n\nSelecciona una opción para i3wm \n" 14  73 19)
 
-            options=(1 "Predeterminado || 250MB RAM || Incluye Compton y personalización"
-                     2 "Escritorio vacio || 150MB RAM || Incluye todo lo minimo para i3wm")
+            options=(1 "Predeterminado || Con Tema || i3-gaps + i3status"
+                     2 "Predeterminado || Con Tema || i3-gaps + bumblebee-status"
+                     3 "Escritorio vacio || Sin Tema || Incluye todo lo minimo para i3wm")
 
             choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -864,21 +864,36 @@ do
                 case $choice in
                     
                     1)  i3wm="i3-gaps i3blocks i3lock i3status dmenu rofi rxvt-unicode"
-						i3wm1="tumbler ffmpegthumbs ffmpegthumbnailer raw-thumbnailer freetype2"
-						i3wm2="network-manager-applet polkit-gnome gnome-keyring lxappearance"
-						i3wm3="ttf-hack gnu-free-fonts awesome-terminal-fonts"
-						i3wm4="papirus-icon-theme gnome-themes-extra"
-						i3wm5="thunar alacritty feh xclip maim"
-						i3wm6="bumblebee-status tk compton-tryone-git i3lock-fancy-git"
+                        i3wm1="tumbler ffmpegthumbs ffmpegthumbnailer raw-thumbnailer freetype2"
+                        i3wm2="network-manager-applet polkit-gnome gnome-keyring lxappearance"
+                        i3wm3="ttf-hack gnu-free-fonts awesome-terminal-fonts"
+                        i3wm4="papirus-icon-theme gnome-themes-extra"
+                        i3wm5="thunar alacritty feh xclip maim"
+                        i3wm6="tk compton-tryone-git i3lock-fancy-git"
                         WM="$i3wm $i3wm1 $i3wm2 $i3wm3 $i3wm4 $i3wm5 $i3wm6"
                         DM="ly-git"
                         echo ly > DMservice
-                        i3tema=true
+                        i3tema1=true
+                        # twmn deepin-screenshot-copy-patch xclip
+                        ;;
+
+
+                    2)  i3wm="i3-gaps i3blocks i3lock dmenu rofi rxvt-unicode"
+                        i3wm1="tumbler ffmpegthumbs ffmpegthumbnailer raw-thumbnailer freetype2"
+                        i3wm2="network-manager-applet polkit-gnome gnome-keyring lxappearance"
+                        i3wm3="ttf-hack gnu-free-fonts awesome-terminal-fonts"
+                        i3wm4="papirus-icon-theme gnome-themes-extra"
+                        i3wm5="thunar alacritty feh xclip maim"
+                        i3wm6="bumblebee-status tk compton-tryone-git i3lock-fancy-git"
+                        WM="$i3wm $i3wm1 $i3wm2 $i3wm3 $i3wm4 $i3wm5 $i3wm6"
+                        DM="ly-git"
+                        echo ly > DMservice
+                        i3tema2=true
                         # twmn deepin-screenshot-copy-patch xclip
                         ;;
                         
                         
-                    2)  WM="i3-gaps i3blocks i3lock i3status dmenu ly-git rxvt-unicode gnome-themes-extra"
+                    3)  WM="i3-gaps i3blocks i3lock i3status dmenu ly-git rxvt-unicode gnome-themes-extra"
                         DM="ly-git"
                         echo ly > DMservice
                         ;;
@@ -886,6 +901,7 @@ do
                 esac
             done
             ;;
+
         2)
             WM="qtile python python2 thunar alacritty network-manager-applet polkit-gnome gnome-keyring lxappearance ly-git rxvt-unicode gnome-themes-extra"
             DM="ly-git"
@@ -1577,6 +1593,9 @@ systemctl enable $(cat GPUvirt)
     fi
 
 
+
+# TEMAS
+
 if [ "$xfce4tema" == "true" ]; then
 #TITULO EN BARRAS
 titulo_progreso="Instalando Tema de XFCE4"
@@ -1601,20 +1620,35 @@ sleep 5
     fi
 
 
-if [ "$i3tema" == "true" ]; then
+if [ "$i3tema1" == "true" ]; then
 #TITULO EN BARRAS
 titulo_progreso="Instalando Tema de i3WM"
 barra_progreso
 
-git clone https://github.com/CodigoCristo/config.git
-unzip config/i3.zip
-clear
-echo -e ""
-echo -e "\t\t\t\tInstalando Tema de i3WM"
-printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
-echo -e ""
-cp -rf .config/* /home/$nombre_usuario/.config/
-rm -R config/
+mkdir /home/$nombre_usuario/.config
+
+wget https://raw.githubusercontent.com/CodigoCristo/config/master/i3-1.zip
+unzip i3-1.zip
+cp -rf i3-1/config/* /home/$nombre_usuario/.config/
+rm -R i3-1/
+rm -R i3-1.zip
+chown -hR $nombre_usuario:users /home/$nombre_usuario/
+chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
+sleep 5
+    fi
+
+if [ "$i3tema2" == "true" ]; then
+#TITULO EN BARRAS
+titulo_progreso="Instalando Tema de i3WM"
+barra_progreso
+
+mkdir /home/$nombre_usuario/.config
+
+wget https://raw.githubusercontent.com/CodigoCristo/config/master/i3-2.zip
+unzip i3-2.zip
+cp -rf i3-2/config/* /home/$nombre_usuario/.config/
+rm -R i3-2/
+rm -R i3-2.zip
 chown -hR $nombre_usuario:users /home/$nombre_usuario/
 chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/
 sleep 5
