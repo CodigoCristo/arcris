@@ -685,7 +685,7 @@ do
                 esac
             done
 
-            KDE="plasma kdebase gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer discover packagekit-qt5 colord-kde kscreen powerdevil kdegraphics-thumbnailers ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer user-manager kdeconnect sshfs ttf-liberation ttf-dejavu qt5ct"
+            KDE="plasma dolphin kate kdialog keditbookmarks kfind khelpcenter konqueror kwrite gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer discover packagekit-qt5 colord-kde kscreen powerdevil kdegraphics-thumbnailers ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer user-manager kdeconnect sshfs ttf-liberation ttf-dejavu qt5ct"
 
             DE="$KDE $KDE2 $KDE3 $KDE4 $KDE5 $KDE6 $KDE7"            
             DM="sddm libxcb qt5-virtualkeyboard"
