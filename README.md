@@ -3,7 +3,7 @@
 > Instalar Arch Linux en Español
 ```
 pacman -Sy git dialog --noconfirm
-git clone git://github.com/CodigoCristo/arcris
+git clone https://github.com/gorkawien/arcris
 cd arcris
 sh arcris
 ```
