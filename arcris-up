@@ -1,0 +1,24 @@
+#!/bin/bash
+clear
+git clone https://github.com/CodigoCristo/arcris
+cd arcris/
+
+chmod +777 Arcris
+chmod +777 arcris-up
+
+clear
+for i in $(seq 1 100)
+do
+    sleep 0.03 
+    echo $i
+done | dialog --title '| Hecho por Código Cristo |' --gauge "\nVisite la comunidad >> t.me/ArchLinuxCristo <<\n " 8 53 0
+
+
+cp .dialogrc ~/.dialogrc
+cp Arcris /bin/arcris
+cp arcris-up /bin/arcris-up
+
+cd ..
+rm -r arcris
+clear
+arcris

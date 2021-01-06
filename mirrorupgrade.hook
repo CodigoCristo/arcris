@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = pacman-mirrorlist
+
+[Action]
+Description = Actualizando Mirrorlist con Reflector.
+When = PostTransaction
+Depends = reflector
+Exec = /bin/sh -c "reflector --verbose --latest 20 --sort rate --save /etc/pacman.d/mirrorlist; rm -f /etc/pacman.d/mirrorlist.pacnew"
