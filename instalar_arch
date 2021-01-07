@@ -4,16 +4,6 @@ tituloInicio="| Visita Nuestra Comunidad - https://t.me/ArchLinuxCristo - by: Ar
 
 titulo="| Instalación de ArchLinux en Español - https://t.me/ArchLinuxCristo |"
 
-#Variable para zona horaria
-clear
-echo "Cargando..."
-echo ""
-echo ""
-zonahorariaok=$(curl https://ipapi.co/timezone)
-echo ""
-clear
-echo "Cargando..."
-
 
 
 if ping -c 3 www.google.com &> /dev/null; then
@@ -43,11 +33,14 @@ echo ""
 sleep 5
 #echo "Presiona ENTER para continuar..."
 #read line
+
+#Variable para zona horaria
 clear
 zonahorariaok=$(curl https://ipapi.co/timezone)
 echo ""
 echo "Cargando..."
 clear
+
 
 else
 clear
@@ -2237,12 +2230,19 @@ sleep 2
 
 echo ""
 timedatectl set-timezone $zonahorariaok
-pacman -Sy ntpd --noconfirm 
+pacman -Sy ntp --noconfirm 
 clear
+echo ""
+echo ""
+echo "Si toma mucho tiempo en cargar..."
+echo "Presione CONTROL + C para Continuar..."
+echo ""
 ntpd -qg
 sleep 3
 hwclock --systohc
 clear
+
+
 clear && echo "" 
 echo -e ""
 echo -e "\t\t\t| Actualizando Hora Actual en LiveCD |"
