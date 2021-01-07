@@ -104,7 +104,11 @@ then
 # opción 1 - instalar solo
         if [ "$menu_inicio_return" = "1" ]
         then
-
+        clear
+        echo ""
+        echo ""
+        echo "Cargando..."
+        sleep 3
         sh instalar_arch
 
 fi
@@ -112,7 +116,11 @@ fi
 # opción 2 - Dual Boot - Windows Instalado
         if [ "$menu_inicio_return" = "2" ]
         then
-
+        clear
+        echo ""
+        echo ""
+        echo "Cargando..."
+        sleep 3
         sh dual_windows
 
 fi
@@ -120,7 +128,9 @@ fi
 # opción 5 - Dual Boot - LINUX
         if [ "$menu_inicio_return" = "3" ]
         then
-
+        clear
+        echo "Cargando..."
+        sleep 3
         sh grub_recu
 
 fi 
@@ -131,6 +141,3 @@ else
     dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| Comunidad para ayudar: t.me/ArchLinuxCristo |" 7 51
 
 fi
-clear
-echo "Cargando..."
-sleep 3
