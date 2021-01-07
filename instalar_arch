@@ -1467,8 +1467,9 @@ cmd=(dialog --keep-tite --backtitle "$titulo" \
 
 options=(1 "> i3wm | 150MB de RAM "
          2 "> qtile | Disponible <"
-         3 "> dwm | Disponible <" 
-         4 "> Bspwm | Disponible <")
+         3 "> dwm | Disponible <"
+         4 "> Bspwm | Disponible <"
+         5 "> sway | Disponible <")
          #4 "> fluxbox | Aún no disponible <"
          #5 "> openbox | Aún no disponible <"
          #6 "> blackbox | Aún no disponible <"
@@ -1556,6 +1557,11 @@ do
             ;;
             
         5)
+            WM="rxvt-unicode sway i3status swaybar rofi st thunar network-manager-applet polkit-gnome gnome-keyring lxappearance ly-git rxvt-unicode gnome-themes-extra"
+            DM="ly-git"
+            echo ly > DMservice
+            ;;
+        6)
             echo "Fourth Option"
             ;;
     esac
@@ -2230,15 +2236,15 @@ sleep 2
 
 echo ""
 timedatectl set-timezone $zonahorariaok
-pacman -Sy ntp --noconfirm 
-clear
-echo ""
-echo ""
-echo "Si toma mucho tiempo en cargar..."
-echo "Presione CONTROL + C para Continuar..."
-echo ""
-ntpd -qg
-sleep 3
+#pacman -Sy ntp --noconfirm 
+#clear
+#echo ""
+#echo ""
+#echo "Si toma mucho tiempo en cargar..."
+#echo "Presione CONTROL + C para Continuar..."
+#echo ""
+#ntpd -qg
+#sleep 3
 hwclock --systohc
 clear
 

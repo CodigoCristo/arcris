@@ -2292,17 +2292,18 @@ sleep 2
 
 echo ""
 timedatectl set-timezone $zonahorariaok
-pacman -Sy ntp --noconfirm 
-clear
-echo ""
-echo ""
-echo "Si toma mucho tiempo en cargar..."
-echo "Presione CONTROL + C para Continuar..."
-echo ""
-ntpd -qg
-sleep 3
+#pacman -Sy ntp --noconfirm 
+#clear
+#echo ""
+#echo ""
+#echo "Si toma mucho tiempo en cargar..."
+#echo "Presione CONTROL + C para Continuar..."
+#echo ""
+#ntpd -qg
+#sleep 3
 hwclock --systohc
 clear
+
 
 
 clear && echo "" 
