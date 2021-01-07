@@ -2209,7 +2209,9 @@ dialog --backtitle "$titulo" \
 \n> Al terminar el equipo se reiniciara con su sistema instalado" 15 73
 
 clear
-echo -e "\n\n\n\n\n\n\n\n\n\n\n\n"
+echo ""
+echo "Cargando..."
+echo -e "\n\n\n\n\n\n\n\n\n\n\n"
 echo ""
 echo -e '\033[38;2;255;0;02m'
 echo " █████╗ ██████╗  ██████╗██████╗ ██╗███████╗";
@@ -2220,21 +2222,14 @@ echo "██║  ██║██║  ██║╚██████╗██║ 
 echo "╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝╚══════╝";
 echo "                                           ";
 echo -e '\033[m'
-echo ""
-echo ""
 sleep 2
-clear
 
 
 
-clear && echo "" 
-echo -e ""
 #echo -e "\t\t\t| Actualizando Hora Actual en LiveCD |"
 #printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
 #echo -e ""
 #sleep 2
-echo "Cargando..."
-echo ""
 timedatectl set-timezone $zonahorariaok
 #pacman -Sy ntp --noconfirm 
 #clear
@@ -2277,7 +2272,7 @@ sleep 2
 #cp pacman.conf /etc/pacman.conf
 pacman -Sy reflector --noconfirm 
 sleep 3
-reflector --verbose --latest 15 --sort rate --save /etc/pacman.d/mirrorlist
+reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
 clear
 cat /etc/pacman.d/mirrorlist
 sleep 3
@@ -2548,7 +2543,7 @@ arch-chroot /mnt /bin/bash -c "pacman -S linux linux-headers linux-firmware mkin
 arch-chroot /mnt /bin/bash -c "pacman -S pacman-mirrorlist cryptsetup lvm2 logrotate nano hddtemp unzip zip --noconfirm --needed"
 arch-chroot /mnt /bin/bash -c "pacman -S dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager --noconfirm --needed"
 arch-chroot /mnt /bin/bash -c "pacman -S iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion --noconfirm --needed"
-arch-chroot /mnt /bin/bash -c "pacman -S e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S less ntp usb_modeswitch usbutils which mtools exfat-utils --noconfirm --needed"
     fi
 
 if [ "$selec8168" == "true" ]; then
@@ -2568,7 +2563,7 @@ arch-chroot /mnt /bin/bash -c "pacman -S linux-hardened linux-hardened-headers l
 arch-chroot /mnt /bin/bash -c "pacman -S pacman-mirrorlist cryptsetup lvm2 logrotate nano hddtemp unzip zip --noconfirm --needed"
 arch-chroot /mnt /bin/bash -c "pacman -S dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager --noconfirm --needed"
 arch-chroot /mnt /bin/bash -c "pacman -S iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion --noconfirm --needed"
-arch-chroot /mnt /bin/bash -c "pacman -S e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S less ntp usb_modeswitch usbutils which mtools exfat-utils --noconfirm --needed"
     fi
 
 if [ "$selecLinuxLts" == "true" ]; then
@@ -2580,7 +2575,7 @@ arch-chroot /mnt /bin/bash -c "pacman -S linux-lts linux-lts-headers linux-firmw
 arch-chroot /mnt /bin/bash -c "pacman -S pacman-mirrorlist cryptsetup lvm2 logrotate nano hddtemp unzip zip --noconfirm --needed"
 arch-chroot /mnt /bin/bash -c "pacman -S dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager --noconfirm --needed"
 arch-chroot /mnt /bin/bash -c "pacman -S iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion --noconfirm --needed"
-arch-chroot /mnt /bin/bash -c "pacman -S e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S less ntp usb_modeswitch usbutils which mtools exfat-utils --noconfirm --needed"
     fi
 
 if [ "$selec8168lts" == "true" ]; then
@@ -2601,7 +2596,7 @@ arch-chroot /mnt /bin/bash -c "pacman -S linux-zen linux-zen-headers linux-firmw
 arch-chroot /mnt /bin/bash -c "pacman -S pacman-mirrorlist cryptsetup lvm2 logrotate nano hddtemp unzip zip --noconfirm --needed"
 arch-chroot /mnt /bin/bash -c "pacman -S dnsmasq ethtool ndisc6 inetutils wvdial gptfdisk dhcp dhcpcd dhclient ppp netctl networkmanager --noconfirm --needed"
 arch-chroot /mnt /bin/bash -c "pacman -S iwd net-tools ifplugd dialog neofetch git wget lsb-release accountsservice bash-completion --noconfirm --needed"
-arch-chroot /mnt /bin/bash -c "pacman -S e2fsprogs less ntp usb_modeswitch usbutils which ntfs-3g mtools exfat-utils cifs-utils --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S less ntp usb_modeswitch usbutils which mtools exfat-utils --noconfirm --needed"
     fi
 
 if [ "$microdriverS" == "true" ]; then

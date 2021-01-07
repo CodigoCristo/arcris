@@ -2265,7 +2265,9 @@ dialog --backtitle "$titulo" \
 \n> Al terminar el equipo se reiniciara con su sistema instalado" 15 73
 
 clear
-echo -e "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+echo ""
+echo "Cargando..."
+echo -e "\n\n\n\n\n\n\n\n\n\n\n"
 echo ""
 echo -e '\033[38;2;255;0;02m'
 echo " █████╗ ██████╗  ██████╗██████╗ ██╗███████╗";
@@ -2276,21 +2278,14 @@ echo "██║  ██║██║  ██║╚██████╗██║ 
 echo "╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝╚══════╝";
 echo "                                           ";
 echo -e '\033[m'
-echo ""
-echo ""
-sleep 2
-clear
-
-
-
-clear && echo "" 
-echo -e ""
-echo -e "\t\t\t| Actualizando Hora Actual en LiveCD |"
-printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
-echo -e ""
 sleep 2
 
-echo ""
+
+
+#echo -e "\t\t\t| Actualizando Hora Actual en LiveCD |"
+#printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+#echo -e ""
+#sleep 2
 timedatectl set-timezone $zonahorariaok
 #pacman -Sy ntp --noconfirm 
 #clear
@@ -2301,9 +2296,8 @@ timedatectl set-timezone $zonahorariaok
 #echo ""
 #ntpd -qg
 #sleep 3
-hwclock --systohc
+#hwclock --systohc
 clear
-
 
 
 clear && echo "" 
@@ -2334,14 +2328,8 @@ sleep 2
 #cp pacman.conf /etc/pacman.conf
 pacman -Sy reflector --noconfirm 
 sleep 3
-reflector --verbose --latest 15 --sort rate --save /etc/pacman.d/mirrorlist
+reflector --verbose --latest 5 --sort rate --save /etc/pacman.d/mirrorlist
 clear
-echo "" 
-echo -e ""
-echo -e "\t\t\t| Actualizando MirrorList en LiveCD |"
-printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
-echo -e ""
-echo ""
 cat /etc/pacman.d/mirrorlist
 echo ""
 echo "Cargando..."
