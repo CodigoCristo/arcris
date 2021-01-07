@@ -2245,7 +2245,7 @@ timedatectl set-timezone $zonahorariaok
 #echo ""
 #ntpd -qg
 #sleep 3
-hwclock --systohc
+#hwclock --systohc
 clear
 
 
