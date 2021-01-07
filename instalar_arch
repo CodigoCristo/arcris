@@ -2229,11 +2229,11 @@ clear
 
 clear && echo "" 
 echo -e ""
-echo -e "\t\t\t| Actualizando Hora Actual en LiveCD |"
-printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
-echo -e ""
-sleep 2
-
+#echo -e "\t\t\t| Actualizando Hora Actual en LiveCD |"
+#printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+#echo -e ""
+#sleep 2
+echo "Cargando..."
 echo ""
 timedatectl set-timezone $zonahorariaok
 #pacman -Sy ntp --noconfirm 

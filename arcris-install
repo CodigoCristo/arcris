@@ -131,3 +131,5 @@ else
     dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| Comunidad para ayudar: t.me/ArchLinuxCristo |" 7 51
 
 fi
+
+echo "Cargando..."
