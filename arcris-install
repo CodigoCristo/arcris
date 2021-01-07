@@ -115,7 +115,7 @@ fi
 
         sh dual_windows
 
-
+fi
 
 # opción 5 - Dual Boot - LINUX
         if [ "$menu_inicio_return" = "3" ]
