@@ -1458,8 +1458,13 @@ done
 #FIN ESCRITORIO
             ;;
         2) #INICIO (WM)
+
 i3tema=false
 seleccionWM=true
+
+bspwmtema=false
+bspwmtema1=false
+bspwmtema2=false
 
 
 cmd=(dialog --keep-tite --backtitle "$titulo" \
@@ -1550,11 +1555,63 @@ do
             DM="ly-git"
             echo ly > DMservice
             ;;
-        4)
+        4)  # 4 - BSPWMMMMMM
+
+            cmd=(dialog --no-collapse --cr-wrap --title "-| SHELL del Sistema |-" --backtitle "$titulo" \
+            --no-tags --ok-label '< Seleccionar >' --nocancel --column-separator "|" --no-tags --nocancel --menu "\nEliga su opción:\n " 12 70 20)
+
+options=(1 "BSPWM con Tema || Gracias a mxhectorvega"
+     2 "BSPWM con Tema || Gracias a Darch7"
+     3 "BSPWM Limpio || Mod + ENTER para abrir Terminal")
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+      WM="bspwm sxhkd rofi dmenu st thunar network-manager-applet polkit-gnome gnome-keyring lxappearance ly-git rxvt-unicode gnome-themes-extra"
+            DM="ly-git"
+            echo ly > DMservice
+
+            bspwmtema1=true
+            ;;
+
+        2)  
+      
+      WM1="bspwm sxhkd rofi dmenu st thunar network-manager-applet polkit-gnome gnome-keyring lxappearance ly-git rxvt-unicode gnome-themes-extra"
+      WM2="ttf-meslo-nerd-font-powerlevel10k picom-ibhagwan-git lemonbar-xft-git fzf-extras"
+      WM3="papirus-icon-theme p7zip unrar zip unzip gzip bzip2 arj lzop alsa-plugins alsa-utils ttf-dejavu ttf-liberation"
+      WM4="xorg-fonts-type1 ttf-bitstream-vera wmname rofi lxrandr polkit-gnome ueberzug slock fzf wireless_tools redshift"
+      WM5="neofetch calcurse bc pcmanfm xarchiver lxappearance leafpad nitrogen pavucontrol"
+      WM6="sxiv blueberry ffmpeg maim xclip xdotool mpv unclutter dunst htop zsh zsh-autosuggestions"
+      WM7="zsh-history-substring-search zsh-completions zsh-syntax-highlighting ranger ttf-joypixels adobe-source-han-sans-jp-fonts adobe-source-han-serif-jp-fonts"
+      WM8="awesome-terminal-fonts ttf-font-awesome"
+      WM9="xdo-git sutils-git xtitle-git"
+
+      WM="$WM1 $WM2 $WM3 $WM4 $WM5 $WM6 $WM7 $WM8 $WM9"
+            DM="ly-git"
+            echo ly > DMservice
+            bspwmtema2=true
+
+            ;;
+        3)
             WM="bspwm sxhkd rofi dmenu st thunar network-manager-applet polkit-gnome gnome-keyring lxappearance ly-git rxvt-unicode gnome-themes-extra"
             DM="ly-git"
             echo ly > DMservice
+            bspwmtema=true
             ;;
+            
+                                                
+    esac
+done
+#FIN_BSPWMMM
+;;
+
+
+
+
+
             
         5)
             WM="rxvt-unicode sway i3status swaybar rofi st thunar network-manager-applet polkit-gnome gnome-keyring lxappearance ly-git rxvt-unicode gnome-themes-extra"
@@ -3112,6 +3169,66 @@ arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usu
 arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/qtile/config.py"
 sleep 5
     fi
+
+
+#TEMA BSPWM
+if [ "$bspwmtema" == "true" ]; then
+
+arch-chroot /mnt /bin/bash -c "install -Dm755 /usr/share/doc/bspwm/examples/bspwmrc /home/$nombre_usuario/.config/bspwm/bspwmrc"
+arch-chroot /mnt /bin/bash -c "install -Dm644 /usr/share/doc/bspwm/examples/sxhkdrc /home/$nombre_usuario/.config/sxhkd/sxhkdrc"
+
+fi
+
+
+if [ "$bspwmtema1" == "true" ]; then
+
+echo 2
+
+fi
+
+if [ "$bspwmtema2" == "true" ]; then
+
+#TITULO EN BARRAS
+titulo_progreso="Instalando Tema de BSPWM"
+barra_progreso
+##################
+
+arch-chroot /mnt /bin/bash -c "git clone https://github.com/darch7/bspwmbydarch.git"
+
+arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/config/* /home/$nombre_usuario/config/"
+
+arch-chroot /mnt /bin/bash -c "chmod u+x /home/$nombre_usuario/.config/bspwm/scripts"
+
+arch-chroot /mnt /bin/bash -c "mkdir -p /home/$nombre_usuario/.local/share/fonts"
+
+arch-chroot /mnt /bin/bash -c "chmod u+x /home/$nombre_usuario/.local/share/fonts"
+
+arch-chroot /mnt /bin/bash -c "curl -fLo 'Droid Sans Mono for Powerline Nerd Font Complete.otf' https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf"
+
+arch-chroot /mnt /bin/bash -c "cp 'Droid Sans Mono for Powerline Nerd Font Complete.otf' /home/$nombre_usuario/.local/share/fonts"
+
+arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/pegarenroot/fzf/fzf/* /usr/share/fzf"
+
+arch-chroot /mnt /bin/bash -c "cp -R 'bspwmbydarch/pegarenroot/tema e iconos/iconos/Material-Black-Blueberry-Numix_1.8.8.zip' /usr/share/icons"
+
+arch-chroot /mnt /bin/bash -c "cp -R 'bspwmbydarch/pegarenroot/tema e iconos/temas/Kripton.tar.xz' /usr/share/themes"
+arch-chroot /mnt /bin/bash -c "cp -R 'bspwmbydarch/pegarenroot/tema e iconos/temas/Material-Black-Blueberry_1.8.8.zip' /usr/share/themes"
+
+
+fi
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
