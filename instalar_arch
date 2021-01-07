@@ -132,7 +132,7 @@ do
   clear
   check=$(ls -l $timezonedir | grep -v .tab | awk '/drwx/' | awk -F " " '{print $9}' | awk '{if (NR!=1) {print}}' | head -1)
   if [[ $check != America ]]; then 
-    echo "../ UP" >timezones 
+    echo "../ UP" > timezones 
   fi
 
   ls -l $timezonedir | grep -v .tab | awk '/drwx/' | awk -F " " '{print $9}' | awk '{print $0"/"}' | awk '$fs=$fs" Time"' | awk '{if (NR!=1) {print}}'>>timezones 
