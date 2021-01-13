@@ -1934,7 +1934,7 @@ do
             spotify_condicion=true
             ;;
         7)
-            REPRO7="spotify spotify-adblock-linux"
+            REPRO7="spotify-adblock-linux"
             REPRO_condicion=true
             spotify_condicion=true
             ;;
@@ -2203,7 +2203,7 @@ do
             AUR_condicion=true
             ;;            
         6)
-            AUR6="pamac-aur pamac-tray-appindicator pamac-zsh-completions"
+            AUR6="pamac-aur"
             AUR_condicion=true
             AUR_pamac=true
             ;;
@@ -2975,7 +2975,10 @@ arch-chroot /mnt /bin/bash -c "cp /tmp/new.xml.gz /usr/share/app-info/xmls/commu
 arch-chroot /mnt /bin/bash -c "pacman -S appstream --noconfirm --needed"
 arch-chroot /mnt /bin/bash -c "appstreamcli refresh-cache --force"
 clear
+arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S pamac-zsh-completions --noeditmenu --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S pamac-tray-icon-plasma --noeditmenu --noconfirm --needed"
 arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S archlinux-appstream-data-pamac --noeditmenu --noconfirm --needed"
+
 mensaje_install
 sleep 8
     fi
