@@ -2327,10 +2327,12 @@ printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
 echo -e ""
 sleep 2
 #cp pacman.conf /etc/pacman.conf
-pacman -Sy reflector --noconfirm 
+pacman -Sy reflector python3 rsync --noconfirm 
 sleep 2
 clear
-reflector --latest 10 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+echo -e "\t\t\t| Actualizando mejores listas de Mirrors |"
+echo ""
+reflector --verbose --latest 7 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 sleep 5
 clear
 cat /etc/pacman.d/mirrorlist
@@ -2493,9 +2495,9 @@ arch-chroot /mnt /bin/bash -c "systemctl enable bluetooth.service"
 titulo_progreso="| Instalando: Base y Base-devel |"
 barra_progreso
 
-pacstrap /mnt base base-devel reflector nano xdg-user-dirs
+pacstrap /mnt base base-devel reflector python3 rsync nano xdg-user-dirs
 clear
-arch-chroot /mnt /bin/bash -c "reflector --verbose --latest 15 --sort rate --save /etc/pacman.d/mirrorlist"
+arch-chroot /mnt /bin/bash -c "reflector --verbose --latest 10 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist"
 #cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 clear
 cat /mnt/etc/pacman.d/mirrorlist
