@@ -1197,12 +1197,12 @@ do
 xfce4tema=false
 
 cmd=(dialog --keep-tite --backtitle "$titulo" \
---no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Decide en instalar o personalizar las opciones\n\n \
-xfce4 xfce4-goodies network-manager-applet alacarte \n\nSelecciona una opción para XFCE4 \n" 14 60 19)
+--no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Decide en instalar o personalizar las opciones\n\n\
+Selecciona una opción para XFCE4 \n" 12 60 19)
 
-options=(1 "Predeterminado || Una mejor experiencia con tema"
-         2 "Escritorio vacio || Sin tema con paquetes extras"
-         3 "Personalizar || Especificar Paquetes básicos")
+options=(1 "Xfce4 ArcriS || Con tema Personalizado"
+         2 "Xfce4 completo || Sistema Completo"
+         3 "Xfce4 minimal || Minimalista")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -1221,27 +1221,7 @@ do
             echo lightdm > DMservice
             ;;
             
-        3)  cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes extras del escritorio XFCE4\n[ ESPACIO ] - Para marcar o desmarcar *" 12 70 19)
-            options=(1 "xfce4-goodies || Programas extras de xfce4" off    # any option can be set to default to "on"
-                     2 "network-manager-applet || Gestionar conexiones de red" off
-                     3 "alacarte || Editar entradas" off)
-            choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-            for choice in $choices
-            do
-                case $choice in
-                    1)
-                        xfce4_2="xfce4-goodies"
-                        ;;
-                    2)
-                        xfce4_3="network-manager-applet"
-                        ;;
-                    3)
-                        xfce4_4="alacarte"
-                        ;;
-                esac
-            done
-            xfce4="xfce4 gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer tumbler ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer"
-            DE="$xfce4 $xfce4_2 $xfce4_3 $xfce4_4"
+        3)  DE="xfce4 network-manager-applet"
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
             echo lightdm > DMservice
             ;;
@@ -1368,10 +1348,30 @@ done
       ######FINAL DEEPIN
 
         4)  #INICIO GNOME
-            DE="gnome-shell gdm gnome-control-center gnome-backgrounds gnome-tweaks gnome-terminal"
-            DM="gdm"
-            #tumbler ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer
-            echo gdm > DMservice
+            cmd=(dialog --keep-tite --backtitle "$titulo" \
+            --no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona una opción para GNOME \n\n" 10 60 19)
+
+            options=(1 "Gnome || Completo de Apps"
+                     2 "Gnome || Minimalista")
+
+            choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+            for choice in $choices
+            do
+                case $choice in
+
+                    1)  DE="gnome gnome-extra gnome-shell gnome-shell-extensions chrome-gnome-shell  webp-pixbuf-loader gnome-tweaks tumbler ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer"
+                        DM="gdm"
+                        echo gdm > DMservice
+                        ;;
+                        
+                    2)  DE="gnome-shell gdm gnome-control-center gnome-backgrounds gnome-tweaks gnome-terminal"
+                        DM="gdm"
+                        echo gdm > DMservice
+                        ;;
+                        
+                esac
+            done
             ;;
         
         5)  #INICIO GNOME flashback
@@ -2926,7 +2926,7 @@ mensaje_install
 
 titulo_progreso="Instalando Tipografias"
 barra_progreso
-arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S gnu-free-fonts ttf-opensans ttf-hack ttf-font-awesome awesome-terminal-fonts noto-fonts-emoji gnome-font-viewer --noeditmenu --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S gnu-free-fonts ttf-opensans ttf-hack ttf-font-awesome awesome-terminal-fonts noto-fonts-emoji gnome-font-viewer nerd-fonts-hack --noeditmenu --noconfirm --needed"
 mensaje_install
 #adobe-source-han-sans-jp-fonts
 #adobe-source-han-sans-cn-fonts
