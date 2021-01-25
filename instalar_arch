@@ -1631,7 +1631,7 @@ do
             ;;
 
         2)
-            SH="bash bash-completion autojump command-not-found"
+            SH="bash bash-completion"
             ;;
         3)
             SH="dash";;
@@ -3134,6 +3134,7 @@ echo -e ""
 sleep 3
 
 arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/"
+arch-chroot /mnt /bin/bash -c "chmod 777 $nombre_usuario:users /home/$nombre_usuario/.config/"
 arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/qtile/"
 arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/qtile/config.py"
 sleep 5
@@ -3148,6 +3149,8 @@ barra_progreso
 arch-chroot /mnt /bin/bash -c "mkdir -p /home/$nombre_usuario/.config/awesome/"
 arch-chroot /mnt /bin/bash -c "cp /etc/xdg/awesome/rc.lua /home/$nombre_usuario/.config/awesome/"
 
+arch-chroot /mnt /bin/bash -c "chmod 777 $nombre_usuario:users /home/$nombre_usuario/.config/"
+arch-chroot /mnt /bin/bash -c "chmod 777 $nombre_usuario:users /home/$nombre_usuario/.config/awesome/rc.lua"
     fi
 
            
@@ -3157,6 +3160,10 @@ if [ "$bspwmtema" == "true" ]; then
 
 arch-chroot /mnt /bin/bash -c "install -Dm755 /usr/share/doc/bspwm/examples/bspwmrc /home/$nombre_usuario/.config/bspwm/bspwmrc"
 arch-chroot /mnt /bin/bash -c "install -Dm644 /usr/share/doc/bspwm/examples/sxhkdrc /home/$nombre_usuario/.config/sxhkd/sxhkdrc"
+arch-chroot /mnt /bin/bash -c "chmod 777 $nombre_usuario:users /home/$nombre_usuario/.config/"
+arch-chroot /mnt /bin/bash -c "chmod 777 $nombre_usuario:users /home/$nombre_usuario/.config/bspwm/bspwmrc"
+arch-chroot /mnt /bin/bash -c "chmod 777 $nombre_usuario:users /home/$nombre_usuario/.config/sxhkd/sxhkdrc"
+
 
 fi
 
