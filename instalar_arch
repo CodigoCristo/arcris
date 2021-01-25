@@ -30,6 +30,7 @@ echo "╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝    ╚�
 echo "                                                     ";
 echo ""
 echo ""
+echo "Cargando..."
 sleep 5
 #echo "Presiona ENTER para continuar..."
 #read line
@@ -1201,8 +1202,8 @@ cmd=(dialog --keep-tite --backtitle "$titulo" \
 Selecciona una opción para XFCE4 \n" 12 60 19)
 
 options=(1 "Xfce4 ArcriS || Con tema Personalizado"
-         2 "Xfce4 completo || Sistema Completo"
-         3 "Xfce4 minimal || Minimalista")
+         2 "Xfce4 || Sistema Completo"
+         3 "Xfce4 || Minimalista")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -1461,20 +1462,21 @@ done
 
 i3tema=false
 seleccionWM=true
-
+qtile_config=false
 bspwmtema=false
 bspwmtema1=false
 bspwmtema2=false
-
+awesome_config=false
 
 cmd=(dialog --keep-tite --backtitle "$titulo" \
---no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --menu "Selecciona tu gestor de ventana a instalar - (WM)" 19 55 16)
+--no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --menu "Selecciona tu gestor de ventana a instalar - (WM)" 20 55 16)
 
 options=(1 "> i3wm | 150MB de RAM "
          2 "> qtile | Disponible <"
          3 "> dwm | Disponible <"
          4 "> Bspwm | Disponible <"
-         5 "> sway | Disponible <")
+         5 "> sway | Disponible <"
+         6 "> Awesome | Disponible <")
          #4 "> fluxbox | Aún no disponible <"
          #5 "> openbox | Aún no disponible <"
          #6 "> blackbox | Aún no disponible <"
@@ -1555,70 +1557,26 @@ do
             DM="ly-git"
             echo ly > DMservice
             ;;
-        4)  # 4 - BSPWMMMMMM
-
-            cmd=(dialog --no-collapse --cr-wrap --title "-| SHELL del Sistema |-" --backtitle "$titulo" \
-            --no-tags --ok-label '< Seleccionar >' --nocancel --column-separator "|" --no-tags --nocancel --menu "\nEliga su opción:\n " 12 70 20)
-
-options=(1 "BSPWM con Tema || Gracias a mxhectorvega"
-     2 "BSPWM con Tema || Gracias a Darch7"
-     3 "BSPWM Limpio || Mod + ENTER para abrir Terminal")
-
-choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-clear
-for choice in $choices
-do
-    case $choice in
-        1)
-      WM="bspwm sxhkd rofi dmenu st thunar network-manager-applet polkit-gnome gnome-keyring lxappearance ly-git rxvt-unicode gnome-themes-extra"
-            DM="ly-git"
-            echo ly > DMservice
-
-            bspwmtema1=true
-            ;;
-
-        2)  
-      
-      WM1="bspwm sxhkd rofi dmenu st thunar network-manager-applet polkit-gnome gnome-keyring lxappearance ly-git rxvt-unicode gnome-themes-extra"
-      WM2="ttf-meslo-nerd-font-powerlevel10k picom-ibhagwan-git lemonbar-xft-git fzf-extras"
-      WM3="papirus-icon-theme p7zip unrar zip unzip gzip bzip2 arj lzop alsa-plugins alsa-utils ttf-dejavu ttf-liberation"
-      WM4="xorg-fonts-type1 ttf-bitstream-vera wmname rofi lxrandr polkit-gnome ueberzug slock fzf wireless_tools redshift"
-      WM5="neofetch calcurse bc pcmanfm xarchiver lxappearance leafpad nitrogen pavucontrol"
-      WM6="sxiv blueberry ffmpeg maim xclip xdotool mpv unclutter dunst htop zsh zsh-autosuggestions"
-      WM7="zsh-history-substring-search zsh-completions zsh-syntax-highlighting ranger ttf-joypixels adobe-source-han-sans-jp-fonts adobe-source-han-serif-jp-fonts"
-      WM8="awesome-terminal-fonts ttf-font-awesome"
-      WM9="xdo-git sutils-git xtitle-git"
-
-      WM="$WM1 $WM2 $WM3 $WM4 $WM5 $WM6 $WM7 $WM8 $WM9"
-            DM="ly-git"
-            echo ly > DMservice
-            bspwmtema2=true
-
-            ;;
-        3)
+        4)  
             WM="bspwm sxhkd rofi dmenu st thunar network-manager-applet polkit-gnome gnome-keyring lxappearance ly-git rxvt-unicode gnome-themes-extra"
             DM="ly-git"
             echo ly > DMservice
-            bspwmtema=true
             ;;
-            
-                                                
-    esac
-done
-#FIN_BSPWMMM
-;;
-
-
-
-
-
             
         5)
             WM="rxvt-unicode sway i3status swaybar rofi st thunar network-manager-applet polkit-gnome gnome-keyring lxappearance ly-git rxvt-unicode gnome-themes-extra"
             DM="ly-git"
             echo ly > DMservice
             ;;
+
         6)
+            WM="awesome rxvt-unicode rofi st thunar network-manager-applet polkit-gnome gnome-keyring lxappearance ly-git gnome-themes-extra"
+            DM="ly-git"
+            echo ly > DMservice
+            awesome_config=true
+            ;;
+
+        7)
             echo "Fourth Option"
             ;;
     esac
@@ -1652,6 +1610,45 @@ done
         AUR_DELETE=""
         programasextrasSI=false
         programasextrasNO=false
+
+
+        #SH
+cmd=(dialog --no-collapse --cr-wrap --title "-| SHELL del Sistema |-" --backtitle "$titulo" \
+--no-tags --ok-label '< Siguiente >' --nocancel --menu "\nSeleccione\n " 15 70 20)
+options=(1 "zsh"   
+         2 "bash"
+         3 "dash"
+         4 "fish"
+         5 "mksh"
+         6 "tcsh")
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            SH="zsh zsh-completions zsh-syntax-highlighting zsh-autosuggestions"
+            ;;
+
+        2)
+            SH="bash bash-completion autojump command-not-found"
+            ;;
+        3)
+            SH="dash";;
+            
+        4)
+            SH="fish";;
+            
+        5)
+            SH="mksh";;
+            
+        6)
+            SH="tcsh";;
+                                                
+    esac
+done
+#FIN_SH
+
 
 dialog --title "-| Programas Extras |-" --yesno "\n¿ Deseas instalar Programas extras en su sistema ?\n\nEsto puede tomar un poco más de tiempo\nTodas las descargas son de repo oficiales y de AUR" 9 55
 case $? in
@@ -1720,42 +1717,6 @@ TERMI=" $TERMI1 $TERMI2 $TERMI3 $TERMI4 $TERMI5 $TERMI6 $TERMI7 $TERMI8 $TERMI9 
 #FINAL DE TERMINALES
 
 
-#SH
-cmd=(dialog --no-collapse --cr-wrap --title "-| SHELL del Sistema |-" --backtitle "$titulo" \
---no-tags --ok-label '< Siguiente >' --nocancel --menu "\nSeleccione\n " 15 70 20)
-options=(1 "zsh"   
-         2 "bash"
-         3 "dash"
-         4 "fish"
-         5 "mksh"
-         6 "tcsh")
-choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-clear
-for choice in $choices
-do
-    case $choice in
-        1)
-            SH="zsh zsh-completions zsh-syntax-highlighting zsh-autosuggestions"
-            ;;
-
-        2)
-            SH="bash bash-completion autojump command-not-found"
-            ;;
-        3)
-            SH="dash";;
-            
-        4)
-            SH="fish";;
-            
-        5)
-            SH="mksh";;
-            
-        6)
-            SH="tcsh";;
-                                                
-    esac
-done
-#FIN_SH
 
 
 #AUDIO
@@ -2928,7 +2889,7 @@ mensaje_install
 
 titulo_progreso="Instalando Tipografias"
 barra_progreso
-arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S gnu-free-fonts ttf-opensans ttf-hack ttf-font-awesome awesome-terminal-fonts noto-fonts-emoji gnome-font-viewer nerd-fonts-hack --noeditmenu --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S ttf-font gnu-free-fonts ttf-opensans ttf-hack ttf-font-awesome awesome-terminal-fonts noto-fonts-emoji gnome-font-viewer nerd-fonts-hack --noeditmenu --noconfirm --needed"
 mensaje_install
 #adobe-source-han-sans-jp-fonts
 #adobe-source-han-sans-cn-fonts
@@ -3027,9 +2988,10 @@ arch-chroot /mnt /bin/bash -c "cp /tmp/new.xml.gz /usr/share/app-info/xmls/commu
 arch-chroot /mnt /bin/bash -c "pacman -S appstream --noconfirm --needed"
 arch-chroot /mnt /bin/bash -c "appstreamcli refresh-cache --force"
 clear
-arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S pamac-zsh-completions --noeditmenu --noconfirm --needed"
-arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S pamac-tray-icon-plasma --noeditmenu --noconfirm --needed"
-arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S archlinux-appstream-data-pamac --noeditmenu --noconfirm --needed"
+#arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S pamac-zsh-completions --noeditmenu --noconfirm --needed"
+#arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S pamac-tray-icon-plasma --noeditmenu --noconfirm --needed"
+#arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S archlinux-appstream-data-pamac --noeditmenu --noconfirm --needed"
+#yay -S archlinux-appstream-data-pamac --noeditmenu --noconfirm --needed
 
 mensaje_install
 sleep 8
@@ -3177,6 +3139,18 @@ arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usu
 sleep 5
     fi
 
+
+    if [ "$awesome_config" == "true" ]; then
+#TITULO EN BARRAS
+titulo_progreso="Configurando Awesome"
+barra_progreso
+
+arch-chroot /mnt /bin/bash -c "mkdir -p /home/$nombre_usuario/.config/awesome/"
+arch-chroot /mnt /bin/bash -c "cp /etc/xdg/awesome/rc.lua /home/$nombre_usuario/.config/awesome/"
+
+    fi
+
+           
 
 #TEMA BSPWM
 if [ "$bspwmtema" == "true" ]; then
