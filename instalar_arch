@@ -1247,6 +1247,7 @@ do
         
         1)  DE="plasma dolphin kate kdialog kfind khelpcenter konqueror kwrite vlc konsole flameshot appmenu-gtk-module libdbusmenu-glib libdbusmenu-gtk3 libdbusmenu-gtk2 deepin-icon-theme discover packagekit-qt5 colord-kde kscreen powerdevil kdegraphics-thumbnailers ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer user-manager kdeconnect"
             DM="sddm libxcb qt5-virtualkeyboard"
+            clear
             echo ""
             echo " > Detalles de programas a instalar en DE: "
             echo ""
@@ -1265,6 +1266,7 @@ do
         
         2)  DE="plasma kde-applications konsole konqueror dolphin discover latte-dock bluedevil kate kdialog keditbookmarks kwrite appmenu-gtk-module libdbusmenu-glib libdbusmenu-gtk3 libdbusmenu-gtk2 kfind khelpcenter kscreen powerdevil kdeconnect kdegraphics-thumbnailers ffmpegthumbs ffmpegthumbnailer raw-thumbnailer freetype2 libgsf"
             DM="sddm libxcb qt5-virtualkeyboard"
+            clear
             echo ""
             echo " > Detalles de programas a instalar en DE: "
             echo ""
@@ -1281,6 +1283,7 @@ do
 
         3)  DE="plasma dolphin konsole discover"
             DM="sddm libxcb qt5-virtualkeyboard"
+            clear
             echo ""
             echo " > Detalles de programas a instalar en DE: "
             echo ""

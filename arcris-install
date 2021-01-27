@@ -104,6 +104,7 @@ then
 # opción 1 - instalar solo
         if [ "$menu_inicio_return" = "1" ]
         then
+        clear
         echo "Cargando..."
         sleep 3
         sh instalar_arch
@@ -113,6 +114,7 @@ fi
 # opción 2 - Dual Boot - Windows Instalado
         if [ "$menu_inicio_return" = "2" ]
         then
+        clear
         echo "Cargando..."
         sleep 3
         sh dual_windows
