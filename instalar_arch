@@ -1233,12 +1233,11 @@ done
 
         2)  #KDE
             cmd=(dialog --keep-tite --backtitle "$titulo" \
---no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Decide en instalar o personalizar las opciones\n\n \
-plasma kdebase discover Menu-Global \n\nSelecciona una opción para Plasma KDE \n" 14 60 19)
+--no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "          Selecciona una opción para Plasma KDE \n" 10 60 19)
 
-options=(1 "Predeterminado || Una mejor experiencia con tema"
-         2 "Escritorio vacio || Sin tema sin paquetes extras"
-         3 "Personalizar || Especificar Paquetes básicos")
+options=(1 "KDE Plasma || Tema ArcriS"
+         2 "KDE Plasma || Completo de Apps"
+         3 "KDE Plasma || Minimalista")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -1246,58 +1245,57 @@ for choice in $choices
 do
     case $choice in
         
-        1)  DE="plasma dolphin kate kdialog keditbookmarks kfind khelpcenter konqueror kwrite vlc konsole flameshot appmenu-gtk-module libdbusmenu-glib libdbusmenu-gtk3 libdbusmenu-gtk2 deepin-icon-theme gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer discover packagekit-qt5 colord-kde kscreen powerdevil kdegraphics-thumbnailers ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer user-manager kdeconnect sshfs ttf-liberation ttf-dejavu qt5ct"
+        1)  DE="plasma dolphin kate kdialog kfind khelpcenter konqueror kwrite vlc konsole flameshot appmenu-gtk-module libdbusmenu-glib libdbusmenu-gtk3 libdbusmenu-gtk2 deepin-icon-theme discover packagekit-qt5 colord-kde kscreen powerdevil kdegraphics-thumbnailers ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer user-manager kdeconnect"
             DM="sddm libxcb qt5-virtualkeyboard"
+            echo ""
+            echo " > Detalles de programas a instalar en DE: "
+            echo ""
+            echo $DE
+            echo ""
+            echo " > Detalles de programas a instalar en DM: "
+            echo ""
+            echo $DM
+            echo ""
+            echo "Presiona ENTER para Continuar..."
+            read line
             echo sddm > DMservice
             plasmatema=true
             ;;
             
-        2)  DE="plasma dolphin kate kdialog keditbookmarks kfind khelpcenter konqueror kwrite konsole gnu-free-fonts ttf-hack discover appmenu-gtk-module libdbusmenu-glib libdbusmenu-gtk3 libdbusmenu-gtk2"
+        
+        2)  DE="plasma kde-applications konsole konqueror dolphin discover latte-dock bluedevil kate kdialog keditbookmarks kwrite appmenu-gtk-module libdbusmenu-glib libdbusmenu-gtk3 libdbusmenu-gtk2 kfind khelpcenter kscreen powerdevil kdeconnect kdegraphics-thumbnailers ffmpegthumbs ffmpegthumbnailer raw-thumbnailer freetype2 libgsf"
             DM="sddm libxcb qt5-virtualkeyboard"
+            echo ""
+            echo " > Detalles de programas a instalar en DE: "
+            echo ""
+            echo $DE
+            echo ""
+            echo " > Detalles de programas a instalar en DM: "
+            echo ""
+            echo $DM
+            echo ""
+            echo "Presiona ENTER para Continuar..."
+            read line
             echo sddm > DMservice
             ;;
-            
-        3)  cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
-            --no-tags --ok-label '< Seleccionar >' --nocancel --checklist "Seleeciona paquetes del escritorio KDE\n[ ESPACIO ] - Para marcar o desmarcar *" 15 70 19)
-            options=(1 "kde-applications || Programas extras de KDE" off 
-                     2 "appmenu-gtk || Global Menu GTK2/GTK3" off
-                     3 "bluedevil || Bluetooth" off
-                     4 "print-manager || Impresoras" off
-                     5 "latte-dock || Dock Plasma" off
-                     6 "discover || Tienda KDE" off)
-            
-            choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-            clear
-            for choice in $choices
-            do
-                case $choice in
-                    1)
-                        KDE2="kde-applications"
-                        ;;
-                    2)
-                        KDE3="appmenu-gtk-module libdbusmenu-glib libdbusmenu-gtk3 libdbusmenu-gtk2"
-                        ;;
-                    3)
-                        KDE4="bluedevil"
-                        ;;
-                    4)
-                        KDE5="print-manager cups"
-                        ;;
-                    5)
-                        KDE6="latte-dock"
-                        ;;
-                    6)
-                        KDE7="discover"
-                        ;;
-                esac
-            done
 
-            KDE="plasma dolphin kate kdialog keditbookmarks kfind khelpcenter konqueror kwrite gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer discover packagekit-qt5 colord-kde kscreen powerdevil kdegraphics-thumbnailers ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer user-manager kdeconnect sshfs ttf-liberation ttf-dejavu qt5ct"
-
-            DE="$KDE $KDE2 $KDE3 $KDE4 $KDE5 $KDE6 $KDE7"            
+        3)  DE="plasma dolphin konsole discover"
             DM="sddm libxcb qt5-virtualkeyboard"
+            echo ""
+            echo " > Detalles de programas a instalar en DE: "
+            echo ""
+            echo $DE
+            echo ""
+            echo " > Detalles de programas a instalar en DM: ".
+            echo ""
+            echo $DM
+            echo ""
+            echo "Presiona ENTER para Continuar..."
+            read line
+
             echo sddm > DMservice
             ;;
+
     esac
 done
 ######FINAL KDE PLASMA
@@ -2889,7 +2887,9 @@ mensaje_install
 
 titulo_progreso="Instalando Tipografias"
 barra_progreso
-arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S ttf-font gnu-free-fonts ttf-opensans ttf-hack ttf-font-awesome awesome-terminal-fonts noto-fonts-emoji gnome-font-viewer nerd-fonts-hack --noeditmenu --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S gnome-font-viewer ttf-opensans ttf-hack ttf-font-awesome awesome-terminal-fonts noto-fonts noto-fonts-emoji nerd-fonts-hack ttf-liberation ttf-liberation gnu-free-fonts --noeditmenu --noconfirm --needed"
+# ttf-dejavu ttf-bitstream-vera ttf-droid ttf-croscore ttf-ibm-plex 
+
 mensaje_install
 #adobe-source-han-sans-jp-fonts
 #adobe-source-han-sans-cn-fonts
