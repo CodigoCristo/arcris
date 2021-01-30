@@ -85,10 +85,10 @@ choice=$(dialog --keep-tite --backtitle "$tituloInicio" --title "-| Arcris |-" \
 --ok-label '*Seleccionar*' --nocancel --column-separator "|" --no-tags \
 --menu "\nSeleccione una opción a continuación utilizando las teclas\n[FLECHA ARRIBA] / [FLECHA ABAJO] y [ESPACIO] o [ENTER]\
 \nLas teclas alternativas también se pueden usar: [+], [-] y [TAB]. \n " 22 70 11 \
-1 "1 HOSTNAME | Establecer el nombre del computador" \
+1 "1 USERS | Establecer Datos Personales" \
 2 "2 TIMEZONE | Establecer la zona horaria del sistema" \
 3 "3 LANGUAGE | Establecer el idioma del sistema" \
-4 "4 USERS | Establecer clave /root y usuario nuevo" \
+4 "4 SHELL | Establece la shell del sistema" \
 5 "5 DISK | Particionar la unidad de instalación" \
 6 "6 KERNEL | Establecer el kernel del sistema" \
 7 "7 DRIVER VIDEO | Establecer el driver de video del sistema" \
@@ -100,8 +100,9 @@ choice=$(dialog --keep-tite --backtitle "$tituloInicio" --title "-| Arcris |-" \
 case "$choice" in
 "1")
 ##INICIO DE HOSTNAME
-# MENSAJE 
-hostname=""
+
+
+
 dialog --backtitle "$titulo" \
 --title "| ALERTA |" \
 --msgbox "\n> No se permite caracteres especiales\
@@ -109,7 +110,80 @@ dialog --backtitle "$titulo" \
 \n> Ni otros caracteres especiales\n> ~!@#$%^&*_-+=|\(){}[]:;<;>;,.?/ \
 \n\n     >>  Ya que pueden causar errores  <<" 13 50
 
+
+bucledat=0
+hostname=""
+username=""
+userpasswd=""
+rootpasswd=""
+
+bucledatos () {
+
+while [ $bucledat == 0 ]; do
+choicedatos=$(dialog --keep-tite --backtitle "$titulo" --column-separator "|" --no-tags --title "| DATOS |" --ok-label 'Seleccionar' --nocancel --menu "\n              Información Personal\n " 13 53 11 \
+1 'User  || Nombre y clave Usuario' \
+2 'Hostname || Nombre de host' \
+3 'Passwd ROOT || Contraseña de Administrador' \
+4 'Save data || Guardar Datos' 3>&1 1>&2 2>&3)
+
+case "$choicedatos" in
+
+"1")
+
   while true; do
+
+    username=$(dialog --title "Crea una cuenta de usuario" \
+     --nocancel --inputbox "\nIntroduzca un nombre de usuario para el nuevo Usuario \
+\n\nEl nombre de usuario debe comenzar con una letra minúscula,\nque puede ir \
+seguida de cualquier combinación de números,\nletras más minúsculas o el símbolo de guión. [ - ] \
+\n\nNombre de usuario de su cuenta:" 14 65 3>&1 1>&2 2>&3)
+
+    if [ $? -eq 0 ]; then
+    #El nombre de usuario debe comenzar con una letra minúscula. 
+    #Puede contener minúsculas alfanuméricas y guiones.
+      if printf "%s" "$username" | grep -Eoq "^[a-z][a-z0-9-]*$" \
+        && [ "${#username}" -lt 33 ]; then
+        # El archivo de nombre de usuario reservado contiene nombres de usuario que deben evitarse
+        if grep -Fxq "$username" reserved_usernames ; then
+          dialog --title "ERROR: Nombre de usuario reservado" \
+            --msgbox "El nombre de usuario que ingresaste ($username) está reservado \
+para uso del sistema. Seleccione uno diferente." 6 70
+        else 
+          inputs_match=false
+          while ! $inputs_match; do
+            input=$(dialog --title "Establecer la contraseña para $username" --clear \
+              --stdout --nocancel --insecure --passwordbox "\n\nElija una contraseña para el nuevo usuario:" 08 60)
+            confirm_input=$(dialog --title "Establecer la contraseña para $username" \
+              --clear --stdout --insecure \
+              --passwordbox "Vuelva a ingresar la contraseña para verificar:" 8 55)
+
+            if [ -z "$input" ]; then
+              dialog --title "ERROR: contraseña vacía" \
+                --msgbox "No se le permite tener una contraseña vacía." 5 55
+            elif [ "$input" != "$confirm_input" ]; then
+              dialog --title "ERROR: Las contraseñas no coinciden" \
+                --msgbox "Las dos contraseñas que ha introducido no coinciden." 5 55
+            else
+              userpasswd="$input"
+              inputs_match=true
+            fi
+          done
+          break
+        fi
+      else
+        dialog --title "ERROR: Formato de nombre de usuario no válido" \
+          --msgbox "Ingresaste un nombre de usuario no válido.\n\nEl nombre de usuario debe comenzar con una letra minúscula, que puede ir seguida de cualquier combinación de números, más letras minúsculas o el símbolo de guión, y no debe tener más de 32 caracteres." 9 80
+      fi
+    fi
+  done
+
+user=$(echo "$username" | sed -n 1p)
+user=$(echo $user | tr '[:upper:]' '[:lower:]')
+
+;;
+
+"2") # HOSTNAME
+while true; do
     hostname=$(dialog --backtitle "$titulo" --nocancel \
       --inputbox "El hostname \
 es una sola palabra que identifica su sistema en la red.\n\nPor favor ingrese el nombre de host para este sistema:" \
@@ -128,10 +202,66 @@ contienen solo los números 0-9, letras mayúsculas y minúsculas (A-Z y a-z), y
 el signo menos.\n\nDebe tener como máximo 63 caracteres y no puede comenzar \
 o terminar con un signo menos." 12 75
     fi
-    
-  done
 
-##FINAL DE HOSTNAME
+  done
+#FIN HOSTANAME
+;;
+
+"3") 
+inputs_match=false
+  while ! $inputs_match; do
+    input=$(dialog --title "Establecer la contraseña de root" --clear --stdout --nocancel \
+      --insecure --passwordbox "Introduzca una contraseña para 'root',\nla cuenta de administrador del sistema. \
+\n\nContraseña de root:" 10 50)
+    confirm_input=$(dialog --title "Establecer la contraseña de root" --clear --stdout \
+      --insecure --passwordbox "Vuelva a ingresar la contraseña para verificar:" 8 55)
+        
+
+    if [ -z "$input" ]; then
+      dialog --title "ERROR: contraseña vacía" \
+        --msgbox "No se le permite tener una contraseña vacía." 5 55
+    elif [ "$input" != "$confirm_input" ]; then
+      dialog --title "ERROR: las contraseñas no coinciden" \
+        --msgbox "Las dos contraseñas que ha introducido no coinciden." 5 55
+    else
+      rootpasswd="$input"
+      inputs_match=true
+    fi
+  done
+;;
+
+
+
+"4")
+clear
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
+echo -e "\t\t\t| Datos Ingresados |"
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
+echo ""
+
+echo Hostname:          $hostname
+echo Passwd ROOT:       $rootpasswd
+echo ""
+echo Nombre de Usuario:   $user
+echo Clave de Usuario :   $userpasswd
+echo -e ""
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
+echo PRESIONA ENTER PARA CONFIRMAR...
+read line
+echo ""
+bucledat=1
+;;
+    esac
+done
+
+}
+
+bucledatos
+
+
 ;;
 
 
@@ -256,65 +386,45 @@ locale=$(dialog --backtitle "$titulo" --clear --title "| Selecciona tu país |" 
 
 
 
-"4")
-## INICIO DE USERS
-# MENSAJE 
+"4") #SH
+SH=""
+cmd=(dialog --no-collapse --cr-wrap --title "-| SHELL del Sistema |-" --backtitle "$titulo" \
+--no-tags --ok-label '< Siguiente >' --nocancel --menu "\nSeleccione\n " 15 70 20)
+options=(1 "zsh"   
+         2 "bash"
+         3 "dash"
+         4 "fish"
+         5 "mksh"
+         6 "tcsh")
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            SH="zsh zsh-completions zsh-syntax-highlighting zsh-autosuggestions"
+            ;;
 
-dialog --backtitle "$titulo" \
---title "| Clave para root |" \
---msgbox "\n> Ingresa la clave para el Administrador\
-\n> /root\
-\n> Sugerencia:\
-\n> No use caracteres especiales\n> ~!@#$%^&*_-+=|\(){}[]:;<;>;,.?/ \
-\n\n     >>  Ya que pueden causar errores  <<" 13 50
-
-#Clave para root
-while [ $rootpasswd != $rootpasswd2 ]
-do 
-    rootpasswd=$(dialog --backtitle "$titulo" --title "|  Clave de Root  |" --insecure --passwordbox "|  Ingrese contraseña de root  |" 8 40 2>&1 > /dev/tty)
-    rootpasswd2=$(dialog --backtitle "$titulo" --title "|  Clave de Root |" --insecure --passwordbox "|  Confirme contraseña de root  |" 8 40 2>&1 > /dev/tty)
-    if [ $rootpasswd != $rootpasswd2 ];then 
-     dialog --backtitle "$titulo" --title "| Clave incorrecta |" --msgbox '\nLas contraseñas no coinciden\n\n      Intente nuevamente...' 8 50
-  else 
-    clear
-  fi
+        2)
+            SH="bash bash-completion"
+            ;;
+        3)
+            SH="dash";;
+            
+        4)
+            SH="fish";;
+            
+        5)
+            SH="mksh";;
+            
+        6)
+            SH="tcsh";;
+                                                
+    esac
 done
-dialog --backtitle "$titulo" --title "-| Clave Correcta |-" --msgbox '\n\nContraseña Conrrecta!' 9 40
-#Clave para root
-
-# MENSAJE 
-dialog --backtitle "$titulo" \
---title "| Creación de Usuario |" \
---msgbox "\n> No se permite caracteres especiales\
-\n> Máximo de 8 caracteres\
-\n> Ni letras con tilde\n> Por ejemplo: è, ü, ñ, etc...\
-\n> Ni otros caracteres especiales\n> ~!@#$%^&*_-+=|\(){}[]:;<;>;,.?/ \
-\n\n     >>  Ya que pueden causar errores  <<" 13 50
-
-#USUARIO NUEVO
-username=$(dialog --backtitle "$titulo" --title "|  Creación de usuario  |" \
-           --form "\nIngresa tu Usuario Nuevo\n\nDebe iniciar en letra y en minúscula\nNada de caracteres especiales\n " 0 0 0 \
-           " Usuario Nuevo:" 1 1 "user" 1 17 25 30 2>&1 > /dev/tty)
-
-user=$(echo "$username" | sed -n 1p)
-user=$(echo $user | tr '[:upper:]' '[:lower:]')
-
-#CLAVE USUARIO NUEVO
-while [ $userpasswd != $userpasswd2 ]
-do 
-    userpasswd=$(dialog --backtitle "$titulo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Contraseña de $user" 8 40 2>&1 > /dev/tty)
-    userpasswd2=$(dialog --backtitle "$titulo" --title "|  Contraseña de $user  |" --insecure --passwordbox "Confirma tu clave de $user" 8 40 2>&1 > /dev/tty)
-    if [ $userpasswd != $userpasswd2 ];then 
-     dialog --backtitle "$titulo" --title "| Clave incorrecta |" --msgbox '\nLas contraseñas no coinciden\n\n      Intente nuevamente...' 8 50
-  else 
-    clear
-  fi
-done
-dialog --backtitle "$titulo" --title "-| Clave Correcta |-" --msgbox '\n\nContraseña Conrrecta!' 9 40
-
+#FIN_SH
 ;;
 
-## FIN DE USERS
 
 
 
@@ -1667,7 +1777,6 @@ done
         TERMI=""
         UTIL=""
         AUDIO=""
-        SH=""
         WEB=""
         REPRO=""
         OFFICE=""
@@ -1679,42 +1788,6 @@ done
         programasextrasNO=false
 
 
-        #SH
-cmd=(dialog --no-collapse --cr-wrap --title "-| SHELL del Sistema |-" --backtitle "$titulo" \
---no-tags --ok-label '< Siguiente >' --nocancel --menu "\nSeleccione\n " 15 70 20)
-options=(1 "zsh"   
-         2 "bash"
-         3 "dash"
-         4 "fish"
-         5 "mksh"
-         6 "tcsh")
-choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-clear
-for choice in $choices
-do
-    case $choice in
-        1)
-            SH="zsh zsh-completions zsh-syntax-highlighting zsh-autosuggestions"
-            ;;
-
-        2)
-            SH="bash bash-completion"
-            ;;
-        3)
-            SH="dash";;
-            
-        4)
-            SH="fish";;
-            
-        5)
-            SH="mksh";;
-            
-        6)
-            SH="tcsh";;
-                                                
-    esac
-done
-#FIN_SH
 
 
 dialog --title "-| Programas Extras |-" --yesno "\n¿ Deseas instalar Programas extras en su sistema ?\n\nEsto puede tomar un poco más de tiempo\nTodas las descargas son de repo oficiales y de AUR" 9 55
