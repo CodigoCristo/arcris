@@ -1465,8 +1465,6 @@ i3tema=false
 seleccionWM=true
 qtile_config=false
 bspwmtema=false
-bspwmtema1=false
-bspwmtema2=false
 awesome_config=false
 
 cmd=(dialog --keep-tite --backtitle "$titulo" \
@@ -1558,10 +1556,57 @@ do
             DM="ly-git"
             echo ly > DMservice
             ;;
-        4)  
-            WM="bspwm sxhkd rofi dmenu st thunar network-manager-applet polkit-gnome gnome-keyring lxappearance ly-git rxvt-unicode gnome-themes-extra"
+        4)  ## INICIO DE BSPWM
+            cmd=(dialog --keep-tite --backtitle "$titulo" \
+--no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "          Selecciona una opción para BSPWM \n" 10 60 19)
+
+options=(1 "Bspwm || Tema by Darch"
+         2 "Bspwm || Limpio")
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+for choice in $choices
+do
+    case $choice in
+        
+        1)  WM="bspwm sxhkd rofi st network-manager-applet polkit-gnome gnome-keyring rxvt-unicode gnome-themes-extra papirus-icon-theme alsa-plugins alsa-utils ttf-dejavu ttf-liberation ttf-bitstream-vera wmname rofi lxrandr polkit-gnome ueberzug slock fzf neofetch calcurse bc pcmanfm xarchiver lxappearance leafpad nitrogen pavucontrol sxiv blueberry ffmpeg maim xclip xdotool mpv unclutter dunst ranger ttf-joypixels adobe-source-han-sans-jp-fonts adobe-source-han-serif-jp-fonts awesome-terminal-fonts ttf-font-awesome gtk3-nocsd-git ttf-meslo-nerd-font-powerlevel10k picom-ibhagwan-git polybar-git fzf-extras"
             DM="ly-git"
             echo ly > DMservice
+            echo ""
+            echo " > Detalles de programas a instalar en WM: "
+            echo ""
+            echo $DE
+            echo ""
+            echo " > Detalles de programas a instalar en DM: "
+            echo ""
+            echo $DM
+            echo ""
+            echo "Presiona ENTER para Continuar..."
+            read line
+            echo sddm > DMservice
+            bspwmtema=true
+            ;;
+            
+        
+        2)  WM="bspwm sxhkd rofi dmenu st thunar network-manager-applet polkit-gnome gnome-keyring lxappearance ly-git rxvt-unicode gnome-themes-extra"
+            DM="ly-git"
+            echo ly > DMservice
+            echo ""
+            echo " > Detalles de programas a instalar en WM: "
+            echo ""
+            echo $WM
+            echo ""
+            echo " > Detalles de programas a instalar en DM: "
+            echo ""
+            echo $DM
+            echo ""
+            echo "Presiona ENTER para Continuar..."
+            read line
+            ;;
+
+    esac
+done
+## FINAL DE BSPWM
             ;;
             
         5)
@@ -3161,52 +3206,27 @@ arch-chroot /mnt /bin/bash -c "chmod 777 $nombre_usuario:users /home/$nombre_usu
 #TEMA BSPWM
 if [ "$bspwmtema" == "true" ]; then
 
-arch-chroot /mnt /bin/bash -c "install -Dm755 /usr/share/doc/bspwm/examples/bspwmrc /home/$nombre_usuario/.config/bspwm/bspwmrc"
-arch-chroot /mnt /bin/bash -c "install -Dm644 /usr/share/doc/bspwm/examples/sxhkdrc /home/$nombre_usuario/.config/sxhkd/sxhkdrc"
-arch-chroot /mnt /bin/bash -c "chmod 777 $nombre_usuario:users /home/$nombre_usuario/.config/"
-arch-chroot /mnt /bin/bash -c "chmod 777 $nombre_usuario:users /home/$nombre_usuario/.config/bspwm/bspwmrc"
-arch-chroot /mnt /bin/bash -c "chmod 777 $nombre_usuario:users /home/$nombre_usuario/.config/sxhkd/sxhkdrc"
+arch-chroot /mnt /bin/bash -c "git clone https://github.com/darch7/bspwmbydarch"
+
+arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/config/*     /home/$nombre_usuario/.config/"
+arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/.local       /home/$nombre_usuario/"
+arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/home/.*      /home/$nombre_usuario/" 
+arch-chroot /mnt /bin/bash -c "chmod +x /home/$nombre_usuario/.local/bin/scripts"
+
+arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/"
+arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/"
+arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.local/"
 
 
-fi
-
-
-if [ "$bspwmtema1" == "true" ]; then
-
-echo 2
-
-fi
-
-if [ "$bspwmtema2" == "true" ]; then
-
-#TITULO EN BARRAS
-titulo_progreso="Instalando Tema de BSPWM"
-barra_progreso
-##################
-
-arch-chroot /mnt /bin/bash -c "git clone https://github.com/darch7/bspwmbydarch.git"
-
-arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/config/* /home/$nombre_usuario/config/"
-
-arch-chroot /mnt /bin/bash -c "chmod u+x /home/$nombre_usuario/.config/bspwm/scripts"
-
-arch-chroot /mnt /bin/bash -c "mkdir -p /home/$nombre_usuario/.local/share/fonts"
-
-arch-chroot /mnt /bin/bash -c "chmod u+x /home/$nombre_usuario/.local/share/fonts"
-
-arch-chroot /mnt /bin/bash -c "curl -fLo 'Droid Sans Mono for Powerline Nerd Font Complete.otf' https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf"
-
-arch-chroot /mnt /bin/bash -c "cp 'Droid Sans Mono for Powerline Nerd Font Complete.otf' /home/$nombre_usuario/.local/share/fonts"
-
-arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/pegarenroot/fzf/fzf/* /usr/share/fzf"
-
-arch-chroot /mnt /bin/bash -c "cp -R 'bspwmbydarch/pegarenroot/tema e iconos/iconos/Material-Black-Blueberry-Numix_1.8.8.zip' /usr/share/icons"
-
-arch-chroot /mnt /bin/bash -c "cp -R 'bspwmbydarch/pegarenroot/tema e iconos/temas/Kripton.tar.xz' /usr/share/themes"
-arch-chroot /mnt /bin/bash -c "cp -R 'bspwmbydarch/pegarenroot/tema e iconos/temas/Material-Black-Blueberry_1.8.8.zip' /usr/share/themes"
-
+arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/root/fzf/*           /usr/share/fzf"
+arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/root/gtk/iconos/*    /usr/share/icons"
+arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/root/gtk/temas/*     /usr/share/themes"
+arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/root/wall/*          /usr/share/"
 
 fi
+
+
+
 
 
 
@@ -3249,6 +3269,62 @@ clear
 
 
 
+echo ''
+echo ''
+
+
+echo $SH | awk -F " " '{print $1}' >> shell
+SH=$(cat shell)
+arch-chroot /mnt /bin/bash -c "chsh -s /bin/$SH"
+arch-chroot /mnt /bin/bash -c "chsh -s /usr/bin/$SH $nombre_usuario"
+arch-chroot /mnt /bin/bash -c "chsh -s /bin/$SH $nombre_usuario"
+#arch-chroot /mnt /bin/bash -c "cp /root/bashrc /root/.bashrc"
+
+
+cp .dialogrc /mnt/root
+chmod +x /mnt/root/.dialogrc
+cp .dialogrc /mnt/home/$nombre_usuario/.dialogrc
+chmod +x /mnt/home/$nombre_usuario/.dialogrc
+
+mkdir /mnt/etc/pacman.d/hooks/
+cp mirrorupgrade.hook /mnt/etc/pacman.d/hooks/mirrorupgrade.hook 
+chmod +x /mnt/etc/pacman.d/hooks/mirrorupgrade.hook
+
+cp zshrc /mnt/home/$nombre_usuario/.zshrc
+arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.zshrc"
+cp zshrc /mnt/root/.zshrc
+cp .bashrc /mnt/home/$nombre_usuario/.bashrc
+arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.bashrc"
+cp .bashrc /mnt/root/.bashrc
+cp .bashrc-root /mnt/home/$nombre_usuario/.bashrc-root
+arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.bashrc-root"
+cp .bashrc-root /mnt/root/.bashrc-root
+
+rm shell
+rm DMservice
+rm GPUvirt
+clear
+
+
+arch-chroot /mnt /bin/bash -c "pacman -Syu --noconfirm"
+arch-chroot /mnt /bin/bash -c "ls -l /home/$nombre_usuario"
+echo ''
+echo ''
+
+
+####################################################################
+clear
+arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd NetworkManager"
+clear
+arch-chroot /mnt /bin/bash -c "systemctl start dhcpcd NetworkManager"
+clear
+echo "noipv6rs" >> /mnt/etc/dhcpcd.conf
+echo "noipv6" >> /mnt/etc/dhcpcd.conf
+
+sed -i '80d' /mnt/etc/sudoers
+sed -i "80i $nombre_usuario ALL=(ALL) ALL" /mnt/etc/sudoers
+clear
+####################################################################
 
 
 
@@ -3367,56 +3443,6 @@ dialog --backtitle "Canal de Youtube: Codigo Cristo" \
 \n> Eduard Tolosa    | @edu4rdt " 16 73
 
 clear
-echo ''
-echo ''
-
-
-echo $SH | awk -F " " '{print $1}' >> shell
-SH=$(cat shell)
-arch-chroot /mnt /bin/bash -c "chsh -s /bin/$SH"
-arch-chroot /mnt /bin/bash -c "chsh -s /usr/bin/$SH $nombre_usuario"
-arch-chroot /mnt /bin/bash -c "chsh -s /bin/$SH $nombre_usuario"
-#arch-chroot /mnt /bin/bash -c "cp /root/bashrc /root/.bashrc"
-
-
-cp .dialogrc /mnt/root
-chmod +x /mnt/root/.dialogrc
-cp .dialogrc /mnt/home/$nombre_usuario/.dialogrc
-chmod +x /mnt/home/$nombre_usuario/.dialogrc
-
-mkdir /mnt/etc/pacman.d/hooks/
-cp mirrorupgrade.hook /mnt/etc/pacman.d/hooks/mirrorupgrade.hook 
-chmod +x /mnt/etc/pacman.d/hooks/mirrorupgrade.hook
-
-cp zshrc /mnt/home/$nombre_usuario/.zshrc
-arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.zshrc"
-cp zshrc /mnt/root/.zshrc
-cp .bashrc /mnt/home/$nombre_usuario/.bashrc
-arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.bashrc"
-cp .bashrc /mnt/root/.bashrc
-cp .bashrc-root /mnt/home/$nombre_usuario/.bashrc-root
-arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.bashrc-root"
-cp .bashrc-root /mnt/root/.bashrc-root
-
-rm shell
-rm DMservice
-rm GPUvirt
-clear
-
-
-arch-chroot /mnt /bin/bash -c "pacman -Syu --noconfirm"
-arch-chroot /mnt /bin/bash -c "ls -l /home/$nombre_usuario"
-echo ''
-echo ''
-
-
-####################################################################
-clear
-arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd NetworkManager"
-clear
-arch-chroot /mnt /bin/bash -c "systemctl start dhcpcd NetworkManager"
-clear
-####################################################################
 
 
 
@@ -3430,11 +3456,17 @@ clear
 #echo ''
 #arch-chroot /mnt /bin/bash -c "alsi -l"
 
-echo "noipv6rs" >> /mnt/etc/dhcpcd.conf
-echo "noipv6" >> /mnt/etc/dhcpcd.conf
 
-sed -i '80d' /mnt/etc/sudoers
-sed -i "80i $nombre_usuario ALL=(ALL) ALL" /mnt/etc/sudoers
+
+cp pacman-chroot.conf /mnt/etc/pacman.conf
+swapdisco=$( fdisk -l | grep "/dev/\|swap" | grep swap | awk -F ' ' '{print $1}' )
+umount -R /mnt
+swapoff ${swapdisco}
+swapoff -a
+swapon -a
+clear
+
+
 # cp pacman-chroot.conf /etc/pacman.conf
 clear
 echo ''
@@ -3470,17 +3502,6 @@ do
 done
 #FIN PROGRESS BARR
 
-
-cp pacman-chroot.conf /mnt/etc/pacman.conf
-
-
-
-
-swapdisco=$( fdisk -l | grep "/dev/\|swap" | grep swap | awk -F ' ' '{print $1}' )
-umount -R /mnt
-swapoff ${swapdisco}
-swapoff -a
-swapon -a
 
 reboot
 
