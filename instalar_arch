@@ -1572,10 +1572,12 @@ do
         1)  WM="bspwm sxhkd rofi st network-manager-applet polkit-gnome gnome-keyring rxvt-unicode gnome-themes-extra papirus-icon-theme alsa-plugins alsa-utils ttf-dejavu ttf-liberation ttf-bitstream-vera wmname rofi lxrandr polkit-gnome ueberzug slock fzf neofetch calcurse bc pcmanfm xarchiver lxappearance leafpad nitrogen pavucontrol sxiv blueberry ffmpeg maim xclip xdotool mpv unclutter dunst ranger ttf-joypixels adobe-source-han-sans-jp-fonts adobe-source-han-serif-jp-fonts awesome-terminal-fonts ttf-font-awesome gtk3-nocsd-git ttf-meslo-nerd-font-powerlevel10k picom-ibhagwan-git polybar-git fzf-extras"
             DM="ly-git"
             echo ly > DMservice
+            bspwmtema=true
+            clear
             echo ""
             echo " > Detalles de programas a instalar en WM: "
             echo ""
-            echo $DE
+            echo $WM
             echo ""
             echo " > Detalles de programas a instalar en DM: "
             echo ""
@@ -1583,14 +1585,13 @@ do
             echo ""
             echo "Presiona ENTER para Continuar..."
             read line
-            echo sddm > DMservice
-            bspwmtema=true
             ;;
             
         
         2)  WM="bspwm sxhkd rofi dmenu st thunar network-manager-applet polkit-gnome gnome-keyring lxappearance ly-git rxvt-unicode gnome-themes-extra"
             DM="ly-git"
             echo ly > DMservice
+            clear
             echo ""
             echo " > Detalles de programas a instalar en WM: "
             echo ""
