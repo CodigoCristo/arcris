@@ -103,15 +103,33 @@ case "$choice" in
 # MENSAJE 
 hostname=""
 dialog --backtitle "$titulo" \
---title "| Hostname |" \
+--title "| ALERTA |" \
 --msgbox "\n> No se permite caracteres especiales\
-\n> Máximo de 8 caracteres\
 \n> Ni letras con tilde\n> Por ejemplo: è, ü, ñ, etc...\
 \n> Ni otros caracteres especiales\n> ~!@#$%^&*_-+=|\(){}[]:;<;>;,.?/ \
 \n\n     >>  Ya que pueden causar errores  <<" 13 50
 
-#nombre de pc (hostname)
-hostname=$(dialog --backtitle "$titulo" --title "| Hostname |" --inputbox "|  Nombre del computador  |" 8 40 2>&1 > /dev/tty)
+  while true; do
+    hostname=$(dialog --backtitle "$titulo" --nocancel \
+      --inputbox "El hostname \
+es una sola palabra que identifica su sistema en la red.\n\nPor favor ingrese el nombre de host para este sistema:" \
+12 80 "ArcriS" 3>&1 1>&2 2>&3)
+
+
+    # Hostname must be alpha-numeric and may contain a dash only in between
+    if printf "%s" "$hostname" | grep -Eoq "^[a-zA-Z0-9-]{1,63}$" \
+      && [ "${hostname:0:1}" != "-" ] \
+      && [ "${hostname: -1}" != "-" ]; then
+      break
+    else
+      dialog --backtitle "$titulo"  --title "| ERROR: Formato de nombre no válido |" \
+        --msgbox "\nIngresó un nombre de host no válido. \n\nUn nombre de host válido puede \
+contienen solo los números 0-9, letras mayúsculas y minúsculas (A-Z y a-z), y \
+el signo menos.\n\nDebe tener como máximo 63 caracteres y no puede comenzar \
+o terminar con un signo menos." 12 75
+    fi
+    
+  done
 
 ##FINAL DE HOSTNAME
 ;;
@@ -934,13 +952,15 @@ if [ "$VM" == "true" ]; then
                 
                 
                 qemu) GPU="xf86-video-fbdev mesa mesa-libgl qemu-guest-agent"
-                      GPUvirt="qemu-ga"
+                      GPUvirt="qemu-guest-agent"
+                      echo $GPUvirt > GPUvirt
                       VMqemu=true
                       dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado Qemu\nInstalar: $GPU" 8 80                   
                 ;;
 
                 kvm)  GPU="xf86-video-fbdev mesa mesa-libgl qemu-guest-agent"
-                      GPUvirt="qemu-ga"
+                      GPUvirt="qemu-guest-agent"
+                      echo $GPUvirt > GPUvirt
                       VMqemu=true
                       dialog --title "-| Driver de Vídeo |-" --stdout --ok-label "<Instalar>"  --msgbox "\nVídeo Detectado Qemu\nInstalar: $GPU" 8 80                   
                 ;;
@@ -1558,7 +1578,7 @@ do
             ;;
         4)  ## INICIO DE BSPWM
             cmd=(dialog --keep-tite --backtitle "$titulo" \
---no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "          Selecciona una opción para BSPWM \n" 10 60 19)
+--no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "          Selecciona una opción para BSPWM \n" 09 60 19)
 
 options=(1 "Bspwm || Tema by Darch"
          2 "Bspwm || Limpio")
@@ -2505,6 +2525,7 @@ barra_progreso
 
 pacstrap /mnt base base-devel reflector python3 rsync nano xdg-user-dirs
 clear
+echo -e "\t\t\t| Actualizando mejores listas de Mirrors del sistema instalado |"
 arch-chroot /mnt /bin/bash -c "reflector --verbose --latest 10 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist"
 #cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 clear
@@ -3207,22 +3228,28 @@ arch-chroot /mnt /bin/bash -c "chmod 777 $nombre_usuario:users /home/$nombre_usu
 #TEMA BSPWM
 if [ "$bspwmtema" == "true" ]; then
 
-arch-chroot /mnt /bin/bash -c "git clone https://github.com/darch7/bspwmbydarch"
+arch-chroot /mnt /bin/bash -c "git clone https://github.com/darch7/bspwmbydarch-Arcris.git"
 
-arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/config/*     /home/$nombre_usuario/.config/"
-arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/.local       /home/$nombre_usuario/"
-arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/home/.*      /home/$nombre_usuario/" 
+arch-chroot /mnt /bin/bash -c "cp -R bspwmArcris/config/*     /home/$nombre_usuario/.config/"
+arch-chroot /mnt /bin/bash -c "cp -R bspwmArcris/.local       /home/$nombre_usuario/"
+arch-chroot /mnt /bin/bash -c "cp -R bspwmArcris/home/.*      /home/$nombre_usuario/" 
 arch-chroot /mnt /bin/bash -c "chmod +x /home/$nombre_usuario/.local/bin/scripts"
+
+arch-chroot /mnt /bin/bash -c "rm -R /home/$nombre_usuario/compilar" 
+arch-chroot /mnt /bin/bash -c "rm -R /home/$nombre_usuario/config" 
 
 arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/"
 arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/"
 arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.local/"
 
 
-arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/root/fzf/*           /usr/share/fzf"
-arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/root/gtk/iconos/*    /usr/share/icons"
-arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/root/gtk/temas/*     /usr/share/themes"
-arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch/root/wall/*          /usr/share/"
+arch-chroot /mnt /bin/bash -c "cp -R bspwmArcris/root/fzf/*           /usr/share/fzf"
+arch-chroot /mnt /bin/bash -c "cp -R bspwmArcris/root/gtk/iconos/*    /usr/share/icons"
+arch-chroot /mnt /bin/bash -c "cp -R bspwmArcris/root/gtk/temas/*     /usr/share/themes"
+arch-chroot /mnt /bin/bash -c "cp -R bspwmArcris/root/wall/*          /usr/share/"
+
+arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -Rns i3-wm --noeditmenu --noconfirm --needed"
+
 
 fi
 
@@ -3460,12 +3487,7 @@ clear
 
 
 cp pacman-chroot.conf /mnt/etc/pacman.conf
-swapdisco=$( fdisk -l | grep "/dev/\|swap" | grep swap | awk -F ' ' '{print $1}' )
-umount -R /mnt
-swapoff ${swapdisco}
-swapoff -a
-swapon -a
-clear
+
 
 
 # cp pacman-chroot.conf /etc/pacman.conf
@@ -3498,11 +3520,17 @@ _end=100
 
 for number in $(seq ${_start} ${_end})
 do
-    sleep 0.2
+    sleep 0.1
     ProgressBar ${number} ${_end}
 done
 #FIN PROGRESS BARR
 
+swapdisco=$( fdisk -l | grep "/dev/\|swap" | grep swap | awk -F ' ' '{print $1}' )
+umount -R /mnt
+swapoff ${swapdisco}
+swapoff -a
+swapon -a
+clear
 
 reboot
 
