@@ -93,7 +93,7 @@ choice=$(dialog --keep-tite --backtitle "$tituloInicio" --title "-| Arcris |-" \
 6 "6 KERNEL | Establecer el kernel del sistema" \
 7 "7 DRIVER VIDEO | Establecer el driver de video del sistema" \
 8 "8 (DE) or (WM) | Establecer un Escritorio o Gestor de Ventanas" \
-9 "9 EXTRA PROGRAMS | Selecciona programas extras del sistema" \
+9 "9 EXTRA PROGRAMS | Selecciona programas extras [Opcional]" \
 10 "> INSTALL | Instalar Arch Linux" \
 11 "> EXIT | Salir del Script ArcriS" 3>&1 1>&2 2>&3)
 
@@ -1275,6 +1275,7 @@ WM=""
 seleccionDE=false
 seleccionWM=false
 seleccionXORG=false
+finalInstall=false
 
 cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "$titulo" --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu (DE) o (WM) a instalar" 10 50 10)
 
@@ -1436,44 +1437,7 @@ done
 
 
         3) #DEEPIN
-            #cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" --no-tags --ok-label '< Seleccionar >' \
-            #    --nocancel --checklist "Seleeciona paquetes del escritorio Deepin\n[ ESPACIO ] - Para marcar o desmarcar *" 14 100 19)
-           # options=(2 "> deepin-topbar" off
-          #           3 "> deepin-dock-plugin-arch-update" off
-         #            4 "> deepin-dock-plugin-cmdu-git" off
-        #             5 "> deepin-dock-plugin-netspeedandsysteminfo" off
-       #              6 "> deepin-dock-plugin-pineappledatetime-git" off
-      #               7 "> deepin-dock-plugin-weather-git" off)
-     #       choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-    #        clear
-   #         for choice in $choices
-  #          do
- #               case $choice in
-#
-                  #  2)
-                 #       deepin2="deepin-topbar"
-                #        ;;
-               #     3)
-              #          deepin3="deepin-dock-plugin-arch-update"
-             #           ;;
-                   # 4)
-                  #      deepin4="deepin-dock-plugin-cmdu-git"
-                 #       ;;
-                #    5)
-               #         deepin5="deepin-dock-plugin-netspeedandsysteminfo"
-              #          ;;
-                   # 6)
-                  #      deepin6="deepin-dock-plugin-pineappledatetime-git"
-                 #       ;;
-                #    7)
-               #         deepin7="deepin-dock-plugin-weather-git"
-              #          ;;
-             #   esac
-            #done
-
-            deepin="deepin deepin-extra gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer"
-            DE="$deepin $deepin1 $deepin2 $deepin3 $deepin4 $deepin5 $deepin6 $deepin7"
-
+            DE="deepin deepin-extra gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer ffmpegthumbs ffmpegthumbnailer freetype2 poppler-glib libgsf raw-thumbnailer"
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
             echo lightdm > DMservice            
             ;;
@@ -1699,7 +1663,7 @@ for choice in $choices
 do
     case $choice in
         
-        1)  WM="bspwm sxhkd feh rofi st network-manager-applet polkit-gnome gnome-keyring rxvt-unicode gnome-themes-extra papirus-icon-theme alsa-plugins alsa-utils ttf-dejavu ttf-liberation ttf-bitstream-vera wmname rofi lxrandr polkit-gnome ueberzug slock fzf neofetch calcurse bc pcmanfm xarchiver lxappearance leafpad nitrogen pavucontrol sxiv blueberry ffmpeg maim xclip xdotool mpv unclutter dunst ranger ttf-joypixels adobe-source-han-sans-jp-fonts adobe-source-han-serif-jp-fonts awesome-terminal-fonts ttf-font-awesome gtk3-nocsd-git ttf-meslo-nerd-font-powerlevel10k picom-ibhagwan-git polybar fzf-extras"
+        1)  WM="bspwm sxhkd feh rofi st network-manager-applet polkit-gnome gnome-keyring rxvt-unicode gnome-themes-extra papirus-icon-theme alsa-plugins alsa-utils ttf-dejavu ttf-liberation ttf-bitstream-vera wmname rofi lxrandr polkit-gnome ueberzug slock fzf neofetch calcurse bc pcmanfm xarchiver lxappearance leafpad nitrogen pavucontrol sxiv blueberry ffmpeg maim xclip xdotool mpv unclutter dunst ranger ttf-joypixels adobe-source-han-sans-jp-fonts adobe-source-han-serif-jp-fonts awesome-terminal-fonts ttf-font-awesome gtk3-nocsd-git ttf-meslo-nerd-font-powerlevel10k picom-ibhagwan-git polybar-git fzf-extras"
             DM="ly-git"
             echo ly > DMservice
             bspwmtema=true
@@ -1766,6 +1730,9 @@ done
           ;;
     esac
 done
+
+finalInstall=true
+
 ;;
 ## FIN DE (DE) or (WM)
 
@@ -2342,7 +2309,6 @@ programasextrasSI=true
    255) echo "Presiono la tecla [ESC]";;
 esac
 
-finalInstall=true
 clear
 ;;
 ## FIN DE EXTRA PROGRAMS
@@ -3306,6 +3272,8 @@ clear
 titulo_progreso="Configurando BSPWM"
 barra_progreso
 arch-chroot /mnt /bin/bash -c "git clone https://github.com/darch7/bspwmbydarch-Arcris.git"
+arch-chroot /mnt /bin/bash -c "pacman -Rns i3-wm --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -Sy pacman-contrib --noconfirm"
 
 arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch-Arcris/config/*     /home/$nombre_usuario/.config/"
 arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch-Arcris/.local       /home/$nombre_usuario/"
@@ -3325,11 +3293,8 @@ arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch-Arcris/root/gtk/iconos/*    /u
 arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch-Arcris/root/gtk/temas/*     /usr/share/themes"
 arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch-Arcris/root/wall/*          /usr/share/"
 
-arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario pacman -Rns i3-wm --noconfirm"
-arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario pacman -Sy pacman-contrib --noconfirm"
-
 arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario feh --bg-scale /usr/share/wall/wallpaperbetter.com_3840x2160.png"
-
+sleep 5
 
 fi
 
