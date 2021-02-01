@@ -93,7 +93,7 @@ choice=$(dialog --keep-tite --backtitle "$tituloInicio" --title "-| Arcris |-" \
 6 "6 KERNEL | Establecer el kernel del sistema" \
 7 "7 DRIVER VIDEO | Establecer el driver de video del sistema" \
 8 "8 (DE) or (WM) | Establecer un Escritorio o Gestor de Ventanas" \
-9 "9 EXTRA PROGRAMS | Selecciona programas extras [Opcional]" \
+9 "9 EXTRA PROGRAMS | Selecciona programas extras - [ OPCIONAL ]" \
 10 "> INSTALL | Instalar Arch Linux" \
 11 "> EXIT | Salir del Script ArcriS" 3>&1 1>&2 2>&3)
 
