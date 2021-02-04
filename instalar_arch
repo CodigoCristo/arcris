@@ -1663,7 +1663,7 @@ for choice in $choices
 do
     case $choice in
         
-        1)  WM="bspwm sxhkd feh rofi st network-manager-applet polkit-gnome gnome-keyring rxvt-unicode gnome-themes-extra papirus-icon-theme alsa-plugins alsa-utils ttf-dejavu ttf-liberation ttf-bitstream-vera wmname rofi lxrandr polkit-gnome ueberzug slock fzf neofetch calcurse bc pcmanfm xarchiver lxappearance leafpad nitrogen pavucontrol sxiv blueberry ffmpeg maim xclip xdotool mpv unclutter dunst ranger ttf-joypixels adobe-source-han-sans-jp-fonts adobe-source-han-serif-jp-fonts awesome-terminal-fonts ttf-font-awesome gtk3-nocsd-git ttf-meslo-nerd-font-powerlevel10k picom-ibhagwan-git polybar-git fzf-extras"
+        1)  WM="bspwm sxhkd feh htop rofi st network-manager-applet polkit-gnome gnome-keyring rxvt-unicode gnome-themes-extra papirus-icon-theme alsa-plugins alsa-utils ttf-dejavu ttf-liberation ttf-bitstream-vera wmname rofi lxrandr polkit-gnome ueberzug slock fzf neofetch calcurse bc pcmanfm xarchiver lxappearance leafpad nitrogen pavucontrol sxiv blueberry ffmpeg maim xclip xdotool mpv unclutter dunst ranger ttf-joypixels adobe-source-han-sans-jp-fonts adobe-source-han-serif-jp-fonts awesome-terminal-fonts ttf-font-awesome gtk3-nocsd-git ttf-meslo-nerd-font-powerlevel10k picom-ibhagwan-git polybar-git fzf-extras"
             DM="ly-git"
             echo ly > DMservice
             bspwmtema=true
@@ -3280,9 +3280,6 @@ arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch-Arcris/.local       /home/$nom
 arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch-Arcris/home/.*      /home/$nombre_usuario/" 
 arch-chroot /mnt /bin/bash -c "chmod +x /home/$nombre_usuario/.local/bin/scripts"
 
-arch-chroot /mnt /bin/bash -c "rm -R /home/$nombre_usuario/compilar" 
-arch-chroot /mnt /bin/bash -c "rm -R /home/$nombre_usuario/config" 
-
 arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/"
 arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.config/"
 arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.local/"
@@ -3293,7 +3290,11 @@ arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch-Arcris/root/gtk/iconos/*    /u
 arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch-Arcris/root/gtk/temas/*     /usr/share/themes"
 arch-chroot /mnt /bin/bash -c "cp -R bspwmbydarch-Arcris/root/wall/*          /usr/share/"
 
-arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario feh --bg-scale /usr/share/wall/wallpaperbetter.com_3840x2160.png"
+arch-chroot /mnt /bin/bash -c "rm -R /home/$nombre_usuario/compilar" 
+arch-chroot /mnt /bin/bash -c "rm -R /home/$nombre_usuario/config" 
+arch-chroot /mnt /bin/bash -c "rm -R /home/$nombre_usuario/root" 
+arch-chroot /mnt /bin/bash -c "rm /home/$nombre_usuario/README.md" 
+
 sleep 5
 
 fi
