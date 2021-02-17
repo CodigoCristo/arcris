@@ -8,7 +8,7 @@
 
 #Colores
 clear
-pacman -Sy git dialog wget curl --noconfirm --needed
+pacman -Sy git glibc dialog wget curl --noconfirm --needed
 clear
 rm arcris
 git clone https://github.com/CodigoCristo/arcris
