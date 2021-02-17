@@ -8,11 +8,18 @@
 
 #Colores
 clear
-pacman -Sy git glibc dialog wget curl --noconfirm --needed
-clear
-rm arcris
-git clone https://github.com/CodigoCristo/arcris
-cd arcris
+#pacman -Sy git glibc dialog wget curl --noconfirm --needed
+#clear
+#rm arcris
+#git clone https://github.com/CodigoCristo/arcris
+#cd arcris
+
+
+pacman -Sy dialog --noconfirm --needed
+curl -LJO https://github.com/CodigoCristo/arcris/archive/master.tar.gz
+tar  -xvf  arcris-master.tar.gz
+cd arcris-master
+
 cp .dialogrc /root
 chmod +x *
 sleep 2
