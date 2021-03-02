@@ -1276,6 +1276,7 @@ seleccionDE=false
 seleccionWM=false
 seleccionXORG=false
 finalInstall=false
+gnomebeta=false
 
 cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "$titulo" --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu (DE) o (WM) a instalar" 10 50 10)
 
@@ -1448,7 +1449,8 @@ done
             --no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona una opción para GNOME \n\n" 10 60 19)
 
             options=(1 "Gnome || Completo de Apps"
-                     2 "Gnome || Minimalista")
+                     2 "Gnome || Minimalista"
+                     3 "Gnome || Gnome40 - BETA")
 
             choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -1465,7 +1467,12 @@ done
                         DM="gdm"
                         echo gdm > DMservice
                         ;;
-                        
+                    
+                    3)  DE="gnome-shell gdm gnome-control-center gnome-backgrounds gnome-tweaks gnome-terminal"
+                        DM="gdm"
+                        echo gdm > DMservice
+                        gnomebeta=true
+                        ;;
                 esac
             done
             ;;
@@ -3299,6 +3306,36 @@ sleep 5
 
 fi
 
+
+
+
+
+if [ "$gnomebeta" == "true" ]; then
+
+titulo_progreso="Instalando Gnome 40"
+barra_progreso
+
+arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S chaotic-mirrorlist chaotic-keyring --noeditmenu --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S chaotic-keyring --noeditmenu --noconfirm --needed"
+cp pacmanchao.conf /mnt/etc/pacman.conf
+arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
+
+# [chaotic-aur]
+# Include = /etc/pacman.d/chaotic-mirrorlist
+
+arch-chroot /mnt /bin/bash -c "(echo S ; echo S ; echo S) | pacman -S gnome-shell-40alfa mutter-40alfa"
+
+arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -R chaotic-mirrorlist chaotic-keyring --noeditmenu --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -R chaotic-keyring --noeditmenu --noconfirm --needed"
+
+cp pacman-chroot.conf /mnt/etc/pacman.conf
+
+arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
+
+mensaje_install
+    fi
 
 
 
