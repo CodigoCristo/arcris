@@ -3322,9 +3322,16 @@ arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
 # Include = /etc/pacman.d/chaotic-mirrorlist
 
 
+arch-chroot /mnt /bin/bash -c "pacman -S gnome-control-center --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S gnome-tweaks --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S gnome-terminal --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S gdm --noconfirm"
 
-arch-chroot /mnt /bin/bash -c "pacman -S gnome-shell-40alfa --noconfirm"
-arch-chroot /mnt /bin/bash -c "pacman -S mutter-40alfa --noconfirm"
+arch-chroot /mnt /bin/bash -c "systemctl enable gdm"
+
+
+arch-chroot /mnt /bin/bash -c "pacman -S gnome-shell-40alfa mutter-40alfa libgweather-git --noconfirm"
+
 
 arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -R chaotic-mirrorlist chaotic-keyring --noconfirm"
 arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -R chaotic-keyring --noconfirm"
@@ -3333,14 +3340,6 @@ cp pacman-chroot.conf /mnt/etc/pacman.conf
 
 arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
 arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
-
-
-arch-chroot /mnt /bin/bash -c "pacman -S gnome-control-center --noconfirm"
-arch-chroot /mnt /bin/bash -c "pacman -S gnome-tweaks --noconfirm"
-arch-chroot /mnt /bin/bash -c "pacman -S gnome-terminal --noconfirm"
-arch-chroot /mnt /bin/bash -c "pacman -S gdm --noconfirm"
-
-arch-chroot /mnt /bin/bash -c "systemctl enable gdm"
 
 #arch-chroot /mnt /bin/bash -c "pacman -S chrome-gnome-shell --noconfirm"
 
