@@ -1463,12 +1463,12 @@ done
                         echo gdm > DMservice
                         ;;
                         
-                    2)  DE="gnome-shell gdm gnome-control-center gnome-backgrounds gnome-tweaks gnome-terminal"
+                    2)  DE="gnome-shell gdm gnome-control-center gnome-tweaks gnome-terminal"
                         DM="gdm"
                         echo gdm > DMservice
                         ;;
                     
-                    3)  DE="gnome-shell gdm gnome-control-center gnome-backgrounds gnome-tweaks gnome-terminal"
+                    3)  DE="gnome-terminal"
                         DM="gdm"
                         echo gdm > DMservice
                         gnomebeta=true
@@ -1479,7 +1479,7 @@ done
         
         5)  #INICIO GNOME flashback
             #DE="gnome-flashback gnome-tweaks gnome-applets sensors-applet gnome-shell"
-            DE="gnome-flashback gnome-shell gnome-terminal gnome-control-center gnome-backgrounds gnome-tweaks"
+            DE="gnome-flashback gnome-shell gnome-terminal gnome-control-center gnome-tweaks"
             DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice"
             echo lightdm > DMservice
             ;;
@@ -2406,7 +2406,7 @@ sleep 2
 clear
 echo -e "\t\t\t| Actualizando mejores listas de Mirrors |"
 echo ""
-reflector --verbose --latest 7 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+reflector --verbose --latest 5 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 sleep 5
 clear
 cat /etc/pacman.d/mirrorlist
@@ -2572,7 +2572,7 @@ barra_progreso
 pacstrap /mnt base base-devel reflector python3 rsync nano xdg-user-dirs
 clear
 echo -e "\t\t\t| Actualizando mejores listas de Mirrors del sistema instalado |"
-arch-chroot /mnt /bin/bash -c "reflector --verbose --latest 10 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist"
+arch-chroot /mnt /bin/bash -c "reflector --verbose --latest 6 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist"
 #cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 clear
 cat /mnt/etc/pacman.d/mirrorlist
@@ -3324,15 +3324,29 @@ arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
 # [chaotic-aur]
 # Include = /etc/pacman.d/chaotic-mirrorlist
 
-arch-chroot /mnt /bin/bash -c "(echo S ; echo S ; echo S) | pacman -S gnome-shell-40alfa mutter-40alfa"
 
-arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -R chaotic-mirrorlist chaotic-keyring --noeditmenu --noconfirm --needed"
-arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -R chaotic-keyring --noeditmenu --noconfirm --needed"
+
+arch-chroot /mnt /bin/bash -c "pacman -S gnome-shell-40alfa --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S mutter-40alfa --noconfirm"
+
+arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -R chaotic-mirrorlist chaotic-keyring --noconfirm"
+arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -R chaotic-keyring --noconfirm"
 
 cp pacman-chroot.conf /mnt/etc/pacman.conf
 
 arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
 arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
+
+
+arch-chroot /mnt /bin/bash -c "pacman -S gnome-control-center --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S gnome-tweaks --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S gnome-terminal --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S gdm --noconfirm"
+
+arch-chroot /mnt /bin/bash -c "systemctl enable gdm"
+
+#arch-chroot /mnt /bin/bash -c "pacman -S chrome-gnome-shell --noconfirm"
+
 
 mensaje_install
     fi
