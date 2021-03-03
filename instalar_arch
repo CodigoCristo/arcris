@@ -1468,10 +1468,7 @@ done
                         echo gdm > DMservice
                         ;;
                     
-                    3)  DE="gnome-terminal"
-                        DM="gdm"
-                        echo gdm > DMservice
-                        gnomebeta=true
+                    3)  gnomebeta=true
                         ;;
                 esac
             done
