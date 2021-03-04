@@ -1282,7 +1282,8 @@ cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "$titulo" --column-s
 
 options=(1 "Entorno de escritorio | (DE)"
          2 "Gestor de ventanas | (WM)"
-         3 "Solo Servidor X | Xorg")
+         3 "Solo Servidor X | Xorg"
+         4 "Emulador de Terminal")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
