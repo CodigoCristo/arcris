@@ -3329,9 +3329,9 @@ arch-chroot /mnt /bin/bash -c "pacman -S gdm --noconfirm"
 
 arch-chroot /mnt /bin/bash -c "systemctl enable gdm"
 
-arch-chroot /mnt /bin/bash -c "(echo S ; echo S ; echo S ; echo S ; echo S ; echo S ; echo S) | pacman -S mutter-40alfa"
-arch-chroot /mnt /bin/bash -c "(echo S ; echo S ; echo S ; echo S ; echo S ; echo S ; echo S) | pacman -S gnome-shell-40alfa"
-arch-chroot /mnt /bin/bash -c "(echo S ; echo S ; echo S ; echo S ; echo S ; echo S ; echo S) | pacman -S libgweather-git"
+arch-chroot /mnt /bin/bash -c "pacman -S mutter-40alfa"
+arch-chroot /mnt /bin/bash -c "pacman -S gnome-shell-40alfa"
+arch-chroot /mnt /bin/bash -c "pacman -S libgweather-git"
 
 arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -R chaotic-mirrorlist chaotic-keyring --noconfirm"
 arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -R chaotic-keyring --noconfirm"
