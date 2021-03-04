@@ -1278,7 +1278,7 @@ seleccionXORG=false
 finalInstall=false
 gnomebeta=false
 
-cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "$titulo" --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu (DE) o (WM) a instalar" 10 50 10)
+cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "$titulo" --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu (DE) o (WM) a instalar" 12 50 12)
 
 options=(1 "Entorno de escritorio | (DE)"
          2 "Gestor de ventanas | (WM)"
