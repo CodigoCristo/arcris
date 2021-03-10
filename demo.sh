@@ -54,7 +54,7 @@ mkfs.fat -F32 "${STORAGE_DEVICE}${PARTITION_SUFFIX}1"
 mount /dev/mapper/vg-root /mnt
 mkdir /mnt/home
 mount /dev/mapper/vg-home /mnt/home
-swapon /dev/mapper/vg-swap
+swapon -s /dev/mapper/vg-swap
 mkdir /mnt/efi
 mount "${STORAGE_DEVICE}${PARTITION_SUFFIX}1" /mnt/efi
 
@@ -69,8 +69,8 @@ reflector --verbose --latest 5 --protocol http --protocol https --sort rate --sa
 
 pacstrap /mnt base base-devel lvm2 wget efibootmgr grub nano reflector python neofetch
 
-genfstab -U /mnt > /mnt/etc/fstab
-
+genfstab -pU /mnt > /mnt/etc/fstab
+tmpfs /tmp tmpfs defaults,noatime,mode=1777 0 0 >> /mnt/etc/fstab
 
 arch-chroot /mnt /bin/bash -c "pacman -S dhcpcd networkmanager iwd net-tools ifplugd --noconfirm"
 #ACTIVAR SERVICIOS
@@ -81,11 +81,18 @@ echo "noipv6" >> /mnt/etc/dhcpcd.conf
 
 arch-chroot /mnt /bin/bash -c "pacman -S linux linux-headers linux-firmware mkinitcpio --noconfirm"
 
+
+mkdir /mnt/hostrun
+mount --bind /run /mnt/hostrun
+arch-chroot /mnt /bin/bash -c 'mkdir /run/lvm'
+arch-chroot /mnt /bin/bash -c 'mount --bind /hostrun/lvm /run/lvm'
+
+
 sed -i '7d' /mnt/etc/mkinitcpio.conf
 sed -i '7i MODULES=(ext4)' /mnt/etc/mkinitcpio.conf
 
 sed -i '52d' /mnt/etc/mkinitcpio.conf
-sed -i "52i HOOKS=(base udev autodetect keymap modconf block lvm2 encrypt filesystems keyboard fsck)" /mnt/etc/mkinitcpio.conf
+sed -i "52i HOOKS=(base udev autodetect keymap modconf block encrypt lvm2 filesystems keyboard fsck)" /mnt/etc/mkinitcpio.conf
 arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 
 sed -i '6d' /mnt/etc/default/grub
@@ -94,10 +101,10 @@ sed -i '6i GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 resume=/dev/mapper/vg-swap"' /
 sed -i '10d' /mnt/etc/default/grub
 sed -i '10i GRUB_PRELOAD_MODULES="part_gpt part_msdos lvm"' /mnt/etc/default/grub
 
-sed -i "s#GRUB_CMDLINE_LINUX=\"\\(.*\\)\"#GRUB_CMDLINE_LINUX=\"cryptdevice=${STORAGE_DEVICE}${PARTITION_SUFFIX}2:lvm\"#" /mnt/etc/default/grub
+sed -i "s#GRUB_CMDLINE_LINUX=\"\\(.*\\)\"#GRUB_CMDLINE_LINUX=\"cryptdevice=/dev/vda2:lvm\"#" /mnt/etc/default/grub
 
 
-
+arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
 echo '' 
 echo 'Instalando EFI System >> bootx64.efi' 
 arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --efi-directory=/efi --removable' 
@@ -105,7 +112,7 @@ echo ''
 echo 'Instalando UEFI System >> grubx64.efi' 
 arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=Arch'
 
-arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
+
 
 
 #CONFIGURANDO PACMAN
