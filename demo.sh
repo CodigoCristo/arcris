@@ -23,36 +23,45 @@ modprobe dm-crypt
 modprobe dm-mod
 
 
+
 # shellcheck disable=SC2154
 echo -n "$PASSPHRASE" | cryptsetup --verbose -c aes-xts-plain64 --pbkdf argon2id --type luks2 -y luksFormat "${STORAGE_DEVICE}${PARTITION_SUFFIX}2"
 echo -n "$PASSPHRASE" | cryptsetup luksOpen "${STORAGE_DEVICE}${PARTITION_SUFFIX}2" lvm
+
 pvcreate /dev/mapper/lvm
 vgcreate vg /dev/mapper/lvm
-lvcreate -L 1G vg -C y -n swap
-lvcreate -L 512M vg -n efi
-lvcreate -L 30G vg -n root
-lvcreate -l +100%FREE vg -n home
 
 
-mkswap -L swap /dev/mapper/vg-swap
-mkfs.ext4 /dev/mapper/vg-efi
+lvcreate --size 4G vg --name swap
+lvcreate --size 20G vg --name root
+lvcreate -l +100%FREE vg --name home
+
+#lvcreate -L 512M vg -n efi
+#lvcreate -L 30G vg -n root
+#lvcreate -l +100%FREE vg -n home
+
+
+
+#mkfs.ext4 /dev/mapper/vg-efi
+
 mkfs.ext4 /dev/mapper/vg-root
 mkfs.ext4 /dev/mapper/vg-home
+mkswap /dev/mapper/vg-swap
 mkfs.fat -F32 "${STORAGE_DEVICE}${PARTITION_SUFFIX}1"
 
 
-swapon /dev/mapper/vg-swap
+
 mount /dev/mapper/vg-root /mnt
 mkdir /mnt/home
 mount /dev/mapper/vg-home /mnt/home
+swapon /dev/mapper/vg-swap
 mkdir /mnt/efi
-mount /dev/mapper/vg-efi /mnt/efi
 mount "${STORAGE_DEVICE}${PARTITION_SUFFIX}1" /mnt/efi
 
 lsblk
 
 echo "Presiona ENTER para continuar..."
-read line
+sleep 5
 
 pacman -Sy reflector python --noconfirm
 
@@ -72,21 +81,12 @@ echo "noipv6" >> /mnt/etc/dhcpcd.conf
 
 
 sed -i 's#^HOOKS=(\(.*\))#HOOKS=(\1 encrypt lvm2)#' /mnt/etc/mkinitcpio.conf
-arch-chroot /mnt mkinitcpio -p linux
+arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 
 
 sed -i "s#GRUB_CMDLINE_LINUX=\"\\(.*\\)\"#GRUB_CMDLINE_LINUX=\"cryptdevice=${STORAGE_DEVICE}${PARTITION_SUFFIX}2:lvm\"#" /mnt/etc/default/grub
 echo "GRUB_ENABLE_CRYPTODISK=y" >> /mnt/etc/default/grub
 
-##
-# We need the lvmpad.socket to make `grub-mkconfig` command run properly
-# under chroot later
-mkdir /mnt/hostrun
-mount --bind /run /mnt/hostrun
-
-
-ln -s /hostrun/lvm /run/lvm
-ls -l /run/lvm
 
 echo '' 
 echo 'Instalando EFI System >> bootx64.efi' 
