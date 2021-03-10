@@ -58,7 +58,7 @@ pacman -Sy reflector python --noconfirm
 
 reflector --verbose --latest 5 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 
-pacstrap /mnt base base-devel linux wget efibootmgr grub nano reflector python neofetch networkmanager dhcpcd
+pacstrap /mnt base base-devel lvm2 linux wget efibootmgr grub nano reflector python neofetch networkmanager dhcpcd
 
 genfstab -U /mnt > /mnt/etc/fstab
 
