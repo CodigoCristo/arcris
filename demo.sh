@@ -75,8 +75,7 @@ sed -i 's#^HOOKS=(\(.*\))#HOOKS=(\1 encrypt lvm2)#' /mnt/etc/mkinitcpio.conf
 arch-chroot /mnt mkinitcpio -p linux
 
 
-sed -i "s#GRUB_CMDLINE_LINUX=\"\\(.*\\)\"#GRUB_CMDLINE_LINUX=\"cryptdevice=${STORAGE_DEVICE}${PARTITION_SUFFIX}2:lvm\"#" \
-    /mnt/etc/default/grub
+sed -i "s#GRUB_CMDLINE_LINUX=\"\\(.*\\)\"#GRUB_CMDLINE_LINUX=\"cryptdevice=${STORAGE_DEVICE}${PARTITION_SUFFIX}2:lvm\"#" /mnt/etc/default/grub
 echo "GRUB_ENABLE_CRYPTODISK=y" >> /mnt/etc/default/grub
 
 ##
@@ -128,15 +127,9 @@ clear
 arch-chroot /mnt /bin/bash -c "(echo 123 ; echo 123) | passwd root"
 
 
-arch-chroot /mnt /bin/bash -c "base=https://raw.githubusercontent.com/untasty/keyboard/master/"
-arch-chroot /mnt /bin/bash -c "wget $base/usr/share/kbd/keymaps/c++.map -O /usr/share/kbd/keymaps/c++.map"
-arch-chroot /mnt /bin/bash -c "echo "KEYMAP=c++" >> /etc/vconsole.conf"
-
 
 arch-chroot /mnt /bin/bash -c "mkinitcpio -p linux"
 
-git clone https://aur.archlinux.org/yay.git
-cd yay
-makepkg -sc --install --needed --noconfirm
-cd ..
-rm -rf yay/
+arch-chroot /mnt /bin/bash -c "git clone https://aur.archlinux.org/yay.git"
+arch-chroot /mnt /bin/bash -c "cd yay"
+arch-chroot /mnt /bin/bash -c "makepkg -sc --install --needed --noconfirm"
