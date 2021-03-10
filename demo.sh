@@ -67,7 +67,7 @@ pacman -Sy reflector python --noconfirm
 
 reflector --verbose --latest 5 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 
-pacstrap /mnt base base-devel lvm2 linux wget efibootmgr grub nano reflector python neofetch networkmanager dhcpcd
+pacstrap /mnt base base-devel lvm2 wget efibootmgr grub nano reflector python neofetch
 
 genfstab -U /mnt > /mnt/etc/fstab
 
@@ -79,13 +79,23 @@ arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd NetworkManager"
 echo "noipv6rs" >> /mnt/etc/dhcpcd.conf
 echo "noipv6" >> /mnt/etc/dhcpcd.conf
 
+arch-chroot /mnt /bin/bash -c "pacman -S linux linux-headers linux-firmware mkinitcpio --noconfirm"
 
-sed -i 's#^HOOKS=(\(.*\))#HOOKS=(\1 encrypt lvm2)#' /mnt/etc/mkinitcpio.conf
+sed -i '7d' /mnt/etc/mkinitcpio.conf
+sed -i '7i MODULES=(ext4)' /mnt/etc/mkinitcpio.conf
+
+sed -i '52d' /mnt/etc/mkinitcpio.conf
+sed -i "52i HOOKS=(base udev autodetect keymap modconf block lvm2 encrypt filesystems keyboard fsck)" /mnt/etc/mkinitcpio.conf
 arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 
+sed -i '6d' /mnt/etc/default/grub
+sed -i '6i GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 resume=/dev/mapper/vg-swap"' /mnt/etc/default/grub
+
+sed -i '10d' /mnt/etc/default/grub
+sed -i '10i GRUB_PRELOAD_MODULES="part_gpt part_msdos lvm"' /mnt/etc/default/grub
 
 sed -i "s#GRUB_CMDLINE_LINUX=\"\\(.*\\)\"#GRUB_CMDLINE_LINUX=\"cryptdevice=${STORAGE_DEVICE}${PARTITION_SUFFIX}2:lvm\"#" /mnt/etc/default/grub
-echo "GRUB_ENABLE_CRYPTODISK=y" >> /mnt/etc/default/grub
+
 
 
 echo '' 
@@ -127,9 +137,4 @@ clear
 arch-chroot /mnt /bin/bash -c "(echo 123 ; echo 123) | passwd root"
 
 
-
-arch-chroot /mnt /bin/bash -c "mkinitcpio -p linux"
-
-arch-chroot /mnt /bin/bash -c "git clone https://aur.archlinux.org/yay.git"
-arch-chroot /mnt /bin/bash -c "cd yay"
-arch-chroot /mnt /bin/bash -c "makepkg -sc --install --needed --noconfirm"
+umount -R /mnt
