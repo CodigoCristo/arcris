@@ -29,7 +29,7 @@ echo -n "$PASSPHRASE" | cryptsetup luksOpen "${STORAGE_DEVICE}${PARTITION_SUFFIX
 pvcreate /dev/mapper/lvm
 vgcreate vg /dev/mapper/lvm
 lvcreate -L 1G vg -C y -n swap
-lvcreate -L 512M vg -n boot
+lvcreate -L 512M vg -n efi
 lvcreate -L 30G vg -n root
 lvcreate -l +100%FREE vg -n home
 
@@ -46,7 +46,7 @@ mount /dev/mapper/vg-root /mnt
 mkdir /mnt/home
 mount /dev/mapper/vg-home /mnt/home
 mkdir /mnt/efi
-mount /dev/mapper/vg-boot /mnt/efi
+mount /dev/mapper/vg-efi /mnt/efi
 mount "${STORAGE_DEVICE}${PARTITION_SUFFIX}1" /mnt/efi
 
 lsblk
