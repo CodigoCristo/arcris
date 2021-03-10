@@ -69,7 +69,7 @@ reflector --verbose --latest 5 --protocol http --protocol https --sort rate --sa
 
 pacstrap /mnt base base-devel lvm2 wget efibootmgr grub nano reflector python neofetch
 
-genfstab -pU /mnt > /mnt/etc/fstab
+genfstab -p -U /mnt > /mnt/etc/fstab
 tmpfs /tmp tmpfs defaults,noatime,mode=1777 0 0 >> /mnt/etc/fstab
 
 arch-chroot /mnt /bin/bash -c "pacman -S dhcpcd networkmanager iwd net-tools ifplugd --noconfirm"
@@ -96,12 +96,16 @@ sed -i "52i HOOKS=(base udev autodetect keymap modconf block encrypt lvm2 filesy
 arch-chroot /mnt /bin/bash -c 'mkinitcpio -P'
 
 sed -i '6d' /mnt/etc/default/grub
-sed -i '6i GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 resume=/dev/mapper/vg-swap"' /mnt/etc/default/grub
+sed -i '6i GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 cryptdevice=/dev/vda2:lvm:allow-discards resume=/dev/mapper/vg-swap"' /mnt/etc/default/grub
 
 sed -i '10d' /mnt/etc/default/grub
 sed -i '10i GRUB_PRELOAD_MODULES="part_gpt part_msdos lvm"' /mnt/etc/default/grub
 
-sed -i "s#GRUB_CMDLINE_LINUX=\"\\(.*\\)\"#GRUB_CMDLINE_LINUX=\"cryptdevice=/dev/vda2:lvm\"#" /mnt/etc/default/grub
+
+#UUID=$(lsblk -dno UUID /dev/vda2)
+
+#sed -i '7d' /mnt/etc/default/grub
+#sed -i '7i GRUB_CMDLINE_LINUX="cryptdevice=${UUID}:lvm"' /mnt/etc/default/grub
 
 
 arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
@@ -112,6 +116,7 @@ echo ''
 echo 'Instalando UEFI System >> grubx64.efi' 
 arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=Arch'
 
+arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
 
 
 
@@ -145,3 +150,5 @@ arch-chroot /mnt /bin/bash -c "(echo 123 ; echo 123) | passwd root"
 
 
 umount -R /mnt
+
+reboot
