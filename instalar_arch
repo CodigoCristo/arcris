@@ -3415,12 +3415,12 @@ chmod +x /mnt/etc/pacman.d/hooks/mirrorupgrade.hook
 cp zshrc /mnt/home/$nombre_usuario/.zshrc
 arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.zshrc"
 cp zshrc /mnt/root/.zshrc
+
 cp .bashrc /mnt/home/$nombre_usuario/.bashrc
+cp .bashrc-root /mnt/root/.bashrc
 arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.bashrc"
-cp .bashrc /mnt/root/.bashrc
-cp .bashrc-root /mnt/home/$nombre_usuario/.bashrc-root
-arch-chroot /mnt /bin/bash -c "chown -hR $nombre_usuario:users /home/$nombre_usuario/.bashrc-root"
-cp .bashrc-root /mnt/root/.bashrc-root
+
+
 
 rm shell
 rm DMservice
