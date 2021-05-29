@@ -3324,68 +3324,6 @@ arch-chroot /mnt /bin/bash -c "rm /home/$nombre_usuario/README.md"
 sleep 5
 
 fi
-
-
-
-
-
-if [ "$gnomebeta" == "true" ]; then
-
-titulo_progreso="Instalando Gnome 40"
-barra_progreso
-
-arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S chaotic-mirrorlist chaotic-keyring --noeditmenu --noconfirm --needed"
-arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S chaotic-keyring --noeditmenu --noconfirm --needed"
-cp pacmanchao.conf /mnt/etc/pacman.conf
-arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
-arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
-
-# [chaotic-aur]
-# Include = /etc/pacman.d/chaotic-mirrorlist
-
-
-arch-chroot /mnt /bin/bash -c "pacman -S gnome-control-center --noconfirm"
-arch-chroot /mnt /bin/bash -c "pacman -S gnome-tweaks --noconfirm"
-arch-chroot /mnt /bin/bash -c "pacman -S gnome-terminal --noconfirm"
-arch-chroot /mnt /bin/bash -c "pacman -S gdm --noconfirm"
-
-arch-chroot /mnt /bin/bash -c "systemctl enable gdm"
-
-arch-chroot /mnt /bin/bash -c "pacman -S mutter-40alfa"
-arch-chroot /mnt /bin/bash -c "pacman -S gnome-shell-40alfa"
-arch-chroot /mnt /bin/bash -c "pacman -S libgweather-git"
-
-arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -R chaotic-mirrorlist chaotic-keyring --noconfirm"
-arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -R chaotic-keyring --noconfirm"
-
-cp pacman-chroot.conf /mnt/etc/pacman.conf
-
-arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
-arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
-
-#arch-chroot /mnt /bin/bash -c "pacman -S chrome-gnome-shell --noconfirm"
-
-
-mensaje_install
-    fi
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if [ "$aurherlp" == "true" ]; then
 titulo_progreso="Eliminando AUR Helper"
 barra_progreso
