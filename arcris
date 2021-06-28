@@ -16,9 +16,9 @@ pacman -Sy glibc dialog curl --noconfirm --needed
 
 
 #pacman -Sy dialog --noconfirm --needed
-#curl -LJO https://github.com/Vertecedoc4545/arcris/tree/master/soms/arcris-xonad.tar.xz
-#tar  -xJf  arcris-xmonad.tar.xz
-cd arcris-xmonad
+curl -LJO https://github.com/CodigoCristo/arcris/archive/master.tar.gz
+tar  -xvf  arcris-master.tar.gz
+cd arcris-master
 
 cp .dialogrc /root
 chmod +x *

@@ -1276,6 +1276,7 @@ seleccionDE=false
 seleccionWM=false
 seleccionXORG=false
 finalInstall=false
+gnomebeta=false
 
 cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "$titulo" --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona tu (DE) o (WM) a instalar" 12 50 12)
 
@@ -1309,8 +1310,8 @@ options=(1 " > | xfce4 | Xfce desktop| <"
          12 " > | mate | Mate GTK3 desktop| <"
          13 " > | ukui | En Prueba| <"
          14 " > | liri | AUR - Compilación| <"
-         15 " > | lumina | AUR - Compilación| <"
-         16 " > | Xmonad | exelente window manager| <")
+         15 " > | lumina | AUR - Compilación| <")
+         #16 " > | Pantheon | Desktop| <")  GTK and Qt
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -1448,8 +1449,9 @@ done
             cmd=(dialog --keep-tite --backtitle "$titulo" \
             --no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona una opción para GNOME \n\n" 10 60 19)
 
-            options=(1 "Gnome 40 (3.38 esta obsoleto)|| Completo de Apps"
-                     2 "Gnome 40 (3.38 esta obsoleto)|| Minimalista")
+            options=(1 "Gnome || Completo de Apps"
+                     2 "Gnome || Minimalista"
+                     3 "Gnome || Gnome40 - BETA")
 
             choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -1467,6 +1469,8 @@ done
                         echo gdm > DMservice
                         ;;
                     
+                    3)  gnomebeta=true
+                        ;;
                 esac
             done
             ;;
@@ -1543,30 +1547,11 @@ done
             echo -e "exec start-lumina-desktop" > /home/$nombre_usuario/.xinitrc
             echo lightdm > DMservice
             ;;
-        16) #INICIO xmonad
-             cmd=(dialog --keep-tite --backtitle "$titulo" \
-            --no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --nocancel --menu "Selecciona una opción para GNOME \n\n" 10 60 19)
-
-            options=(1 "Xmonad axarva | el mejor xmonad de unixporn "
-                     2 "Xmonad | base, lee la documentacion, no se instalara gestor de seciones")
-
-            choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-
-            for choice in $choices
-            do
-                case $choice in
-
-                    1)  DE="xmonad xmonad-contrib git bash zsh"
-                        xmonadtema=true
-                        DM="lightdm"
-                        echo lightdm > DMservice
-                        ;;
-
-                    2)  DE="xmonad amonad-contrib xterm picom dunst drun rofi xorg"
-                        ;;
-
-                esac
-            done
+        16) #INICIO Pantheon
+            DE="onboard orca cmake pantheon pantheon-files pantheon-terminal gnome-session gnome-control-center switchboard pantheon-applications-menu wingpanel-indicator-session wingpanel-indicator-datetime wingpanel gtk-theme-elementary contractor file-roller dconf-editor  "
+            DM="lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings  lightdm-pantheon-greeter light-locker accountsservice"
+            echo -e "exec cerbere" > /home/$nombre_usuario/.xinitrc
+            echo lightdm > DMservice
             ;;
 
     esac
@@ -3216,13 +3201,7 @@ sleep 5
     fi
 
  
-if [ "$xmonadtema" == "true" ]; then
-arch-chroot /mnt /bin/bash -c "git clone https://github.com/Vertecedoc4545/dotfiles-2.0"
-#this is until https://github.com/Axarva/dotfiles-2.0 accept my pull request
-arch-chroot /mnt /bin/bash -c "cd ./dotfiles-2.0"
-arch-chroot /mnt /bin/bash -c "chmod +x ./install-on-arch-arcris.sh"
-arch-chroot /mnt /bin/bash -c "./install-on-arch-arcris.sh"
-fi
+
 if [ "$plasmatema" == "true" ]; then
 #TITULO EN BARRAS
 titulo_progreso="Instalando Tema de KDE Plasma"
@@ -3324,6 +3303,68 @@ arch-chroot /mnt /bin/bash -c "rm /home/$nombre_usuario/README.md"
 sleep 5
 
 fi
+
+
+
+
+
+if [ "$gnomebeta" == "true" ]; then
+
+titulo_progreso="Instalando Gnome 40"
+barra_progreso
+
+arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S chaotic-mirrorlist chaotic-keyring --noeditmenu --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -S chaotic-keyring --noeditmenu --noconfirm --needed"
+cp pacmanchao.conf /mnt/etc/pacman.conf
+arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
+
+# [chaotic-aur]
+# Include = /etc/pacman.d/chaotic-mirrorlist
+
+
+arch-chroot /mnt /bin/bash -c "pacman -S gnome-control-center --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S gnome-tweaks --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S gnome-terminal --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S gdm --noconfirm"
+
+arch-chroot /mnt /bin/bash -c "systemctl enable gdm"
+
+arch-chroot /mnt /bin/bash -c "pacman -S mutter-40alfa"
+arch-chroot /mnt /bin/bash -c "pacman -S gnome-shell-40alfa"
+arch-chroot /mnt /bin/bash -c "pacman -S libgweather-git"
+
+arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -R chaotic-mirrorlist chaotic-keyring --noconfirm"
+arch-chroot /mnt /bin/bash -c "sudo -u $nombre_usuario yay -R chaotic-keyring --noconfirm"
+
+cp pacman-chroot.conf /mnt/etc/pacman.conf
+
+arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm"
+
+#arch-chroot /mnt /bin/bash -c "pacman -S chrome-gnome-shell --noconfirm"
+
+
+mensaje_install
+    fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if [ "$aurherlp" == "true" ]; then
 titulo_progreso="Eliminando AUR Helper"
 barra_progreso
