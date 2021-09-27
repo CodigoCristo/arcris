@@ -2795,7 +2795,7 @@ sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
 sed -i '7d' /mnt/etc/default/grub
 ######
 echo ''
-echo "GRUB_DISABLE_OS_PROBER=false" >>  /etc/default/grub
+echo "GRUB_DISABLE_OS_PROBER=false" >>  /mnt/etc/default/grub
 arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
 echo '' 
 echo 'ls -l /mnt/boot' 
@@ -2825,7 +2825,7 @@ sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
 sed -i '7d' /mnt/etc/default/grub
 ########
 echo '' 
-echo "GRUB_DISABLE_OS_PROBER=false" >>  /etc/default/grub
+echo "GRUB_DISABLE_OS_PROBER=false" >>  /mnt/etc/default/grub
 arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
 echo '' 
 echo 'ls -l /mnt/boot' 
