@@ -16,6 +16,13 @@ pacman -Sy wget --noconfirm
 wget v.gd/arcris ; sh arcris
 ```
 
+> Método 3
+```
+pacman -Sy wget --noconfirm
+wget https://raw.githubusercontent.com/CodigoCristo/arcris/master/arcris
+sh arcris
+```
+
 # Capturas
 
 
