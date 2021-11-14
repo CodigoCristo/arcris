@@ -6,7 +6,7 @@
 > Método 1
 ```
 loadkeys es
-curl -L v.gd/arcris > arcris ; sh arcris
+curl -L is.gd/arcris > arcris ; sh arcris
 ```
 
 > Método 2
