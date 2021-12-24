@@ -2,7 +2,7 @@
 
 [paypal.me/codigocristo](paypal.me/codigocristo)
 
-# ArcriS
+# ArcriS 3.0 - 2022
 
 1. Descarga la ISO de Arch Linux Oficial.
 2. Descargar el Script y ejecutalo.
