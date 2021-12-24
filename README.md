@@ -1,5 +1,5 @@
-# Donaciones
-paypal.me/codigocristo
+# [Donaciones / Donations](paypal.me/codigocristo)
+
 
 # ArcriS
 
@@ -26,7 +26,7 @@ wget https://raw.githubusercontent.com/CodigoCristo/arcris/master/arcris
 sh arcris
 ```
 
-> Método 3
+> Método 4
 ```
 pacman -Sy git --noconfirm
 git clone https://github.com/CodigoCristo/arcris
