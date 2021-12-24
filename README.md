@@ -38,7 +38,7 @@ sh arcris
 # Capturas
 
 
-![Captura 2](https://github.com/CodigoCristo/arcris/blob/master/capturas/DeepinScreenshot_xfdesktop_20210217115417.png)
+![Captura 2](https://github.com/CodigoCristo/arcris/blob/master/capturas/present.png)
 
 
-![Captura 1](https://github.com/CodigoCristo/arcris/blob/master/capturas/DeepinScreenshot_xfdesktop_20210217115346.png)
+![Captura 1](https://github.com/CodigoCristo/arcris/blob/master/capturas/main.png)
