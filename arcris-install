@@ -123,34 +123,12 @@ do
 source lib/user
 users
 clear
-dialog --no-collapse --cr-wrap --backtitle "${title}" --title "${ent_title_user}" --stdout --ok-label "${btn_confirm}" \
---prgbox "echo '' 
-echo '#################################################' 
-echo ''
-echo '${end_user} ${username}'
-echo '${end_keyuser} ${userpasswd}'
-echo ''
-echo '${end_keyroot} ${rootpasswd}'
-echo '${end_hotstname} ${hostname}' 
-echo ''
-echo '#################################################' " 15 55
 current_item="2"
 ;;
 
 2) 
 source lib/zoneinfo
 locality
-
-clear
-echo $zonahorariauto 
-echo "----------"
-echo $zonemanual
-echo "----------"
-echo $zonahorariamanual
-#echo $timezonedir$timezone
-echo "----------"
-echo $localefrom
-read line
 current_item="3"
 ;;
 
@@ -158,19 +136,12 @@ current_item="3"
 3)
 source lib/lang
 lang
-
-clear 
-echo $keymap
-echo $keymapx
-read line
 current_item="4"
 ;;
 
 4) 
 source lib/shellsystem
 shellsystem
-echo $shell
-read line 
 current_item="5"
 ;;
 
