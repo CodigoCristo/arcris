@@ -1,3 +1,6 @@
+# Donaciones
+paypal.me/codigocristo
+
 # ArcriS
 
 1. Descarga la ISO de Arch Linux Oficial.
