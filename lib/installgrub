@@ -1,0 +1,186 @@
+#!/bin/bash
+
+installgrub1 () {
+
+######
+#GRUB
+######
+uefi=$( parted $disk print | grep -ic gpt )
+
+if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]; then
+clear
+titulo_progreso="| SU SISTEMA ES UEFI |"
+barra_progreso
+arch-chroot /mnt /bin/bash -c "pacman -S grub efibootmgr os-prober --noconfirm"
+clear
+echo ""
+echo '>>> Su disco es GPT | UEFI es el sistema Moderno <<<'
+cat /tmp/partitions | grep gpt 
+sleep 3
+echo '' 
+echo 'Instalando EFI System >> bootx64.efi' 
+arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --efi-directory=/boot/EFI --removable' 
+echo '' 
+echo 'Instalando UEFI System >> grubx64.efi' 
+arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=Arch'
+######
+sed -i '6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"' /mnt/etc/default/grub
+sed -i '7d' /mnt/etc/default/grub
+######
+echo ''
+echo "GRUB_DISABLE_OS_PROBER=false" >>  /mnt/etc/default/grub
+arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
+echo '' 
+echo 'ls -l /mnt/boot' 
+ls -l /mnt/boot 
+echo '' 
+echo 'Lea bien que no tenga ningún error marcado' 
+echo '> Confirme tener las IMG de linux para el arranque' 
+echo '> Confirme tener la carpeta de GRUB para el arranque' 
+mensaje_install
+sleep 3
+clear
+
+else
+clear
+titulo_progreso="|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |"
+barra_progreso
+arch-chroot /mnt /bin/bash -c "pacman -S grub os-prober --noconfirm"
+clear
+echo "" 
+echo '>>> Su disco es DOS MBR | BIOS Legacy es un sistema antiguo <<<' 
+echo "" 
+cat /tmp/partitions | grep dos 
+sleep 3
+echo '' 
+arch-chroot /mnt /bin/bash -c "grub-install --target=i386-pc $disk"
+########
+sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
+sed -i '7d' /mnt/etc/default/grub
+########
+echo '' 
+echo "GRUB_DISABLE_OS_PROBER=false" >>  /mnt/etc/default/grub
+arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
+echo '' 
+echo 'ls -l /mnt/boot' 
+ls -l /mnt/boot 
+echo '' 
+echo 'Lea bien que no tenga ningún error marcado' 
+echo '> Confirme tener las IMG de linux para el arranque' 
+echo '> Confirme tener la carpeta de GRUB para el arranque'
+mensaje_install
+sleep 3
+clear
+fi
+# FIN GRUB
+
+}
+
+
+
+installgrub3 () {
+
+######
+#GRUB
+######
+uefi=$( parted $disk print | grep -ic gpt )
+
+if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]; then
+clear
+titulo_progreso="| SU SISTEMA ES UEFI |"
+barra_progreso
+arch-chroot /mnt /bin/bash -c "pacman -S grub efibootmgr os-prober --noconfirm"
+clear
+echo ""
+echo '>>> Su disco es GPT | UEFI es el sistema Moderno <<<'
+cat /tmp/partitions | grep gpt 
+sleep 3
+echo '' 
+echo 'Instalando EFI System >> bootx64.efi' 
+arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --efi-directory=/boot/EFI --removable' 
+echo '' 
+echo 'Instalando UEFI System >> grubx64.efi' 
+arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=Arch'
+######
+sed -i '6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"' /mnt/etc/default/grub
+sed -i '7d' /mnt/etc/default/grub
+######
+echo ''
+echo "GRUB_DISABLE_OS_PROBER=false" >>  /mnt/etc/default/grub
+arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
+echo '' 
+echo 'ls -l /mnt/boot' 
+ls -l /mnt/boot 
+echo '' 
+echo 'Lea bien que no tenga ningún error marcado' 
+echo '> Confirme tener las IMG de linux para el arranque' 
+echo '> Confirme tener la carpeta de GRUB para el arranque' 
+mensaje_install
+sleep 3
+clear
+
+else
+clear
+titulo_progreso="|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |"
+barra_progreso
+arch-chroot /mnt /bin/bash -c "pacman -S grub os-prober --noconfirm"
+clear
+
+bootwin=$(fdisk -l ${disk} | grep /dev/ | awk '{if (NR!=1) {print}}' | grep "*" | awk -F ' ' '{print $1}' )
+mkdir -p /boot/windows
+mount "$bootwin" /boot/windows
+
+echo "" 
+echo '>>> Su disco es DOS MBR | BIOS Legacy es un sistema antiguo <<<' 
+echo "" 
+cat /tmp/partitions | grep dos 
+sleep 3
+echo '' 
+arch-chroot /mnt /bin/bash -c "grub-install --target=i386-pc $disk"
+########
+sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
+sed -i '7d' /mnt/etc/default/grub
+########
+echo '' 
+echo "GRUB_DISABLE_OS_PROBER=false" >>  /mnt/etc/default/grub
+arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
+echo '' 
+echo 'ls -l /mnt/boot' 
+ls -l /mnt/boot 
+echo '' 
+echo 'Lea bien que no tenga ningún error marcado' 
+echo '> Confirme tener las IMG de linux para el arranque' 
+echo '> Confirme tener la carpeta de GRUB para el arranque'
+mensaje_install
+sleep 3
+clear
+fi
+# FIN GRUB
+
+}
+
+
+
+
+installgrub () {
+
+case $GRUBINSTALL in
+
+  1)
+    installgrub1
+    ;;
+
+  2)
+    # installgrub2
+    ;;
+
+  3)
+    installgrub3
+    ;;
+
+  *)
+    installgrub1
+    ;;
+esac
+
+}

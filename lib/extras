@@ -1,0 +1,634 @@
+#!/bin/bash
+
+
+fuc_utilidades () {
+
+#UTILIDADES
+cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}"  \
+--no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "Utilidades para tu sistema\n[ ESPACIO ] - Para marcar o desmarcar *" 18 80 20)
+options=(1 "Lectura y formateo de discos incluido Android" on    # any option can be set to default to "on"
+         2 "Compresión y Descompresión de archivos" on
+         3 "Códecs de video, lectura de todos los formatos de vídeo" off
+         4 "gufw - Firewall de red" off
+         5 "hardinfo - Información del sistema y benchmark" off
+         6 "gnome-disk-utility - Administrador de Discos" off
+         7 "gparted - Administrador de Discos" off
+         8 "bluez - Bluetooth" off
+         9 "viewnior - Visor de Imagenes" off
+         10 "gedit - Editor de Textos GTK" off)
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+1)
+UTIL1=true
+;;
+
+2)
+UTIL2=true
+;;
+
+3)
+UTIL3=true
+;;
+
+4)
+UTIL4=true
+;;
+
+5)
+UTIL5=true
+;;
+
+6)
+UTIL6=true
+;;
+
+7)
+UTIL7=true
+;;
+
+8) 
+UTIL8=true
+;;
+
+9)
+UTIL9=true
+;;   
+
+10)
+UTIL10=true
+;;   
+    esac
+done
+#FINAL DE UTILIDADES
+
+}
+
+
+fuc_terminales () {
+
+#TERMINALES
+cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}"  \
+--no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "Terminal para tu sistema\n[ ESPACIO ] - Para marcar o desmarcar *" 17 80 20)
+options=(1 "lxterminal" on    # any option can be set to default to "on"
+         2 "tilix" off
+         3 "xfce4-terminal" off
+         4 "deepin-terminal" off
+         5 "mate-terminal" off
+         6 "terminator" off
+         7 "st" off
+         8 "alacritty" off
+         9 "kitty" off)
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            TERMI1=true
+            ;;
+        2)
+            TERMI2=true
+            ;;
+        3)
+            TERMI3=true
+            ;;
+        4)
+            TERMI4=true
+            ;;
+        
+        5)
+            TERMI5=true
+            ;;
+
+        6)
+            TERMI6=true
+            ;;
+               
+        7)
+            TERMI7=true
+            ;;   
+        8)
+            TERMI8=true
+            ;;   
+        9)
+            TERMI9=true
+            ;;   
+    esac
+done
+#FINAL DE TERMINALES
+}
+
+
+fuc_audiosistema () {
+
+#AUDIO
+cmd=(dialog --no-collapse --cr-wrap --title "-| Audio del Sistema |-" --backtitle "$titulo"  \
+--no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --radiolist "\n- Pulse Audio para el usuario tradicional \
+\n- Jack Audio para Profesionales sin latencia \
+\n- Alsa Audio para terminal sin Interfaz Gráfica \
+\n- PipeWire Audio el futuro del sonido\n \
+\n[ ESPACIO ] - Para marcar * " 17 80 17)
+options=(1 " PipeWire   + Códecs de audio  " on    # any option can be set to default to "on"
+         2 " Pulseaudio + Códecs de audio  " off    
+         3 " Jack2      + Códecs de audio  " off
+         4 " ALSA       + Códecs de audio  " off)
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+
+        1)
+            AUDIO1=true
+            # https://wiki.archlinux.org/title/PipeWire
+            ;;
+
+        2)
+            AUDIO2=true
+            # https://wiki.archlinux.org/index.php/PulseAudio
+            # pulseeffects libcanberra-pulse libcanberra-gstreamer 
+            ;;
+
+        3)
+            AUDIO3=true
+            #https://wiki.archlinux.org/index.php/Professional_audio
+            ;;
+
+        4)
+            AUDIO4=true
+            #https://wiki.archlinux.org/index.php/Advanced_Linux_Sound_Architecture
+            ;;
+
+    esac
+done
+#FIN_AUDIO
+
+}
+
+
+
+fuc_reproductores () {
+
+#REPRODUCTOR
+
+cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
+--no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' \
+--title "-| Reproductores Video y Audio |-" \
+--checklist "\n[ ESPACIO ] - Para marcar o desmarcar *" 14 80 14)
+options=(   1 " vlc                           " on
+            2 " mpv                           " off
+            3 " nuclear-player-bin            " off            
+            4 " spotify-Sin-Anuncios-adblock  " off
+            5 " audacious                     " off
+            6 " moc                           " off
+            7 " cmus                          " off)
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            REPRO1=true
+            ;;
+        2)
+            REPRO2=true
+            ;;
+        3)
+            REPRO3=true
+            ;;
+        4)
+            REPRO4=true
+            ;;
+        5)
+            REPRO5=true
+            ;;
+        6)
+            REPRO6=true
+            ;;
+        7)
+            REPRO7=true
+            ;;
+    esac
+done
+
+# FIN REPRODUCTOR
+
+}
+
+
+
+fuc_navegador_web () {
+
+#NAVEGADORES
+cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
+--no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "Selecciona tu navegador web\n[ ESPACIO ] - Para marcar o desmarcar *" 15 80 19)
+options=(1 "Firefox | Open source" on    # any option can be set to default to "on"
+         2 "Chromium | Open source" off
+         3 "Midori | Open source" off
+         4 "Brave | AUR - Open source" off
+         5 "Google Chrome | AUR - Proprietary browser" off         
+         6 "Opera | AUR - Proprietary browser" off
+         7 "Vivaldi | AUR - Proprietary browser" off
+         8 "Tor-browser | AUR - Open source" off)
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            WEB1=true
+            ;;
+        2)
+            WEB2=true
+            ;;
+        3)
+            WEB3=true
+            ;;
+        4)
+            WEB4=true
+            ;;
+        5)
+            WEB5=true
+            ;;
+        6)
+            WEB6=true
+            ;;
+        7)
+            WEB7=true
+            ;;
+        8)
+            WEB8=true
+            ;; 
+    esac
+done
+# FIN NAVEGADORES
+
+}
+
+
+
+
+fuc_ofimatica () {
+
+#OFFICE
+cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
+--no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 11 80 14)
+options=(    1 "LibreOffice | libreoffice-fresh" on
+             2 "WPS Office | AUR - wps-office" off
+             3 "SoftMaker Office | AUR - freeoffice " off)
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            OFFICE1=true
+            ;;
+        2)
+            OFFICE2=true
+            ;;
+        3)
+            OFFICE3=true
+            ;;
+    esac
+done
+# FIN OFFICE
+
+}
+
+
+
+fuc_administrador_de_tareas () {
+
+#Administrador de Tareas
+cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Administrador de Tareas |-" \
+--no-tags  --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 15 80 20)
+options=(1 " gnome-system-monitor " on
+         2 " htop                 " on
+         3 " bashtop              " off
+         4 " gtop                 " off
+         5 " gotop - AUR          " off)
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            AP1="gnome-system-monitor"
+            AP_condicion=true
+            ;;
+        2)
+            AP2="htop"
+            AP_condicion=true
+            ;;
+        3)
+            AP3="bashtop"
+            AP_condicion=true
+            ;;
+        4)
+            AP4="gtop"
+            AP_condicion=true
+            ;;
+        5)
+            AP5="gotop"
+            AP_condicion=true
+            ;;
+            
+            
+    esac
+done
+
+
+
+}
+
+
+
+fuc_social () {
+
+#Redes Sociales
+cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  --title "-| Redes Sociales |-" \
+--no-tags  --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --column-separator "|" --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 15 80 20)
+options=(1 "Telegram | telegram-desktop" on
+         2 "IGdm - AUR | App de chat de Instagram" off
+         3 "Whatsapp - AUR | whatsapp-nativefier-dark" off
+         4 "Facebook Messenger - AUR | caprine" off
+         5 "Netflix - AUR | netflix-qdesktop" off
+         6 "Skype - AUR | skypeforlinux-preview-bin" off)
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            RS1=true
+            ;;
+        2)
+            RS2=true
+            ;;
+        3)
+            RS3=true
+            ;;
+        4)
+            RS4=true
+            ;;    
+        5)
+            RS5=true
+            ;;            
+        6)
+            RS6=true
+            ;;
+            
+    esac
+done
+#FINAL DE Redes Sociales
+
+}
+
+
+fuc_gamer () {
+
+#INICIO DE GAMING
+cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  --title "-| Gamers |-" \
+--no-tags  --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --column-separator "|" --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 24 80 24)
+options=(1 "steam | Plataforma desarrollada por valve" on
+         2 "wine | Ejecuta aplicaciones de Windows en Linux" off
+         3 "crossover | La version de pago de Wine" off
+         4 "winetricks | Instala varias bibliotecas necesarias para Wine" off
+         5 "lutris | Instala juegos para que puedas empezar sin problemas" off
+         6 "legendary | Un reemplazo de código abierto para Epic Games Launcher" off
+         7 "retroarch | Una interfaz para emuladores, motores y reproductores" off
+         8 "snes9x-gtk | SNES - Emulador" off
+         9 "ppsspp | PSP1 - Emulador" off
+         10 "pcsx2 | PSP2 - Emulador" off
+         11 "rpcs3 | PSP3 - Emulador" off
+         12 "cemu | Wii U Emulador (via wine)" off
+         13 "citra-git | Nintendo 3DS Emulador" off
+         14 "desmume | Nintendo DS Emulador" off
+         15 "higan | Emulador para SNES, NES, GB, GBC, GBA" off)
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            GAM1=true
+            ;;
+        2)
+            GAM2=true
+            ;;
+        3)
+            GAM3=true
+            ;;
+        4)
+            GAM4=true
+            ;;    
+        5)
+            GAM5=true
+            ;;            
+        6)
+            GAM6=true
+            ;;
+        7)
+            GAM7=true
+            ;; 
+        8)
+            GAM8=true
+            ;;
+        9)
+            GAM9=true
+            ;; 
+        10)
+            GAM10=true
+            ;; 
+        11)
+            GAM11=true
+            ;;
+        12)
+            GAM12=true
+            ;;
+        13)
+            GAM13=true
+            ;;
+        14)
+            GAM14=true
+            ;;    
+        15)
+            GAM15=true
+            ;; 
+
+    esac
+done
+
+#FINAL DE GAMING
+}
+
+
+
+
+fuc_aur_helpers () {
+
+cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  --title "-| AUR Helper |-" \
+--no-tags  --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --column-separator "|" --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 18 80 18)
+options=(1 "yay | Terminal" on
+         2 "trizen | Terminal" off
+         3 "pikaur | Terminal" off
+         4 "aurman | Terminal" off
+         5 "pakku | Terminal" off
+         6 "Pamac | Graphical" off
+         7 "Octopi | Graphical" off
+         8 "Cylon | Graphical" off
+         9 "Argon | Graphical" off
+         10 "Pakku GUI | Graphical" off)
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            AUR1=true
+            ;;
+        2)
+            AUR2=true
+            ;;
+        3)
+            AUR3=true
+            ;;
+        4)
+            AUR4=true
+            ;;    
+        5)
+            AUR5=true
+            ;;            
+        6)
+            AUR6=true
+            ;;
+        7)
+            AUR7=true
+            ;; 
+        8)
+            AUR8=true
+            ;;
+        9)
+            AUR9=true
+            ;; 
+        10)
+            AUR10=true
+            ;; 
+
+    esac
+done
+
+#FINAL DE AUR
+
+}
+
+
+
+
+extraprogram () {
+
+
+extraprograms=true
+
+AP_condicion=false
+TERMINAL_condicion=false
+
+while [[ $extraprograms == "true" ]]; do
+
+menuextras=$(dialog --keep-tite --backtitle "${title}" --title "-| Programas Extras |-" \
+--ok-label "Seleccionar" --default-item "${extras_item}" --no-tags \
+--menu "\nSeleccione los programas extras que necesita \n " 20 60 10 \
+1 "               Utilidades                            " \
+2 "               Terminales                            " \
+3 "               Audio                                 " \
+4 "               Reproductores                         " \
+5 "               Navegador Web                         " \
+6 "               Ofimática                             " \
+7 "               Administrador de tareas               " \
+8 "               Social media                          " \
+9 "               Gamers                                " \
+10 "               AUR helpers                           " \
+11 " > Guardar elección de programas extras a instalar < " 3>&1 1>&2 2>&3)
+
+case "$menuextras" in
+
+"1")
+fuc_utilidades
+extras_item="2"
+;;
+
+"2") 
+fuc_terminales
+extras_item="3"
+;;
+
+"3")
+fuc_audiosistema
+extras_item="4"
+;;
+
+"4") 
+fuc_reproductores
+extras_item="5"
+;;
+
+"5")
+fuc_navegador_web
+extras_item="6"
+;;
+
+"6")
+fuc_ofimatica
+extras_item="7"
+;;
+
+"7")
+fuc_administrador_de_tareas
+extras_item="8"
+;;
+
+"8")
+fuc_social
+extras_item="9"
+;;
+
+"9")
+fuc_gamer
+extras_item="10"
+;;
+
+"10")
+fuc_aur_helpers
+extras_item="11"
+;;
+
+"11")
+extraprograms=false
+break
+;;
+
+$1)  # BOTON CANCELAR
+extraprograms=false
+break
+;;
+
+    esac
+done
+
+
+}
+
+

@@ -1,139 +1,241 @@
-#!/bin/sh
-: 'Copyright (C) 2019 Código Cristo'
-#!/bin/bash
+#!/usr/bin/env bash
 
-# wget is.gd/arcris && sh arcris
-# https://is.gd/stats.php?url=arcris
+# git add .  
+# git commit -m 'testing'
+# git push -f
+# curl -L is.gd/arcrisnew > arcris ; sh arcris 
 
+echo ""
+echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+locale=$(locale-gen)
+dialog --stdout --infobox "$locale" 10 50
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+export LANG=en_US.UTF-8
 clear
-#Colores
-red='\033[38;2;255;0;02m'
-echo ""
-echo ""
-echo -e $red ">-------------------------------------------------------------------------<";
-echo -e $red ">                                                                         <";
-echo -e $red ">                                                                         <";
-echo -e $red ">                      ██   █▄▄▄▄ ▄█▄    █▄▄▄▄ ▄█    ▄▄▄▄▄                <";
-echo -e $red ">                      █ █  █  ▄▀ █▀ ▀▄  █  ▄▀ ██   █     ▀▄              <";
-echo -e $red ">                      █▄▄█ █▀▀▌  █   ▀  █▀▀▌  ██ ▄  ▀▀▀▀▄                <";
-echo -e $red ">                      █  █ █  █  █▄  ▄▀ █  █  ▐█  ▀▄▄▄▄▀                 <";
-echo -e $red ">                         █   █   ▀███▀    █    ▐                         <";
-echo -e $red ">                        █   ▀            ▀                               <";
-echo -e $red ">                       ▀                                                 <";
-echo -e $red ">                                                                         <";
-function ProgressBar {
-# Process data
-    let _progress=(${1}*100/${2}*100)/100
-    let _done=(${_progress}*6)/10
-    let _left=60-$_done
-# Build progressbar string lengths
-    _fill=$(printf "%${_done}s")
-    _empty=$(printf "%${_left}s")
 
-# 1.2 Build progressbar strings and print the ProgressBar line
-# 1.2.1 Output example:                           
-# 1.2.1.1 Progress : [########################################] 100%
-printf "\r > Cargando : |${_fill// /▇}${_empty// /-}| ${_progress}%%"
+welcome_title=" -| Language Select |- "
 
-}
 
-# Variables
-_start=1
+cmd=(dialog --nocancel --backtitle "Welcome : $(date "+%A, %B %d, %Y - %I:%M %p")" --title "${welcome_title}" \
+    --menu "\nDonations in: www.patreon.com/codigocristo\n\nSelect the language of the installer:\n\n---------------------------------------------\n\nDonaciones en: www.patreon.com/codigocristo\n\nSeleccione el idioma del instalador:\n " 20 60 10)
 
-# This accounts as the "totalState" variable for the ProgressBar function
-_end=100
+options=(1 "Español"
+         2 "English"
+         3 "Russian")
 
-# Proof of concept
-for number in $(seq ${_start} ${_end})
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+for choice in $choices
 do
-    sleep 0.06
-    ProgressBar ${number} ${_end}
+    case $choice in
+
+
+        1)
+        source languages/español.conf
+        echo "$LANGUAGE UTF-8" > /etc/locale.gen
+        locale=$(locale-gen)
+        dialog --backtitle "$title" \
+        --title "${idiom}" --stdout --ok-label "${oklabel}" \
+        --infobox "$locale" 10 50
+        echo "LANG=$LANGUAGE" > /etc/locale.conf
+        export LANG=$LANGUAGE
+        setfont lat5-16
+        ;;
+
+
+        2)
+        source languages/english.conf
+        echo "$LANGUAGE UTF-8" > /etc/locale.gen
+        locale=$(locale-gen)
+        dialog --backtitle "$title" \
+        --title "${idiom}" --stdout --ok-label "${oklabel}" \
+        --infobox "$locale" 10 50
+        echo "LANG=$LANGUAGE" > /etc/locale.conf
+        export LANG=$LANGUAGE
+        setfont default8x16
+        ;;
+
+
+        3)
+        # vconsole.conf 
+        # FONT="cyr-sun16"
+        # ls /usr/share/consolefonts
+        # ls /usr/share/kbd/consolefonts | grep 8x16
+        # setfont cyr-sun16
+        # showconsolefont
+        source languages/russian.conf
+        echo "$LANGUAGE UTF-8" > /etc/locale.gen
+        locale=$(locale-gen)
+        dialog --backtitle "$title" \
+        --title "${idiom}" --stdout --ok-label "${oklabel}" \
+        --infobox "$locale" 20 50
+        echo "LANG=$LANGUAGE" > /etc/locale.conf
+        export LANG=$LANGUAGE
+        setfont cyr-sun16
+        ;;
+
+    esac
 done
 
 
-#Poniendo el sistema en español
-echo ""
-echo ""
-echo ""
-
-cp .dialogrc /root
-
-chmod +x *
 
 
-sed -i '177d' /etc/locale.gen
-sed -i "177i #en_US.UTF-8 UTF-8" /etc/locale.gen
 
-sed -i '200d' /etc/locale.gen
-sed -i "200i es_ES.UTF-8 UTF-8" /etc/locale.gen
+sectionuser=0
+sectionubi=0
+sectionlang=0
+sectionshell=0
+sectiondisk=0
+sectionkernel=0
+sectionvideo=0
+sectionenv=0
+
+main () {
+
+while true; do
 
 
-locale-gen
 
-echo LANG=es_ES.UTF-8 > /etc/locale.conf
-export LANG=es_ES.UTF-8
-echo ""
-echo -e '\033[m'
-sleep 3
+menuprincipal=(dialog --keep-tite --default-item "${current_item}" --backtitle "${title}" --title "${title_menu}" \
+--ok-label "${select_ok_label}" --nocancel --no-tags \
+--menu "${text_menu}" ${highmenu} ${widthmenu} 10)
 
-#terminus-font
-#FONT=ter-v14b  /etc/vconsole.conf 
-#partprobe
+options=(   1 "${menu1} ${submenu1}" 
+            2 "${menu2} ${submenu2}" 
+            3 "${menu3} ${submenu3}" 
+            4 "${menu4} ${submenu4}" 
+            5 "${menu5} ${submenu5}" 
+            6 "${menu6} ${submenu6}" 
+            7 "${menu7} ${submenu7}" 
+            8 "${menu8} ${submenu8}" 
+            9 "${menu9} ${submenu9}" 
+            10 "${menu10}" 
+            11 "${menu11}"  )
 
-sed -i '200d' /etc/locale.gen
-sed -i "200i #es_ES.UTF-8 UTF-8" /etc/locale.gen
+choices=$("${menuprincipal[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
-#Inicio
-dialog --backtitle "| Instalación de ArchLinux en Español - https://t.me/ArchLinuxCristo |" \
---column-separator "|" --no-tags --title "| Arch Linux |" --ok-label 'Seleccionar' --no-cancel --menu "\nScript de instalación rápida de Arch Linux\n " 12 50 20 \
-1 'Instalar  |> Arch Linux' \
-2 'Dual Boot |> Arch Linux con Windows' 2>temp
 
-#1 'Instalar  |> Arch Linux' \
-#3 'Dual Boot |> Arch Linux con Windows' \
-#5 'GRUB |> Reparación de Arranque' 2>temp
+for choice in $choices
+do
+    case $choice in
 
-#2 ' > | Instalar | Arch con Cifrado| <' \
-#4 ' > | Dual Boot | GNU/Linux Instalado| <' \
+1)
+source lib/user
+users
+clear
+dialog --no-collapse --cr-wrap --backtitle "${title}" --title "${ent_title_user}" --stdout --ok-label "${btn_confirm}" \
+--prgbox "echo '' 
+echo '#################################################' 
+echo ''
+echo '${end_user} ${username}'
+echo '${end_keyuser} ${userpasswd}'
+echo ''
+echo '${end_keyroot} ${rootpasswd}'
+echo '${end_hotstname} ${hostname}' 
+echo ''
+echo '#################################################' " 15 55
+current_item="2"
+;;
 
-#Opciones
-if [ "$?" = "0" ]
-then
-        menu_inicio_return=$(cat temp)
- 
-# opción 1 - instalar solo
-        if [ "$menu_inicio_return" = "1" ]
-        then
-        clear
-        echo "Cargando..."
-        sleep 3
-        sh instalar_arch
+2) 
+source lib/zoneinfo
+locality
 
-fi
+clear
+echo $zonahorariauto 
+echo "----------"
+echo $zonemanual
+echo "----------"
+echo $zonahorariamanual
+#echo $timezonedir$timezone
+echo "----------"
+echo $localefrom
+read line
+current_item="3"
+;;
 
-# opción 2 - Dual Boot - Windows Instalado
-        if [ "$menu_inicio_return" = "2" ]
-        then
-        clear
-        echo "Cargando..."
-        sleep 3
-        sh dual_windows
 
-fi
+3)
+source lib/lang
+lang
 
-# opción 5 - Dual Boot - LINUX
-        if [ "$menu_inicio_return" = "3" ]
-        then
-        clear
-        echo "Cargando..."
-        sleep 3
-        sh grub_recu
+clear 
+echo $keymap
+echo $keymapx
+read line
+current_item="4"
+;;
 
-fi 
+4) 
+source lib/shellsystem
+shellsystem
+echo $shell
+read line 
+current_item="5"
+;;
 
-# Cancelar
-else
+5)
+source lib/disks
+disksystem
+current_item="6"
+;;
 
-    dialog --backtitle "| Instalación de ArchLinux - https://t.me/ArchLinuxCristo |" --stdout --ok-label 'Reiniciar' --title "| Finalizar |" --msgbox "\n| Comunidad para ayudar: t.me/ArchLinuxCristo |" 7 51
+6)
+source lib/kernel
+kerneles
+current_item="7"
+;;
 
-fi
+7)
+source lib/video
+drivervideo
+;;
+
+8)
+source lib/environment
+environment
+current_item="9"
+;;
+
+9)
+source lib/extras
+extraprogram
+current_item="10"
+;;
+
+10)
+source lib/install
+install
+
+;;
+
+11)
+cd 
+rm -r arcris arcrisnew arcrisnew-main.tar.gz
+clear && echo "" 
+echo -e ""
+echo -e "${msg_end}"
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
+echo "" && sleep 3 && clear && setfont default8x16 && exit
+;;
+
+    esac
+done
+
+
+    
+done
+
+}
+
+main
+# Codigo cristo pal mundo
+
+
+
+
+
+
+
+

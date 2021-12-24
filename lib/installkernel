@@ -1,0 +1,341 @@
+#!/bin/bash
+
+###########################################
+####### FUNCION DE BARRA ##################
+###########################################
+
+installkernel () {
+
+case $kernel_select in
+
+  linux-stable)
+
+arch-chroot /mnt /bin/bash -c "pacman -Syu --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -Syu --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -Sy alsi --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -Sy yay-bin --noconfirm --needed"
+
+arch-chroot /mnt /bin/bash -c "pacman -S linux --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S linux-headers --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S linux-firmware --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S mkinitcpio --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S pacman-mirrorlist --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S cryptsetup --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S lvm2 --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S logrotate --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S nano --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S hddtemp --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S unzip --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S zip --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dnsmasq --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ethtool --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ndisc6 --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S inetutils --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wvdial --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S gptfdisk --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dhcp --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dhcpcd --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dhclient --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ppp --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S netctl --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S networkmanager --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S iwd --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S net-tools --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ifplugd --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dialog --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S neofetch --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S git --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wget --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S lsb-release --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S accountsservice --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S bash-completion --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S less --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ntp --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S usb_modeswitch --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S usbutils --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S which --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S mtools --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dosfstools --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S exfatprogs --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ntfs-3g  --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S reiserfsprogs --noconfirm --needed"
+ 
+ 
+
+
+
+arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd NetworkManager"
+
+  ;;
+
+  linux-hardened)
+
+arch-chroot /mnt /bin/bash -c "pacman -Syu --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -Syu --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -Sy alsi --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -Sy yay-bin --noconfirm --needed"
+
+arch-chroot /mnt /bin/bash -c "pacman -S linux-hardened --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S linux-hardened-headers --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S linux-firmware --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S mkinitcpio --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S pacman-mirrorlist --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S cryptsetup --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S lvm2 --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S logrotate --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S nano --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S hddtemp --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S unzip --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S zip --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dnsmasq --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ethtool --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ndisc6 --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S inetutils --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wvdial --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S gptfdisk --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dhcp --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dhcpcd --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dhclient --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ppp --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S netctl --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S networkmanager --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S iwd --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S net-tools --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ifplugd --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dialog --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S neofetch --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S git --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wget --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S lsb-release --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S accountsservice --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S bash-completion --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S less --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ntp --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S usb_modeswitch --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S usbctl --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S usbutils --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S which --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S mtools --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dosfstools --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S exfatprogs --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ntfs-3g  --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S reiserfsprogs --noconfirm --needed"
+
+arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd NetworkManager"
+
+  ;;
+
+  linux-lts)
+
+arch-chroot /mnt /bin/bash -c "pacman -Syu --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -Syu --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -Sy alsi --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -Sy yay-bin --noconfirm --needed"
+
+arch-chroot /mnt /bin/bash -c "pacman -S linux-lts --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S linux-lts-headers --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S linux-firmware --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S mkinitcpio --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S pacman-mirrorlist --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S cryptsetup --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S lvm2 --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S logrotate --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S nano --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S hddtemp --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S unzip --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S zip --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dnsmasq --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ethtool --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ndisc6 --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S inetutils --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wvdial --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S gptfdisk --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dhcp --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dhcpcd --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dhclient --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ppp --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S netctl --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S networkmanager --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S iwd --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S net-tools --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ifplugd --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dialog --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S neofetch --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S git --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wget --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S lsb-release --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S accountsservice --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S bash-completion --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S less --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ntp --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S usb_modeswitch --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S usbutils --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S which --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S mtools --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dosfstools --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S exfatprogs --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ntfs-3g  --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S reiserfsprogs --noconfirm --needed"
+
+arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd NetworkManager"
+
+  ;;
+
+  linux-zen)
+
+arch-chroot /mnt /bin/bash -c "pacman -Syu --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -Syu --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -Sy alsi --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -Sy yay-bin --noconfirm --needed"
+
+arch-chroot /mnt /bin/bash -c "pacman -S linux-zen --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S linux-zen-headers --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S linux-firmware --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S mkinitcpio --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S pacman-mirrorlist --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S cryptsetup --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S lvm2 --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S logrotate --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S nano --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S hddtemp --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S unzip --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S zip --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dnsmasq --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ethtool --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ndisc6 --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S inetutils --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wvdial --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S gptfdisk --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dhcp --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dhcpcd --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dhclient --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ppp --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S netctl --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S networkmanager --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S iwd --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S net-tools --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ifplugd --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dialog --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S neofetch --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S git --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wget --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S lsb-release --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S accountsservice --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S bash-completion --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S less --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ntp --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S usb_modeswitch --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S usbutils --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S which --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S mtools --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dosfstools --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S exfatprogs --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S ntfs-3g  --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S reiserfsprogs --noconfirm --needed"
+
+arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd NetworkManager"
+
+  ;;
+
+esac
+
+
+
+if [ "$selec8168" == "true" ]; then
+arch-chroot /mnt /bin/bash -c "pacman -S r8168 --noconfirm"
+echo blacklist r8169 > /mnt/etc/modprobe.d/blacklist.conf
+cat /mnt/etc/modprobe.d/blacklist.conf
+arch-chroot /mnt /bin/bash -c 'modprobe r8168'
+fi
+
+if [ "$selec8168lts" == "true" ]; then
+arch-chroot /mnt /bin/bash -c "pacman -S r8168-lts --noconfirm"
+echo blacklist r8169 > /mnt/etc/modprobe.d/blacklist.conf
+cat /mnt/etc/modprobe.d/blacklist.conf
+arch-chroot /mnt /bin/bash -c 'modprobe r8168'
+fi
+
+
+if [ "$microdriver" == "true" ]; then
+microcode=$(lspci -k | grep 'Host bridge: Intel')
+lspci -k | grep 'Host bridge:'  > procesador
+if [[ $microcode  = *Intel* || $microcode = *intel* || $microcode = *INTEL* ]]
+then
+clear    
+echo ""
+echo ""
+echo ""
+cat procesador
+echo ""   
+sleep 3
+arch-chroot /mnt /bin/bash -c "pacman -S intel-ucode --noconfirm"
+else
+clear
+echo ""
+echo ""     
+cat procesador
+echo ""  
+sleep 3
+arch-chroot /mnt /bin/bash -c "pacman -S amd-ucode --noconfirm"
+fi
+fi
+
+
+if [ "$wifidriver" == "true" ]; then
+broadcom=$(/bin/bash -c "lspci -k | grep 'Network controller: Broadcom' ")
+if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
+then            
+arch-chroot /mnt /bin/bash -c "pacman -S broadcom-wl --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wireless-regdb --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wpa_supplicant --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wireless_tools --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c 'modprobe wl' 
+arch-chroot /mnt /bin/bash -c 'rmmod b43'
+arch-chroot /mnt /bin/bash -c 'rmmod ssb' 
+else  
+arch-chroot /mnt /bin/bash -c "pacman -S iw --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wireless_tools --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wpa_supplicant --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dialog --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wireless-regdb --noconfirm --needed"
+fi
+fi
+
+if [ "$wifidriverdmks" == "true" ]; then
+broadcom=$(arch-chroot /mnt /bin/bash -c "lspci -k | grep 'Network controller: Broadcom' ")
+if [[ $broadcom  = *Broadcom* || $broadcom = *broadcom* || $broadcom = *BROADCOM* ]]
+then      
+arch-chroot /mnt /bin/bash -c "pacman -S broadcom-wl-dkms --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wireless-regdb --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wpa_supplicant --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wireless_tools --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c 'modprobe wl' 
+arch-chroot /mnt /bin/bash -c 'rmmod b43'
+arch-chroot /mnt /bin/bash -c 'rmmod ssb' 
+else
+arch-chroot /mnt /bin/bash -c "pacman -S iw --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wireless_tools --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wpa_supplicant --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S dialog --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S wireless-regdb --noconfirm --needed"
+fi
+fi
+
+if [ "$touchdriver" == "true" ]; then
+arch-chroot /mnt /bin/bash -c "pacman -S xf86-input-synaptics --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S xf86-input-libinput --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S xorg-xinput --noconfirm --needed"
+fi
+
+if [ "$blutudriver" == "true" ]; then
+arch-chroot /mnt /bin/bash -c "pacman -S bluez --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S bluez-utils --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "pacman -S pulseaudio-bluetooth --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "systemctl enable bluetooth.service"
+fi
+
+
+
+
+
+}

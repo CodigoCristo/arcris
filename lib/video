@@ -1,0 +1,579 @@
+#!/bin/bash
+
+drivermanual () {
+
+nombreGrafica=$(lspci | grep VGA |  awk -F " " '{print $5,$6,$7,$8,$9,$10}')
+
+cmd=(dialog --nocancel --no-tags --backtitle "${title}" --title "-| Driver de Vídeo |-" \
+    --menu "\nTarjeta de vídeo: \n\n${nombreGrafica}\n\nElige una opción\n " 13 60 00)
+
+options=(   1 "  Video vesa (Generic All)             "
+            2 "  Intel (Open Source)                  "
+            3 "  AMD/ATI (Open Source)                "
+            4 "  AMD/Radeon (Open Source)             "
+            5 "  Nvidia (Open Source)                 "
+            6 "  Nvidia + Intel (Open Source)         "
+            7 "  Nvidia 495xx (Linux Stable)          "
+            8 "  Nvidia 390xx (Linux Stable)          "
+            9 "  Nvidia 495xx (Linux LTS)             "
+            10 "  Nvidia 390xx (Linux LTS)             "
+            11 "  Nvidia 495xx (Linux Hardened - Zen)  "
+            12 "  Nvidia 390xx (Linux Hardened - Zen)  "
+            13 "  Nvidia 495xx (Linux Stable + Intel)  ")
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+for choice in $choices
+do
+    case $choice in
+
+
+        1) video="Vesa OpenSource"
+        ;;
+
+        2) video="Intel OpenSource"
+        ;;
+
+        3) video="ATI OpenSource"
+        ;;
+
+        4) video="Radeon OpenSource"
+        ;;
+
+        5) video="Nvidia OpenSource"
+        ;;
+
+        6) video="Nvidia + Intel OpenSource"
+        ;;
+
+        7) video="Nvidia 495xx"
+        ;;
+
+        8) video="Nvidia 390xx"
+        ;;
+
+        9) video="Nvidia 495xx lts"
+        ;;
+
+        10) video="Nvidia 390xx lts"
+        ;;
+
+        11) video="Nvidia 495xx dkms"
+        ;;
+
+        12) video="Nvidia 390xx dkms"
+        ;;
+
+        13) video="Nvidia 495xx intel"
+        ;;
+
+    esac
+done
+}
+
+
+driverautomatico () {
+
+case $(systemd-detect-virt) in 
+    oracle)
+
+        if [ "$kernel_select" == "linux-stable" ]; then
+        
+            dialog --backtitle "${title}" --title "-| Vídeo |-" --stdout --ok-label 'Aceptar' --msgbox "\nDriver virtualbox-host-modules-arch \n" 7 40
+            video="VirtualBox"
+
+        else
+
+            dialog --backtitle "${title}" --title "-| Vídeo |-" --stdout --ok-label 'Aceptar' --msgbox "\nDriver virtualbox-host-dkms \n" 7 35
+            video="VirtualBox dkms"
+
+        fi
+    ;; 
+
+    vmware)
+        dialog --backtitle "${title}" --title "-| Vídeo |-" --stdout --ok-label 'Aceptar' --msgbox "\nDriver xf86-video-vmware \n" 7 30
+        video="VMware"
+    ;; 
+
+    qemu) 
+        dialog --backtitle "${title}" --title "-| Driver de Vídeo |-" --stdout --ok-label "<Confirmar>"  --msgbox "\nVídeo Detectado Qemu\n " 7 30
+        video="Qemu"
+    ;; 
+
+    kvm) 
+        dialog --backtitle "${title}" --title "-| Driver de Vídeo |-" --stdout --ok-label "<Confirmar>"  --msgbox "\nVídeo Detectado Qemu kvm\n " 7 30
+        video="Qemu Kvm"
+    ;; 
+
+    *)
+
+if (lspci | grep VGA | grep "NVIDIA\|nVidia" &>/dev/null && lspci | grep VGA | grep "Intel" &>/dev/null); then 
+
+dialog --backtitle "${title}" --title "-| Vídeo |-" --stdout --ok-label 'Aceptar' --msgbox "\nDriver: xf86-video-intel xf86-video-nouveau mesa \n" 7 55
+video="Nvidia + Intel OpenSource"
+
+elif (lspci | grep VGA | grep "NVIDIA\|nVidia" &>/dev/null); then 
+
+dialog --backtitle "${title}" --title "-| Vídeo |-" --stdout --ok-label 'Aceptar' --msgbox "\nDriver: xf86-video-nouveau mesa \n" 7 37
+video="Nvidia OpenSource"
+
+elif (lspci | grep VGA | grep "Radeon R\|R2/R3/R4/R5" &>/dev/null); then 
+
+dialog --backtitle "${title}" --title "-| Vídeo |-" --stdout --ok-label 'Aceptar' --msgbox "\nDriver: xf86-video-amdgpu vulkan-radeon mesa \n" 7 50
+video="Radeon OpenSource"
+
+
+elif (lspci | grep VGA | grep "ATI\|AMD/ATI" &>/dev/null); then 
+
+dialog --backtitle "${title}" --title "-| Vídeo |-" --stdout --ok-label 'Aceptar' --msgbox "\nDriver: xf86-video-ati mesa \n" 7 33
+video="ATI OpenSource"
+
+elif (lspci | grep VGA | grep "Intel" &>/dev/null); then 
+
+dialog --backtitle "${title}" --title "-| Vídeo |-" --stdout --ok-label 'Aceptar' --msgbox "\nDriver: xf86-video-intel vulkan-intel mesa \n" 7 47
+video="Intel OpenSource"
+
+else
+
+dialog --backtitle "${title}" --title "-| Vídeo |-" --stdout --ok-label 'Aceptar' --msgbox "\nDriver: xf86-video-vesa mesa \n" 7 0
+video="Vesa OpenSource"
+
+fi 
+
+;; 
+esac 
+
+clear
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+drivervideo () {
+
+
+if [[ ${sectionkernel} == "1" ]]; then
+
+nombreGrafica=$(lspci | grep VGA |  awk -F " " '{print $5,$6,$7,$8,$9,$10}')
+
+dialog --keep-tite --no-collapse --cr-wrap --backtitle "${title}" \
+--title "-| Driver de Vídeo |-" --defaultno --yes-label '<  Manual  >' --no-label ' < Automático > ' \
+--yesno "\nTarjeta de vídeo: \n\n${nombreGrafica}\n\nElige una opción\n " 00 00
+
+respuestavideo=$?
+case $respuestavideo in
+
+   0) drivermanual ;;
+   1) driverautomatico ;;
+   255) echo "[ESC] key pressed.";;
+
+esac
+
+sectionvideo=1
+current_item="8"
+
+else
+
+dialog --backtitle "${title}" --title "-| ERROR |-" --stdout --ok-label "< OK >"  --msgbox "\nSeleccione tu Kernel primero \n " 7 35
+current_item="6"
+
+fi
+
+
+
+
+}
+
+
+
+
+
+installvideo () {
+
+
+
+case $video in 
+
+  "VirtualBox")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de VirtualBox" 
+    arch-chroot /mnt /bin/bash -c "pacman -S virtualbox-guest-utils --noconfirm" 
+    arch-chroot /mnt /bin/bash -c "pacman -S xf86-video-vmware --noconfirm" 
+    arch-chroot /mnt /bin/bash -c "pacman -S virtualbox-host-modules-arch --noconfirm" 
+    arch-chroot /mnt /bin/bash -c "pacman -S mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "modprobe -a vboxdrv"
+    arch-chroot /mnt /bin/bash -c "modprobe -a vboxguest vboxsf vboxvideo"
+    arch-chroot /mnt /bin/bash -c "modprobe -a vboxnetadp vboxnetflt vboxnetadp"
+    arch-chroot /mnt /bin/bash -c "VBoxClient-all"
+    arch-chroot /mnt /bin/bash -c "systemctl enable vboxservice.service"
+    arch-chroot /mnt /bin/bash -c "systemctl enable systemd-modules-load.service"
+
+  ;;
+
+
+  "VirtualBox dkms")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de VirtualBox dkms" 
+    arch-chroot /mnt /bin/bash -c "pacman -S virtualbox-guest-utils --noconfirm" 
+    arch-chroot /mnt /bin/bash -c "pacman -S xf86-video-vmware --noconfirm" 
+    arch-chroot /mnt /bin/bash -c "pacman -S virtualbox-host-dkms --noconfirm" 
+    arch-chroot /mnt /bin/bash -c "pacman -S mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "modprobe -a vboxdrv"
+    arch-chroot /mnt /bin/bash -c "modprobe -a vboxguest vboxsf vboxvideo"
+    arch-chroot /mnt /bin/bash -c "modprobe -a vboxnetadp vboxnetflt vboxnetadp"
+    arch-chroot /mnt /bin/bash -c "VBoxClient-all"
+    arch-chroot /mnt /bin/bash -c "systemctl enable vboxservice.service"
+    arch-chroot /mnt /bin/bash -c "systemctl enable systemd-modules-load.service"
+
+  ;;
+
+
+  "VMware")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de VMware" 
+    arch-chroot /mnt /bin/bash -c "pacman -S xf86-video-vmware --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S xf86-input-vmmouse --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S open-vm-tools --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S net-tools --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S gtkmm --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S mesa --noconfirm"
+
+  ;;
+
+
+  "Qemu")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de Qemu" 
+    arch-chroot /mnt /bin/bash -c "pacman -S mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S mesa-libgl --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S xf86-video-fbdev --noconfirm"
+
+  ;;
+
+
+  "Qemu Kvm")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de Qemu Kvm" 
+    arch-chroot /mnt /bin/bash -c "pacman -S mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S mesa-libgl --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S xf86-video-fbdev --noconfirm"
+
+  ;;
+
+
+  "Vesa OpenSource")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de Video vesa (Generic All)" 
+    arch-chroot /mnt /bin/bash -c "pacman -S xf86-video-vesa --noconfirm"
+
+  ;;
+
+  "Intel OpenSource")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de Video Intel (Open Source)" 
+    arch-chroot /mnt /bin/bash -c "pacman -S xf86-video-intel --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S vulkan-intel --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S lib32-mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S intel-media-driver --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libva-intel-driver --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libva-vdpau-driver --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libvdpau-va-gl --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libva-utils --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S vdpauinfo --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S intel-compute-runtime --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S clinfo --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S ocl-icd --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S lib32-ocl-icd --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S opencl-headers --noconfirm"
+
+  ;;
+
+
+  "ATI OpenSource")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de Video AMD/ATI (Open Source)" 
+    arch-chroot /mnt /bin/bash -c "pacman -S xf86-video-ati --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S lib32-mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S mesa-vdpau --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libva-mesa-driver --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S lib32-mesa-vdpau --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S lib32-libva-mesa-driver --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libva-vdpau-driver --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libvdpau-va-gl --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libva-utils --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S vdpauinfo --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S opencl-mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S clinfo --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S ocl-icd --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S lib32-ocl-icd --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S opencl-headers --noconfirm"
+
+  ;;
+
+
+  "Radeon OpenSource")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de Video AMD/Radeon Open Source)" 
+    arch-chroot /mnt /bin/bash -c "pacman -S xf86-video-amdgpu --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S lib32-mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S vulkan-radeon --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S lib32-vulkan-radeon --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S mesa-vdpau --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libva-mesa-driver --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S lib32-mesa-vdpau --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S lib32-libva-mesa-driver --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libva-vdpau-driver --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libvdpau-va-gl --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libva-utils --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S vdpauinfo --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S opencl-mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S clinfo --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S ocl-icd --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S lib32-ocl-icd --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S opencl-headers --noconfirm"
+
+  ;;
+
+
+  "Nvidia OpenSource")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de Video Nvidia (Open Source)" 
+    arch-chroot /mnt /bin/bash -c "pacman -S xf86-video-nouveau --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S lib32-mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S mesa-vdpau --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libva-mesa-driver --noconfirm"
+
+  ;;
+
+  "Nvidia + Intel OpenSource")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de Video Nvidia (Open Source)" 
+    arch-chroot /mnt /bin/bash -c "pacman -S xf86-video-nouveau --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S lib32-mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S mesa-vdpau --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libva-mesa-driver --noconfirm"
+    echo "" 
+    echo "Se estan instalando los drivers de Video Intel (Open Source)" 
+    arch-chroot /mnt /bin/bash -c "pacman -S xf86-video-intel --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S vulkan-intel --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S lib32-mesa --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S intel-media-driver --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libva-intel-driver --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libva-vdpau-driver --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libvdpau-va-gl --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S libva-utils --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S vdpauinfo --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S intel-compute-runtime --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S clinfo --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S ocl-icd --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S lib32-ocl-icd --noconfirm"
+    arch-chroot /mnt /bin/bash -c "pacman -S opencl-headers --noconfirm"
+
+  ;;
+
+
+  "Nvidia 495xx")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de Video Nvidia_Privativo_495xx_(Linux_Stable)" 
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia-settings --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-nvidia-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libva-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S vdpauinfo --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libvdpau --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-libvdpau --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S opencl-nvidia --noconfirm --needed" 
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-opencl-nvidia --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ffnvcodec-headers --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libxnvctrl --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S clinfo --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ocl-icd --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-ocl-icd --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S opencl-headers --noconfirm --needed"
+
+
+  ;;
+
+
+  "Nvidia 390xx")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de Video Nvidia_Privativo_390xx_(Linux_Stable)" 
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia-390xx --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia-390xx-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia-390xx-settings --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libxnvctrl-390xx --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-nvidia-390xx-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libva-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S vdpauinfo --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libvdpau --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-libvdpau --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S opencl-nvidia-390xx --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-opencl-nvidia-390xx --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S clinfo --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ocl-icd --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-ocl-icd --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S opencl-headers --noconfirm --needed"
+
+  ;;
+
+
+  "Nvidia 495xx lts")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de Video Nvidia_Privativo_495xx_(Linux_LTS)" 
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia-lts --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia-settings --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-nvidia-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libva-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S vdpauinfo --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libvdpau --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-libvdpau --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S opencl-nvidia --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-opencl-nvidia --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ffnvcodec-headers --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libxnvctrl --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S clinfo --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ocl-icd --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-ocl-icd --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S opencl-headers --noconfirm --needed"
+
+  ;;
+
+
+  "Nvidia 390xx lts")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de Video Nvidia_Privativo_390xx_(Linux_LTS)" 
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia-390xx-lts --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia-390xx-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-nvidia-390xx-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libva-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S vdpauinfo --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libvdpau --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-libvdpau --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S opencl-nvidia-390xx --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-opencl-nvidia-390xx --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S clinfo --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ocl-icd --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-ocl-icd --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S opencl-headers --noconfirm --needed"
+
+  ;;
+
+
+  "Nvidia 495xx dkms")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de Video Nvidia_Privativo_495xx_(Linux_Hardened_-_Zen)" 
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia-dkms --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-nvidia-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libva-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S vdpauinfo --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libvdpau --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-libvdpau --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S opencl-nvidia --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-opencl-nvidia --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ffnvcodec-headers --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libxnvctrl --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S clinfo --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ocl-icd --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-ocl-icd --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S opencl-headers --noconfirm --needed"
+
+  ;;
+
+
+  "Nvidia 390xx dkms")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de Video vesa (Generic All)" 
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia-390xx-dkms --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia-390xx-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-nvidia-390xx-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libva-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S vdpauinfo --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libvdpau --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-libvdpau --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S opencl-nvidia-390xx --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-opencl-nvidia-390xx --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S clinfo --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ocl-icd --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-ocl-icd --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S opencl-headers --noconfirm --needed"
+
+  ;;
+
+
+  "Nvidia 495xx intel")
+    
+    echo "" 
+    echo "Se estan instalando los drivers de Video Nvidia_Privativo_495xx_(Linux_Stable_+_Intel)" 
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia-settings --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nvidia-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-nvidia-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libva-utils --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S xf86-video-intel --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S optimus-manager --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S bbswitch --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S optimus-manager-qt --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S vdpauinfo --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libvdpau --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-libvdpau --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S opencl-nvidia --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-opencl-nvidia --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ffnvcodec-headers --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libxnvctrl --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S clinfo --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ocl-icd --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lib32-ocl-icd --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S opencl-headers --noconfirm --needed"
+
+    arch-chroot /mnt /bin/bash -c "rmmod nvidia_uvm"
+    arch-chroot /mnt /bin/bash -c "rmmod nvidia"
+
+    arch-chroot /mnt /bin/bash -c "systemctl enable optimus-manager.service"
+    arch-chroot /mnt /bin/bash -c "optimus-manager --switch auto"
+    arch-chroot /mnt /bin/bash -c "optimus-manager --set-startup intel"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username optimus-manager --switch auto"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username optimus-manager --set-startup intel"
+
+  ;;
+
+
+
+esac
+
+
+}

@@ -1,0 +1,65 @@
+#!/bin/bash
+
+deletediskdd () {
+
+
+
+################################################################
+# SELETC DISK
+################################################################
+
+part="$(lsblk -lno NAME,SIZE,TYPE | grep 'disk' | awk '{print "/dev/" $1 " " $2}' | sort -u | sed '/f/d' | sed '/sr/d' )" 
+disk=$(dialog --backtitle "${title}" --clear  --ok-label "Seleccionar disco" --no-cancel --menu "\nSelecciona tu disco :\n " 12 50 0 ${part} 2>&1 >/dev/tty)
+
+dialog --backtitle "${title}" --title "-| Mensaje |-" \
+--msgbox "\n> Este proceso puede dañar su disco si lo cancela inesperadamente\
+\n\n> En algunos es necesario reiniciar su equipo para ver los cambios" 11 50
+
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Confirmar |-" --yesno "\nEsto suele demorar mucho tiempo dependiendo de la cantidad de GB de tu Disco seleccionado\n\ndd if=/dev/zero of="${disk}" bs=4M conv=fsync oflag=direct status=progress\n\n¿ Deseas continuar con formatear ?" 12 70
+case $? in
+
+   0)
+#Desmontamos todo disco y swapoff
+swapdisco=$( fdisk -l | grep "/dev/\|swap" | grep swap | awk -F ' ' '{print $1}' )
+umount -R /mnt
+clear
+swapoff ${swapdisco}
+clear
+swapoff -a
+clear
+swapon -a
+clear
+rm /mnt/etc/fstab
+clear 
+
+
+bootarch=$( ls /sys/firmware/efi/ | grep -ic efivars )
+
+case $bootarch in
+
+  1)
+dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Formateando Disco - UEFI |-" --stdout --ok-label "Siguiente" \
+--prgbox "dd if=/dev/zero of="${disk}" bs=4M conv=fsync oflag=direct status=progress  && \
+parted ${disk} mklabel gpt && \
+fdisk -l ${disk} \
+partprobe" 20 80
+;;
+
+  0)
+dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Formateando Disco - BIOS LEGACY |-" --stdout --ok-label "Siguiente" \
+--prgbox "dd if=/dev/zero of="${disk}" bs=4M conv=fsync oflag=direct status=progress  && \
+parted ${disk} mklabel msdos && \
+fdisk -l ${disk} \
+partprobe" 20 80
+;;
+
+esac
+
+;;
+
+1) 
+clear
+;;
+esac
+
+}

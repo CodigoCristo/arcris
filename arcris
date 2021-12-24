@@ -6,22 +6,31 @@
 # wget is.gd/arcris && sh arcris
 # https://is.gd/stats.php?url=arcris
 
-#Colores
 clear
-pacman -Sy glibc dialog curl --noconfirm --needed
-#clear
-#rm arcris
-#git clone https://github.com/CodigoCristo/arcris
-#cd arcris
+pacman -Sy --noconfirm
+pacman -Sy 
+clear
 
+pacmaninit1=$( pacman -Ss glibc  | grep "glibc" 	| grep "installed" | wc -l )
+pacmaninit2=$( pacman -Ss dialog | grep "dialog" 	| grep "installed" | wc -l )
+pacmaninit3=$( pacman -Ss curl 	 | grep "curl" 		| grep "installed" | wc -l )
 
-#pacman -Sy dialog --noconfirm --needed
+if [[ "$pacmaninit1" = "1" && "$pacmaninit2" = "1" && "$pacmaninit3" = "1" ]] ; then
+clear
+else
+clear
+sudo pacman -Sy glibc dialog curl ncurses --noconfirm --needed
+sleep 5
+fi
+
+clear
 curl -LJO https://github.com/CodigoCristo/arcris/archive/master.tar.gz
 tar  -xvf  arcris-master.tar.gz
 cd arcris-master
 
 cp .dialogrc /root
 chmod +x *
-sleep 2
 clear
+echo "Loading..."
+sleep 2
 sh arcris-install

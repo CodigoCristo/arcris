@@ -1,0 +1,100 @@
+#!/bin/bash
+
+auto1 () {
+
+
+# dialog --backtitle "${title}" --title "-| Mensaje |-" --msgbox "\n> UEFI trabaja con discos en GPT \n\n> UEFI su partición boot es formateada en FAT32 \n\n> BIOS LEGACY trabaja con discos en DOS/MBR\n\n> BIOS LEGACY su partición boot es formateada en EXT4\n( La partición boot en linux es opcional )" 13 60
+# {sudo pacman -Sy ; printf "\n\n\n\n\n\n" ; lsblk -l 2>&1} | dialog --programbox " Preparando Disco - UEFI" 20 100
+
+################################################################
+# SELETC DISK
+################################################################
+
+# part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}' | sed '/sr/d')" 
+part="$(lsblk -lno NAME,SIZE,TYPE | grep 'disk' | awk '{print "/dev/" $1 " " $2}' | sort -u | sed '/f/d' | sed '/sr/d' )" 
+disk=$(dialog --backtitle "${title}" --clear  --ok-label "Seleccionar disco" --no-cancel --menu "\nSelecciona el disco para Arch Linux\n " 12 45 0 ${part} 2>&1 >/dev/tty)
+
+
+bootarch=$( ls /sys/firmware/efi/ | grep -ic efivars )
+
+
+#Desmontamos todo disco y swapoff
+swapdisco=$( fdisk -l | grep "/dev/\|swap" | grep swap | awk -F ' ' '{print $1}' )
+umount -R /mnt
+clear
+swapoff ${swapdisco}
+clear
+swapoff -a
+clear
+swapon -a
+clear
+rm /mnt/etc/fstab
+clear 
+
+
+case $bootarch in
+
+  1)
+
+dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Preparando Disco - UEFI |-" --stdout --ok-label "Siguiente" \
+--prgbox "sgdisk --zap-all ${disk} && \
+parted ${disk} mklabel gpt && \
+sgdisk ${disk} -n=1:0:+250M -t=1:ef00 && \
+sgdisk ${disk} -n=2:0:0 && \
+fdisk -l ${disk} > /tmp/partitions && \
+echo -------------------------------------- && \
+cat /tmp/partitions" 20 110
+
+
+partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1}')"
+
+echo $partitions | awk -F ' ' '{print $1}' >  boot-efi
+echo $partitions | awk -F ' ' '{print $2}' >  root-efi
+
+dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Formateo y Montar Particiones |-" --stdout --ok-label "Siguiente" \
+--prgbox "mkfs.ext4 $(cat root-efi) && \
+mount $(cat root-efi) /mnt && \
+mkfs.fat -F 32 $(cat boot-efi) && \
+mkdir -p /mnt/boot/EFI && \
+mount $(cat boot-efi) /mnt/boot/EFI && \
+echo -------------------------------------- && \
+lsblk ${disk} --all" 20 110
+
+rm boot-efi root-efi
+
+;;
+
+  0)
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Preparando Disco - BIOS LEGACY |-" --stdout --ok-label "Siguiente" \
+--prgbox "sgdisk --zap-all ${disk} && \
+(echo o; echo n; echo p; echo 1; echo ""; echo +250M; echo n; echo p; echo 2; echo ""; echo ""; echo a; echo 1; echo w; echo q) | fdisk ${disk} && \
+fdisk -l ${disk} > /tmp/partitions && \
+cat /tmp/partitions" 20 110
+
+
+partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1}')"
+
+echo $partitions | awk -F ' ' '{print $1}' >  boot-boot
+echo $partitions | awk -F ' ' '{print $2}' >  root-boot
+
+dialog --no-collapse --cr-wrap --backtitle "$titulo" --title "-| Formateo y Montar Particiones |-" --stdout --ok-label "Siguiente" \
+--prgbox "mkfs.ext4 $(cat root-boot) && \
+mount $(cat root-boot) /mnt && \
+mkfs.ext4 $(cat boot-boot) && \
+mkdir -p /mnt/boot && \
+mount $(cat boot-boot) /mnt/boot && \
+lsblk ${disk} --all" 20 110
+
+rm boot-boot root-boot
+
+;;
+
+esac
+
+
+clear
+partprobe
+clear
+
+
+}

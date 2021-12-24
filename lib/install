@@ -1,0 +1,557 @@
+#!/bin/bash
+#rmmod floppy
+###########################################
+####### FUNCION DE BARRA ##################
+###########################################
+
+function barra_progreso {
+
+clear    
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
+echo -e ""
+echo -e "\t\t\t$titulo_progreso"
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
+
+#INICIO PROGRESS BARR
+function ProgressBar {
+    let _progress=(${1}*100/${2}*100)/100
+    let _done=(${_progress}*6)/10
+    let _left=60-$_done
+    _fill=$(printf "%${_done}s")
+    _empty=$(printf "%${_left}s")
+# 1.2.1.1 Progreso : [########################################] 100%
+printf "\r > Cargando : |${_fill// /║}${_empty// /-}| ${_progress}%%"
+
+}
+# Variables
+_start=1
+
+_end=100
+
+for number in $(seq ${_start} ${_end})
+do
+    sleep 0.065
+    ProgressBar ${number} ${_end}
+done
+#FIN PROGRESS BARR
+echo ""
+echo ""
+}
+
+
+function mensaje_install {
+echo ""
+echo ""
+echo -e '\033[38;2;255;0;02m'
+echo " █████╗ ██████╗  ██████╗██████╗ ██╗███████╗";
+echo "██╔══██╗██╔══██╗██╔════╝██╔══██╗██║██╔════╝";
+echo "███████║██████╔╝██║     ██████╔╝██║███████╗";
+echo "██╔══██║██╔══██╗██║     ██╔══██╗██║╚════██║";
+echo "██║  ██║██║  ██║╚██████╗██║  ██║██║███████║";
+echo "╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝╚══════╝";
+echo "                                           ";
+echo -e '\033[m'
+echo ""
+echo ""
+sleep 3
+}
+
+
+
+install () {
+
+clear
+logoline1='                             -`                        '
+logoline2='                           .o+`                        '
+logoline3='                           `ooo/                       '
+logoline4='                          `+oooo:                      '
+logoline5='                         `+oooooo:                     ' 
+logoline6='                         -+oooooo+:                    '
+logoline7='                       `/:-:++oooo+:                   '
+logoline8='                      `/++++/+++++++:                  '
+logoline9='                     `/++++++++++++++:                 '
+logoline11='                    `/+++ooooooooooooo/`               '
+logoline12='                   ./ooosssso++osssssso+`              '
+logoline13='                  .oossssso-````/ossssss+`             '
+logoline14='                 -osssssso.      :ssssssso.            '
+logoline15='                :osssssss/        osssso+++.           '
+logoline16='               /ossssssss/        +ssssooo/-           '
+logoline17='             `/ossssso+/:-        -:/+osssso+-         '
+logoline18='            `+sso+:-`                 `.-/+oso:        '
+logoline19='           `++:.                           `-/+/       '
+logoline20='           .`                                 `/       '
+logoline21="                          _                  _         "
+logoline22="  .--.                   / \   _ __ ___ _ __(_)___     "
+logoline23=" / _.-' .-.  .-.  .-.   / _ \ | '__/ __| '__| / __|    "
+logoline24=" \  '-. '-'  '-'  '-'  / ___ \| | | (__| |  | \__ \    "
+logoline25="  '--'                /_/   \_\_|  \___|_|  |_|___/    "
+
+
+
+if [[ $sectionuser == "0" ]]; then
+    dialog --backtitle "${title}" --title "-| ERROR |-" --stdout --msgbox "\n\nNo has creado tu usuario. \n " 8 30   
+    main
+elif [[ $sectionubi == "0" ]]; then
+    dialog --backtitle "${title}" --title "-| ERROR |-" --stdout --msgbox "\n\nNo has elegido tu Ubicación.\n " 8 32
+    main
+elif [[ $sectionlang == "0" ]]; then
+    dialog --backtitle "${title}" --title "-| ERROR |-" --stdout --msgbox "\n\nNo has elegido tu Idioma.\n " 8 30
+    main
+elif [[ $sectionshell == "0" ]]; then
+    dialog --backtitle "${title}" --title "-| ERROR |-" --stdout --msgbox "\n\nNo has elegido tu Shell del sistema.\n " 8 40
+    main
+elif [[ $sectiondisk == "0" ]]; then
+    dialog --backtitle "${title}" --title "-| ERROR |-" --stdout --msgbox "\n\nSelecciona tu Disco para instalar en el sistema.\n " 8 53
+    main
+elif [[ $sectionkernel == "0" ]]; then
+    dialog --backtitle "${title}" --title "-| ERROR |-" --stdout --msgbox "\n\nSelecciona el Kernel para instalar en el sistema.\n " 8 53
+    main
+elif [[ $sectionvideo == "0" ]]; then
+    dialog --backtitle "${title}" --title "-| ERROR |-" --stdout --msgbox "\n\nSelecciona tu driver de vídeo para instalar en el sistema.\n " 8 62
+    main
+elif [[ $sectionenv == "0" ]]; then
+    dialog --backtitle "${title}" --title "-| ERROR |-" --stdout --msgbox "\n\nSelecciona un entorno gráfico para instalar en el sistema.\n " 8 62
+    main
+else
+    clear
+fi
+
+
+
+
+
+
+if [[ ${zonemanual} == true ]]; then
+    zonahoraria=${zonahorariamanual}
+else
+    zonahoraria=${zonahorariauto}
+fi
+
+
+if [[ $seleccionDE == true ]]; then
+    environment=$DE
+elif [[ $seleccionWM == true ]]; then
+    environment=$WM
+else
+    environment=$tty
+fi
+
+
+
+
+
+red='\033[38;2;255;1;31m'
+clear
+echo -e $red
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo ""
+echo ""
+echo -e "${logoline1}"
+echo -e "${logoline2}"
+echo -e "${logoline3} Kernel  : ${kernel_select}"
+echo -e "${logoline4}"
+echo -e "${logoline5} Disco   : ${disk}"
+echo -e "${logoline6}"
+echo -e "${logoline7} Usuario : ${username}"
+echo -e "${logoline8}"
+echo -e "${logoline9} Idioma  : ${keymapx}"
+echo -e "${logoline11}"
+echo -e "${logoline12} Zona Horaria : ${zonahoraria}"
+echo -e "${logoline13}"
+echo -e "${logoline14} Ubicación : ${localefrom}"
+echo -e "${logoline15}"
+echo -e "${logoline16} Driver de Vídeo : ${video}"
+echo -e "${logoline17}"
+echo -e "${logoline18} Entorno Gráfico : ${environment}"
+echo -e "${logoline19}"
+echo -e "${logoline20}"
+echo -e "${logoline21}"
+echo -e "${logoline22}"
+echo -e "${logoline23}"
+echo -e "${logoline24}"
+echo -e "${logoline25}"
+echo ""
+echo ""
+echo "  Arcris Instalación fácil de ArchLinux - Donaciones en: www.patreon.com/codigocristo"
+echo ""
+echo ""
+
+function ProgressBar {
+    let _progress=(${1}*100/${2}*100)/100
+    let _done=(${_progress}*6)/10
+    let _left=60-$_done
+    _fill=$(printf "%${_done}s")
+    _empty=$(printf "%${_left}s")
+# 1.2.1.1 Progreso : [########################################] 100%
+printf "\r   |${_fill// /║}${_empty// /-}| ${_progress}%%"
+
+}
+# Variables
+_start=1
+
+_end=101
+
+for number in $(seq ${_start} ${_end})
+do
+    sleep 0.25
+    ProgressBar ${number} ${_end}
+done
+
+echo -e '\033[m'
+
+
+clear
+timedatectl set-timezone $zonahoraria
+hwclock -w
+hwclock --hctosys
+hwclock --systohc
+clear
+echo "" 
+echo -e ""
+echo -e "\t\t\t| Actualizando Hora Actual en LiveCD |"
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
+sleep 2
+timedatectl status
+echo ""
+date +' %A, %B %d, %Y - %r'
+sleep 5
+clear
+
+
+echo "" 
+echo -e ""
+echo -e "\t\t\t| Actualizando lista de Keys en LiveCD |"
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
+sleep 2
+pacman -Sy archlinux-keyring --noconfirm 
+sleep 2
+clear
+
+
+echo "" 
+echo -e ""
+echo -e "\t\t\t| Actualizando MirrorList en LiveCD |"
+printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
+echo -e ""
+sleep 3
+pacman -Sy reflector --noconfirm 
+pacman -Sy python3 --noconfirm 
+pacman -Sy rsync --noconfirm 
+clear
+echo -e "\t\t\t| Actualizando mejores listas de Mirrors |"
+echo ""
+reflector --verbose --latest 6 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+sleep 3
+clear
+cat /etc/pacman.d/mirrorlist
+sleep 3
+clear
+
+
+titulo_progreso="| Instalando: Base y Base-devel |"
+barra_progreso
+pacstrap /mnt base
+pacstrap /mnt base-devel
+pacstrap /mnt reflector python3 rsync
+pacstrap /mnt nano 
+pacstrap /mnt xdg-user-dirs
+clear
+
+
+titulo_progreso="| Actualizando mejores listas de Mirrors del sistema instalado |"
+barra_progreso
+arch-chroot /mnt /bin/bash -c "reflector --verbose --latest 6 --protocol https --sort rate --save /etc/pacman.d/mirrorlist"
+clear
+cat /mnt/etc/pacman.d/mirrorlist
+sleep 3
+clear
+echo ""
+arch-chroot /mnt /bin/bash -c "pacman -Syu --noconfirm"
+echo ""
+echo " Agregando Repositorio de Arcris :"
+echo ""
+cp pacman.conf /mnt/etc/pacman.conf
+arch-chroot /mnt /bin/bash -c "pacman -Syu --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -Syu --noconfirm"
+clear
+
+
+titulo_progreso="| Archivo FSTAB |"
+barra_progreso
+genfstab -U /mnt > /mnt/etc/fstab
+echo ""
+arch-chroot /mnt /bin/bash -c "cat /etc/fstab"
+sleep 3
+clear
+
+
+titulo_progreso="| Usuario y Administrador |"
+barra_progreso
+echo -e ""
+echo -e ""
+echo "$hostname" > /mnt/etc/hostname
+echo "127.0.1.1 $hostname.localdomain $hostname" > /mnt/etc/hosts
+echo ""
+echo "Hostname: $(cat /mnt/etc/hostname)"
+echo ""
+echo "Hosts: $(cat /mnt/etc/hosts)"
+echo ""
+sleep 5
+arch-chroot /mnt /bin/bash -c "(echo $rootpasswd ; echo $rootpasswd) | passwd root"
+arch-chroot /mnt /bin/bash -c "useradd -m -g users -s /bin/bash $username"
+arch-chroot /mnt /bin/bash -c "(echo $userpasswd ; echo $userpasswd) | passwd $username"
+#arch-chroot /mnt /bin/sh -c "echo root:$rootpasswd | chpasswd"
+#arch-chroot /mnt /bin/bash -c "echo $user:$userpasswd | chpasswd"
+sed -i "80i $username ALL=(ALL) NOPASSWD: ALL"  /mnt/etc/sudoers
+
+
+
+# Idioma
+titulo_progreso="| Actualizando Idioma del Sistema |"
+barra_progreso
+echo -e ""
+echo -e ""
+echo "${localefrom} UTF-8" > /mnt/etc/locale.gen
+arch-chroot /mnt /bin/bash -c "locale-gen" 
+echo ""
+echo "LANG=$localefrom" > /mnt/etc/locale.conf && cat /mnt/etc/locale.conf 
+echo "KEYMAP=$keymap" > /mnt/etc/vconsole.conf && cat /mnt/etc/vconsole.conf 
+echo ""
+arch-chroot /mnt /bin/bash -c "export $(cat /mnt/etc/locale.conf)" 
+export $(cat /mnt/etc/locale.conf)
+arch-chroot /mnt /bin/bash -c "sudo -u $username export $(cat /etc/locale.conf)"
+export $(cat /mnt/etc/locale.conf)
+sleep 3
+
+
+## DIRECTORIOS
+titulo_progreso="| Actualizando lista de directorios de usuario |"
+barra_progreso
+echo -e ""
+echo -e ""
+arch-chroot /mnt /bin/bash -c "xdg-user-dirs-update"
+arch-chroot /mnt /bin/bash -c "sudo -u $username xdg-user-dirs-update"
+echo ""
+arch-chroot /mnt /bin/bash -c "ls -l /root/"
+echo ""
+echo ""
+arch-chroot /mnt /bin/bash -c "ls -l /home/$username/"
+echo ""
+sleep 5
+clear
+
+
+## ZONA HORARIA 
+titulo_progreso="| Actualizando Zona Horaria |"
+barra_progreso
+echo -e ""
+echo -e ""
+ln -sf /usr/share/zoneinfo/$zonahoraria /mnt/etc/localtime
+arch-chroot /mnt /bin/bash -c "timedatectl set-timezone $zonahoraria"
+arch-chroot /mnt /bin/bash -c "hwclock -w"
+arch-chroot /mnt /bin/bash -c "hwclock --hctosys"
+arch-chroot /mnt /bin/bash -c "hwclock --systohc"
+sleep 2
+arch-chroot /mnt /bin/bash -c "timedatectl status"
+echo ""
+arch-chroot /mnt /bin/bash -c "date +' %A, %B %d, %Y - %I:%M %p'"
+sleep 5
+clear
+
+
+## KERNEL SELECCIONADO
+source lib/installkernel
+installkernel
+clear
+
+## ESCRITORIOS 
+titulo_progreso="| Instalando Entorno Gráfico |"
+barra_progreso
+echo -e ""
+echo -e ""
+source lib/environment
+installenvironment
+clear
+
+## DRIVERS DE VIDEO
+titulo_progreso="| Instalando driver de Vídeo |"
+barra_progreso
+echo -e ""
+echo -e ""
+source lib/video
+installvideo
+
+## SHELL DEL SISTEMA
+source lib/shellsystem
+installshell
+
+## GRUB
+source lib/installgrub
+installgrub
+clear
+
+source lib/installextras
+extrasinstall
+clear
+
+
+####################################################################
+clear
+arch-chroot /mnt /bin/bash -c "ntpd -qg"
+arch-chroot /mnt /bin/bash -c "hwclock -w"
+arch-chroot /mnt /bin/bash -c "hwclock --hctosys"
+arch-chroot /mnt /bin/bash -c "hwclock --systohc"
+clear
+arch-chroot /mnt /bin/bash -c "localectl --no-convert set-x11-keymap $keymapx"
+mkdir -p /mnt/etc/X11/xorg.conf.d
+touch /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
+
+tee /mnt/etc/X11/xorg.conf.d/00-keyboard.conf <<EOF
+Section "InputClass"
+        Identifier "system-keyboard"
+        MatchIsKeyboard "on"
+        Option "XkbLayout" "$keymapx"
+EndSection 
+EOF
+clear
+cat /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
+mkdir -p /mnt/usr/share/backgrounds/
+cp arcris.png /mnt/usr/share/backgrounds/arcris.png
+sleep 5
+####################################################################
+
+####################################################################
+clear
+echo ""
+echo ""
+echo "Quitando repo cristo:"
+echo ""
+sleep 4
+cp pacman-chroot.conf /mnt/etc/pacman.conf
+arch-chroot /mnt /bin/bash -c "pacman -Syu --noconfirm" 
+arch-chroot /mnt /bin/bash -c "pacman -Syu --noconfirm" 
+clear
+arch-chroot /mnt /bin/bash -c "systemctl enable dhcpcd NetworkManager"
+clear
+arch-chroot /mnt /bin/bash -c "systemctl start dhcpcd NetworkManager"
+clear
+echo "noipv6rs" >> /mnt/etc/dhcpcd.conf
+echo "noipv6" >> /mnt/etc/dhcpcd.conf
+clear
+sed -i '80d' /mnt/etc/sudoers
+sed -i "80i $username ALL=(ALL) ALL" /mnt/etc/sudoers
+clear
+####################################################################
+clear
+####################################################################
+echo ""
+echo ""
+arch-chroot /mnt /bin/bash -c "sudo -u $username alsi -l"
+echo ""
+echo "  Gracias a toda la comunidad en Telegram : https://t.me/ArchLinuxCristo"
+echo ""
+echo "     Larga vida a Yno Alberto y Novatovich - Agradecimientos :"
+echo ""
+echo "     @dakataca @#!/bin/bash @Svendeer @AlexHMusique @mxhectorvega @D3stry3rK3rn3l @CodeAssault"
+echo "     @GloriousMusketeer @ynoalberto @javashin @JW2128 @Jhoseph_AG @picallogl @i_a_n_6 @MisaelCB"
+echo ""
+printf "\n  | La computadora se reiniciara para finalizar |\n  | Cuando este apagada la computadora retire la USB o CD |\n\n"
+
+#INICIO PROGRESS BARR
+function ProgressBar {
+    let _progress=(${1}*100/${2}*100)/100
+    let _done=(${_progress}*6)/10
+    let _left=60-$_done
+    _fill=$(printf "%${_done}s")
+    _empty=$(printf "%${_left}s")
+# 1.2.1.1 Progreso : [########################################] 100%
+printf "\r > Cargando : |${_fill// /║}${_empty// /-}| ${_progress}%%"
+
+}
+# Variables
+_start=1
+
+_end=100
+
+for number in $(seq ${_start} ${_end})
+do
+    sleep 0.5
+    ProgressBar ${number} ${_end}
+done
+#FIN PROGRESS BARR
+echo ""
+echo ""
+####################################################################
+
+
+clear
+swapdisco=$( fdisk -l | grep "/dev/\|swap" | grep swap | awk -F ' ' '{print $1}' )
+umount -R /mnt
+swapoff ${swapdisco}
+swapoff -a
+swapon -a
+clear
+reboot
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+install2 () {
+
+red='\033[38;2;255;1;31m'
+clear
+echo ""
+echo ""
+echo -e $red '                             -`                        '
+echo -e $red '                           .o+`                        '
+echo -e $red '                           `ooo/                       Kernel  : ${kernel_select}'
+echo -e $red '                          `+oooo:                      '
+echo -e $red '                         `+oooooo:                     Disco   : ' 
+echo -e $red '                         -+oooooo+:                    '
+echo -e $red '                       `/:-:++oooo+:                   Usuario : '
+echo -e $red '                      `/++++/+++++++:                  '
+echo -e $red '                     `/++++++++++++++:                 Idioma  : '
+echo -e $red '                    `/+++ooooooooooooo/`               '
+echo -e $red '                   ./ooosssso++osssssso+`              Zona Horaria :'
+echo -e $red '                  .oossssso-````/ossssss+`             '
+echo -e $red '                 -osssssso.      :ssssssso.            Ubicación :'
+echo -e $red '                :osssssss/        osssso+++.           '
+echo -e $red '               /ossssssss/        +ssssooo/-           Driver de Vídeo : '
+echo -e $red '             `/ossssso+/:-        -:/+osssso+-         '
+echo -e $red '            `+sso+:-`                 `.-/+oso:        Entorno Gráfico : '
+echo -e $red '           `++:.                           `-/+/       '
+echo -e $red '           .`                                 `/       '
+echo -e $red "                          _                  _         "
+echo -e $red "  .--.                   / \   _ __ ___ _ __(_)___     "
+echo -e $red " / _.-' .-.  .-.  .-.   / _ \ | '__/ __| '__| / __|    "
+echo -e $red " \  '-. '-'  '-'  '-'  / ___ \| | | (__| |  | \__ \    "
+echo -e $red "  '--'                /_/   \_\_|  \___|_|  |_|___/    "
+
+echo -e '\033[m'
+
+read line
+
+}

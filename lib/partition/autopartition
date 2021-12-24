@@ -1,0 +1,46 @@
+#!/bin/bash
+
+autopartition () {
+
+
+cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Particionado Automático del Disco |-" \
+--no-tags --ok-label "Confirmar" --nocancel --menu "\nEliga su mejor opción para su Sistema\n\nLa unidad SSD tienen una vida útil limitada por los\nciclos de escritura.
+\nActivar SWAP conducirá a una mejora dramática del\nrendimiento a costa de una vida útil del SSD algo más corta.\n " 20 64 20)
+options=(1 " Root ( ext4 ) Recomendado     "   
+         2 " Root - Swap ( ext4 )          "
+         3 " Root - Home ( ext4 )          "
+		 4 " Root - Home - Swap ( ext4 )   ")
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+    ################
+
+1) ################ 
+source lib/partition/auto/auto1
+auto1
+;;
+
+2) ################
+source lib/partition/auto/auto2
+auto2
+;;
+3) ################
+source lib/partition/auto/auto3
+auto3
+;;
+
+4) ################
+source lib/partition/auto/auto4
+auto4
+;;
+                                                
+    esac
+done
+
+
+}
+
+

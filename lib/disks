@@ -1,0 +1,69 @@
+#!/bin/bash
+proximamente () {
+    dialog --backtitle "${title}" --title "-| Código Cristo |-" --stdout --ok-label 'Aceptar' --msgbox "\nProximamente...\n" 7 55
+}
+
+
+disksystem () {
+
+GRUBINSTALL=1
+
+cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Discos |-" \
+--ok-label "Confirmar" --menu "\nEliga su mejor opción para su Sistema\n " 15 60 15)
+options=(1 " Particionado Automático                       "   
+         2 " Particionado Automático con Cifrado de Disco  "
+         3 " Particionado Manual                           "
+         4 " Particionado con otro Sistema Operativo       "
+         5 " Cambia o Crea tu Tabla de partición del Disco "
+         6 " Formatea todo tu Disco con DD                 ")
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+    ################
+
+1) ################ 
+source lib/partition/autopartition
+autopartition
+;;
+
+2) ################
+source lib/partition/encryptpartition
+# GRUBINSTALL=2
+# encryptpartition
+proximamente
+;;
+3) ################
+source lib/partition/manualpartition
+# manualpartition
+manualpartition
+;;
+
+4) ################
+source lib/partition/dualbootpartition
+GRUBINSTALL=3
+dualpartition
+;;
+
+
+5) ################
+source lib/partition/tabledisk
+tabledisk
+;;
+
+
+6) ################
+source lib/partition/deletediskdd
+deletediskdd
+;;
+
+    esac
+done
+
+sectiondisk=1
+
+}
+
+

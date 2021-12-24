@@ -1,0 +1,73 @@
+#!/bin/bash
+
+tabledisk () {
+
+
+
+################################################################
+# SELETC DISK
+################################################################
+
+part="$(lsblk -lno NAME,SIZE,TYPE | grep 'disk' | awk '{print "/dev/" $1 " " $2}' | sort -u | sed '/f/d' | sed '/sr/d' )" 
+disk=$(dialog --backtitle "${title}" --clear  --ok-label "Seleccionar disco" --no-cancel --menu "\nSelecciona tu disco :\n " 12 50 0 ${part} 2>&1 >/dev/tty)
+
+#Desmontamos todo disco y swapoff
+swapdisco=$( fdisk -l | grep "/dev/\|swap" | grep swap | awk -F ' ' '{print $1}' )
+umount -R /mnt
+clear
+swapoff ${swapdisco}
+clear
+swapoff -a
+clear
+swapon -a
+clear
+rm /mnt/etc/fstab
+clear 
+
+bootarch=$( ls /sys/firmware/efi/ | grep -ic efivars )
+
+if [[ $bootarch == 1 ]]; then
+  tableboot="UEFI"
+else
+  tableboot="BIOS LEGACY"
+fi
+
+cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Tabla de Partición |-" \
+--ok-label "Confirmar" --no-tags --menu "\nLa conversión borrá toda información de su Disco\n- Para sistema UEFI use GPT\n- Para sistema BIOS LEGACY use MBR/dos\n\nTu sistema iniciado es : ${tableboot}\n " 16 55 15)
+options=(1 "         Convertir disco a GPT                 "   
+         2 "         Convertir disco a MBR-dos             ")
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+    ################
+
+1) ################ 
+dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Preparando Disco - UEFI |-" --stdout --ok-label "Siguiente" \
+--prgbox "sgdisk --zap-all ${disk} && \
+parted ${disk} mklabel gpt && \
+fdisk -l ${disk} > /tmp/partitions && \
+echo -------------------------------------- && \
+cat /tmp/partitions" 20 110
+
+;;
+
+2) ################ 
+dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Preparando Disco - UEFI |-" --stdout --ok-label "Siguiente" \
+--prgbox "sgdisk --zap-all ${disk} && \
+parted ${disk} mklabel msdos && \
+fdisk -l ${disk} > /tmp/partitions && \
+echo -------------------------------------- && \
+cat /tmp/partitions" 20 110
+
+;;
+
+    esac
+done
+
+
+
+
+}

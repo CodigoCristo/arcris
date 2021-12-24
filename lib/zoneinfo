@@ -1,0 +1,123 @@
+#!/bin/bash
+
+#https://www.gsp.com/cgi-bin/man.cgi?section=1&topic=dialog
+
+locality () {
+
+##########################
+# ZONE
+##########################
+
+
+
+zoneinfo="N/N"
+timezonedir=""
+timezone=""
+
+zonahorariauto="N/N"
+zonahorariamanual="N/N"
+
+clear
+echo ""
+echo "Loading..."
+echo ""
+curl https://ipapi.co/timezone > zoneinfo
+zonahorariauto=$(cat zoneinfo)
+echo ""
+locales=""
+localefrom=""
+curl https://ipapi.co/languages | awk -F "," '{print $1}' | sed 's/-/_/g' | sed "s|$|.UTF8|" > language
+country=$(cat language)
+clear
+
+
+dialog --backtitle "${title}" --title "${title_timezone}" --defaultno --yesno "${msg_timezone1}$zonahorariauto | $country${msg_timezone2}" 12 40
+
+if [ "$?" = "0" ]; then
+#### PRESS NO
+selected=0 
+timezonedir=/usr/share/zoneinfo
+while [ "$selected" = "0" ] 
+do
+
+  clear
+  check=$(ls -l $timezonedir | grep -v .tab | awk '/drwx/' | awk -F " " '{print $9}' | awk '{if (NR!=1) {print}}' | head -1)
+  if [[ $check != America ]]; then 
+    echo "../ UP" >timezones 
+  fi
+
+  ls -l $timezonedir | grep -v .tab | awk '/drwx/' | awk -F " " '{print $9}' | awk '{print $0"/"}' | awk '$fs=$fs" Time"' | awk '{if (NR!=1) {print}}'>>timezones 
+  
+  ls -l $timezonedir | grep -v .tab | awk '/-rw-/' | awk -F " " '{print $9}' | awk '$fs=$fs" Time"' | awk '{if (NR!=1) {print}}'>>timezones
+  timezones=$(cat timezones) 
+  rm timezones 
+    timezone=$(dialog --backtitle "${title}" --title "${title_timezone}" --clear --title "${title_timezonemanual}: $zoneinfo |-" \
+    --menu "${msg_timezonemanual}" 30 45 20 ${timezones} 2>&1 >/dev/tty)  
+  clear
+  if [ "$?" = "0" ] 
+  then
+    if [[ $timezone == *"/"* ]]; then 
+      timezonedir=$timezonedir/$timezone
+
+    else 
+      zonemanual=true
+      selected=1
+    fi
+  fi
+done
+
+zonahorariamanual=$(echo $timezonedir$timezone | sed 's/^....................//g')
+
+
+locales="$(cat lib/locale.gen | grep -v "#  " | sed 's/#//g' | grep '.UTF-8 UTF-8' )"
+localefrom=$(dialog --backtitle "${title}" --no-cancel --ok-label "${btn_confirm}" --clear --title "${title_country}" \
+--menu "${msg_country} ${country}\n " 25 35 20 ${locales} 2>&1 > /dev/tty)
+
+rm language 
+rm zoneinfo
+clear
+# $localefrom > variable 1  = es_PE.UTF-8
+
+
+else
+# PRESS YES
+zonemanual=false
+
+zonahorariauto=$(cat zoneinfo)
+localefrom=$(cat language)
+
+rm language 
+rm zoneinfo
+clear
+
+fi
+
+# $zoneinfo  > variable 1
+# $timezonedir$timezone  = /usr/share/zoneinfo/America/Lima
+
+
+# if [ "$zonadefaultNo" == "true" ]; then
+# ln -sf $timezonedir${timezone} /mnt/etc/localtime
+#     fi
+#
+# if [ "$zonadefaultYes" == "true" ]; then
+# ln -sf /usr/share/zoneinfo/$zonahorariaok /mnt/etc/localtime
+#     fi
+
+rm zoneinfo
+clear
+
+
+##########################
+# COUNTRY
+##########################
+
+
+
+
+
+
+
+sectionubi=1
+
+}

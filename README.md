@@ -13,13 +13,21 @@ curl -L is.gd/arcris > arcris ; sh arcris
 ```
 loadkeys es
 pacman -Sy wget --noconfirm
-wget v.gd/arcris ; sh arcris
+wget is.gd/arcris ; sh arcris
 ```
 
 > Método 3
 ```
 pacman -Sy wget --noconfirm
 wget https://raw.githubusercontent.com/CodigoCristo/arcris/master/arcris
+sh arcris
+```
+
+> Método 3
+```
+pacman -Sy git --noconfirm
+git clone https://github.com/CodigoCristo/arcris
+cd arcris
 sh arcris
 ```
 

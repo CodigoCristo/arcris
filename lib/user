@@ -1,0 +1,112 @@
+#!/bin/bash
+
+
+users () {
+
+
+
+hostname="Arcris"
+username=""
+userpasswd=""
+rootpasswd=""
+
+dialog --backtitle "${title}" --title "-| User |-" --stdout --ok-label "< OK >"  --msgbox "\nEscriba su usuario y contraseña. \n " 7 37
+
+##########################
+# USER
+##########################
+while true; do
+username=$(dialog --backtitle "${title}" --title "${titleuser}" \
+--nocancel --inputbox "${msg_username}" 15 65 3>&1 1>&2 2>&3)
+
+    if [ $? -eq 0 ]; then
+    #El nombre de usuario debe comenzar con una letra minúscula. 
+    #Puede contener minúsculas alfanuméricas y guiones.
+      if printf "%s" "${username}" | grep -Eoq "^[a-z][a-z0-9-]*$" \
+       && [ "${#username}" -lt 20 ]; then
+        
+        # El archivo de nombre de usuario reservado contiene nombres de usuario que deben evitarse
+        if grep -Fxq $username reserved_usernames ; then
+          
+          dialog --backtitle "${title}" --title "${title_reserved_usernames}" --msgbox "${msg_reserved_usernames}" 10 40
+        
+        else 
+          
+          inputs_match=false
+          
+          while ! $inputs_match; do
+
+            input=$(dialog --backtitle "${title}" --title "${title_passwuser}" --clear \
+              --stdout --nocancel --insecure --passwordbox "${msg_passwduser} $username:\n " 10 55)
+            confirm_input=$(dialog --backtitle "${title}" --title "${title_passwuserconfirm} $username |-" \
+              --clear --stdout --insecure --no-cancel --passwordbox "${msg_passwuserconfirm}" 10 55)
+
+            if [ -z "$input" ]; then
+
+              dialog --backtitle "${title}" --title "${title_passwusernull}" --msgbox "${msg_passwusernull}" 7 60
+            
+            elif [ "$input" != "$confirm_input" ]; then
+
+              dialog --backtitle "${title}" --title "${title_error}" --msgbox "${msg_passwuserfail}" 7 60
+            else
+              userpasswd="$input"
+              inputs_match=true
+            fi
+          done
+          break
+        fi
+      else
+        dialog --backtitle "${title}" --title "${title_userfail}" --msgbox "${msg_userfail}" 11 80
+      fi
+    fi
+  done
+
+
+
+##########################
+# HOSTNAME
+##########################
+#while true; do
+#    hostname=$(dialog --backtitle "${title}" --title "${title_hostname}" --nocancel \
+#    --inputbox "${msg_hostname}" 12 65 "ArcriS" 3>&1 1>&2 2>&3)
+#
+#
+#   # Hostname must be alpha-numeric and may contain a dash only in between
+#    if printf "%s" "$hostname" | grep -Eoq "^[a-zA-Z0-9-]{1,63}$" \
+#      && [ "${hostname:0:1}" != "-" ] \
+#      && [ "${hostname: -1}" != "-" ]; then
+#      break
+#    else
+#      dialog --backtitle "${title}"  --title "${title_hostname_fail}" --msgbox "${msg_hostname_fail}" 12 68
+#    fi
+#
+#  done
+
+
+dialog --backtitle "${title}" --title "-| Root |-" --stdout --ok-label "< OK >"  --msgbox "\nEscriba su contraseña de administrador. \n " 7 43
+
+##########################
+# PASSWD ROOT
+##########################
+inputs_match=false
+  while ! $inputs_match; do
+    input=$(dialog --backtitle "${title}" --title "${title_passroot}" --clear --stdout --nocancel \
+      --insecure --passwordbox "${msg_passroot}" 13 50)
+    confirm_input=$(dialog --backtitle "${title}" --title "${title_passroot_confirm}" --clear --stdout --no-cancel \
+      --insecure --passwordbox "${msg_passroot_confirm}" 10 60)
+        
+
+    if [ -z "$input" ]; then
+      dialog --backtitle "${title}" --title "${title_passrootnull}" --msgbox "${msg_passrootnull}" 7 55
+    elif [ "$input" != "$confirm_input" ]; then
+      dialog --title "${title_passroot_error}" --msgbox "${msg_passroot_error}" 7 58
+    else
+      rootpasswd="$input"
+      inputs_match=true
+    fi
+  done
+
+
+  sectionuser=1
+
+}

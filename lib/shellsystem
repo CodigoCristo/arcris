@@ -1,0 +1,134 @@
+#!/bin/bash
+
+shellsystem () {
+
+shell=""
+
+cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}" --title "${title_shell}" \
+--no-tags --ok-label "${btn_confirm}" --nocancel --menu "${msg_shell}" 15 52 15)
+options=(1 " zsh  "   
+         2 " bash "
+         3 " fish "
+         4 " dash "
+         5 " mksh "
+         6 " tcsh ")
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+        1)
+            shell="zsh"
+            sectionshell=1
+            ;;
+
+        2)
+            shell="bash"
+            sectionshell=1
+            ;;
+        3)
+            shell="fish"
+            sectionshell=1
+            ;;
+            
+        4)
+            shell="dash"
+            sectionshell=1
+            ;;
+            
+        5)
+            shell="mksh"
+            sectionshell=1
+            ;;
+            
+        6)
+            shell="tcsh"
+            sectionshell=1
+            ;;
+                                                
+    esac
+done
+
+
+}
+
+
+
+
+
+installshell () {
+
+
+
+case $shell in
+
+  zsh)
+
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S zsh --noeditmenu --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S zsh-completions --noeditmenu --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S zsh-syntax-highlighting --noeditmenu --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S zsh-autosuggestions --noeditmenu --noconfirm --needed"
+
+  ;;
+
+  bash)
+
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S bash --noeditmenu --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S bash-completion --noeditmenu --noconfirm --needed"
+
+  ;;
+
+  dash)
+    
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S dash --noeditmenu --noconfirm --needed"
+
+  ;;
+
+  fish)
+    
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S fish --noeditmenu --noconfirm --needed"
+
+  ;;
+
+  mksh)
+    
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S mksh --noeditmenu --noconfirm --needed"
+
+  ;;
+
+
+  tcsh)
+
+    arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S tcsh --noeditmenu --noconfirm --needed"
+
+  ;;
+
+esac
+
+
+echo ""
+
+arch-chroot /mnt /bin/bash -c "chsh -s /bin/$shell"
+arch-chroot /mnt /bin/bash -c "chsh -s /usr/bin/$shell $username"
+arch-chroot /mnt /bin/bash -c "chsh -s /bin/$shell $username"
+
+
+cp .dialogrc /mnt/root
+chmod +x /mnt/root/.dialogrc
+cp .dialogrc /mnt/home/$username/.dialogrc
+chmod +x /mnt/home/$username/.dialogrc
+
+mkdir /mnt/etc/pacman.d/hooks/
+cp mirrorupgrade.hook /mnt/etc/pacman.d/hooks/mirrorupgrade.hook 
+chmod +x /mnt/etc/pacman.d/hooks/mirrorupgrade.hook
+
+cp .zshrc /mnt/home/$username/.zshrc
+arch-chroot /mnt /bin/bash -c "chown -hR $username:users /home/$username/.zshrc"
+cp .zshrc /mnt/root/.zshrc
+
+cp .bashrc /mnt/home/$username/.bashrc
+cp .bashrc-root /mnt/root/.bashrc
+arch-chroot /mnt /bin/bash -c "chown -hR $username:users /home/$username/.bashrc"
+
+
+}

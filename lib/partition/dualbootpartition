@@ -1,0 +1,354 @@
+#!/bin/bash
+
+
+bios_rootdualboot () {
+
+clear
+rmmod floppy
+clear
+swapdisco=$( fdisk -l | grep "/dev/\|swap" | grep swap | awk -F ' ' '{print $1}' )
+umount -R /mnt
+swapoff ${swapdisco}
+clear
+swapoff -a
+swapon -a
+rm /mnt/etc/fstab
+clear 
+#Desmontamos todo disco y swapoff
+
+part=""
+disk=""
+partitions=""
+p=""
+part=""
+rootfs=""
+
+
+tableboot="BIOS LEGACY"
+part="$(lsblk -lno NAME,SIZE,TYPE | grep 'disk' | awk '{print "/dev/" $1 " " $2}' | sort -u | sed '/f/d' | sed '/sr/d' )" 
+disk=$(dialog --backtitle "${title}" --clear  --ok-label "Seleccionar disco" --no-cancel --menu "\nSelecciona el disco para Arch Linux\n " 12 45 0 ${part} 2>&1 >/dev/tty)
+
+partitioner=$(dialog --backtitle "${title}" --clear --title "-| Particionado de Disco |-" --ok-label 'Seleccionar' --no-cancel --menu ">\n> Crear particiones correctamente\n> Tu sistema iniciado es : ${tableboot}" 9 0 0\
+    "cfdisk" " Un particionador casi grafico         " \
+    "fdisk " " Un particionador de linea de comandos " \
+    "parted" " Un particionador de linea de comandos " 2>&1 > /dev/tty)
+
+clear
+
+$partitioner $disk
+
+fdisk -l "$disk" > /tmp/partitions
+
+#partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
+partitions=$(fdisk -l ${disk} | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}' | grep /dev/ | awk '{if (NR=1) {print}}' | sed 's/*//g')
+p="$(echo "$partitions")"
+
+part=$(dialog --backtitle "${title}" --title "-| Selección de puntos de Montaje |-" --ok-label 'Seleccionar' --no-cancel --clear \
+  --menu "\nSelecciona la partición para Administrador: [ / ]\n " 10 55 0 ${p} 2>&1 > /dev/tty)
+
+#dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Verificando estado de partición |-" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+
+rootfs=$part
+
+p=$(echo "$p" | grep -v $part)
+
+dialog --clear --no-collapse --cr-wrap --backtitle "${title}" --title "| Formateando partición en EXT4 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext4 -F $part" 20 80
+
+mount "$rootfs" /mnt
+
+
+cmd=(dialog --backtitle "$titulo" --separate-output --ok-label 'Montar y formatear selección' --cancel-label 'No tengo más particiones' \--checklist "Selecciona otros puntos de montajes:\n\
+\n[SPACE] para marcar * \n\
+[ENTER] para continuar. \n\n\
+Todas las particiones tienen un formato de EXT4 \n " 13 75 0)
+options=("/home" "Archivos de usuario" off
+  "/tmp " "Archivos temporales" off
+  "/usr " "Datos estáticos" off
+  "/var " "Datos de variables" off
+  "/srv " "Datos de los servicios prestados por este sistema" off
+  "/opt " "Aplicaciones de terceros o privativos" off
+  "swap " "Memoria virtual RAM" off
+  )
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+  case $choice in
+        
+    "/home")
+
+#     dialog --backtitle "$titulo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
+      part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
+        --menu "| Elige la partición que desea usar para: home |" 0 55 0 ${p} 2>&1 > /dev/tty )
+      homefs="$part"
+      #dialog --backtitle "$titulo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+      #partitioning
+      dialog --clear --no-collapse --cr-wrap --backtitle "${title}" --title "| Formateando partición en EXT4 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext4 -F $part" 20 80
+      homedir="home"
+      mkdir -p /mnt/home
+      mount "$homefs" /mnt/home
+      p=$(echo "$p" | grep -v "$part")
+      ;;
+
+    "/tmp")
+
+#     dialog --backtitle "$titulo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
+      part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
+        --menu "| Elige la partición que desea usar para: tmp |" 0 55 0 ${p} 2>&1 > /dev/tty )
+      tmpfs="$part"
+      #dialog --backtitle "$titulo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+      #partitioning
+      dialog --clear --no-collapse --cr-wrap --backtitle "${title}" --title "| Formateando partición en EXT4 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext4 -F $part" 20 80
+      tmpdir="tmp"
+      mkdir -p /mnt/tmp
+      mount "$tmpfs" /mnt/tmp
+      p=$(echo "$p" | grep -v "$part")
+      ;;
+
+    "/usr")
+
+#     dialog --backtitle "$titulo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
+      part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
+        --menu "| Elige la partición que desea usar para: usr |" 0 55 0 ${p} 2>&1 > /dev/tty )
+      usrfs="$part"
+      #dialog --backtitle "$titulo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+      #partitioning
+      dialog --clear --no-collapse --cr-wrap --backtitle "${title}" --title "| Formateando partición en EXT4 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext4 -F $part" 20 80
+      usrdir="usr"
+      mkdir -p /mnt/usr
+      mount "$usrfs" /mnt/usr
+      p=$(echo "$p" | grep -v "$part")
+      ;;
+
+    "/var")
+
+#     dialog --backtitle "$titulo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
+      part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
+        --menu "| Elige la partición que desea usar para: var |" 0 55 0 ${p} 2>&1 > /dev/tty )
+      varfs="$part"
+      #dialog --backtitle "$titulo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+      #partitioning
+      dialog --clear --no-collapse --cr-wrap --backtitle "${title}" --title "| Formateando partición en EXT4 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext4 -F $part" 20 80
+      vardir="var"
+      mkdir -p /mnt/var
+      mount "$varfs" /mnt/var
+      p=$(echo "$p" | grep -v "$part")
+      ;;
+
+    "/srv")
+
+#     dialog --backtitle "$titulo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
+      part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
+        --menu "| Elige la partición que desea usar para: srv |" 0 55 0 ${p} 2>&1 > /dev/tty )
+      srvfs="$part"
+      #dialog --backtitle "$titulo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+      #partitioning
+      dialog --clear --no-collapse --cr-wrap --backtitle "${title}" --title "| Formateando partición en EXT4 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext4 -F $part" 20 80
+      srvdir="srv"
+      mkdir -p /mnt/srv
+      mount "$srvfs" /mnt/srv
+      p=$(echo "$p" | grep -v "$part")
+      ;;
+
+    "/opt")
+
+#     dialog --backtitle "$titulo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
+      part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
+        --menu "| Elige la partición que desea usar para: opt |" 0 55 0 ${p} 2>&1 > /dev/tty )
+      optfs="$part"
+      #dialog --backtitle "$titulo" --title "| Verificando estado de Disco |" --stdout --ok-label "Siguiente" --prgbox "e2fsck -f -y -v -C 0 $part" 20 80
+      #partitioning
+      dialog --clear --no-collapse --cr-wrap --backtitle "${title}" --title "| Formateando partición en EXT4 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext4 -F $part" 20 80
+      optdir="opt"
+      mkdir -p /mnt/opt
+      mount "$optfs" /mnt/opt
+      p=$(echo "$p" | grep -v "$part")
+      ;;
+
+    "swap")
+#     dialog --backtitle "$titulo" --title "| TIPO DE PARTICIÓN |" --stdout --ok-label 'Siguiente' --msgbox "$(echo "" && fdisk -l $disk | grep gpt && echo "" && fdisk -l $disk | grep /dev/ )" 11 150
+      part=$(dialog --backtitle "$titulo" --ok-label 'Seleccionar' --no-cancel --clear --title "| Selecciona la partición |" \
+        --menu "| Elige la partición que desea usar para: swap |" 0 55 0 ${p} 2>&1 > /dev/tty)
+      dialog --title "| Formateando Swap Linux |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkswap $part && swapon $part" 10 100
+      swap="$part"
+      p=$(echo "$p" | grep -v "$part")
+
+  esac
+done
+
+
+clear
+partprobe
+clear
+
+dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Informarción |-" --stdout --ok-label "Siguiente" \
+--prgbox "lsblk -lo NAME,SIZE,MOUNTPOINT,TYPE > /tmp/partitions && \
+echo -------------------------------------- && \
+echo _ && \
+cat /tmp/partitions && \
+echo _ && \
+echo --------------------------------------" 20 50
+
+#PARTICIONADO MANUAL
+
+
+}
+
+
+
+bios_solorootdualboot () { 
+
+clear
+rmmod floppy
+clear
+swapdisco=$( fdisk -l | grep "/dev/\|swap" | grep swap | awk -F ' ' '{print $1}' )
+umount -R /mnt
+swapoff ${swapdisco}
+clear
+swapoff -a
+swapon -a
+rm /mnt/etc/fstab
+clear 
+#Desmontamos todo disco y swapoff
+
+part=""
+disk=""
+partitions=""
+p=""
+part=""
+rootfs=""
+
+
+part="$(lsblk -lno NAME,SIZE,TYPE | grep 'disk' | awk '{print "/dev/" $1 " " $2}' | sort -u | sed '/f/d' | sed '/sr/d' )" 
+disk=$(dialog --backtitle "${title}" --clear  --ok-label "Seleccionar disco" --no-cancel --menu "\nSelecciona el disco para Arch Linux\n " 12 45 0 ${part} 2>&1 >/dev/tty)
+
+partitioner=$(dialog --backtitle "${title}" --clear --title "-| Particionado de Disco |-" --ok-label 'Seleccionar' --no-cancel --menu ">\n> Crear particiones correctamente\n> Tu sistema iniciado es : ${tableboot}" 9 0 0\
+    "cfdisk" " Un particionador casi grafico         " \
+    "fdisk " " Un particionador de linea de comandos " \
+    "parted" " Un particionador de linea de comandos " 2>&1 > /dev/tty)
+
+clear
+
+$partitioner $disk
+
+fdisk -l "$disk" > /tmp/partitions
+
+#partitions="$(cat /tmp/partitions | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}')"
+partitions=$(fdisk -l ${disk} | grep /dev/ | awk '{if (NR!=1) {print}}' | sed 's/*//g' | awk -F ' ' '{print $1,$5}' | grep /dev/ | awk '{if (NR=1) {print}}' | sed 's/*//g')
+p="$(echo "$partitions")"
+
+part=$(dialog --backtitle "${title}" --title "-| Selección de puntos de Montaje |-" --ok-label 'Seleccionar' --no-cancel --clear \
+  --menu "\nSelecciona la partición root para Linux: \n " 10 55 0 ${p} 2>&1 > /dev/tty)
+
+rootfs=$part
+
+# bootwin=$(fdisk -l ${disk} | grep /dev/ | awk '{if (NR!=1) {print}}' | grep "*" | awk -F ' ' '{print $1}' )
+
+dialog --clear --no-collapse --cr-wrap --backtitle "${title}" --title "| Formateando partición en EXT4 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext4 -F $part" 20 80 
+mount "$rootfs" /mnt
+
+
+clear
+partprobe
+
+dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Informarción |-" --stdout --ok-label "Siguiente" \
+--prgbox "lsblk -lo NAME,SIZE,MOUNTPOINT,TYPE > /tmp/partitions && \
+echo -------------------------------------- && \
+echo _ && \
+cat /tmp/partitions && \
+echo _ && \
+echo --------------------------------------" 20 50
+
+
+}
+
+
+
+dualpartition () { 
+
+cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Dual Boot |-" \
+--ok-label "Confirmar" --menu "\nEliga su mejor opción para su Instalación: \n " 11 60 11)
+options=(1 " DualBoot y solo root                       "   
+         2 " DualBoot y con más puntos de montaje       ")
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+clear
+for choice in $choices
+do
+    case $choice in
+    ################
+
+1) # SOLO ROOT ################ 
+
+bootarch=$( ls /sys/firmware/efi/ | grep -ic efivars )
+
+### UEFII
+if [[ $bootarch == 1 ]]; then  
+  
+echo " UEFI"
+
+### BIOSSSSSS 
+else  
+
+echo " BIOS"
+bios_solorootdualboot
+
+fi
+
+;;
+
+2) # MAS PARTICIONES ################
+
+bootarch=$( ls /sys/firmware/efi/ | grep -ic efivars )
+
+### UEFII
+if [[ $bootarch == 1 ]]; then  
+  
+echo " UEFI"
+
+### BIOSSSSSS 
+else  
+
+echo " BIOS"
+bios_rootdualboot
+
+fi
+
+;;
+
+
+    esac
+done
+
+
+}
+
+
+
+
+
+funcionesextras () {
+
+bootarch=$( ls /sys/firmware/efi/ | grep -ic efivars )
+
+### UEFII
+if [[ $bootarch == 1 ]]; then  
+  
+echo " UEFI"
+
+### BIOSSSSSS 
+else  
+
+echo " BIOS"
+
+fi
+
+
+
+
+
+part="$(echo "print devices" | parted | grep /dev/ | awk '{if (NR!=1) {print}}' | sed '/sr/d')" 
+disk=$(dialog --backtitle "$titulo" --clear  --ok-label 'Seleccionar' --no-cancel --menu "Selecciona el disco para Linux" 10 50 0 ${part} 2>&1 >/dev/tty)
+
+
+}
