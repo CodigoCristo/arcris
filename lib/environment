@@ -27,7 +27,7 @@ do
 
 seleccionDE=true
 
-cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "${title}" --column-separator "|" --no-tags --ok-label '< Seleccionar >' --menu "\nSelecciona tu escritorio a instalar - (DE)\n " 0 60 0)
+cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "${title}" --column-separator "|" --no-tags --ok-label '< Seleccionar >' --menu "\nSelecciona tu escritorio a instalar - (DE)\n " 9 60 9)
 
 options=(1 " > | xfce4 | Xfce desktop| <"
          2 " > | gnome | GNOME Classic desktop| <"
@@ -105,7 +105,7 @@ done
 cmd=(dialog --keep-tite --backtitle "${title}" \
 --no-collapse --cr-wrap --column-separator "|" --no-tags \
 --ok-label '< Seleccionar >' --nocancel --menu "\n \
-Selecciona una opción para GNOME \n " 12 60 20)
+Selecciona una opción para KDE Plasma \n " 12 60 20)
 
 options=(1 "   Plasma || Sistema Completo  "
          2 "   Plasma || Minimalista       ")
@@ -174,12 +174,13 @@ done
 seleccionWM=true
 
 cmd=(dialog --keep-tite --backtitle "${title}" \
---no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '< Seleccionar >' --menu "Selecciona tu gestor de ventana a instalar - (WM)" 20 55 16)
+--no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '  Seleccionar  ' --menu "\nSelecciona tu gestor de ventana a instalar - (WM)\n " 14 60 14)
 
-options=(1 "> i3wm | 150MB de RAM "
-         2 "> qtile | Disponible <"
-         3 "> Awesome | Disponible <")
-
+options=(1 "> i3wm | Disponible <"
+         2 "> bspwm | Disponible <"
+         3 "> dwm | Disponible <"
+         4 "> awesome | Disponible <"
+         5 "> openbox | Disponible <")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -191,13 +192,20 @@ do
             ;;
 
         2)
-            WM="qtile"
+            WM="bspwm"
             ;;
 
         3)
+            WM="dwm"
+            ;;
+
+        4)
             WM="awesome"
             ;;
 
+        5)
+            WM="openbox"
+            ;;
     esac
 done
 #FINAL (WM)
@@ -835,6 +843,51 @@ sed -i 's/#greeter-session=example-gtk-gnome/greeter-session=lightdm-slick-greet
 
   arch-chroot /mnt /bin/bash -c "systemctl enable entrance"
 
+  ;;
+
+
+"i3wm")
+  echo "" 
+  echo "Se esta instalando el entorno i3wm:" 
+  echo "" 
+
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S i3-gaps --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S i3blocks --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S i3lock --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S i3status --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S dmenu --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S rofi --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S st --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S rxvt-unicode --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ly-git --noeditmenu --noconfirm --needed"
+
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S pcmanfm --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S tumbler --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ffmpegthumbs --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ffmpegthumbnailer --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S raw-thumbnailer --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S freetype2 --noeditmenu --noconfirm --needed"
+
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S network-manager-applet --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S polkit-gnome --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gnome-keyring  --noeditmenu --noconfirm --needed"
+
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ttf-hack --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gnu-free-fonts --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S awesome-terminal-fonts --noeditmenu --noconfirm --needed"
+
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S papirus-icon-theme --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gnome-themes-extra --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lxappearance --noeditmenu --noconfirm --needed"
+
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S feh --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S xclip --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S maim --noeditmenu --noconfirm --needed"
+
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S accountsservice --noeditmenu --noconfirm --needed"
+
+  arch-chroot /mnt /bin/bash -c "systemctl enable ly"
+  
   ;;
 
 

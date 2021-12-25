@@ -1,19 +1,14 @@
 #!/bin/bash
 
 
-cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "${title}" --column-separator "|" --no-tags --ok-label '< Seleccionar >' --menu "\nSelecciona tu escritorio a instalar - (DE)\n " 0 60 0)
+cmd=(dialog --keep-tite --backtitle "${title}" \
+--no-collapse --cr-wrap --column-separator "|" --no-tags --ok-label '  Seleccionar  ' --menu "\nSelecciona tu gestor de ventana a instalar - (WM)\n " 14 60 14)
 
-options=(1 " > | xfce4 | Xfce desktop| <"
-         2 " > | gnome | GNOME Classic desktop| <"
-         3 " > | plasma | KDE Plasma desktop| <"
-         4 " > | deepin | Deepin desktop| <"
-         5 " > | mate | Mate GTK3 desktop| <"
-         6 " > | lxqt | LXDE-Qt & Razor-qt projects| <"
-         7 " > | lxde | The Lightweight X11 GTK2| <"
-         8 " > | lxde-gtk3 | The Lightweight X11 GTK3| <"
-         9 " > | budgie-desktop | Budgie desktop| <"
-         10 " > | cinnamon | Cinnamon desktop| <"
-         11 " > | gnome-flashback | GNOME 2 desktop| <"
-         12 " > | enlightenment | Enlightenment desktop| <")
+options=(1 "> i3wm | Disponible <"
+         2 "> bspwm | Disponible <"
+         3 "> dwm | Disponible <"
+         3 "> awesome | Disponible <"
+         3 "> openbox | Disponible <")
+
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
