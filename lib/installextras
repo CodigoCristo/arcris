@@ -367,7 +367,7 @@ arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nuclear-player-bin --noe
 fi
 
 if [ "$REPRO4" == "true" ]; then
-
+clear
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' "_"
 echo -e ""
 echo -e "\t\t\t         Actualizando Keys de Spotify          "

@@ -27,7 +27,7 @@ do
 
 seleccionDE=true
 
-cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "${title}" --column-separator "|" --no-tags --ok-label '< Seleccionar >' --menu "Selecciona tu escritorio a instalar - (DE)" 22 60 19)
+cmd=(dialog --keep-tite --no-collapse --cr-wrap --backtitle "${title}" --column-separator "|" --no-tags --ok-label '< Seleccionar >' --menu "\nSelecciona tu escritorio a instalar - (DE)\n " 0 60 0)
 
 options=(1 " > | xfce4 | Xfce desktop| <"
          2 " > | gnome | GNOME Classic desktop| <"
