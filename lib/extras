@@ -323,24 +323,19 @@ for choice in $choices
 do
     case $choice in
         1)
-            AP1="gnome-system-monitor"
-            AP_condicion=true
+            AP1=true
             ;;
         2)
-            AP2="htop"
-            AP_condicion=true
+            AP2=true
             ;;
         3)
-            AP3="bashtop"
-            AP_condicion=true
+            AP3=true
             ;;
         4)
-            AP4="gtop"
-            AP_condicion=true
+            AP4=true
             ;;
         5)
-            AP5="gotop"
-            AP_condicion=true
+            AP5=true
             ;;
             
             
