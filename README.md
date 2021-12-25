@@ -13,6 +13,9 @@
 
 ![Captura 1](https://github.com/CodigoCristo/arcris/blob/master/capturas/main.png)
 
+
+# Como descargar el instalador en la ISO
+
 > Método 1
 ```
 loadkeys es
