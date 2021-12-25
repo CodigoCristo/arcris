@@ -5,7 +5,7 @@ fuc_utilidades () {
 
 #UTILIDADES
 cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}"  \
---no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "Utilidades para tu sistema\n[ ESPACIO ] - Para marcar o desmarcar *" 18 80 20)
+--no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "Utilidades para tu sistema\n[ ESPACIO ] - Para marcar o desmarcar *" 17 80 20)
 options=(1 "Lectura y formateo de discos incluido Android" on    # any option can be set to default to "on"
          2 "Compresión y Descompresión de archivos" on
          3 "Códecs de video, lectura de todos los formatos de vídeo" off
@@ -13,7 +13,6 @@ options=(1 "Lectura y formateo de discos incluido Android" on    # any option ca
          5 "hardinfo - Información del sistema y benchmark" off
          6 "gnome-disk-utility - Administrador de Discos" off
          7 "gparted - Administrador de Discos" off
-         8 "bluez - Bluetooth" off
          9 "viewnior - Visor de Imagenes" off
          10 "gedit - Editor de Textos GTK" off)
 
@@ -72,7 +71,7 @@ fuc_terminales () {
 
 #TERMINALES
 cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}"  \
---no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "Terminal para tu sistema\n[ ESPACIO ] - Para marcar o desmarcar *" 17 80 20)
+--no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "Terminal para tu sistema\n[ ESPACIO ] - Para marcar o desmarcar *" 17 80 17)
 options=(1 "lxterminal" on    # any option can be set to default to "on"
          2 "tilix" off
          3 "xfce4-terminal" off
@@ -127,12 +126,12 @@ done
 fuc_audiosistema () {
 
 #AUDIO
-cmd=(dialog --no-collapse --cr-wrap --title "-| Audio del Sistema |-" --backtitle "$titulo"  \
+cmd=(dialog --no-collapse --cr-wrap --title "-| Audio del Sistema |-" --backtitle "${title}"  \
 --no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --radiolist "\n- Pulse Audio para el usuario tradicional \
 \n- Jack Audio para Profesionales sin latencia \
 \n- Alsa Audio para terminal sin Interfaz Gráfica \
 \n- PipeWire Audio el futuro del sonido\n \
-\n[ ESPACIO ] - Para marcar * " 17 80 17)
+\n[ ESPACIO ] - Para marcar * " 16 80 16)
 options=(1 " PipeWire   + Códecs de audio  " on    # any option can be set to default to "on"
          2 " Pulseaudio + Códecs de audio  " off    
          3 " Jack2      + Códecs de audio  " off
@@ -177,10 +176,10 @@ fuc_reproductores () {
 
 #REPRODUCTOR
 
-cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
+cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}" --separate-output --column-separator "|" \
 --no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' \
 --title "-| Reproductores Video y Audio |-" \
---checklist "\n[ ESPACIO ] - Para marcar o desmarcar *" 14 80 14)
+--checklist "\n[ ESPACIO ] - Para marcar o desmarcar *" 15 80 15)
 options=(   1 " vlc                           " on
             2 " mpv                           " off
             3 " nuclear-player-bin            " off            
@@ -227,8 +226,8 @@ done
 fuc_navegador_web () {
 
 #NAVEGADORES
-cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
---no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "Selecciona tu navegador web\n[ ESPACIO ] - Para marcar o desmarcar *" 15 80 19)
+cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}" --separate-output --column-separator "|" \
+--no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "Selecciona tu navegador web\n[ ESPACIO ] - Para marcar o desmarcar *" 16 80 16)
 options=(1 "Firefox | Open source" on    # any option can be set to default to "on"
          2 "Chromium | Open source" off
          3 "Midori | Open source" off
@@ -278,8 +277,8 @@ done
 fuc_ofimatica () {
 
 #OFFICE
-cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo" --separate-output --column-separator "|" \
---no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 11 80 14)
+cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}" --separate-output --column-separator "|" \
+--no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 12 80 12)
 options=(    1 "LibreOffice | libreoffice-fresh" on
              2 "WPS Office | AUR - wps-office" off
              3 "SoftMaker Office | AUR - freeoffice " off)
@@ -310,7 +309,7 @@ fuc_administrador_de_tareas () {
 
 #Administrador de Tareas
 cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Administrador de Tareas |-" \
---no-tags  --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 15 80 20)
+--no-tags  --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 14 80 14)
 options=(1 " gnome-system-monitor " on
          2 " htop                 " on
          3 " bashtop              " off
@@ -351,9 +350,10 @@ done
 fuc_social () {
 
 #Redes Sociales
-cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  --title "-| Redes Sociales |-" \
+cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}"  --title "-| Redes Sociales |-" \
 --no-tags  --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --column-separator "|" --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 15 80 20)
-options=(1 "Telegram | telegram-desktop" on
+options=(1 "Telegram | Mensajería instantánea" on
+         7 "Discord | Mensajería instantánea" off
          2 "IGdm - AUR | App de chat de Instagram" off
          3 "Whatsapp - AUR | whatsapp-nativefier-dark" off
          4 "Facebook Messenger - AUR | caprine" off
@@ -383,7 +383,11 @@ do
         6)
             RS6=true
             ;;
-            
+
+        7)
+            RS7=true
+            ;;         
+
     esac
 done
 #FINAL DE Redes Sociales
@@ -394,7 +398,7 @@ done
 fuc_gamer () {
 
 #INICIO DE GAMING
-cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  --title "-| Gamers |-" \
+cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}"  --title "-| Gamers |-" \
 --no-tags  --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --column-separator "|" --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 24 80 24)
 options=(1 "steam | Plataforma desarrollada por valve" on
          2 "wine | Ejecuta aplicaciones de Windows en Linux" off
@@ -474,8 +478,8 @@ done
 
 fuc_aur_helpers () {
 
-cmd=(dialog --no-collapse --cr-wrap --backtitle "$titulo"  --title "-| AUR Helper |-" \
---no-tags  --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --column-separator "|" --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 18 80 18)
+cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}"  --title "-| AUR Helper |-" \
+--no-tags  --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --column-separator "|" --checklist "\n[ ESPACIO ] - Para marcar o desmarcar *\n " 19 80 19)
 options=(1 "yay | Terminal" on
          2 "trizen | Terminal" off
          3 "pikaur | Terminal" off
