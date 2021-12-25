@@ -7,6 +7,12 @@
 1. Descarga la ISO de Arch Linux Oficial.
 2. Descargar el Script y ejecutalo.
 
+
+![Captura 2](https://github.com/CodigoCristo/arcris/blob/master/capturas/present.png)
+
+
+![Captura 1](https://github.com/CodigoCristo/arcris/blob/master/capturas/main.png)
+
 > Método 1
 ```
 loadkeys es
@@ -35,10 +41,4 @@ cd arcris
 sh arcris
 ```
 
-# Capturas
 
-
-![Captura 2](https://github.com/CodigoCristo/arcris/blob/master/capturas/present.png)
-
-
-![Captura 1](https://github.com/CodigoCristo/arcris/blob/master/capturas/main.png)
