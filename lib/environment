@@ -293,8 +293,9 @@ case $environment in
   arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S plank --noeditmenu --noconfirm --needed"
   arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S plank-theme-namor --noeditmenu --noconfirm --needed"
 
-arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S android-file-transfer android-tools android-udev msmtp libmtp libcddb gvfs gvfs-afc gvfs-smb gvfs-gphoto2 gvfs-mtp gvfs-goa gvfs-nfs gvfs-google gst-libav dosfstools f2fs-tools exfat-utils ntfs-3g udftools nilfs-utils polkit gpart mtools cifs-utils --noeditmenu --noconfirm --needed"
-
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S android-file-transfer android-tools android-udev msmtp libmtp libcddb gvfs gvfs-afc gvfs-smb gvfs-gphoto2 gvfs-mtp gvfs-goa gvfs-nfs gvfs-google gst-libav dosfstools f2fs-tools ntfs-3g udftools nilfs-utils polkit gpart mtools cifs-utils --noeditmenu --noconfirm --needed"
+  
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S git unzip zip --noeditmenu --noconfirm --needed"
   arch-chroot /mnt /bin/bash -c "git clone https://github.com/CodigoCristo/themexfce4.git"
   arch-chroot /mnt /bin/bash -c "rm -r /home/$username/.config"
   arch-chroot /mnt /bin/bash -c "unzip /root/themexfce4/configxfce4.zip -d /home/$username/.config"
