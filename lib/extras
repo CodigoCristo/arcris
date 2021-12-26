@@ -131,7 +131,7 @@ cmd=(dialog --no-collapse --cr-wrap --title "-| Audio del Sistema |-" --backtitl
 \n- Jack Audio para Profesionales sin latencia \
 \n- Alsa Audio para terminal sin Interfaz Gráfica \
 \n- PipeWire Audio el futuro del sonido\n \
-\n[ ESPACIO ] - Para marcar * " 16 80 16)
+\n[ ESPACIO ] - Para marcar * " 17 80 17)
 options=(1 " PipeWire   + Códecs de audio  " on    # any option can be set to default to "on"
          2 " Pulseaudio + Códecs de audio  " off    
          3 " Jack2      + Códecs de audio  " off

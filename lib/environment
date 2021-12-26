@@ -295,11 +295,11 @@ case $environment in
 
 arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S android-file-transfer android-tools android-udev msmtp libmtp libcddb gvfs gvfs-afc gvfs-smb gvfs-gphoto2 gvfs-mtp gvfs-goa gvfs-nfs gvfs-google gst-libav dosfstools f2fs-tools exfat-utils ntfs-3g udftools nilfs-utils polkit gpart mtools cifs-utils --noeditmenu --noconfirm --needed"
 
-git clone https://github.com/CodigoCristo/themexfce4.git
-cd themexfce4
-rm -r /home/$username/.config
-unzip configxfce4.zip -d /home/$username/.config
-arch-chroot /mnt /bin/bash -c "chown -R $username:users /home/$username/.config/"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username git clone https://github.com/CodigoCristo/themexfce4.git"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username cd themexfce4"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username rm -r /home/$username/.config"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username unzip configxfce4.zip -d /home/$username/.config"
+  arch-chroot /mnt /bin/bash -c "chown -R $username:users /home/$username/.config/"
 
 
 # Comprimir un directorio
