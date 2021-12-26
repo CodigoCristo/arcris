@@ -283,6 +283,34 @@ case $environment in
 
   arch-chroot /mnt /bin/bash -c "systemctl enable lightdm"
 
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S plata-theme-bin --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S papirus-icon-theme --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gtk-engine-murrine --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ttf-roboto --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S pavucontrol --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gedit --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gedit-plugins --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S plank --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S plank-theme-namor --noeditmenu --noconfirm --needed"
+
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S android-file-transfer android-tools android-udev msmtp libmtp libcddb gvfs gvfs-afc gvfs-smb gvfs-gphoto2 gvfs-mtp gvfs-goa gvfs-nfs gvfs-google gst-libav dosfstools f2fs-tools exfat-utils ntfs-3g udftools nilfs-utils polkit gpart mtools cifs-utils --noeditmenu --noconfirm --needed"
+
+git clone https://github.com/CodigoCristo/themexfce4.git
+cd themexfce4
+rm -r /home/$username/.config
+unzip configxfce4.zip -d /home/$username/.config
+arch-chroot /mnt /bin/bash -c "chown -R $username:users /home/$username/.config/"
+
+
+# Comprimir un directorio
+# zip sampleZipFile.zip /sampleZip/ExampleDir
+
+# para sobreescribir archivos
+# unzip -o sampleZipFile.zip 
+
+# Descomprimir un archivo a un directorio diferente
+# unzip sampleZipFile.zip -d /usr/sampleZip/ExampleDir
+
   ;;
 
 
