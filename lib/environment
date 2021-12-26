@@ -297,7 +297,7 @@ case $environment in
   arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S wget unzip zip --noeditmenu --noconfirm --needed"
 
   clear
-  
+
   arch-chroot /mnt /bin/bash -c "wget https://raw.githubusercontent.com/CodigoCristo/themexfce4/master/configxfce4.zip -P /home/$username/"
   # arch-chroot /mnt /bin/bash -c "rm -r /home/$username/.config"
   ls /home/$username
@@ -309,8 +309,20 @@ case $environment in
   echo ""
   sleep 10
 
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S lightdm-webkit2-greeter --noeditmenu --noconfirm --needed"
+
+arch-chroot /mnt /bin/bash -c "wget https://raw.githubusercontent.com/CodigoCristo/themexfce4/master/glorius.zip -P /home/$username/"
+echo ""
+sleep 10
+arch-chroot /mnt /bin/bash -c "unzip -o /home/$username/glorius.zip -d /usr/share/lightdm-webkit/themes/"
+arch-chroot /mnt /bin/bash -c "rm /home/$username/glorius.zip"
+
+sed -i 's/^webkit_theme\s*=\s*\(.*\)/webkit_theme = glorious #\1/g' /mnt/etc/lightdm/lightdm-webkit2-greeter.conf
+sed -i 's/^debug_mode\s*=\s*\(.*\)/debug_mode = true #\1/g' /mnt/etc/lightdm/lightdm-webkit2-greeter.conf
+sed -i 's/#greeter-session=example-gtk-gnome/greeter-session=lightdm-webkit2-greeter/g' /mnt/etc/lightdm/lightdm.conf
+
 # Comprimir un directorio
-# zip sampleZipFile.zip /sampleZip/ExampleDir
+# zip sampleZipFile.zip -r /sampleZip/ExampleDir
 
 # para sobreescribir archivos
 # unzip -o sampleZipFile.zip 
