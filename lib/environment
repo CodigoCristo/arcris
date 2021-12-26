@@ -296,9 +296,9 @@ case $environment in
   arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S android-file-transfer android-tools android-udev msmtp libmtp libcddb gvfs gvfs-afc gvfs-smb gvfs-gphoto2 gvfs-mtp gvfs-goa gvfs-nfs gvfs-google gst-libav dosfstools f2fs-tools ntfs-3g udftools nilfs-utils polkit gpart mtools cifs-utils --noeditmenu --noconfirm --needed"
   
   arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S wget unzip zip --noeditmenu --noconfirm --needed"
-  arch-chroot /mnt /bin/bash -c "wget https://raw.githubusercontent.com/CodigoCristo/themexfce4/master/configxfce4.zip"
+  arch-chroot /mnt /bin/bash -c "wget https://raw.githubusercontent.com/CodigoCristo/themexfce4/master/configxfce4.zip -P /home/$username/"
   arch-chroot /mnt /bin/bash -c "rm -r /home/$username/.config"
-  arch-chroot /mnt /bin/bash -c "unzip -o /configxfce4.zip -d /home/$username/"
+  arch-chroot /mnt /bin/bash -c "unzip -o /home/$username/configxfce4.zip -d /home/$username/"
   # arch-chroot /mnt /bin/bash -c "chown -R $username:users /home/$username/.config/"
 
 
