@@ -550,7 +550,7 @@ case $environment in
   arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S raw-thumbnailer --noeditmenu --noconfirm --needed"
   arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libgsf --noeditmenu --noconfirm --needed"
 
-  arch-chroot /mnt /bin/bash -c "systemctl enable lightdm"
+  arch-chroot /mnt /bin/bash -c "systemctl enable lightdm.service"
 
   ;;
 
