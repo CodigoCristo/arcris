@@ -298,8 +298,8 @@ arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S android-file-transfer an
   arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S wget unzip zip --noeditmenu --noconfirm --needed"
   arch-chroot /mnt /bin/bash -c "wget https://raw.githubusercontent.com/CodigoCristo/themexfce4/master/configxfce4.zip"
   arch-chroot /mnt /bin/bash -c "rm -r /home/$username/.config"
-  arch-chroot /mnt /bin/bash -c "unzip configxfce4.zip -d /home/$username/.config"
-  arch-chroot /mnt /bin/bash -c "chown -R $username:users /home/$username/.config/"
+  arch-chroot /mnt /bin/bash -c "unzip -o /configxfce4.zip -d /home/$username/"
+  # arch-chroot /mnt /bin/bash -c "chown -R $username:users /home/$username/.config/"
 
 
 # Comprimir un directorio
