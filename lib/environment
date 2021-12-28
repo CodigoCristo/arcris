@@ -98,7 +98,7 @@ do
         2)  DE="Gnome Lite"
             ;;
 
-        2)  DE="Gnome Arcris"
+        3)  DE="Gnome Arcris"
             ;;
             
     esac
