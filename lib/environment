@@ -83,7 +83,8 @@ cmd=(dialog --keep-tite --backtitle "${title}" \
 Selecciona una opción para GNOME \n " 12 60 20)
 
 options=(1 "   Gnome || Sistema Completo  "
-         2 "   Gnome || Minimalista       ")
+         2 "   Gnome || Minimalista       "
+         3 "   Gnome || Tema Arcris       ")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
@@ -97,6 +98,9 @@ do
         2)  DE="Gnome Lite"
             ;;
 
+        2)  DE="Gnome Arcris"
+            ;;
+            
     esac
 done
             ;;
@@ -440,7 +444,8 @@ sed -i 's/#greeter-session=example-gtk-gnome/greeter-session=lightdm-webkit2-gre
   arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gnome-terminal --noeditmenu --noconfirm --needed"
   arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nautilus --noeditmenu --noconfirm --needed"
   arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gnome-themes-extra --noeditmenu --noconfirm --needed"
-  
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gnome-keyring --noeditmenu --noconfirm --needed"
+
   arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gnu-free-fonts --noeditmenu --noconfirm --needed"
   arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ttf-hack --noeditmenu --noconfirm --needed"
   arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ttf-inconsolata --noeditmenu --noconfirm --needed"
@@ -460,6 +465,94 @@ sed -i 's/#greeter-session=example-gtk-gnome/greeter-session=lightdm-webkit2-gre
   arch-chroot /mnt /bin/bash -c "systemctl enable gdm"
 
   ;;
+
+
+
+  "Gnome Arcris")
+  echo "" 
+  echo "Se esta instalando el entorno Gnome Arcris:" 
+  echo "" 
+
+  arch-chroot /mnt /bin/bash -c "pacman -S xorg --noconfirm"
+  arch-chroot /mnt /bin/bash -c "pacman -S xorg-apps --noconfirm"
+  arch-chroot /mnt /bin/bash -c "pacman -S xorg-server --noconfirm"
+  arch-chroot /mnt /bin/bash -c "pacman -S xorg-xinit --noconfirm"
+  arch-chroot /mnt /bin/bash -c "pacman -S xorg-twm --noconfirm"
+  arch-chroot /mnt /bin/bash -c "pacman -S xterm --noconfirm"
+
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gnome-shell --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gdm --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gnome-control-center --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gnome-tweaks --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gnome-terminal --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S nautilus --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gnome-themes-extra --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gnome-keyring --noeditmenu --noconfirm --needed"
+
+  # THEME ####################
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gnome-shell-extensions  --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gnome-menus --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S chrome-gnome-shell --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gnome-system-monitor --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S papirus-icon-theme --noeditmenu --noconfirm --needed"
+  ############################
+
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gnu-free-fonts --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ttf-hack --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ttf-inconsolata --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ttf-font-awesome --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S awesome-terminal-fonts --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S noto-fonts --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S noto-fonts-emoji --noeditmenu --noconfirm --needed"
+  
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ffmpegthumbs --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ffmpegthumbnailer --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S freetype2 --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S poppler-glib --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libgsf --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S raw-thumbnailer --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S libgsf --noeditmenu --noconfirm --needed"
+
+  arch-chroot /mnt /bin/bash -c "systemctl enable gdm"
+
+
+
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S android-file-transfer android-tools android-udev msmtp libmtp libcddb gvfs gvfs-afc gvfs-smb gvfs-gphoto2 gvfs-mtp gvfs-goa gvfs-nfs gvfs-google gst-libav dosfstools f2fs-tools ntfs-3g udftools nilfs-utils polkit gpart mtools cifs-utils --noeditmenu --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S wget unzip zip --noeditmenu --noconfirm --needed"
+
+clear
+
+arch-chroot /mnt /bin/bash -c "wget https://raw.githubusercontent.com/CodigoCristo/themegnome/master/config_gnome.zip -P /home/$username/"
+arch-chroot /mnt /bin/bash -c "wget https://raw.githubusercontent.com/CodigoCristo/themegnome/master/local_gnome.zip -P /home/$username/"
+arch-chroot /mnt /bin/bash -c "wget https://raw.githubusercontent.com/CodigoCristo/themegnome/master/theme_gnome.zip -P /home/$username/"
+ls /home/$username
+echo ""
+sleep 10
+arch-chroot /mnt /bin/bash -c "unzip -o /home/$username/config_gnome.zip -d /home/$username/"
+arch-chroot /mnt /bin/bash -c "unzip -o /home/$username/local_gnome.zip -d /home/$username/"
+arch-chroot /mnt /bin/bash -c "unzip -o /home/$username/theme_gnome.zip -d /home/$username/"
+arch-chroot /mnt /bin/bash -c "rm /home/$username/config_gnome.zip"
+arch-chroot /mnt /bin/bash -c "rm /home/$username/local_gnome.zip"
+arch-chroot /mnt /bin/bash -c "rm /home/$username/theme_gnome.zip"
+arch-chroot /mnt /bin/bash -c "chown -R $username:users /home/$username/.config/"
+arch-chroot /mnt /bin/bash -c "chown -R $username:users /home/$username/.local/"
+arch-chroot /mnt /bin/bash -c "chown -R $username:users /home/$username/.themes/"
+echo ""
+sleep 10
+
+# Comprimir un directorio
+# zip sampleZipFile.zip -r /sampleZip/ExampleDir
+
+# para sobreescribir archivos
+# unzip -o sampleZipFile.zip 
+
+# Descomprimir un archivo a un directorio diferente
+# unzip sampleZipFile.zip -d /usr/sampleZip/ExampleDir
+
+
+  ;;
+
+
 
 
   "KDE Plasma")
