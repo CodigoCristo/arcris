@@ -1,7 +1,6 @@
 #!/bin/bash
 
 
-
 uefi_rootdualboot () {
 
 clear
@@ -48,6 +47,8 @@ part=$(dialog --backtitle "${title}" --title "-| Selección de puntos de Montaje
   --menu "\nSelecciona la partición para Administrador: [ / ]\n " 10 55 0 ${p} 2>&1 > /dev/tty)
 
 rootfs=$part
+
+p=$(echo "$p" | grep -v $part)
 
 bootwin=$(fdisk -l ${disk} | grep /dev/ | awk '{if (NR!=1) {print}}' | grep "EFI" | awk '{print $1}' )
 
