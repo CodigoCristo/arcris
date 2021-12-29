@@ -1103,7 +1103,7 @@ sed -i 's/#greeter-session=example-gtk-gnome/greeter-session=lightdm-slick-greet
   arch-chroot /mnt /bin/bash -c "pacman -S xorg-twm --noconfirm"
   arch-chroot /mnt /bin/bash -c "pacman -S xterm --noconfirm"
 
-  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S dwm-git --noeditmenu --noconfirm --needed"
+  arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S dwm --noeditmenu --noconfirm --needed"
   arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S dmenu --noeditmenu --noconfirm --needed"
   arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S rofi --noeditmenu --noconfirm --needed"
   arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S st --noeditmenu --noconfirm --needed"
