@@ -217,9 +217,9 @@ fi
 
 
 if [ "$UTIL8" == "true" ]; then
-arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S bluez --noconfirm"
-arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S bluez-utils --noconfirm"
-arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S pulseaudio-bluetooth --noconfirm"
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S yt-dlp --noconfirm"
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ffmpeg --noconfirm"
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S rtmpdump atomicparsley aria2 --noconfirm"
 fi
 
 

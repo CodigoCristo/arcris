@@ -1,3 +1,18 @@
 #!/bin/bash
 
 
+#UTILIDADES
+cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}"  \
+--no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "Utilidades para tu sistema\n[ ESPACIO ] - Para marcar o desmarcar *" 18 80 18)
+options=(1 "Lectura y formateo de discos incluido Android" on    # any option can be set to default to "on"
+         2 "Compresión y Descompresión de archivos" on
+         3 "Códecs de video, lectura de todos los formatos de vídeo" off
+         4 "gufw - Firewall de red" off
+         5 "hardinfo - Información del sistema y benchmark" off
+         6 "gnome-disk-utility - Administrador de Discos" off
+         7 "gparted - Administrador de Discos" off
+         8 "yt-dlp - youtube-dl con funciones y correcciones adicionales" off
+         9 "viewnior - Visor de Imagenes" off
+         10 "gedit - Editor de Textos GTK" off)
+
+choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
