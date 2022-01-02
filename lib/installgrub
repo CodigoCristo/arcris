@@ -227,7 +227,7 @@ echo ""
 echo ""
 arch-chroot /mnt /bin/bash -c "systemctl enable --now snapper-timeline.timer"
 arch-chroot /mnt /bin/bash -c "systemctl enable --now snapper-cleanup.timer"
-# arch-chroot /mnt /bin/bash -c "systemctl enable --now grub-btrfs.path"
+arch-chroot /mnt /bin/bash -c "systemctl enable --now grub-btrfs.path"
 
 arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S snap-pac-grub --noeditmenu --noconfirm --needed"
 arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S snapper-gui-git --noeditmenu --noconfirm --needed"
