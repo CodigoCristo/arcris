@@ -211,6 +211,7 @@ arch-chroot /mnt /bin/bash -c "rm -r /.snapshots"
 arch-chroot /mnt /bin/bash -c "snapper -c root create-config /"
 arch-chroot /mnt /bin/bash -c "btrfs subvolume delete /.snapshots"
 arch-chroot /mnt /bin/bash -c "mkdir /.snapshots"
+mount -o subvol=@snapshots $(cat root-efi) /mnt/.snapshots
 arch-chroot /mnt /bin/bash -c "mount -a"
 arch-chroot /mnt /bin/bash -c "chmod 750 /.snapshots"
 echo ""
