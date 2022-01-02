@@ -253,7 +253,7 @@ arch-chroot /mnt /bin/bash -c "pacman -S rsync --noconfirm"
 sleep 3
 arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg" 
 arch-chroot /mnt /bin/bash -c "chmod a+rx /.snapshots"
-arch-chroot /mnt /bin/bash -c "chown :users .snapshots"
+arch-chroot /mnt /bin/bash -c "chown :users /.snapshots"
 sleep 3
 
 ######################################################
