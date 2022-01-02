@@ -52,7 +52,7 @@ echo $partitions | awk -F ' ' '{print $1}' >  boot-efi
 echo $partitions | awk -F ' ' '{print $2}' >  root-efi
 
 dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Formateo y Montar Particiones |-" --stdout --ok-label "Siguiente" \
---prgbox "mkfs.btrfs -f -n 32k $(cat root-efi) && \
+--prgbox "mkfs.btrfs $(cat root-efi) && \
 mount $(cat root-efi) /mnt && \
 mkfs.fat -F 32 $(cat boot-efi) && \
 mkdir -p /mnt/boot/EFI && \
