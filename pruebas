@@ -1,9 +1,7 @@
 #!/bin/bash
 
-
-#UTILIDADES
 cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}"  \
---no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "Utilidades para tu sistema\n[ ESPACIO ] - Para marcar o desmarcar *" 18 80 18)
+--no-tags --ok-label ' Confirmar ' --cancel-label ' No deseo esto ' --checklist "Utilidades para tu sistema\n[ ESPACIO ] - Para marcar o desmarcar *" 21 80 21)
 options=(1 "Lectura y formateo de discos incluido Android" on    # any option can be set to default to "on"
          2 "Compresión y Descompresión de archivos" on
          3 "Códecs de video, lectura de todos los formatos de vídeo" off
@@ -13,6 +11,9 @@ options=(1 "Lectura y formateo de discos incluido Android" on    # any option ca
          7 "gparted - Administrador de Discos" off
          8 "yt-dlp - youtube-dl con funciones y correcciones adicionales" off
          9 "viewnior - Visor de Imagenes" off
-         10 "gedit - Editor de Textos GTK" off)
+         10 "gedit - Editor de Textos GTK" off
+         11 "Flatpak - Linux application sandboxing" off
+         12 "Qemu - Emulador y virtualizador" off
+         13 "VirtualBox - Emulador y virtualizador" off)
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)

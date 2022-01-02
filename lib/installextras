@@ -217,22 +217,44 @@ fi
 
 
 if [ "$UTIL8" == "true" ]; then
-arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S yt-dlp --noconfirm"
-arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ffmpeg --noconfirm"
-arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S rtmpdump atomicparsley aria2 --noconfirm"
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S yt-dlp --noeditmenu --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S ffmpeg --noeditmenu --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S rtmpdump atomicparsley aria2 --noeditmenu --noconfirm --needed"
 fi
 
 
 if [ "$UTIL9" == "true" ]; then
-arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S viewnior --noconfirm"
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S viewnior --noeditmenu --noconfirm --needed"
 fi
 
 
 if [ "$UTIL10" == "true" ]; then
-arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gedit --noconfirm"
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S gedit --noeditmenu --noconfirm --needed"
 fi
 
+
+if [ "$UTIL11" == "true" ]; then
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S flatpak --noeditmenu --noconfirm --needed"
+fi
+
+
+if [ "$UTIL12" == "true" ]; then
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S virt-manager --noeditmenu --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S qemu --noeditmenu --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S qemu-arch-extra --noeditmenu --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S edk2-ovmf --noeditmenu --noconfirm --needed"
+fi
+
+
+if [ "$UTIL13" == "true" ]; then
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S virtualbox --noeditmenu --noconfirm --needed"
+fi
+
+
 # FIN DE UTILIDADES
+
+
+
 
 
 if [ "$TERMI1" == "true" ]; then
@@ -266,7 +288,7 @@ fi
 
 
 if [ "$TERMI7" == "true" ]; then
-arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S st --noconfirm"
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S st --noeditmenu --noconfirm --needed"
 fi
 
 

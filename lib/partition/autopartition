@@ -9,7 +9,8 @@ cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Particion
 options=(1 " Root ( ext4 ) Recomendado     "   
          2 " Root - Swap ( ext4 )          "
          3 " Root - Home ( ext4 )          "
-		 4 " Root - Home - Swap ( ext4 )   ")
+         4 " Root - Home - Swap ( ext4 )   "
+         5 " Root ( Btrfs )   ")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
@@ -36,6 +37,14 @@ auto3
 source lib/partition/auto/auto4
 auto4
 ;;
+
+
+5) ################
+source lib/partition/auto/auto5
+auto5
+GRUBINSTALL=4
+;;
+
                                                 
     esac
 done

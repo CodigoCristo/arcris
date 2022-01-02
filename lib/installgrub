@@ -161,6 +161,150 @@ fi
 
 
 
+installgrub4 () {
+
+######
+#GRUB
+######
+uefi=$( parted $disk print | grep -ic gpt )
+
+if [ $uefi == 1 ] && [ -d /sys/firmware/efi ]; then
+clear
+titulo_progreso="| SU SISTEMA ES UEFI |"
+barra_progreso
+arch-chroot /mnt /bin/bash -c "pacman -S grub efibootmgr os-prober --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S snapper --noconfirm" 
+arch-chroot /mnt /bin/bash -c "pacman -S grub-btrfs --noconfirm" 
+sed -i 's/MODULES=()/MODULES=(btrfs)/' /mnt/etc/mkinitcpio.conf
+arch-chroot /mnt /bin/bash -c "mkinitcpio -P"
+
+######################################################
+clear
+echo ""
+echo '>>> Su disco es GPT | UEFI es el sistema Moderno <<<'
+cat /tmp/partitions | grep gpt 
+sleep 3
+echo '' 
+echo 'Instalando EFI System >> bootx64.efi' 
+arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --efi-directory=/boot/EFI --removable' 
+echo '' 
+echo 'Instalando UEFI System >> grubx64.efi' 
+arch-chroot /mnt /bin/bash -c 'grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=Arch'
+######
+sed -i '6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"' /mnt/etc/default/grub
+sed -i '7d' /mnt/etc/default/grub
+######
+echo ''
+echo "GRUB_DISABLE_OS_PROBER=false" >>  /mnt/etc/default/grub
+arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
+echo '' 
+######################################################
+
+clear
+echo "" 
+echo "" 
+echo "Configurando snapper..." 
+echo ""
+sleep 3
+umount /mnt/.snapshots
+rm -r /mnt/.snapshots
+arch-chroot /mnt /bin/bash -c "snapper -c root create-config /"
+arch-chroot /mnt /bin/bash -c "btrfs suvolume delete /mnt/.snapshots"
+arch-chroot /mnt /bin/bash -c "mkdir /mnt/.snapshots"
+mount /mnt/.snapshots
+arch-chroot /mnt /bin/bash -c "chmod 750 /mnt/.snapshots"
+echo ""
+echo ""
+sleep 5
+sed -i 's/ALLOW_USERS=""/s/ALLOW_USERS="$username"/' /mnt/etc/snapper/configs/root
+sed -i 's/TIMELINE_LIMIT_HOURLY="10"/TIMELINE_LIMIT_HOURLY="5"/' /mnt/etc/snapper/configs/root
+sed -i 's/TIMELINE_LIMIT_DAILY="10"/TIMELINE_LIMIT_DAILY="7"/' /mnt/etc/snapper/configs/root
+sed -i 's/TIMELINE_LIMIT_WEEKLY="0"/TIMELINE_LIMIT_WEEKLY="0"/' /mnt/etc/snapper/configs/root
+sed -i 's/TIMELINE_LIMIT_MONTHLY="10"/TIMELINE_LIMIT_MONTHLY="0"/' /mnt/etc/snapper/configs/root
+sed -i 's/TIMELINE_LIMIT_YEARLY="10"/TIMELINE_LIMIT_YEARLY="0"/' /mnt/etc/snapper/configs/root
+clear
+echo ""
+echo ""
+arch-chroot /mnt /bin/bash -c "systemctl enable --now snapper-timeline.timer"
+arch-chroot /mnt /bin/bash -c "systemctl enable --now snapper-cleanup.timer"
+# arch-chroot /mnt /bin/bash -c "systemctl enable --now grub-btrfs.path"
+
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S snap-pac-grub --noeditmenu --noconfirm --needed"
+arch-chroot /mnt /bin/bash -c "sudo -u $username yay -S snapper-gui-git --noeditmenu --noconfirm --needed"
+
+sleep 5
+mkdir /mnt/etc/pacman.d/hooks
+cat > /mnt/etc/pacman.d/hooks/50-bootbackup.hook <<EOF
+[Trigger]
+Operation = Upgrade
+Operation = Install
+Operation = Remove
+Type = Path
+Target = boot/*
+[Action]
+Depends = rsync
+Description = Backing up /boot...
+When = PreTransaction
+Exec = /ustr/bin/rsync -a --delete /boot /.bootbackup
+EOF
+clear
+sleep 3
+arch-chroot /mnt /bin/bash -c "pacman -S rsync --noconfirm" 
+sleep 3
+arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg" 
+arch-chroot /mnt /bin/bash -c "chmod a+rx /mnt/.snapshots"
+arch-chroot /mnt /bin/bash -c "chown :$username /mnt/.snapshots"
+sleep 3
+
+######################################################
+clear
+echo 'ls -l /mnt/boot' 
+ls -l /mnt/boot 
+echo '' 
+echo 'Lea bien que no tenga ningún error marcado' 
+echo '> Confirme tener las IMG de linux para el arranque' 
+echo '> Confirme tener la carpeta de GRUB para el arranque' 
+mensaje_install
+sleep 3
+clear
+######################################################
+
+else
+clear
+titulo_progreso="|  SISTEMA BIOS LEGACY Y DISCO DOS/MBR  |"
+barra_progreso
+arch-chroot /mnt /bin/bash -c "pacman -S grub os-prober --noconfirm"
+clear
+echo "" 
+echo '>>> Su disco es DOS MBR | BIOS Legacy es un sistema antiguo <<<' 
+echo "" 
+cat /tmp/partitions | grep dos 
+sleep 3
+echo '' 
+arch-chroot /mnt /bin/bash -c "grub-install --target=i386-pc $disk"
+########
+sed -i "6iGRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"" /mnt/etc/default/grub
+sed -i '7d' /mnt/etc/default/grub
+########
+echo '' 
+echo "GRUB_DISABLE_OS_PROBER=false" >>  /mnt/etc/default/grub
+arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
+echo '' 
+echo 'ls -l /mnt/boot' 
+ls -l /mnt/boot 
+echo '' 
+echo 'Lea bien que no tenga ningún error marcado' 
+echo '> Confirme tener las IMG de linux para el arranque' 
+echo '> Confirme tener la carpeta de GRUB para el arranque'
+mensaje_install
+sleep 3
+clear
+fi
+# FIN GRUB
+
+}
+
+
 
 installgrub () {
 
@@ -176,6 +320,10 @@ case $GRUBINSTALL in
 
   3)
     installgrub3
+    ;;
+
+  4)
+    installgrub4
     ;;
 
   *)
