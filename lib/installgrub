@@ -240,12 +240,13 @@ Operation = Upgrade
 Operation = Install
 Operation = Remove
 Type = Path
-Target = boot/*
+Target = usr/lib/modules/*/vmlinuz
+
 [Action]
 Depends = rsync
 Description = Backing up /boot...
-When = PreTransaction
-Exec = /ustr/bin/rsync -a --delete /boot /.bootbackup
+When = PostTransaction
+Exec = /usr/bin/rsync -a --delete /boot /.bootbackup
 EOF
 clear
 sleep 3
