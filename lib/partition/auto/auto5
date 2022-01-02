@@ -60,7 +60,7 @@ btrfs subvolume create /mnt/@var && \
 btrfs subvolume create /mnt/@snapshots  && \
 btrfs subvolume list -p /mnt  && \
 umount /mnt  && \
-mount -o noatime,compress=zstd,space_cache=v2,discard=async,subvol=@ $(cat root-efi)  && \
+mount -o noatime,compress=zstd,space_cache=v2,discard=async,subvol=@ $(cat root-efi) /mnt && \
 mkdir -p /mnt/home && \
 mkdir -p /mnt/var && \
 mkdir -p /mnt/.snapshots && \
