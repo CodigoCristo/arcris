@@ -304,7 +304,7 @@ case $environment in
 
   arch-chroot /mnt /bin/bash -c "wget https://raw.githubusercontent.com/CodigoCristo/themexfce4/master/configxfce4.zip -P /home/$username/"
   # arch-chroot /mnt /bin/bash -c "rm -r /home/$username/.config"
-  ls /home/$username
+  ls --all /home/$username
   echo ""
   sleep 10
   arch-chroot /mnt /bin/bash -c "unzip -o /home/$username/configxfce4.zip -d /home/$username/"

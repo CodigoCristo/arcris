@@ -73,7 +73,7 @@ mount $(cat boot-efi) /mnt/boot/EFI && \
 echo -------------------------------------- && \
 lsblk ${disk} --all" 20 110
 
-rm boot-efi root-efi
+# rm boot-efi root-efi
 
 ;;
 

@@ -206,22 +206,22 @@ echo ""
 echo "Configurando snapper..." 
 echo ""
 sleep 3
-umount /mnt/.snapshots
-rm -r /mnt/.snapshots
+arch-chroot /mnt /bin/bash -c "umount /.snapshots"
+arch-chroot /mnt /bin/bash -c "rm -r /.snapshots"
 arch-chroot /mnt /bin/bash -c "snapper -c root create-config /"
-arch-chroot /mnt /bin/bash -c "btrfs suvolume delete /mnt/.snapshots"
-arch-chroot /mnt /bin/bash -c "mkdir /mnt/.snapshots"
-mount /mnt/.snapshots
-arch-chroot /mnt /bin/bash -c "chmod 750 /mnt/.snapshots"
+arch-chroot /mnt /bin/bash -c "btrfs subvolume delete /.snapshots"
+arch-chroot /mnt /bin/bash -c "mkdir /.snapshots"
+arch-chroot /mnt /bin/bash -c "mount -a"
+arch-chroot /mnt /bin/bash -c "chmod 750 /.snapshots"
 echo ""
 echo ""
 sleep 5
-sed -i 's/ALLOW_USERS=""/s/ALLOW_USERS="$username"/' /mnt/etc/snapper/configs/root
-sed -i 's/TIMELINE_LIMIT_HOURLY="10"/TIMELINE_LIMIT_HOURLY="5"/' /mnt/etc/snapper/configs/root
-sed -i 's/TIMELINE_LIMIT_DAILY="10"/TIMELINE_LIMIT_DAILY="7"/' /mnt/etc/snapper/configs/root
-sed -i 's/TIMELINE_LIMIT_WEEKLY="0"/TIMELINE_LIMIT_WEEKLY="0"/' /mnt/etc/snapper/configs/root
-sed -i 's/TIMELINE_LIMIT_MONTHLY="10"/TIMELINE_LIMIT_MONTHLY="0"/' /mnt/etc/snapper/configs/root
-sed -i 's/TIMELINE_LIMIT_YEARLY="10"/TIMELINE_LIMIT_YEARLY="0"/' /mnt/etc/snapper/configs/root
+sed -i 's/ALLOW_USERS=""/ALLOW_USERS="$username"/g' /mnt/etc/snapper/configs/root
+sed -i 's/TIMELINE_LIMIT_HOURLY="10"/TIMELINE_LIMIT_HOURLY="5"/g' /mnt/etc/snapper/configs/root
+sed -i 's/TIMELINE_LIMIT_DAILY="10"/TIMELINE_LIMIT_DAILY="7"/g' /mnt/etc/snapper/configs/root
+sed -i 's/TIMELINE_LIMIT_WEEKLY="0"/TIMELINE_LIMIT_WEEKLY="0"/g' /mnt/etc/snapper/configs/root
+sed -i 's/TIMELINE_LIMIT_MONTHLY="10"/TIMELINE_LIMIT_MONTHLY="0"/g' /mnt/etc/snapper/configs/root
+sed -i 's/TIMELINE_LIMIT_YEARLY="10"/TIMELINE_LIMIT_YEARLY="0"/g' /mnt/etc/snapper/configs/root
 clear
 echo ""
 echo ""
@@ -252,8 +252,8 @@ sleep 3
 arch-chroot /mnt /bin/bash -c "pacman -S rsync --noconfirm" 
 sleep 3
 arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg" 
-arch-chroot /mnt /bin/bash -c "chmod a+rx /mnt/.snapshots"
-arch-chroot /mnt /bin/bash -c "chown :$username /mnt/.snapshots"
+arch-chroot /mnt /bin/bash -c "chmod a+rx /.snapshots"
+arch-chroot /mnt /bin/bash -c "chown :users .snapshots"
 sleep 3
 
 ######################################################
