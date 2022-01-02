@@ -54,19 +54,21 @@ echo $partitions | awk -F ' ' '{print $2}' >  root-efi
 dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Formateo y Montar Particiones |-" --stdout --ok-label "Siguiente" \
 --prgbox "mkfs.btrfs -f -n 32k $(cat root-efi) && \
 mount $(cat root-efi) /mnt && \
+mkfs.fat -F 32 $(cat boot-efi) && \
+mkdir -p /mnt/boot/EFI && \
+mount $(cat boot-efi) /mnt/boot/EFI && \
 btrfs subvolume create /mnt/@  && \
 btrfs subvolume create /mnt/@home && \
 btrfs subvolume create /mnt/@var && \
 btrfs subvolume create /mnt/@snapshots  && \
 btrfs subvolume list -p /mnt  && \
 mount -o noatime,compress=zstd,space_cache=v2,discard=async,subvol=@ $(cat root-efi)  && \
-mkdir -p /mnt/{boot,home,var,.snapshots}   && \
+mkdir -p /mnt/home && \
+mkdir -p /mnt/var && \
+mkdir -p /mnt/.snapshots && \
 mount -o noatime,compress=zstd,space_cache=v2,discard=async,subvol=@home $(cat root-efi) /mnt/home  && \
 mount -o noatime,compress=zstd,space_cache=v2,discard=async,subvol=@var $(cat root-efi) /mnt/var && \
 mount -o noatime,compress=zstd,space_cache=v2,discard=async,subvol=@snapshots $(cat root-efi) /mnt/.snapshots  && \
-mkfs.fat -F 32 $(cat boot-efi) && \
-mkdir -p /mnt/boot/EFI && \
-mount $(cat boot-efi) /mnt/boot/EFI && \
 echo -------------------------------------- && \
 lsblk ${disk} --all" 20 110
 
