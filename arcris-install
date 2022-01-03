@@ -182,7 +182,7 @@ install
 
 11)
 cd 
-rm -r arcris arcrisnew arcrisnew-main.tar.gz
+rm -r arcris arcris-master arcris-master.tar.gz
 clear && echo "" 
 echo -e ""
 echo -e "${msg_end}"
