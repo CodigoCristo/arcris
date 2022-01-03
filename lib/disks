@@ -1,6 +1,6 @@
 #!/bin/bash
 proximamente () {
-    dialog --backtitle "${title}" --title "-| Código Cristo |-" --stdout --ok-label 'Aceptar' --msgbox "\nProximamente...\n" 7 55
+    dialog --backtitle "${title}" --title "-| Código Cristo |-" --stdout --ok-label "${btn_accept}" --msgbox "${msg_coming}" 7 55
 }
 
 
@@ -8,14 +8,14 @@ disksystem () {
 
 GRUBINSTALL=1
 
-cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}" --title "-| Discos |-" \
---ok-label "Confirmar" --menu "\nEliga su mejor opción para su Sistema\n " 15 60 15)
-options=(1 " Particionado Automático                       "   
-         2 " Particionado Automático con Cifrado de Disco  "
-         3 " Particionado Manual                           "
-         4 " Particionado con otro Sistema Operativo       "
-         5 " Cambia o Crea tu Tabla de partición del Disco "
-         6 " Formatea todo tu Disco con DD                 ")
+cmd=(dialog --no-collapse --cr-wrap --backtitle "${title}" --title "${title_disk}" \
+--ok-label "${btn_confirm}" --menu "${msg_menu_disk}" 15 60 15)
+options=(1 "${msg_menu_disk1}"   
+         2 "${msg_menu_disk2}"
+         3 "${msg_menu_disk3}"
+         4 "${msg_menu_disk4}"
+         5 "${msg_menu_disk5}"
+         6 "${msg_menu_disk6}")
 
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
