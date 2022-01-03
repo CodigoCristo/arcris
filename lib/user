@@ -10,7 +10,7 @@ username=""
 userpasswd=""
 rootpasswd=""
 
-dialog --backtitle "${title}" --title "-| User |-" --stdout --ok-label "< OK >"  --msgbox "\nEscriba su usuario y contraseña. \n " 7 37
+dialog --backtitle "${title}" --title "${title_user_main}" --stdout --ok-label "${btn_ok_main}"  --msgbox "${msg_user_main}" 7 37
 
 ##########################
 # USER
