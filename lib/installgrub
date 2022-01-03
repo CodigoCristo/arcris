@@ -176,6 +176,7 @@ arch-chroot /mnt /bin/bash -c "pacman -S grub efibootmgr os-prober --noconfirm"
 arch-chroot /mnt /bin/bash -c "pacman -S snapper --noconfirm" 
 arch-chroot /mnt /bin/bash -c "pacman -S grub-btrfs --noconfirm" 
 sed -i 's/MODULES=()/MODULES=(btrfs)/' /mnt/etc/mkinitcpio.conf
+sed -i 's/HOOKS=(base udev autodetect modconf block filesystems keyboard fsck)/HOOKS=(base udev autodetect modconf block filesystems keyboard fsck grub-btrfs-overlayfs)/' /mnt/etc/mkinitcpio.conf
 arch-chroot /mnt /bin/bash -c "mkinitcpio -P"
 
 ######################################################
