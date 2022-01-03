@@ -207,14 +207,14 @@ echo ""
 echo "Configurando snapper..." 
 echo ""
 sleep 3
-arch-chroot /mnt /bin/bash -c "umount -f /.snapshots"
-arch-chroot /mnt /bin/bash -c "rm -r /.snapshots"
+umount -f /mnt/.snapshots
+rm -r /mnt/.snapshots
 arch-chroot /mnt /bin/bash -c "snapper -c root create-config /"
-arch-chroot /mnt /bin/bash -c "btrfs subvolume delete /.snapshots"
-arch-chroot /mnt /bin/bash -c "mkdir /.snapshots"
-# mount -o subvol=@snapshots $(cat root-efi) /mnt/.snapshots
+btrfs subvolume delete /mnt/.snapshots
+mkdir /mnt/.snapshots
+mount -o subvol=@snapshots $(cat root-efi) /mnt/.snapshots
 arch-chroot /mnt /bin/bash -c "mount -a"
-arch-chroot /mnt /bin/bash -c "chmod 750 /.snapshots"
+chmod 750 /mnt/.snapshots
 echo ""
 echo ""
 sleep 5
