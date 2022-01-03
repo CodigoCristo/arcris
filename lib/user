@@ -83,7 +83,7 @@ username=$(dialog --backtitle "${title}" --title "${titleuser}" \
 #  done
 
 
-dialog --backtitle "${title}" --title "-| Root |-" --stdout --ok-label "< OK >"  --msgbox "\nEscriba su contraseña de administrador. \n " 7 43
+dialog --backtitle "${title}" --title "-| Root |-" --stdout --ok-label "${btn_ok_main}"  --msgbox "${msg_passwdroot_main}" 7 43
 
 ##########################
 # PASSWD ROOT
