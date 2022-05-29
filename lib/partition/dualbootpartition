@@ -26,7 +26,9 @@ rootfs=""
 
 tableboot="BIOS LEGACY"
 part="$(lsblk -lno NAME,SIZE,TYPE | grep 'disk' | awk '{print "/dev/" $1 " " $2}' | sort -u | sed '/f/d' | sed '/sr/d' )" 
+
 disk=$(dialog --backtitle "${title}" --clear  --ok-label "Seleccionar disco" --no-cancel --menu "\nSelecciona el disco para Arch Linux\n " 12 45 0 ${part} 2>&1 >/dev/tty)
+diskWin=$(dialog --backtitle "${title}" --clear  --ok-label "Seleccionar disco" --no-cancel --menu "\nSelecciona el disco de Windows\n " 12 45 0 ${part} 2>&1 >/dev/tty)
 
 partitioner=$(dialog --backtitle "${title}" --clear --title "-| Particionado de Disco |-" --ok-label 'Seleccionar' --no-cancel --menu ">\n> Crear particiones correctamente\n> Tu sistema iniciado es : ${tableboot}" 9 0 0\
     "cfdisk" " Un particionador casi grafico         " \
@@ -50,12 +52,11 @@ rootfs=$part
 
 p=$(echo "$p" | grep -v $part)
 
+bootwin=$(fdisk -l ${diskWin} | grep /dev/ | awk '{if (NR!=1) {print}}' | grep "EFI" | awk '{print $1}' )
+
+
 dialog --clear --no-collapse --cr-wrap --backtitle "${title}" --title "| Formateando partición en EXT4 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext4 -F $part" 20 80 
 mount "$rootfs" /mnt
-
-
-diskWin=$(dialog --backtitle "${title}" --clear  --ok-label "Seleccionar disco" --no-cancel --menu "\nSelecciona el disco de Windows\n " 12 45 0 ${part} 2>&1 >/dev/tty)
-bootwin=$(fdisk -l ${diskWin} | grep /dev/ | awk '{if (NR!=1) {print}}' | grep "EFI" | awk '{print $1}' )
 
 mkdir -p /mnt/boot/EFI
 mount "$bootwin" /mnt/boot/EFI
@@ -492,6 +493,7 @@ rootfs=""
 
 part="$(lsblk -lno NAME,SIZE,TYPE | grep 'disk' | awk '{print "/dev/" $1 " " $2}' | sort -u | sed '/f/d' | sed '/sr/d' )" 
 disk=$(dialog --backtitle "${title}" --clear  --ok-label "Seleccionar disco" --no-cancel --menu "\nSelecciona el disco para Arch Linux\n " 12 45 0 ${part} 2>&1 >/dev/tty)
+diskWin=$(dialog --backtitle "${title}" --clear  --ok-label "Seleccionar disco" --no-cancel --menu "\nSelecciona el disco de Windows\n " 12 45 0 ${part} 2>&1 >/dev/tty)
 
 partitioner=$(dialog --backtitle "${title}" --clear --title "-| Particionado de Disco |-" --ok-label 'Seleccionar' --no-cancel --menu ">\n> Crear particiones correctamente\n> Tu sistema iniciado es : ${tableboot}" 9 0 0\
     "cfdisk" " Un particionador casi grafico         " \
@@ -513,12 +515,11 @@ part=$(dialog --backtitle "${title}" --title "-| Selección de puntos de Montaje
 
 rootfs=$part
 
+bootwin=$(fdisk -l ${diskWin} | grep /dev/ | awk '{if (NR!=1) {print}}' | grep "EFI" | awk '{print $1}' )
+
+
 dialog --clear --no-collapse --cr-wrap --backtitle "${title}" --title "| Formateando partición en EXT4 |" --stdout --ok-label "Siguiente" --prgbox "echo "" && mkfs.ext4 -F $part" 20 80 
 mount "$rootfs" /mnt
-
-
-diskWin=$(dialog --backtitle "${title}" --clear  --ok-label "Seleccionar disco" --no-cancel --menu "\nSelecciona el disco de Windows\n " 12 45 0 ${part} 2>&1 >/dev/tty)
-bootwin=$(fdisk -l ${diskWin} | grep /dev/ | awk '{if (NR!=1) {print}}' | grep "EFI" | awk '{print $1}' )
 
 mkdir -p /mnt/boot/EFI
 mount "$bootwin" /mnt/boot/EFI
